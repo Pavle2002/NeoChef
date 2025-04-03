@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    // Target and module settings
+    "target": "ES2023", // Specifies the JavaScript version to compile to.
+    "module": "NodeNext", // Specifies the module system to use (Node.js with ES modules).
+    "moduleResolution": "NodeNext", // Determines how modules are resolved (Node.js with ES modules).
+    "lib": ["ES2023", "DOM"], // Includes built-in type definitions for ES2023 and DOM APIs.
+
+    // Directory structure
+    "rootDir": "./src", // Specifies the root directory of input files.
+    "outDir": "./dist", // Specifies the output directory for compiled files.
+
+    // Strictness and type checking
+    "strict": true, // Enables all strict type-checking options.
+    "noUncheckedIndexedAccess": true, // Ensures all indexed accesses are checked for undefined.
+    "forceConsistentCasingInFileNames": true, // Enforces consistent casing in file names.
+    "verbatimModuleSyntax": true, // Ensures that module syntax is preserved in output files.
+
+    // Interoperability and module resolution
+    "esModuleInterop": true, // Enables compatibility with CommonJS and ES modules.
+    "resolveJsonModule": true, // Allows importing JSON files as modules.
+
+    // Performance and debugging
+    "skipLibCheck": true, // Skips type checking of declaration files for faster builds.
+    "sourceMap": true, // Disables generation of source maps for debugging.
+
+    // Module detection
+    "moduleDetection": "force" // Forces explicit module usage (no implicit script files).
+  },
+  "include": ["src"], // Specifies files or directories to include in the compilation.
+  "exclude": ["node_modules"] // Excludes files or directories from the compilation.
+}
