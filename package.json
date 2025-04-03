@@ -15,5 +15,8 @@
     "url": "https://github.com/Pavle2002/Neo-Chef/issues"
   },
   "homepage": "https://github.com/Pavle2002/Neo-Chef#readme",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "typescript": "^5.8.2"
+  }
 }
