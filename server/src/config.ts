@@ -18,6 +18,8 @@ requiredEnvVars.forEach((key) => {
 
 // Export configuration
 const config = {
+  port: parseInt(process.env.PORT || "3000", 10),
+  env: process.env.NODE_ENV || "development",
   neo4j: {
     uri: process.env.NEO4J_CONNECTION_URI as string,
     username: process.env.NEO4J_USERNAME as string,

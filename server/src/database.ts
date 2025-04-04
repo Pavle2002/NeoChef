@@ -10,6 +10,7 @@ const [serverInfo, error] = await safeAwait(driver.getServerInfo());
 
 if (error) {
   console.error("Failed to connect to Neo4j database:", error);
+  await driver.close();
   throw new Error("Database connection failed");
 }
 
