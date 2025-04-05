@@ -4,8 +4,8 @@
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
-    "build": "tsc",
-    "start": "tsc && node dist/index.js",
+    "build": "tsc && tsc-alias",
+    "start": "node dist/index.js",
     "dev": "tsx watch src/index.ts"
   },
   "repository": {
@@ -16,13 +16,20 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "connect-redis": "^8.0.2",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
-    "neo4j-driver": "^5.28.1"
+    "express-session": "^1.18.1",
+    "neo4j-driver": "^5.28.1",
+    "redis": "^4.7.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
+    "@types/express-session": "^1.18.1",
     "@types/node": "^22.14.0",
+    "tsc-alias": "^1.8.13",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2"
   }

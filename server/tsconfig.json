@@ -25,7 +25,21 @@
     "sourceMap": true, // Disables generation of source maps for debugging.
 
     // Module detection
-    "moduleDetection": "force" // Forces explicit module usage (no implicit script files).
+    "moduleDetection": "force", // Forces explicit module usage (no implicit script files).
+
+    // Base URL and paths
+    "baseUrl": "./src", // Sets the base directory for resolving non-relative module names.
+    "paths": {
+      // Define paths for absolute imports
+      "@config/*": ["config/*"],
+      "@repositories/*": ["repositories/*"],
+      "@services/*": ["services/*"],
+      "@middlewares/*": ["middlewares/*"],
+      "@routes/*": ["routes/*"],
+      "@controllers/*": ["controllers/*"],
+      "@utils/*": ["utils/*"],
+      "@types/*": ["types/*"]
+    }
   },
   "include": ["src"], // Specifies files or directories to include in the compilation.
   "exclude": ["node_modules"] // Excludes files or directories from the compilation.
