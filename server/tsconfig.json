@@ -32,6 +32,8 @@
     "paths": {
       // Define paths for absolute imports
       "@config/*": ["config/*"],
+      "@models/*": ["models/*"],
+      "@interfaces/*": ["interfaces/*"],
       "@repositories/*": ["repositories/*"],
       "@services/*": ["services/*"],
       "@middlewares/*": ["middlewares/*"],
