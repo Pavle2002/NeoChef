@@ -1,14 +1,11 @@
 import passport from "passport";
 import { Strategy } from "passport-local";
-import { AuthService } from "@services/auth-service.js";
-import { UserRepository } from "@repositories/user-repository.js";
 import { safeAwait } from "@utils/safe-await.js";
-import type { User } from "@models/user.js";
-
-const userRepository = new UserRepository();
-const authService = new AuthService(userRepository);
+import { authService } from "@services/index.js";
+import type { User } from "@models/index.js";
 
 const strategty = new Strategy(async (username, password, done) => {
+  console.log("authenticate user");
   const [error, user] = await safeAwait(
     authService.authenticateUser(username, password)
   );
@@ -20,10 +17,12 @@ const strategty = new Strategy(async (username, password, done) => {
 passport.use(strategty);
 
 passport.serializeUser((user, done) => {
+  console.log("serialize user");
   done(null, (user as User).id);
 });
 
 passport.deserializeUser(async (id, done) => {
+  console.log("deserialize user");
   const [error, user] = await safeAwait(authService.getUserById(id as string));
   if (error) return done(error);
   if (!user) return done(null, false);

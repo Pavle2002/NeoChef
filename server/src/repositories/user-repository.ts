@@ -1,8 +1,8 @@
-import { type IUserRepository } from "@interfaces/user-repository.interface.js";
-import { type User } from "@models/user.js";
 import neo4j from "@config/neo4j.js";
 import { Neo4jError } from "neo4j-driver";
-import { type UserInput } from "@models/user.js";
+import { type IUserRepository } from "@interfaces/index.js";
+import { type User } from "@models/index.js";
+import { type UserInput } from "@models/index.js";
 
 export class UserRepository implements IUserRepository {
   private neo4jClient = neo4j;

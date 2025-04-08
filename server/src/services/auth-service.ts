@@ -1,7 +1,6 @@
 import bcrypt from "bcrypt";
-import { type User, type UserInput } from "@models/user.js";
-import { type IAuthService } from "@interfaces/auth-service.interface.js";
-import { type IUserRepository } from "@interfaces/user-repository.interface.js";
+import type { User, UserInput } from "@models/index.js";
+import type { IAuthService, IUserRepository } from "@interfaces/index.js";
 
 export class AuthService implements IAuthService {
   constructor(private userRepository: IUserRepository) {}

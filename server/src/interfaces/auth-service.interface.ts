@@ -1,4 +1,4 @@
-import type { User, UserInput } from "@models/user.js";
+import type { User, UserInput } from "@models/index.js";
 
 export interface IAuthService {
   getUserById(id: string): Promise<User | null>;

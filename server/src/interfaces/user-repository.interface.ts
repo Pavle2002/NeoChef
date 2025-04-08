@@ -1,4 +1,4 @@
-import { type User, type UserInput } from "@models/user.js";
+import type { User, UserInput } from "@models/index.js";
 
 export interface IUserRepository {
   findById(id: string): Promise<User | null>;

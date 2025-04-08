@@ -1,5 +1,5 @@
---Add custom errors (duplicate user in user-repository.ts)
 --Organize auth logic from index.ts into controllers and routes
+--Add custom errors (duplicate user in user-repository.ts)
 --Add logger (Winston)
 --Add Express error handler middleware
 --Add validations (Zod)

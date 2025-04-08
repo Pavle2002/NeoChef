@@ -1,11 +1,6 @@
 import express, { type Request, type Response } from "express";
-import config from "@config/config.js";
-import sessionConfig from "@config/session.js";
-import corsConfig from "@config/cors.js";
-import passport from "@config/passport.js";
-import { AuthService } from "@services/auth-service.js";
-import { UserRepository } from "@repositories/user-repository.js";
-import type { UserInput } from "@models/user.js";
+import { config, sessionConfig, corsConfig, passport } from "@config/index.js";
+import { authRoutes } from "@routes/index.js";
 
 const app = express();
 const port = config.port;
@@ -16,29 +11,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(sessionConfig);
 app.use(passport.initialize());
 app.use(passport.session());
+app.use("/auth", authRoutes);
 
 app.get("/", (req, res) => {
   console.log("Session ID:", req.session.id);
   res.send("Hello, World!");
-});
-
-//----Testing the session and passport authentication----
-
-const userRepository = new UserRepository();
-const authService = new AuthService(userRepository);
-// Login route
-app.post(
-  "/login",
-  passport.authenticate("local"),
-  (req: Request, res: Response) => {
-    res.status(200).send({ message: "Login successful", user: req.user });
-  }
-);
-
-// Register route
-app.post("/register", async (req: Request, res: Response): Promise<void> => {
-  const user = await authService.registerUser(req.body as UserInput);
-  res.status(201).send({ message: "User registered successfully", user });
 });
 
 // Protected route
