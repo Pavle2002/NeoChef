@@ -1,6 +1,8 @@
 import express, { type Request, type Response } from "express";
 import { config, sessionConfig, corsConfig, passport } from "@config/index.js";
 import { authRoutes } from "@routes/index.js";
+import { sendSuccess } from "@utils/response-handler.js";
+import { errorHandler, isAuthenticated } from "@middlewares/index.js";
 
 const app = express();
 const port = config.port;
@@ -13,19 +15,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use("/auth", authRoutes);
 
-app.get("/", (req, res) => {
-  console.log("Session ID:", req.session.id);
-  res.send("Hello, World!");
+app.get("/", (req: Request, res: Response) => {
+  sendSuccess(res, 200, null, "Hello World!");
 });
 
-// Protected route
-app.get("/profile", (req: Request, res: Response) => {
-  if (req.isAuthenticated()) {
-    res.send({ message: "You are authenticated", user: req.user });
-  } else {
-    res.status(401).send({ message: "Unauthorized" });
-  }
-});
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
