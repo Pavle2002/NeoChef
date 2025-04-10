@@ -1,8 +1,8 @@
 import express, { type Request, type Response } from "express";
 import { config, sessionConfig, corsConfig, passport } from "@config/index.js";
-import { authRoutes } from "@routes/index.js";
+import { authRoutes } from "@routes/auth-routes.js";
 import { sendSuccess } from "@utils/response-handler.js";
-import { errorHandler, isAuthenticated } from "@middlewares/index.js";
+import { errorHandler } from "@middlewares/error-handler.js";
 
 const app = express();
 const port = config.port;

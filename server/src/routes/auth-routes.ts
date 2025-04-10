@@ -1,14 +1,16 @@
 import { Router } from "express";
-import { passport } from "@config/index.js";
-import { authController } from "@controllers/index.js";
-import { isAuthenticated } from "@middlewares/index.js";
+import { authController } from "@controllers/auth-controller.js";
+import { isAuthenticated } from "@middlewares/auth-middleware.js";
+import { validate } from "@middlewares/validation-middleware.js";
+import { loginSchema, registerSchema } from "@schemas/auth-schemas.js";
 
-const { login, register, logout } = authController;
+const { login, register, logout, getCurrentUser } = authController;
 
 const router = Router();
 
-router.post("/login", passport.authenticate("local"), login);
-router.post("/register", register);
+router.post("/login", validate(loginSchema), login);
+router.post("/register", validate(registerSchema), register);
 router.get("/logout", isAuthenticated, logout);
+router.get("/me", isAuthenticated, getCurrentUser);
 
-export default router;
+export { router as authRoutes };

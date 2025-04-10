@@ -1,8 +1,9 @@
 import neo4j from "@config/neo4j.js";
 import { Neo4jError } from "neo4j-driver";
-import { type IUserRepository } from "@interfaces/index.js";
-import { type User } from "@models/index.js";
-import { type UserInput } from "@models/index.js";
+import { type IUserRepository } from "@interfaces/user-repository.interface.js";
+import { type User } from "@models/user.js";
+import type { RegisterInput } from "@app-types/auth-inputs.js";
+import { ConflictError } from "@errors/index.js";
 
 export class UserRepository implements IUserRepository {
   private neo4jClient = neo4j;
@@ -32,7 +33,7 @@ export class UserRepository implements IUserRepository {
     return result.records.map((record) => record.get("u").properties as User);
   }
 
-  async create(user: UserInput): Promise<User> {
+  async create(user: RegisterInput): Promise<User> {
     try {
       const result = await this.neo4jClient.executeQuery(
         `CREATE (u:User {id: apoc.create.uuid(), username: $username, email: $email, password: $password})
@@ -51,7 +52,7 @@ export class UserRepository implements IUserRepository {
         error instanceof Neo4jError &&
         error.code === "Neo.ClientError.Schema.ConstraintValidationFailed"
       ) {
-        throw new Error("User with the same email already exists");
+        throw new ConflictError("User with the same email already exists");
       }
       throw error;
     }
