@@ -1,5 +1,11 @@
 import express, { type Request, type Response } from "express";
-import { config, sessionConfig, corsConfig, passport } from "@config/index.js";
+import {
+  config,
+  sessionConfig,
+  corsConfig,
+  passport,
+  logger,
+} from "@config/index.js";
 import { authRoutes } from "@routes/auth-routes.js";
 import { sendSuccess } from "@utils/response-handler.js";
 import { errorHandler } from "@middlewares/error-handler.js";
@@ -22,5 +28,5 @@ app.get("/", (req: Request, res: Response) => {
 app.use(errorHandler);
 
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  logger.info(`Server is running on http://localhost:${port}`);
 });

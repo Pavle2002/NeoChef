@@ -4,6 +4,7 @@ import { safeAwait } from "@utils/safe-await.js";
 import { authService } from "@services/index.js";
 import type { User } from "@models/user.js";
 import type { LoginInput } from "@app-types/auth-inputs.js";
+import { logger } from "@config/index.js";
 
 const strategty = new Strategy(
   { passReqToCallback: true },
@@ -22,12 +23,12 @@ const strategty = new Strategy(
 passport.use(strategty);
 
 passport.serializeUser((user, done) => {
-  console.log("serialize user");
+  logger.info("serialize user");
   done(null, (user as User).id);
 });
 
 passport.deserializeUser(async (id, done) => {
-  console.log("deserialize user");
+  logger.info("deserialize user");
   const [error, user] = await safeAwait(authService.getUserById(id as string));
   if (error) return done(error);
   if (!user) return done(null, false);
