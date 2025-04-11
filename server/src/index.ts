@@ -9,10 +9,12 @@ import {
 import { authRoutes } from "@routes/auth-routes.js";
 import { sendSuccess } from "@utils/response-handler.js";
 import { errorHandler } from "@middlewares/error-handler.js";
+import { morganMiddleware } from "@middlewares/morgan-middleware.js";
 
 const app = express();
 const port = config.port;
 
+app.use(morganMiddleware);
 app.use(corsConfig);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -28,5 +30,5 @@ app.get("/", (req: Request, res: Response) => {
 app.use(errorHandler);
 
 app.listen(port, () => {
-  logger.info(`Server is running on http://localhost:${port}`);
+  logger.info("Server is running", { address: `http://localhost:${port}` });
 });

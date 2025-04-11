@@ -8,15 +8,15 @@ const redisClient = client.createClient({
 });
 
 redisClient.on("error", (err) => {
-  logger.error("Redis Client Error", err);
+  logger.error(err);
 });
 
 const [error] = await safeAwait(redisClient.connect());
 if (error) {
-  logger.error("Failed to connect to Redis database ", error);
+  logger.error(error);
   await redisClient.quit();
   throw new Error("Redis connection failed");
 }
 
-logger.info("Connected to Redis database ", config.redis.url);
+logger.info("Connected to Redis database", { address: config.redis.url });
 export default redisClient;

@@ -12,11 +12,11 @@ const neo4jClient = neo4j.driver(url, neo4j.auth.basic(username, password), {
 const [error, serverInfo] = await safeAwait(neo4jClient.getServerInfo());
 
 if (error) {
-  logger.error("Failed to connect to Neo4j database ", error);
+  logger.error(error);
   await neo4jClient.close();
   throw new Error("Neo4j connection failed");
 }
 
-logger.info("Connected to Neo4j database ", serverInfo);
+logger.info("Connected to Neo4j database", { ...serverInfo });
 
 export default neo4jClient;

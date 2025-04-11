@@ -23,12 +23,12 @@ const strategty = new Strategy(
 passport.use(strategty);
 
 passport.serializeUser((user, done) => {
-  logger.info("serialize user");
+  logger.debug("Serialize user");
   done(null, (user as User).id);
 });
 
 passport.deserializeUser(async (id, done) => {
-  logger.info("deserialize user");
+  logger.debug("Deserialize user");
   const [error, user] = await safeAwait(authService.getUserById(id as string));
   if (error) return done(error);
   if (!user) return done(null, false);
