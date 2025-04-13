@@ -1,21 +1,22 @@
 import client from "redis";
 import config from "@config/config.js";
-import { safeAwait } from "@utils/helpers.js";
+import { safeAwait } from "@utils/safe-await.js";
+import logger from "@config/logger.js";
 
 const redisClient = client.createClient({
   url: config.redis.url,
 });
 
 redisClient.on("error", (err) => {
-  console.error("Redis Client Error", err);
+  logger.error(err);
 });
 
-const [_, error] = await safeAwait(redisClient.connect());
+const [error] = await safeAwait(redisClient.connect());
 if (error) {
-  console.error("Failed to connect to Redis database:", error);
+  logger.error(error);
   await redisClient.quit();
   throw new Error("Redis connection failed");
 }
 
-console.log("Connected to Redis database:", config.redis.url);
+logger.info("Connected to Redis database", { address: config.redis.url });
 export default redisClient;

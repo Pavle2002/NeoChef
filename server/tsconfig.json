@@ -32,13 +32,17 @@
     "paths": {
       // Define paths for absolute imports
       "@config/*": ["config/*"],
+      "@models/*": ["models/*"],
+      "@interfaces/*": ["interfaces/*"],
       "@repositories/*": ["repositories/*"],
       "@services/*": ["services/*"],
       "@middlewares/*": ["middlewares/*"],
       "@routes/*": ["routes/*"],
       "@controllers/*": ["controllers/*"],
       "@utils/*": ["utils/*"],
-      "@types/*": ["types/*"]
+      "@app-types/*": ["types/*"],
+      "@errors/*": ["errors/*"],
+      "@schemas/*": ["schemas/*"]
     }
   },
   "include": ["src"], // Specifies files or directories to include in the compilation.

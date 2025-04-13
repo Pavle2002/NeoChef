@@ -1,6 +1,9 @@
 /*/node_modules/
 /server/dist/
 /server/.env
+/server/todo.md
+/server/logs
+/cookie.txt
 
 # Client-specific
 /client/logs
