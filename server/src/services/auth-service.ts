@@ -12,10 +12,10 @@ export class AuthService implements IAuthService {
   }
 
   async authenticateUser(
-    username: string,
+    email: string,
     password: string
   ): Promise<User | null> {
-    const user = await this.userRepository.findByUsername(username);
+    const user = await this.userRepository.findByEmail(email);
     if (!user) return null;
 
     const isPasswordValid = await bcrypt.compare(password, user.password);

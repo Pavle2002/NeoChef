@@ -26,6 +26,15 @@ export class UserRepository implements IUserRepository {
     return record ? (record.get("u").properties as User) : null;
   }
 
+  async findByEmail(email: string): Promise<User | null> {
+    const result = await this.neo4jClient.executeQuery(
+      "MATCH (u:User {email: $email}) RETURN u",
+      { email }
+    );
+    const record = result.records[0];
+    return record ? (record.get("u").properties as User) : null;
+  }
+
   async findAll(): Promise<User[]> {
     const result = await this.neo4jClient.executeQuery(
       "MATCH (u:User) RETURN u"
