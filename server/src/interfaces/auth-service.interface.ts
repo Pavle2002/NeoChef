@@ -1,4 +1,4 @@
-import type { RegisterInput } from "@app-types/auth-inputs.js";
+import type { RegisterInput } from "@app-types/auth-types.js";
 import type { User } from "@models/user.js";
 
 export interface IAuthService {

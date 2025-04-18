@@ -34,9 +34,9 @@ app.listen(port, () => {
 });
 
 // const result = await fetch(
-//   "https://api.spoonacular.com/recipes/716431/information?apiKey=ba4f73ce06a1448791d0e6d3a3f58d6a&includeNutrition=false"
-//   //`https://api.spoonacular.com/food/ingredients/9266/information?apiKey=ba4f73ce06a1448791d0e6d3a3f58d6a&unit=g&amount=100`
-//   //`https://api.spoonacular.com/recipes/complexSearch?apiKey=ba4f73ce06a1448791d0e6d3a3f58d6a&addRecipeInformation=${true}&addRecipeNutrition=${true}&number=${1}`
+//   // "https://api.spoonacular.com/recipes/716431/information?apiKey=ba4f73ce06a1448791d0e6d3a3f58d6a&includeNutrition=false"
+//   // `https://api.spoonacular.com/food/ingredients/9266/information?apiKey=ba4f73ce06a1448791d0e6d3a3f58d6a&unit=g&amount=100`
+//   `https://api.spoonacular.com/recipes/complexSearch?apiKey=ba4f73ce06a1448791d0e6d3a3f58d6a&addRecipeInformation=${true}&addRecipeNutrition=${true}&number=${1}`
 // );
 // const data = await result.json();
 

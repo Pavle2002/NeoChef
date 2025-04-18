@@ -11,8 +11,8 @@ export function errorHandler(
 ): void {
   if (err instanceof ZodError) {
     const formattedErrors = err.errors
-      .map((error) => `${error.path.join(".")} : ${error.message}`)
-      .join("; ");
+      .map((error) => `${error.message}`)
+      .join(". ");
 
     return sendError(res, 400, formattedErrors);
   }

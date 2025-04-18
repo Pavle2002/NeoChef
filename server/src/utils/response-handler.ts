@@ -2,7 +2,7 @@ import type { ApiResponse } from "@app-types/api-response.js";
 import type { Response } from "express";
 
 export function sendSuccess<T>(
-  res: Response,
+  res: Response<ApiResponse<T>>,
   statusCode: number,
   data: T | null,
   message: string
@@ -11,11 +11,11 @@ export function sendSuccess<T>(
     success: true,
     data,
     message,
-  } as ApiResponse<T>);
+  });
 }
 
 export function sendError(
-  res: Response,
+  res: Response<ApiResponse<null>>,
   statusCode: number,
   message: string
 ): void {
@@ -23,5 +23,5 @@ export function sendError(
     success: false,
     data: null,
     message,
-  } as ApiResponse<null>);
+  });
 }

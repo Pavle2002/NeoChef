@@ -3,7 +3,7 @@ import { Strategy } from "passport-local";
 import { safeAwait } from "@utils/safe-await.js";
 import { authService } from "@services/index.js";
 import type { User } from "@models/user.js";
-import type { LoginInput } from "@app-types/auth-inputs.js";
+import type { LoginInput } from "@app-types/auth-types.js";
 import { logger } from "@config/index.js";
 
 const strategty = new Strategy(
