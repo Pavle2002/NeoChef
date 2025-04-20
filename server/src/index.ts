@@ -10,6 +10,7 @@ import { authRoutes } from "@routes/auth-routes.js";
 import { sendSuccess } from "@utils/response-handler.js";
 import { errorHandler } from "@middlewares/error-handler.js";
 import { morganMiddleware } from "@middlewares/morgan-middleware.js";
+import { SpoonacularApiClient } from "@clients/spoonacular-api-client.js";
 
 const app = express();
 const port = config.port;
@@ -32,6 +33,20 @@ app.use(errorHandler);
 app.listen(port, () => {
   logger.info("Server is running", { address: `http://localhost:${port}` });
 });
+
+const apiClient = new SpoonacularApiClient(
+  "ba4f73ce06a1448791d0e6d3a3f58d6a",
+  "https://api.spoonacular.com"
+);
+
+const result = await apiClient.searchRecipes({
+  cuisine: "asian",
+  diet: "vegan",
+  type: "main course",
+  number: 1,
+});
+
+console.dir(result, { depth: null });
 
 // const result = await fetch(
 //   // "https://api.spoonacular.com/recipes/716431/information?apiKey=ba4f73ce06a1448791d0e6d3a3f58d6a&includeNutrition=false"

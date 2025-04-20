@@ -1,2 +1,4 @@
---Add error logging
---Add morgan
+--Test spoonaculat-import-service
+--Add error codes for all errors
+--Fix auth routes to return user data without password
+--Consider writing tests for all services

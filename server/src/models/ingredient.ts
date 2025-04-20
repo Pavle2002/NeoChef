@@ -1,8 +1,7 @@
-export type Ingrediant = {
+export type Ingredient = {
   id: string;
   spoonacularId: string;
   name: string;
   image: string;
-  consistency: string;
   aisle: string;
 };
