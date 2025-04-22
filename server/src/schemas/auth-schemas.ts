@@ -22,9 +22,13 @@ const passwordSchema = z
     "Password must contain at least one special character"
   );
 
+const emailSchema = z
+  .string({ required_error: "Email is required" })
+  .email("Invalid email");
+
 export const loginSchema = z.object({
   body: z.object({
-    username: usernameSchema,
+    email: emailSchema,
     password: passwordSchema,
   }),
 });
@@ -32,9 +36,7 @@ export const loginSchema = z.object({
 export const registerSchema = z.object({
   body: z.object({
     username: usernameSchema,
-    email: z
-      .string({ required_error: "Email is required" })
-      .email("Invalid email"),
+    email: emailSchema,
     password: passwordSchema,
   }),
 });

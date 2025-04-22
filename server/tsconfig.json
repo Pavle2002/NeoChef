@@ -41,6 +41,7 @@
       "@controllers/*": ["controllers/*"],
       "@utils/*": ["utils/*"],
       "@app-types/*": ["types/*"],
+      "@clients/*": ["clients/*"],
       "@errors/*": ["errors/*"],
       "@schemas/*": ["schemas/*"]
     }

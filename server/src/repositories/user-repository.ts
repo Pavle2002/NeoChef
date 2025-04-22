@@ -2,8 +2,8 @@ import neo4j from "@config/neo4j.js";
 import { Neo4jError } from "neo4j-driver";
 import { type IUserRepository } from "@interfaces/user-repository.interface.js";
 import { type User } from "@models/user.js";
-import type { RegisterInput } from "@app-types/auth-inputs.js";
-import { ConflictError } from "@errors/index.js";
+import type { RegisterInput } from "@app-types/auth-types.js";
+import { ConflictError, InternalServerError } from "@errors/index.js";
 
 export class UserRepository implements IUserRepository {
   private neo4jClient = neo4j;
@@ -26,6 +26,15 @@ export class UserRepository implements IUserRepository {
     return record ? (record.get("u").properties as User) : null;
   }
 
+  async findByEmail(email: string): Promise<User | null> {
+    const result = await this.neo4jClient.executeQuery(
+      "MATCH (u:User {email: $email}) RETURN u",
+      { email }
+    );
+    const record = result.records[0];
+    return record ? (record.get("u").properties as User) : null;
+  }
+
   async findAll(): Promise<User[]> {
     const result = await this.neo4jClient.executeQuery(
       "MATCH (u:User) RETURN u"
@@ -36,14 +45,15 @@ export class UserRepository implements IUserRepository {
   async create(user: RegisterInput): Promise<User> {
     try {
       const result = await this.neo4jClient.executeQuery(
-        `CREATE (u:User {id: apoc.create.uuid(), username: $username, email: $email, password: $password})
+        `CREATE (u:User {id: apoc.create.uuid()})
+        SET u += $user
         RETURN u`,
-        user
+        { user }
       );
 
       const record = result.records[0];
       if (!record) {
-        throw new Error("Failed to create user");
+        throw new InternalServerError("Failed to create user");
       }
 
       return record.get("u").properties as User;

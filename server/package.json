@@ -17,6 +17,7 @@
   "description": "",
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "bottleneck": "^2.19.5",
     "connect-redis": "^8.0.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",

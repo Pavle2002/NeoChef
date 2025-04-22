@@ -1,0 +1,151 @@
+import { SpoonacularQuotaExceededError } from "@errors/spoonacular-quota-exceeded-error.js";
+import Bottleneck from "bottleneck";
+import type { RecipeData } from "@app-types/recipe-types.js";
+import type {
+  SpoonacularResult,
+  SpoonacularSearchOptions,
+} from "@app-types/spoonacular-types.js";
+import type { Cuisine } from "@models/cuisine.js";
+import type { Diet } from "@models/diet.js";
+import type { DishType } from "@models/dish-type.js";
+import type { Equipment } from "@models/equipment.js";
+import { extractImageName } from "@utils/extract-file-name.js";
+import type { ExtendedIngredient } from "@app-types/ingredient-types.js";
+import type { ISpoonacularApiClient } from "@interfaces/spoonacular-api-client.interface.js";
+
+export class SpoonacularApiClient implements ISpoonacularApiClient {
+  private apiKey: string;
+  private baseUrl: string;
+  private rateLimiter: Bottleneck;
+
+  constructor(apiKey: string, baseUrl: string, reqPerSecond: number = 1) {
+    this.apiKey = apiKey;
+    this.baseUrl = baseUrl;
+    this.rateLimiter = new Bottleneck({
+      maxConcurrent: 1,
+      minTime: 1000 / reqPerSecond,
+    });
+  }
+
+  async searchRecipes(
+    options: SpoonacularSearchOptions
+  ): Promise<SpoonacularResult[]> {
+    const { cuisine, diet, type, number } = options;
+
+    const searchParams = {
+      apiKey: this.apiKey,
+      cuisine,
+      diet,
+      type,
+      number: number.toString(),
+      fillIngredients: "true",
+      instructionsRequired: "true",
+      addRecipeInformation: "true",
+      addRecipeNutrition: "true",
+      addRecipeInstructions: "true",
+    };
+
+    const url = `${this.baseUrl}/recipes/complexSearch?${new URLSearchParams(
+      searchParams
+    )}`;
+
+    const response = await this.rateLimiter.schedule(() => fetch(url));
+
+    if (response.status === 402) {
+      throw new SpoonacularQuotaExceededError("Exceeded daily quota");
+    }
+    if (!response.ok) {
+      throw new Error(
+        `Spoonacular API error: ${response.status} - ${response.statusText}`
+      );
+    }
+
+    const data = await response.json();
+
+    if (!Array.isArray(data.results)) {
+      throw new Error("Invalid response format from Spoonacular API");
+    }
+
+    // Map the Spoonacular API response to the SpoonacularResult type
+    return data.results.map((recipe: any): SpoonacularResult => {
+      const nutrition = recipe.nutrition ?? {};
+      const caloricBreakdown = nutrition.caloricBreakdown ?? {};
+      const weightPerServing = nutrition.weightPerServing?.amount ?? 0;
+      const caloriesPerServing =
+        nutrition.nutrients?.find((n: any) => n.name === "Calories")?.amount ??
+        0;
+
+      const instructions =
+        recipe.analyzedInstructions?.[0]?.steps?.map((s: any) => s.step) ?? [];
+
+      const recipeData: RecipeData = {
+        spoonacularId: recipe.id?.toString() ?? "",
+        title: recipe.title ?? "",
+        imageType: recipe.imageType ?? "",
+        servings: recipe.servings ?? 0,
+        pricePerServing: recipe.pricePerServing ?? 0,
+        weightPerServing,
+        caloriesPerServing,
+        readyInMinutes: recipe.readyInMinutes ?? 0,
+        healthScore: recipe.healthScore ?? 0,
+        spoonacularScore: recipe.spoonacularScore ?? 0,
+        summary: recipe.summary ?? "",
+        instructions,
+        percentCarbs: caloricBreakdown.percentCarbs ?? 0,
+        percentFat: caloricBreakdown.percentFat ?? 0,
+        percentProtein: caloricBreakdown.percentProtein ?? 0,
+      };
+
+      const cuisines: Cuisine[] = (recipe.cuisines ?? [])
+        .filter((name: string) => name)
+        .map((name: string) => ({ name }));
+
+      const diets: Diet[] = (recipe.diets ?? [])
+        .filter((name: string) => name)
+        .map((name: string) => ({ name }));
+
+      const dishTypes: DishType[] = (recipe.dishTypes ?? [])
+        .filter((name: string) => name)
+        .map((name: string) => ({ name }));
+
+      const equipmentMap = new Map<string, Equipment>();
+      (recipe.analyzedInstructions?.[0]?.steps ?? [])
+        .flatMap((step: any) => step.equipment ?? [])
+        .filter((e: any) => e?.id && e?.name)
+        .forEach((e: any) => {
+          equipmentMap.set(e.id.toString(), {
+            spoonacularId: e.id.toString(),
+            name: e.name,
+            image: extractImageName(e.image ?? ""),
+          });
+        });
+      const equipment = Array.from(equipmentMap.values());
+
+      const extendedIngredients: ExtendedIngredient[] = (
+        recipe.missedIngredients ?? []
+      )
+        .filter((i: any) => i?.id && i?.name)
+        .map(
+          (i: any): ExtendedIngredient => ({
+            ingredientData: {
+              spoonacularId: i.id.toString(),
+              name: i.name,
+              aisle: i.aisle ?? "",
+              image: extractImageName(i.image ?? ""),
+            },
+            amount: i.amount ?? 0,
+            unit: i.unit ?? "",
+          })
+        );
+
+      return {
+        recipeData,
+        cuisines,
+        diets,
+        dishTypes,
+        equipment,
+        extendedIngredients,
+      };
+    });
+  }
+}
