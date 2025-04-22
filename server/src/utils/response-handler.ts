@@ -1,4 +1,5 @@
 import type { ApiResponse } from "@app-types/api-response.js";
+import type { ErrorCode } from "@app-types/error-codes.js";
 import type { Response } from "express";
 
 export function sendSuccess<T>(
@@ -17,11 +18,13 @@ export function sendSuccess<T>(
 export function sendError(
   res: Response<ApiResponse<null>>,
   statusCode: number,
-  message: string
+  message: string,
+  errorCode: ErrorCode
 ): void {
   res.status(statusCode).json({
     success: false,
     data: null,
     message,
+    errorCode,
   });
 }

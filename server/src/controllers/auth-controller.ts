@@ -12,14 +12,14 @@ function login(req: Request, res: Response, next: NextFunction): void {
     "local",
     (err: Error | null, user: User, info: IVerifyOptions) => {
       if (err) {
-        return next(new InternalServerError(info.message));
+        return next(err);
       }
       if (!user) {
         return next(new UnauthorizedError(info.message));
       }
       req.logIn(user, (err: Error | null) => {
         if (err) {
-          return next(new InternalServerError("Login failed"));
+          return next(err);
         }
         return sendSuccess(res, 200, user, info.message);
       });
@@ -41,11 +41,11 @@ async function logout(
 ): Promise<void> {
   req.logout((err: Error | null) => {
     if (err) {
-      next(new InternalServerError("Logout failed"));
+      next(err);
     }
     req.session.destroy((err: Error | null) => {
       if (err) {
-        next(new InternalServerError("Session destruction failed"));
+        next(err);
       }
       res.clearCookie("neochef.sid", { path: "/" });
       return sendSuccess(res, 200, null, "Logout successful");

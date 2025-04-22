@@ -27,16 +27,20 @@ const emailSchema = z
   .email("Invalid email");
 
 export const loginSchema = z.object({
-  body: z.object({
-    email: emailSchema,
-    password: passwordSchema,
-  }),
+  body: z
+    .object({
+      email: emailSchema,
+      password: passwordSchema,
+    })
+    .strict("Invalid format"),
 });
 
 export const registerSchema = z.object({
-  body: z.object({
-    username: usernameSchema,
-    email: emailSchema,
-    password: passwordSchema,
-  }),
+  body: z
+    .object({
+      username: usernameSchema,
+      email: emailSchema,
+      password: passwordSchema,
+    })
+    .strict("Invalid format"),
 });

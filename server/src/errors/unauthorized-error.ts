@@ -1,8 +1,9 @@
+import { ErrorCodes, type ErrorCode } from "@app-types/error-codes.js";
 import { AppError } from "@errors/app-error.js";
 
 export class UnauthorizedError extends AppError {
-  constructor(message: string) {
-    super(message, 401);
+  constructor(message: string, erroCode: ErrorCode = ErrorCodes.AUTH_INVALID) {
+    super(message, 401, erroCode);
     Object.setPrototypeOf(this, UnauthorizedError.prototype);
   }
 }

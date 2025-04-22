@@ -4,6 +4,7 @@ import { type IUserRepository } from "@interfaces/user-repository.interface.js";
 import { type User } from "@models/user.js";
 import type { RegisterInput } from "@app-types/auth-types.js";
 import { ConflictError, InternalServerError } from "@errors/index.js";
+import { ErrorCodes } from "@app-types/error-codes.js";
 
 export class UserRepository implements IUserRepository {
   private neo4jClient = neo4j;
@@ -62,7 +63,17 @@ export class UserRepository implements IUserRepository {
         error instanceof Neo4jError &&
         error.code === "Neo.ClientError.Schema.ConstraintValidationFailed"
       ) {
-        throw new ConflictError("User with the same email already exists");
+        if (error.message.includes("email")) {
+          throw new ConflictError(
+            "User with the same email already exists",
+            ErrorCodes.RES_CONFLICT_EMAIL
+          );
+        }
+        if (error.message.includes("username"))
+          throw new ConflictError(
+            "User with the same username already exists",
+            ErrorCodes.RES_CONFLICT_USERNAME
+          );
       }
       throw error;
     }

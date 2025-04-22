@@ -7,6 +7,7 @@ const requiredEnvVars = [
   "NEO4J_PASSWORD",
   "REDIS_URL",
   "CLIENT_ORIGIN",
+  "SPOONACULAR_API_KEY",
 ];
 
 requiredEnvVars.forEach((key) => {
@@ -26,6 +27,10 @@ const config = {
     url: process.env.NEO4J_URL as string,
     username: process.env.NEO4J_USERNAME as string,
     password: process.env.NEO4J_PASSWORD as string,
+  },
+  spoonacular: {
+    baseUrl: process.env.SPOONACULAR_BASE_URL || "https://api.spoonacular.com",
+    apiKey: process.env.SPOONACULAR_API_KEY as string,
   },
 };
 

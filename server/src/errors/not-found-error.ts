@@ -1,8 +1,12 @@
+import { ErrorCodes, type ErrorCode } from "@app-types/error-codes.js";
 import { AppError } from "@errors/app-error.js";
 
 export class NotFoundError extends AppError {
-  constructor(message: string) {
-    super(message, 404);
+  constructor(
+    message: string,
+    errorCode: ErrorCode = ErrorCodes.RES_NOT_FOUND
+  ) {
+    super(message, 404, errorCode);
     Object.setPrototypeOf(this, NotFoundError.prototype);
   }
 }

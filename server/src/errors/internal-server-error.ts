@@ -1,8 +1,12 @@
+import { ErrorCodes, type ErrorCode } from "@app-types/error-codes.js";
 import { AppError } from "@errors/app-error.js";
 
 export class InternalServerError extends AppError {
-  constructor(message: string) {
-    super(message, 500);
+  constructor(
+    message: string,
+    errorCode: ErrorCode = ErrorCodes.SYS_INTERNAL_ERROR
+  ) {
+    super(message, 500, errorCode);
     Object.setPrototypeOf(this, InternalServerError.prototype);
   }
 }
