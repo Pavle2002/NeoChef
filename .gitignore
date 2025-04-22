@@ -1,11 +1,10 @@
+/.vscode
 /*/node_modules/
 /server/dist/
 /server/.env
 /server/todo.md
 /server/logs
 /cookies.txt
-
-/.vscode
 
 # Client-specific
 /client/logs
