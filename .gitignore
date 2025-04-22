@@ -1,9 +1,10 @@
+/.vscode
 /*/node_modules/
 /server/dist/
 /server/.env
 /server/todo.md
 /server/logs
-/cookie.txt
+/cookies.txt
 
 # Client-specific
 /client/logs
@@ -20,8 +21,6 @@
 /client/*.local
 
 # Editor directories and files
-/client/.vscode
-/client/.vscode/*
 !/client/.vscode/extensions.json
 /client/.idea
 /client/.DS_Store
