@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc && tsc-alias",
     "start": "node dist/index.js",
-    "dev": "tsx watch src/index.ts"
+    "dev": "tsx watch src/index.ts",
+    "import-recipes": "tsx src/scripts/import-recipes.ts"
   },
   "repository": {
     "type": "git",

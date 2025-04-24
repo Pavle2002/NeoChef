@@ -5,6 +5,7 @@ import { IngredientRepository } from "@repositories/ingrediant-repository.js";
 import { SpoonacularImportService } from "@services/spoonacular-import-service.js";
 import { SpoonacularApiClient } from "@clients/spoonacular-api-client.js";
 import { config } from "@config/index.js";
+import { FileImportProgressManager } from "./file-import-progress-manager.js";
 
 const userRepository = new UserRepository();
 const ingredientRepository = new IngredientRepository();
@@ -13,9 +14,13 @@ const spoonacularApiClient = new SpoonacularApiClient(
   config.spoonacular.apiKey,
   config.spoonacular.baseUrl
 );
+const fileImportProgressManager = new FileImportProgressManager(
+  config.spoonacular.importProgressFilePath
+);
 
 export const authService = new AuthService(userRepository);
 export const spoonacularImportService = new SpoonacularImportService(
   spoonacularApiClient,
-  recipeRepository
+  recipeRepository,
+  fileImportProgressManager
 );

@@ -6,4 +6,5 @@ export type ExtendedIngredient = {
   ingredientData: IngredientData;
   amount: number;
   unit: string;
+  original: string;
 };

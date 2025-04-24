@@ -3,5 +3,5 @@ import type { Recipe } from "@models/recipe.js";
 
 export interface ISpoonacularImportService {
   importRecipes(options: SpoonacularSearchOptions): Promise<Recipe[]>;
-  importRecipeById(spoonacularId: string): Promise<Recipe>;
+  importRecipesInBatches(batchSize: number): Promise<void>;
 }

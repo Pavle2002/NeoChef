@@ -1,6 +1,6 @@
 import neo4j from "neo4j-driver";
-import config from "@config/config.js";
 import { safeAwait } from "@utils/safe-await.js";
+import config from "@config/config.js";
 import logger from "@config/logger.js";
 
 const { url, username, password } = config.neo4j;

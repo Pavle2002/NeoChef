@@ -30,7 +30,7 @@ export class SpoonacularApiClient implements ISpoonacularApiClient {
   async searchRecipes(
     options: SpoonacularSearchOptions
   ): Promise<SpoonacularResult[]> {
-    const { cuisine, diet, type, number } = options;
+    const { cuisine, diet, type, number, offset } = options;
 
     const searchParams = {
       apiKey: this.apiKey,
@@ -38,11 +38,14 @@ export class SpoonacularApiClient implements ISpoonacularApiClient {
       diet,
       type,
       number: number.toString(),
+      offset: offset.toString(),
       fillIngredients: "true",
       instructionsRequired: "true",
       addRecipeInformation: "true",
       addRecipeNutrition: "true",
       addRecipeInstructions: "true",
+      sort: "meta-score",
+      sortDirection: "desc",
     };
 
     const url = `${this.baseUrl}/recipes/complexSearch?${new URLSearchParams(
@@ -66,7 +69,6 @@ export class SpoonacularApiClient implements ISpoonacularApiClient {
       throw new Error("Invalid response format from Spoonacular API");
     }
 
-    // Map the Spoonacular API response to the SpoonacularResult type
     return data.results.map((recipe: any): SpoonacularResult => {
       const nutrition = recipe.nutrition ?? {};
       const caloricBreakdown = nutrition.caloricBreakdown ?? {};
@@ -135,6 +137,7 @@ export class SpoonacularApiClient implements ISpoonacularApiClient {
             },
             amount: i.amount ?? 0,
             unit: i.unit ?? "",
+            original: i.original ?? "",
           })
         );
 

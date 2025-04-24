@@ -79,12 +79,14 @@ export class RecipeRepository implements IRecipeRepository {
        MATCH (i:Ingredient {id: $ingredientId})
        MERGE (r)-[rel:CONTAINS]->(i)
        SET rel.amount = $amount,
-           rel.unit = $unit`,
+           rel.unit = $unit,
+           rel.original = $original`,
       {
         recipeId,
         ingredientId: savedIngredient.id,
         amount: ingredient.amount,
         unit: ingredient.unit,
+        original: ingredient.original,
       }
     );
   }

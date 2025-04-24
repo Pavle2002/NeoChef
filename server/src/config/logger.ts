@@ -1,11 +1,11 @@
 import winston from "winston";
-import { config } from "@config/index.js";
+import config from "./config.js";
 
 const { combine, timestamp, json, printf, colorize, errors } = winston.format;
 const { Console, File } = winston.transports;
 
 const myFormat = printf(({ level, message, stack }) => {
-  return `[${level}]- ${message} ${stack ? "\n" + stack : ""}`;
+  return `[${level}] - ${message} ${stack ? "\n" + stack : ""}`;
 });
 
 const customLevels = {

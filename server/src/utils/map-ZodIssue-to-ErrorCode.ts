@@ -1,4 +1,4 @@
-import { ErrorCodes, type ErrorCode } from "@app-types/error-codes.js";
+import { ErrorCodes, type ErrorCode } from "@utils/error-codes.js";
 import { ZodIssueCode, type ZodIssue } from "zod";
 
 export function mapZodIssueToErrorCode(issue: ZodIssue): ErrorCode {

@@ -10,6 +10,7 @@ export type SpoonacularSearchOptions = {
   diet: string;
   type: string;
   number: number;
+  offset: number;
 };
 
 export type SpoonacularResult = {
@@ -19,4 +20,15 @@ export type SpoonacularResult = {
   diets: Diet[];
   dishTypes: DishType[];
   equipment: Equipment[];
+};
+
+export type CombinationProgressEntry = { offset: number; done: boolean };
+
+export type ProgressState = {
+  position: {
+    cuisineIndex: number;
+    dietIndex: number;
+    dishTypeIndex: number;
+  };
+  combinations: Record<string, CombinationProgressEntry>;
 };

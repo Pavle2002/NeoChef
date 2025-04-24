@@ -4,7 +4,7 @@ import { type IUserRepository } from "@interfaces/user-repository.interface.js";
 import { type User } from "@models/user.js";
 import type { RegisterInput } from "@app-types/auth-types.js";
 import { ConflictError, InternalServerError } from "@errors/index.js";
-import { ErrorCodes } from "@app-types/error-codes.js";
+import { ErrorCodes } from "@utils/error-codes.js";
 
 export class UserRepository implements IUserRepository {
   private neo4jClient = neo4j;
