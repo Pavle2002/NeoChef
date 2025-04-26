@@ -1,20 +1,20 @@
-import type { ISpoonacularImportService } from "@interfaces/spoonacular-import-service.interface.js";
-import type { ISpoonacularApiClient } from "@interfaces/spoonacular-api-client.interface.js";
+import type { IImportService } from "@interfaces/import-service.interface.js";
+import type { IApiClient } from "@interfaces/api-client.interface.js";
 import type { IRecipeRepository } from "@interfaces/recipe-repository.interface.js";
-import type { SpoonacularSearchOptions } from "@app-types/spoonacular-types.js";
+import type { RecipeSearchOptions } from "@app-types/recipe-types.js";
 import type { Recipe } from "@models/recipe.js";
 import type { IImportProgressManager } from "@interfaces/import-progress-manager.interface.js";
 import { safeAwait } from "@utils/safe-await.js";
 import { CUISINES, DIETS, DISH_TYPES } from "@utils/spoonacular-constants.js";
 
-export class SpoonacularImportService implements ISpoonacularImportService {
+export class SpoonacularImportService implements IImportService {
   constructor(
-    private spoonacularApiClient: ISpoonacularApiClient,
+    private spoonacularApiClient: IApiClient,
     private recipeRepository: IRecipeRepository,
     private importProgressManager: IImportProgressManager
   ) {}
 
-  async importRecipes(options: SpoonacularSearchOptions): Promise<Recipe[]> {
+  async importRecipes(options: RecipeSearchOptions): Promise<Recipe[]> {
     const results = await this.spoonacularApiClient.searchRecipes(options);
     const recipes: Recipe[] = [];
 
@@ -64,7 +64,7 @@ export class SpoonacularImportService implements ISpoonacularImportService {
           };
           if (combinationProgress.done) continue;
 
-          const searchOptions: SpoonacularSearchOptions = {
+          const searchOptions: RecipeSearchOptions = {
             cuisine,
             diet,
             type: dishType,

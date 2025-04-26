@@ -1,5 +1,5 @@
 import type { IImportProgressManager } from "@interfaces/import-progress-manager.interface.js";
-import type { ProgressState } from "@app-types/spoonacular-types.js";
+import type { ImportProgressState } from "@models/import-progress-state.js";
 import { promises as fs } from "fs";
 import { dirname } from "path";
 
@@ -11,7 +11,7 @@ export class FileImportProgressManager implements IImportProgressManager {
    * Saves the current progress state to a file
    * @param progress The progress state to save
    */
-  async save(progress: ProgressState): Promise<void> {
+  async save(progress: ImportProgressState): Promise<void> {
     try {
       await fs.mkdir(dirname(this.filePath), { recursive: true });
       await fs.writeFile(
@@ -28,13 +28,13 @@ export class FileImportProgressManager implements IImportProgressManager {
    * If file is not found, returns the default state
    * @returns The loaded progress state
    */
-  async load(): Promise<ProgressState> {
+  async load(): Promise<ImportProgressState> {
     try {
       const data = await fs.readFile(this.filePath, "utf8");
       if (data.trim() === "") {
         return this.getDefaultState();
       }
-      return JSON.parse(data) as ProgressState;
+      return JSON.parse(data) as ImportProgressState;
     } catch (error) {
       if ((error as NodeJS.ErrnoException).code === "ENOENT") {
         return this.getDefaultState();
@@ -43,7 +43,7 @@ export class FileImportProgressManager implements IImportProgressManager {
     }
   }
 
-  private getDefaultState(): ProgressState {
+  private getDefaultState(): ImportProgressState {
     return {
       position: {
         cuisineIndex: 0,

@@ -15,13 +15,13 @@ export class RecipeRepository implements IRecipeRepository {
   private neo4j = neo4jClient;
 
   async createOrUpdate(recipe: RecipeData): Promise<Recipe> {
-    const { spoonacularId, ...upsertRecipe } = recipe;
+    const { sourceId, sourceName, ...upsertRecipe } = recipe;
     const result = await this.neo4j.executeQuery(
-      `MERGE (r:Recipe {spoonacularId: $spoonacularId})
+      `MERGE (r:Recipe {sourceName: $sourceName, sourceId: $sourceId})
       ON CREATE SET r.id = apoc.create.uuid(), r += $upsertRecipe
       ON MATCH SET r += $upsertRecipe
       RETURN r`,
-      { spoonacularId: recipe.spoonacularId, upsertRecipe }
+      { sourceId, sourceName, upsertRecipe }
     );
     const record = result.records[0];
     if (!record) {
@@ -60,7 +60,7 @@ export class RecipeRepository implements IRecipeRepository {
   async linkToEquipment(recipeId: string, equipment: Equipment): Promise<void> {
     await this.neo4j.executeQuery(
       `MATCH (r:Recipe {id: $recipeId})
-      MERGE (e:Equipment {spoonacularId: $equipment.spoonacularId})
+      MERGE (e:Equipment {sourceName: $equipment.sourceName, sourceId: $equipment.sourceId})
       SET e.name = $equipment.name, e.image = $equipment.image
       MERGE (r)-[:REQUIRES]->(e)`,
       { recipeId, equipment }

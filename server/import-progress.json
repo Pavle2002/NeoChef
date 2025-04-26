@@ -1,8 +1,405 @@
 {
   "position": {
     "cuisineIndex": 0,
-    "dietIndex": 0,
-    "dishTypeIndex": 0
+    "dietIndex": 7,
+    "dishTypeIndex": 1
   },
-  "combinations": {}
+  "combinations": {
+    "italian|gluten free|main course": {
+      "offset": 20,
+      "done": false
+    },
+    "italian|gluten free|side dish": {
+      "offset": 20,
+      "done": false
+    },
+    "italian|gluten free|dessert": {
+      "offset": 10,
+      "done": true
+    },
+    "italian|gluten free|appetizer": {
+      "offset": 20,
+      "done": false
+    },
+    "italian|gluten free|salad": {
+      "offset": 5,
+      "done": true
+    },
+    "italian|gluten free|bread": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|gluten free|breakfast": {
+      "offset": 2,
+      "done": true
+    },
+    "italian|gluten free|soup": {
+      "offset": 5,
+      "done": true
+    },
+    "italian|gluten free|beverage": {
+      "offset": 5,
+      "done": true
+    },
+    "italian|gluten free|sauce": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|gluten free|marinade": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|gluten free|fingerfood": {
+      "offset": 4,
+      "done": true
+    },
+    "italian|gluten free|snack": {
+      "offset": 20,
+      "done": false
+    },
+    "italian|gluten free|drink": {
+      "offset": 5,
+      "done": true
+    },
+    "italian|ketogenic|main course": {
+      "offset": 7,
+      "done": true
+    },
+    "italian|ketogenic|side dish": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|ketogenic|dessert": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|ketogenic|appetizer": {
+      "offset": 1,
+      "done": true
+    },
+    "italian|ketogenic|salad": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|ketogenic|bread": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|ketogenic|breakfast": {
+      "offset": 1,
+      "done": true
+    },
+    "italian|ketogenic|soup": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|ketogenic|beverage": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|ketogenic|sauce": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|ketogenic|marinade": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|ketogenic|fingerfood": {
+      "offset": 1,
+      "done": true
+    },
+    "italian|ketogenic|snack": {
+      "offset": 1,
+      "done": true
+    },
+    "italian|ketogenic|drink": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|vegetarian|main course": {
+      "offset": 14,
+      "done": true
+    },
+    "italian|vegetarian|side dish": {
+      "offset": 20,
+      "done": false
+    },
+    "italian|vegetarian|dessert": {
+      "offset": 10,
+      "done": true
+    },
+    "italian|vegetarian|appetizer": {
+      "offset": 19,
+      "done": true
+    },
+    "italian|vegetarian|salad": {
+      "offset": 7,
+      "done": true
+    },
+    "italian|vegetarian|bread": {
+      "offset": 2,
+      "done": true
+    },
+    "italian|vegetarian|breakfast": {
+      "offset": 2,
+      "done": true
+    },
+    "italian|vegetarian|soup": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|vegetarian|beverage": {
+      "offset": 6,
+      "done": true
+    },
+    "italian|vegetarian|sauce": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|vegetarian|marinade": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|vegetarian|fingerfood": {
+      "offset": 5,
+      "done": true
+    },
+    "italian|vegetarian|snack": {
+      "offset": 19,
+      "done": true
+    },
+    "italian|vegetarian|drink": {
+      "offset": 6,
+      "done": true
+    },
+    "italian|vegan|main course": {
+      "offset": 2,
+      "done": true
+    },
+    "italian|vegan|side dish": {
+      "offset": 12,
+      "done": true
+    },
+    "italian|vegan|dessert": {
+      "offset": 1,
+      "done": true
+    },
+    "italian|vegan|appetizer": {
+      "offset": 9,
+      "done": true
+    },
+    "italian|vegan|salad": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|vegan|bread": {
+      "offset": 1,
+      "done": true
+    },
+    "italian|vegan|breakfast": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|vegan|soup": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|vegan|beverage": {
+      "offset": 6,
+      "done": true
+    },
+    "italian|vegan|sauce": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|vegan|marinade": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|vegan|fingerfood": {
+      "offset": 3,
+      "done": true
+    },
+    "italian|vegan|snack": {
+      "offset": 9,
+      "done": true
+    },
+    "italian|vegan|drink": {
+      "offset": 6,
+      "done": true
+    },
+    "italian|lacto-vegetarian|main course": {
+      "offset": 12,
+      "done": true
+    },
+    "italian|lacto-vegetarian|side dish": {
+      "offset": 20,
+      "done": false
+    },
+    "italian|lacto-vegetarian|dessert": {
+      "offset": 1,
+      "done": true
+    },
+    "italian|lacto-vegetarian|appetizer": {
+      "offset": 13,
+      "done": true
+    },
+    "italian|lacto-vegetarian|salad": {
+      "offset": 6,
+      "done": true
+    },
+    "italian|lacto-vegetarian|bread": {
+      "offset": 2,
+      "done": true
+    },
+    "italian|lacto-vegetarian|breakfast": {
+      "offset": 1,
+      "done": true
+    },
+    "italian|lacto-vegetarian|soup": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|lacto-vegetarian|beverage": {
+      "offset": 6,
+      "done": true
+    },
+    "italian|lacto-vegetarian|sauce": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|lacto-vegetarian|marinade": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|lacto-vegetarian|fingerfood": {
+      "offset": 5,
+      "done": true
+    },
+    "italian|lacto-vegetarian|snack": {
+      "offset": 13,
+      "done": true
+    },
+    "italian|lacto-vegetarian|drink": {
+      "offset": 6,
+      "done": true
+    },
+    "italian|ovo-vegetarian|main course": {
+      "offset": 2,
+      "done": true
+    },
+    "italian|ovo-vegetarian|side dish": {
+      "offset": 16,
+      "done": true
+    },
+    "italian|ovo-vegetarian|dessert": {
+      "offset": 7,
+      "done": true
+    },
+    "italian|ovo-vegetarian|appetizer": {
+      "offset": 10,
+      "done": true
+    },
+    "italian|ovo-vegetarian|salad": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|ovo-vegetarian|bread": {
+      "offset": 2,
+      "done": true
+    },
+    "italian|ovo-vegetarian|breakfast": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|ovo-vegetarian|soup": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|ovo-vegetarian|beverage": {
+      "offset": 6,
+      "done": true
+    },
+    "italian|ovo-vegetarian|sauce": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|ovo-vegetarian|marinade": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|ovo-vegetarian|fingerfood": {
+      "offset": 3,
+      "done": true
+    },
+    "italian|ovo-vegetarian|snack": {
+      "offset": 10,
+      "done": true
+    },
+    "italian|ovo-vegetarian|drink": {
+      "offset": 6,
+      "done": true
+    },
+    "italian|pescetarian|main course": {
+      "offset": 13,
+      "done": true
+    },
+    "italian|pescetarian|side dish": {
+      "offset": 7,
+      "done": true
+    },
+    "italian|pescetarian|dessert": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|pescetarian|appetizer": {
+      "offset": 2,
+      "done": true
+    },
+    "italian|pescetarian|salad": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|pescetarian|bread": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|pescetarian|breakfast": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|pescetarian|soup": {
+      "offset": 1,
+      "done": true
+    },
+    "italian|pescetarian|beverage": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|pescetarian|sauce": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|pescetarian|marinade": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|pescetarian|fingerfood": {
+      "offset": 1,
+      "done": true
+    },
+    "italian|pescetarian|snack": {
+      "offset": 2,
+      "done": true
+    },
+    "italian|pescetarian|drink": {
+      "offset": 0,
+      "done": true
+    },
+    "italian|paleo|main course": {
+      "offset": 5,
+      "done": true
+    }
+  }
 }

@@ -9,9 +9,17 @@ export type RecipeData = Omit<Recipe, "id">;
 
 export type ExtendedRecipe = {
   recipeData: RecipeData;
-  ingredients: ExtendedIngredient[];
+  extendedIngredients: ExtendedIngredient[];
   cuisines: Cuisine[];
   diets: Diet[];
   dishTypes: DishType[];
   equipment: Equipment[];
+};
+
+export type RecipeSearchOptions = {
+  cuisine: string;
+  diet: string;
+  type: string;
+  number: number;
+  offset: number;
 };

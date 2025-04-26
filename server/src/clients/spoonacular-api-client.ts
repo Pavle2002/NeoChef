@@ -2,18 +2,18 @@ import { SpoonacularQuotaExceededError } from "@errors/spoonacular-quota-exceede
 import Bottleneck from "bottleneck";
 import type { RecipeData } from "@app-types/recipe-types.js";
 import type {
-  SpoonacularResult,
-  SpoonacularSearchOptions,
-} from "@app-types/spoonacular-types.js";
+  ExtendedRecipe,
+  RecipeSearchOptions,
+} from "@app-types/recipe-types.js";
 import type { Cuisine } from "@models/cuisine.js";
 import type { Diet } from "@models/diet.js";
 import type { DishType } from "@models/dish-type.js";
 import type { Equipment } from "@models/equipment.js";
 import { extractImageName } from "@utils/extract-file-name.js";
 import type { ExtendedIngredient } from "@app-types/ingredient-types.js";
-import type { ISpoonacularApiClient } from "@interfaces/spoonacular-api-client.interface.js";
+import type { IApiClient } from "@interfaces/api-client.interface.js";
 
-export class SpoonacularApiClient implements ISpoonacularApiClient {
+export class SpoonacularApiClient implements IApiClient {
   private apiKey: string;
   private baseUrl: string;
   private rateLimiter: Bottleneck;
@@ -27,9 +27,7 @@ export class SpoonacularApiClient implements ISpoonacularApiClient {
     });
   }
 
-  async searchRecipes(
-    options: SpoonacularSearchOptions
-  ): Promise<SpoonacularResult[]> {
+  async searchRecipes(options: RecipeSearchOptions): Promise<ExtendedRecipe[]> {
     const { cuisine, diet, type, number, offset } = options;
 
     const searchParams = {
@@ -69,7 +67,7 @@ export class SpoonacularApiClient implements ISpoonacularApiClient {
       throw new Error("Invalid response format from Spoonacular API");
     }
 
-    return data.results.map((recipe: any): SpoonacularResult => {
+    return data.results.map((recipe: any): ExtendedRecipe => {
       const nutrition = recipe.nutrition ?? {};
       const caloricBreakdown = nutrition.caloricBreakdown ?? {};
       const weightPerServing = nutrition.weightPerServing?.amount ?? 0;
@@ -81,7 +79,8 @@ export class SpoonacularApiClient implements ISpoonacularApiClient {
         recipe.analyzedInstructions?.[0]?.steps?.map((s: any) => s.step) ?? [];
 
       const recipeData: RecipeData = {
-        spoonacularId: recipe.id?.toString() ?? "",
+        sourceId: recipe.id?.toString() ?? "",
+        sourceName: "Spoonacular",
         title: recipe.title ?? "",
         imageType: recipe.imageType ?? "",
         servings: recipe.servings ?? 0,
@@ -116,7 +115,8 @@ export class SpoonacularApiClient implements ISpoonacularApiClient {
         .filter((e: any) => e?.id && e?.name)
         .forEach((e: any) => {
           equipmentMap.set(e.id.toString(), {
-            spoonacularId: e.id.toString(),
+            sourceId: e.id.toString(),
+            sourceName: "Spoonacular",
             name: e.name,
             image: extractImageName(e.image ?? ""),
           });
@@ -130,7 +130,8 @@ export class SpoonacularApiClient implements ISpoonacularApiClient {
         .map(
           (i: any): ExtendedIngredient => ({
             ingredientData: {
-              spoonacularId: i.id.toString(),
+              sourceId: i.id.toString(),
+              sourceName: "Spoonacular",
               name: i.name,
               aisle: i.aisle ?? "",
               image: extractImageName(i.image ?? ""),

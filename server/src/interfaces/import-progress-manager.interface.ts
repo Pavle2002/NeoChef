@@ -1,6 +1,6 @@
-import type { ProgressState } from "@app-types/spoonacular-types.js";
+import type { ImportProgressState } from "@models/import-progress-state.js";
 
 export interface IImportProgressManager {
-  save(progress: ProgressState): Promise<void>;
-  load(): Promise<ProgressState>;
+  save(progress: ImportProgressState): Promise<void>;
+  load(): Promise<ImportProgressState>;
 }

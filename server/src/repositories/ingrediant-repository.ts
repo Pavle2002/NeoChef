@@ -8,13 +8,13 @@ export class IngredientRepository implements IIngredientRepository {
   private neo4j = neo4jClient;
 
   async createOrUpdate(ingrediant: IngredientData): Promise<Ingredient> {
-    const { spoonacularId, ...upsertIngredient } = ingrediant;
+    const { sourceId, sourceName, ...upsertIngredient } = ingrediant;
     const result = await this.neo4j.executeQuery(
-      `MERGE (i:Ingredient {spoonacularId: $spoonacularId})
+      `MERGE (i:Ingredient {sourceName: $sourceName, sourceId: $sourceId})
             ON CREATE SET i.id = apoc.create.uuid(), i += $upsertIngredient
             ON MATCH SET i += $upsertIngredient
             RETURN i`,
-      { spoonacularId: ingrediant.spoonacularId, upsertIngredient }
+      { sourceId, sourceName, upsertIngredient }
     );
 
     const record = result.records[0];
