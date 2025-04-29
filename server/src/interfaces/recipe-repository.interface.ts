@@ -4,16 +4,18 @@ import type { Recipe } from "@models/recipe.js";
 import type { Cuisine } from "@models/cuisine.js";
 import type { Diet } from "@models/diet.js";
 import type { DishType } from "@models/dish-type.js";
-import type { ExtendedIngredient } from "@app-types/ingredient-types.js";
+import type { IngredientUsage } from "@app-types/ingredient-types.js";
 
 export interface IRecipeRepository {
   createOrUpdate(recipe: RecipeData): Promise<Recipe>;
-  linkToIngredient(
+  findById(id: string): Promise<Recipe | null>;
+  addIngredient(
     recipeId: string,
-    ingredient: ExtendedIngredient
+    ingredientId: string,
+    usage: IngredientUsage
   ): Promise<void>;
-  linkToEquipment(recipeId: string, equipment: Equipment): Promise<void>;
-  linkToCuisine(recipeId: string, cuisine: Cuisine): Promise<void>;
-  linkToDiet(recipeId: string, diet: Diet): Promise<void>;
-  linkToDishType(recipeId: string, dishType: DishType): Promise<void>;
+  addEquipment(recipeId: string, equipment: Equipment): Promise<void>;
+  addCuisine(recipeId: string, cuisine: Cuisine): Promise<void>;
+  addDiet(recipeId: string, diet: Diet): Promise<void>;
+  addDishType(recipeId: string, dishType: DishType): Promise<void>;
 }

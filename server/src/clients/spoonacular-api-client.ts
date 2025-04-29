@@ -136,9 +136,11 @@ export class SpoonacularApiClient implements IApiClient {
               aisle: i.aisle ?? "",
               image: extractImageName(i.image ?? ""),
             },
-            amount: i.amount ?? 0,
-            unit: i.unit ?? "",
-            original: i.original ?? "",
+            usage: {
+              amount: i.amount ?? 0,
+              unit: i.unit ?? "",
+              original: i.original ?? "",
+            },
           })
         );
 

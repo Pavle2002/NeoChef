@@ -4,7 +4,7 @@ import { ZodIssueCode, type ZodIssue } from "zod";
 export function mapZodIssueToErrorCode(issue: ZodIssue): ErrorCode {
   switch (issue.code) {
     case ZodIssueCode.invalid_type:
-      return issue.received === undefined
+      return issue.received === "undefined"
         ? ErrorCodes.VAL_MISSING_FIELD
         : ErrorCodes.VAL_INVALID_TYPE;
     case ZodIssueCode.unrecognized_keys:

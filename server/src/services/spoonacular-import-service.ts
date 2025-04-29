@@ -6,11 +6,12 @@ import type { Recipe } from "@models/recipe.js";
 import type { IImportProgressManager } from "@interfaces/import-progress-manager.interface.js";
 import { safeAwait } from "@utils/safe-await.js";
 import { CUISINES, DIETS, DISH_TYPES } from "@utils/spoonacular-constants.js";
+import type { IUnitOfWorkFactory } from "@interfaces/unit-of-work-factory.interface.js";
 
 export class SpoonacularImportService implements IImportService {
   constructor(
     private spoonacularApiClient: IApiClient,
-    private recipeRepository: IRecipeRepository,
+    private uowFactory: IUnitOfWorkFactory,
     private importProgressManager: IImportProgressManager
   ) {}
 
@@ -19,28 +20,34 @@ export class SpoonacularImportService implements IImportService {
     const recipes: Recipe[] = [];
 
     for (const result of results) {
-      const recipe = await this.recipeRepository.createOrUpdate(
-        result.recipeData
-      );
+      const recipe = await this.uowFactory.execute(async (uow) => {
+        const recipe = await uow.recipes.createOrUpdate(result.recipeData);
 
-      await Promise.all([
-        ...result.extendedIngredients.map((ingredient) =>
-          this.recipeRepository.linkToIngredient(recipe.id, ingredient)
-        ),
-        ...result.cuisines.map((cuisine) =>
-          this.recipeRepository.linkToCuisine(recipe.id, cuisine)
-        ),
-        ...result.diets.map((diet) =>
-          this.recipeRepository.linkToDiet(recipe.id, diet)
-        ),
-        ...result.dishTypes.map((dishType) =>
-          this.recipeRepository.linkToDishType(recipe.id, dishType)
-        ),
-        ...result.equipment.map((equipment) =>
-          this.recipeRepository.linkToEquipment(recipe.id, equipment)
-        ),
-      ]);
+        for (const extendedIngredient of result.extendedIngredients) {
+          const ingredient = await uow.ingredients.createOrUpdate(
+            extendedIngredient.ingredientData
+          );
+          await uow.recipes.addIngredient(
+            recipe.id,
+            ingredient.id,
+            extendedIngredient.usage
+          );
+        }
+        for (const cuisine of result.cuisines) {
+          await uow.recipes.addCuisine(recipe.id, cuisine);
+        }
+        for (const diet of result.diets) {
+          await uow.recipes.addDiet(recipe.id, diet);
+        }
+        for (const dishType of result.dishTypes) {
+          await uow.recipes.addDishType(recipe.id, dishType);
+        }
+        for (const equipment of result.equipment) {
+          await uow.recipes.addEquipment(recipe.id, equipment);
+        }
 
+        return recipe;
+      });
       recipes.push(recipe);
     }
     return recipes;

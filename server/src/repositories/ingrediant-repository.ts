@@ -1,15 +1,15 @@
 import type { IngredientData } from "@app-types/ingredient-types.js";
-import neo4jClient from "@config/neo4j.js";
 import { InternalServerError } from "@errors/internal-server-error.js";
 import type { IIngredientRepository } from "@interfaces/ingredient-repository.interface.js";
+import type { IQueryExecutor } from "@interfaces/query-executor.interface.js";
 import type { Ingredient } from "@models/ingredient.js";
 
 export class IngredientRepository implements IIngredientRepository {
-  private neo4j = neo4jClient;
+  constructor(private queryExecutor: IQueryExecutor) {}
 
   async createOrUpdate(ingrediant: IngredientData): Promise<Ingredient> {
     const { sourceId, sourceName, ...upsertIngredient } = ingrediant;
-    const result = await this.neo4j.executeQuery(
+    const result = await this.queryExecutor.run(
       `MERGE (i:Ingredient {sourceName: $sourceName, sourceId: $sourceId})
             ON CREATE SET i.id = apoc.create.uuid(), i += $upsertIngredient
             ON MATCH SET i += $upsertIngredient
