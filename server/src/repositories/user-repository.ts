@@ -91,13 +91,90 @@ export class UserRepository implements IUserRepository {
 
   async delete(id: string): Promise<boolean> {
     const result = await this.queryExecutor.run(
-      `MATCH (u:User {id: $id}) 
-      DELETE u 
+      `MATCH (u:User {id: $id})
+      DELETE u
       RETURN COUNT(u) AS count`,
       { id }
     );
 
     const record = result.records[0];
     return record ? record.get("count") > 0 : false;
+  }
+
+  async addLikesRecipe(userId: string, recipeId: string): Promise<void> {
+    const result = await this.queryExecutor.run(
+      `MATCH (u:User {id: $userId})
+       MATCH (r:Recipe {id: $recipeId})
+       MERGE (u)-[:LIKES_RECIPE]->(r)
+       RETURN u, r`,
+      { userId, recipeId }
+    );
+
+    if (!result.records[0]) {
+      throw new InternalServerError("Failed to add liked recipe for user");
+    }
+  }
+
+  async addHasIngredient(userId: string, ingredientId: string): Promise<void> {
+    const result = await this.queryExecutor.run(
+      `MATCH (u:User {id: $userId})
+       MATCH (i:Ingredient {id: $ingredientId})
+       MERGE (u)-[:HAS_INGREDIENT]->(i)
+       RETURN u, i`,
+      { userId, ingredientId }
+    );
+
+    if (!result.records[0]) {
+      throw new InternalServerError(
+        "Failed to add ingredient to user's pantry"
+      );
+    }
+  }
+
+  async addDislikesIngredient(
+    userId: string,
+    ingredientId: string
+  ): Promise<void> {
+    const result = await this.queryExecutor.run(
+      `MATCH (u:User {id: $userId})
+       MATCH (i:Ingredient {id: $ingredientId})
+       MERGE (u)-[:DISLIKES_INGREDIENT]->(i)
+       RETURN u, i`,
+      { userId, ingredientId }
+    );
+
+    if (!result.records[0]) {
+      throw new InternalServerError(
+        "Failed to add disliked ingredient for user"
+      );
+    }
+  }
+
+  async addPrefersCuisine(userId: string, cuisineName: string): Promise<void> {
+    const result = await this.queryExecutor.run(
+      `MATCH (u:User {id: $userId})
+       MATCH (c:Cuisine {name: $cuisineName})
+       MERGE (u)-[:PREFERS]->(c)
+       RETURN u, c`,
+      { userId, cuisineName }
+    );
+
+    if (!result.records[0]) {
+      throw new InternalServerError("Failed to add preferred cuisine for user");
+    }
+  }
+
+  async addFollowsDiet(userId: string, dietName: string): Promise<void> {
+    const result = await this.queryExecutor.run(
+      `MATCH (u:User {id: $userId})
+       MATCH (d:Diet {name: $dietName})
+       MERGE (u)-[:FOLLOWS]->(d)
+       RETURN u, d`,
+      { userId, dietName }
+    );
+
+    if (!result.records[0]) {
+      throw new InternalServerError("Failed to add followed diet for user");
+    }
   }
 }

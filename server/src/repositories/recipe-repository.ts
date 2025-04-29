@@ -38,40 +38,56 @@ export class RecipeRepository implements IRecipeRepository {
   }
 
   async addCuisine(recipeId: string, cuisine: Cuisine): Promise<void> {
-    await this.queryExecutor.run(
+    const result = await this.queryExecutor.run(
       `MATCH (r:Recipe {id: $recipeId})
       MERGE (c:Cuisine {name: $cuisine.name})
-      MERGE (r)-[:BELONGS_TO]->(c)`,
+      MERGE (r)-[:BELONGS_TO]->(c)
+      RETURN r`,
       { recipeId, cuisine }
     );
+    if (!result.records[0]) {
+      throw new InternalServerError("Failed to add cuisine to recipe");
+    }
   }
 
   async addDiet(recipeId: string, diet: Diet): Promise<void> {
-    await this.queryExecutor.run(
+    const result = await this.queryExecutor.run(
       `MATCH (r:Recipe {id: $recipeId})
       MERGE (d:Diet {name: $diet.name})
-      MERGE (r)-[:SUITABLE_FOR]->(d)`,
+      MERGE (r)-[:SUITABLE_FOR]->(d)
+      RETURN r`,
       { recipeId, diet }
     );
+    if (!result.records[0]) {
+      throw new InternalServerError("Failed to add diet to recipe");
+    }
   }
 
   async addDishType(recipeId: string, dishType: DishType): Promise<void> {
-    await this.queryExecutor.run(
+    const result = await this.queryExecutor.run(
       `MATCH (r:Recipe {id: $recipeId})
       MERGE (m:DishType {name: $dishType.name})
-      MERGE (r)-[:IS_OF_TYPE]->(m)`,
+      MERGE (r)-[:IS_OF_TYPE]->(m)
+      RETURN r`,
       { recipeId, dishType }
     );
+    if (!result.records[0]) {
+      throw new InternalServerError("Failed to add dish type to recipe");
+    }
   }
 
   async addEquipment(recipeId: string, equipment: Equipment): Promise<void> {
-    await this.queryExecutor.run(
+    const result = await this.queryExecutor.run(
       `MATCH (r:Recipe {id: $recipeId})
       MERGE (e:Equipment {sourceName: $equipment.sourceName, sourceId: $equipment.sourceId})
-      SET e.name = $equipment.name, e.image = $equipment.image
-      MERGE (r)-[:REQUIRES]->(e)`,
+      SET e += $equipment
+      MERGE (r)-[:REQUIRES]->(e)
+      RETURN r`,
       { recipeId, equipment }
     );
+    if (!result.records[0]) {
+      throw new InternalServerError("Failed to add equipment to recipe");
+    }
   }
 
   async addIngredient(
@@ -79,16 +95,20 @@ export class RecipeRepository implements IRecipeRepository {
     ingredientId: string,
     usage: IngredientUsage
   ): Promise<void> {
-    await this.queryExecutor.run(
+    const result = await this.queryExecutor.run(
       `MATCH (r:Recipe {id: $recipeId})
        MATCH (i:Ingredient {id: $ingredientId})
        MERGE (r)-[rel:CONTAINS]->(i)
-       SET rel += $usage`,
+       SET rel += $usage
+       RETURN r, i`,
       {
         recipeId,
         ingredientId,
         usage,
       }
     );
+    if (!result.records[0]) {
+      throw new InternalServerError("Failed to add ingredient to recipe");
+    }
   }
 }

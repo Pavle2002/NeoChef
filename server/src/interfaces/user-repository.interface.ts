@@ -9,9 +9,9 @@ export interface IUserRepository {
   create(user: RegisterInput): Promise<User>;
   update(id: string, user: Partial<User>): Promise<User | null>;
   delete(id: string): Promise<boolean>;
-  // addLikedRecipe(id: string, recipeId: string): Promise<void>;
-  // addHasIngredient(id: string, ingredientId: string): Promise<void>;
-  // addDislikesIngredient(id: string, ingredientId: string): Promise<void>;
-  // addPrefersCuisine(id: string, cuisineName: string): Promise<void>;
-  // addFollowsDiet(id: string, dietName: string): Promise<void>;
+  addLikesRecipe(userId: string, recipeId: string): Promise<void>;
+  addHasIngredient(userId: string, ingredientId: string): Promise<void>;
+  addDislikesIngredient(userId: string, ingredientId: string): Promise<void>;
+  addPrefersCuisine(userId: string, cuisineName: string): Promise<void>;
+  addFollowsDiet(userId: string, dietName: string): Promise<void>;
 }
