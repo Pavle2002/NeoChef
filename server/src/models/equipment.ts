@@ -1,5 +1,6 @@
 export type Equipment = {
-  spoonacularId: string;
+  sourceId: string;
+  sourceName: string;
   name: string;
   image: string;
 };

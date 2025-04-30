@@ -5,23 +5,30 @@ import { type Cuisine } from "@models/cuisine.js";
 import { type Diet } from "@models/diet.js";
 import { type DishType } from "@models/dish-type.js";
 import { type Equipment } from "@models/equipment.js";
-import neo4jClient from "@config/neo4j.js";
 import { InternalServerError } from "@errors/index.js";
-import { type IIngredientRepository } from "@interfaces/ingredient-repository.interface.js";
-import { type ExtendedIngredient } from "@app-types/ingredient-types.js";
+import type { IQueryExecutor } from "@interfaces/query-executor.interface.js";
+import type { IngredientUsage } from "@app-types/ingredient-types.js";
 
 export class RecipeRepository implements IRecipeRepository {
-  constructor(private ingredientRepository: IIngredientRepository) {}
-  private neo4j = neo4jClient;
+  constructor(private queryExecutor: IQueryExecutor) {}
+
+  async findById(id: string): Promise<Recipe | null> {
+    const result = await this.queryExecutor.run(
+      "MATCH (r:Recipe {id: $id}) RETURN r",
+      { id }
+    );
+    const record = result.records[0];
+    return record ? (record.get("r").properties as Recipe) : null;
+  }
 
   async createOrUpdate(recipe: RecipeData): Promise<Recipe> {
-    const { spoonacularId, ...upsertRecipe } = recipe;
-    const result = await this.neo4j.executeQuery(
-      `MERGE (r:Recipe {spoonacularId: $spoonacularId})
+    const { sourceId, sourceName, ...upsertRecipe } = recipe;
+    const result = await this.queryExecutor.run(
+      `MERGE (r:Recipe {sourceName: $sourceName, sourceId: $sourceId})
       ON CREATE SET r.id = apoc.create.uuid(), r += $upsertRecipe
       ON MATCH SET r += $upsertRecipe
       RETURN r`,
-      { spoonacularId: recipe.spoonacularId, upsertRecipe }
+      { sourceId, sourceName, upsertRecipe }
     );
     const record = result.records[0];
     if (!record) {
@@ -30,8 +37,8 @@ export class RecipeRepository implements IRecipeRepository {
     return record.get("r").properties as Recipe;
   }
 
-  async linkToCuisine(recipeId: string, cuisine: Cuisine): Promise<void> {
-    await this.neo4j.executeQuery(
+  async addCuisine(recipeId: string, cuisine: Cuisine): Promise<void> {
+    await this.queryExecutor.run(
       `MATCH (r:Recipe {id: $recipeId})
       MERGE (c:Cuisine {name: $cuisine.name})
       MERGE (r)-[:BELONGS_TO]->(c)`,
@@ -39,8 +46,8 @@ export class RecipeRepository implements IRecipeRepository {
     );
   }
 
-  async linkToDiet(recipeId: string, diet: Diet): Promise<void> {
-    await this.neo4j.executeQuery(
+  async addDiet(recipeId: string, diet: Diet): Promise<void> {
+    await this.queryExecutor.run(
       `MATCH (r:Recipe {id: $recipeId})
       MERGE (d:Diet {name: $diet.name})
       MERGE (r)-[:SUITABLE_FOR]->(d)`,
@@ -48,8 +55,8 @@ export class RecipeRepository implements IRecipeRepository {
     );
   }
 
-  async linkToDishType(recipeId: string, dishType: DishType): Promise<void> {
-    await this.neo4j.executeQuery(
+  async addDishType(recipeId: string, dishType: DishType): Promise<void> {
+    await this.queryExecutor.run(
       `MATCH (r:Recipe {id: $recipeId})
       MERGE (m:DishType {name: $dishType.name})
       MERGE (r)-[:IS_OF_TYPE]->(m)`,
@@ -57,34 +64,30 @@ export class RecipeRepository implements IRecipeRepository {
     );
   }
 
-  async linkToEquipment(recipeId: string, equipment: Equipment): Promise<void> {
-    await this.neo4j.executeQuery(
+  async addEquipment(recipeId: string, equipment: Equipment): Promise<void> {
+    await this.queryExecutor.run(
       `MATCH (r:Recipe {id: $recipeId})
-      MERGE (e:Equipment {spoonacularId: $equipment.spoonacularId})
+      MERGE (e:Equipment {sourceName: $equipment.sourceName, sourceId: $equipment.sourceId})
       SET e.name = $equipment.name, e.image = $equipment.image
       MERGE (r)-[:REQUIRES]->(e)`,
       { recipeId, equipment }
     );
   }
 
-  async linkToIngredient(
+  async addIngredient(
     recipeId: string,
-    ingredient: ExtendedIngredient
+    ingredientId: string,
+    usage: IngredientUsage
   ): Promise<void> {
-    const savedIngredient = await this.ingredientRepository.createOrUpdate(
-      ingredient.ingredientData
-    );
-    await this.neo4j.executeQuery(
+    await this.queryExecutor.run(
       `MATCH (r:Recipe {id: $recipeId})
        MATCH (i:Ingredient {id: $ingredientId})
        MERGE (r)-[rel:CONTAINS]->(i)
-       SET rel.amount = $amount,
-           rel.unit = $unit`,
+       SET rel += $usage`,
       {
         recipeId,
-        ingredientId: savedIngredient.id,
-        amount: ingredient.amount,
-        unit: ingredient.unit,
+        ingredientId,
+        usage,
       }
     );
   }

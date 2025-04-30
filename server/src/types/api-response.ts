@@ -1,8 +1,16 @@
-import type { ErrorCode } from "@app-types/error-codes.js";
+import type { ErrorCode } from "@utils/error-codes.js";
 
-export type ApiResponse<T> = {
-  success: boolean;
-  data: T | null;
+export type SuccessResponse<T> = {
+  success: true;
+  data: T;
   message: string;
-  errorCode?: ErrorCode;
 };
+
+export type FailResponse = {
+  success: false;
+  data: null;
+  message: string;
+  errorCode: ErrorCode;
+};
+
+export type ApiResponse<T> = SuccessResponse<T> | FailResponse;

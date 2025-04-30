@@ -10,7 +10,6 @@ import { authRoutes } from "@routes/auth-routes.js";
 import { sendSuccess } from "@utils/response-handler.js";
 import { errorHandler } from "@middlewares/error-handler.js";
 import { morganMiddleware } from "@middlewares/morgan-middleware.js";
-import { spoonacularImportService } from "@services/index.js";
 
 const app = express();
 const port = config.port;
@@ -33,10 +32,3 @@ app.use(errorHandler);
 app.listen(port, () => {
   logger.info("Server is running", { address: `http://localhost:${port}` });
 });
-
-// spoonacularImportService.importRecipes({
-//   cuisine: "italian",
-//   diet: "vegetarian",
-//   type: "main course",
-//   number: 10,
-// });

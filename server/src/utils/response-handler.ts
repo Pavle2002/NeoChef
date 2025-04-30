@@ -1,11 +1,11 @@
-import type { ApiResponse } from "@app-types/api-response.js";
-import type { ErrorCode } from "@app-types/error-codes.js";
+import type { FailResponse, SuccessResponse } from "@app-types/api-response.js";
+import type { ErrorCode } from "@utils/error-codes.js";
 import type { Response } from "express";
 
 export function sendSuccess<T>(
-  res: Response<ApiResponse<T>>,
+  res: Response<SuccessResponse<T>>,
   statusCode: number,
-  data: T | null,
+  data: T,
   message: string
 ): void {
   res.status(statusCode).json({
@@ -16,7 +16,7 @@ export function sendSuccess<T>(
 }
 
 export function sendError(
-  res: Response<ApiResponse<null>>,
+  res: Response<FailResponse>,
   statusCode: number,
   message: string,
   errorCode: ErrorCode

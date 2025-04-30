@@ -1,6 +1,6 @@
 import client from "redis";
-import config from "@config/config.js";
 import { safeAwait } from "@utils/safe-await.js";
+import config from "@config/config.js";
 import logger from "@config/logger.js";
 
 const redisClient = client.createClient({

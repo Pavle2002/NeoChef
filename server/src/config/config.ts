@@ -31,6 +31,8 @@ const config = {
   spoonacular: {
     baseUrl: process.env.SPOONACULAR_BASE_URL || "https://api.spoonacular.com",
     apiKey: process.env.SPOONACULAR_API_KEY as string,
+    importProgressFilePath:
+      process.env.IMPORT_PROGRESS_FILE_PATH || "./import-progress.json",
   },
 };
 

@@ -4,7 +4,7 @@ import type { IVerifyOptions } from "passport-local";
 import { authService } from "@services/index.js";
 import type { User } from "@models/user.js";
 import { sendSuccess } from "@utils/response-handler.js";
-import { InternalServerError, UnauthorizedError } from "@errors/index.js";
+import { UnauthorizedError } from "@errors/index.js";
 import type { RegisterInput } from "@app-types/auth-types.js";
 
 function login(req: Request, res: Response, next: NextFunction): void {

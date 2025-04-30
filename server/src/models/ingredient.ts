@@ -1,6 +1,7 @@
 export type Ingredient = {
   id: string;
-  spoonacularId: string;
+  sourceId: string;
+  sourceName: string;
   name: string;
   image: string;
   aisle: string;
