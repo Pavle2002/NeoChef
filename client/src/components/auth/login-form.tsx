@@ -14,16 +14,17 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 import { loginSchema } from "@/schemas/auth-shemas";
 import { type LoginInput } from "@/types/auth-inputs";
 import useLogin from "@/hooks/useLogin";
-import { ApiError } from "@/lib/errors";
+import ApiError from "@/utils/api-error";
 import { toast } from "sonner";
 
 type LoginFormProps = React.ComponentPropsWithoutRef<"form">;
 
 export default function LoginForm({ className, ...props }: LoginFormProps) {
+  const navigate = useNavigate();
   // 1. Define your form.
   const form = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
@@ -33,8 +34,6 @@ export default function LoginForm({ className, ...props }: LoginFormProps) {
     },
   });
   const { mutate: login, isPending, isError, error } = useLogin();
-  const navigate = useNavigate();
-
   // 2. Define a submit handler.
   function onSubmit(data: LoginInput) {
     // Do something with the form values.
@@ -50,8 +49,8 @@ export default function LoginForm({ className, ...props }: LoginFormProps) {
           minute: "numeric",
           hour12: true,
         }).format(now);
-        toast.success("Welcome back. You successfully logged in", {
-          description: formattedDate,
+        toast.success("Welcome back. You successfully logged in 🎉", {
+          description: formattedDate + " 📆",
         });
         navigate("/home");
       },
@@ -103,7 +102,7 @@ export default function LoginForm({ className, ...props }: LoginFormProps) {
           )}
         />
         {isError && error instanceof ApiError && (
-          <FormMessage>{error.message}</FormMessage>
+          <FormMessage>{error.errorCodeObject.USER_MESSAGE}</FormMessage>
         )}
 
         <Button className="w-full" type="submit">

@@ -1,6 +1,5 @@
 import { ApiResponse } from "@/types/api-response";
-import { ApiError, NetworkError } from "./errors";
-import { safeAwait } from "./safe-await";
+import ApiError from "./api-error";
 
 const API_URL = "http://localhost:3000";
 
@@ -11,18 +10,15 @@ class ApiClient {
     this.baseUrl = baseUrl;
   }
 
-  async request<T>(endpoint: string, options?: RequestInit): Promise<T | null> {
-    const [err, res] = await safeAwait(
-      fetch(`${this.baseUrl}${endpoint}`, {
-        credentials: "include", // Send cookies with the request
-        ...options,
-      })
-    );
-    if (err) throw new NetworkError();
-
+  async request<T>(endpoint: string, options?: RequestInit): Promise<T> {
+    const res = await fetch(`${this.baseUrl}${endpoint}`, {
+      credentials: "include", // Send cookies with the request
+      ...options,
+    });
     const resBody = (await res.json()) as ApiResponse<T>;
 
-    if (!resBody.success) throw new ApiError(resBody.message);
+    if (!resBody.success)
+      throw new ApiError(resBody.message, res.status, resBody.errorCode);
 
     return resBody.data;
   }

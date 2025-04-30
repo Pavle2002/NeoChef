@@ -13,12 +13,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { cn } from "@/lib/cn";
+import { cn } from "@/utils/cn";
 import { registerSchema } from "@/schemas/auth-shemas";
 import { type RegisterInput } from "@/types/auth-inputs";
 import { toast } from "sonner";
 import useRegister from "@/hooks/useRegister";
-import { ApiError } from "@/lib/errors";
+import ApiError from "@/utils/api-error";
 
 type RegisterFormProps = React.ComponentPropsWithoutRef<"form">;
 
@@ -26,6 +26,7 @@ export default function RegisterForm({
   className,
   ...props
 }: RegisterFormProps) {
+  const navigate = useNavigate();
   // 1. Define your form.
   const form = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
@@ -35,8 +36,14 @@ export default function RegisterForm({
       password: "",
     },
   });
-  const { mutate: register, isPending, isError, error } = useRegister();
-  const navigate = useNavigate();
+
+  const { mutate: register, error, isError, isPending } = useRegister();
+  const isApiError = isError && error instanceof ApiError;
+  const isEmailConflict =
+    isApiError && error.errorCodeObject.NAME === "RES_CONFLICT_EMAIL";
+  const isUserNameConflict =
+    isApiError && error.errorCodeObject.NAME === "RES_CONFLICT_USERNAME";
+  const isOtherApiError = isApiError && !isEmailConflict && !isUserNameConflict;
 
   // 2. Define a submit handler.
   function onSubmit(data: RegisterInput) {
@@ -76,7 +83,9 @@ export default function RegisterForm({
                   {...field}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage>
+                {isUserNameConflict && error.errorCodeObject.USER_MESSAGE}
+              </FormMessage>
             </FormItem>
           )}
         />
@@ -94,7 +103,9 @@ export default function RegisterForm({
                   {...field}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage>
+                {isEmailConflict && error.errorCodeObject.USER_MESSAGE}
+              </FormMessage>
             </FormItem>
           )}
         />
@@ -112,8 +123,8 @@ export default function RegisterForm({
           )}
         />
 
-        {isError && error instanceof ApiError && (
-          <FormMessage>{error.message}</FormMessage>
+        {isOtherApiError && (
+          <FormMessage>{error.errorCodeObject.USER_MESSAGE}</FormMessage>
         )}
 
         <Button className="w-full" type="submit">
