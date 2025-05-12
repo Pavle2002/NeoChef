@@ -12,8 +12,8 @@ import Login from "@/pages/login-page";
 import Register from "@/pages/register-page";
 import Home from "./pages/home-page";
 import { toast, Toaster } from "sonner";
-import { NetworkError } from "./lib/errors";
 import ProtectedRoute from "./components/protected-route";
+import ApiError from "./utils/api-error";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +40,12 @@ const router = createBrowserRouter([
   },
 ]);
 
+function toastGlobalError() {
+  toast.error("Oops... Something went wrong", {
+    description: "Please check your internet connection 📶🔌",
+  });
+}
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -48,18 +54,12 @@ const queryClient = new QueryClient({
   },
   queryCache: new QueryCache({
     onError: (error) => {
-      if (error instanceof NetworkError)
-        toast.error("Oops... Something went wrong", {
-          description: "Please check your internet connection 📶",
-        });
+      if (!(error instanceof ApiError)) toastGlobalError();
     },
   }),
   mutationCache: new MutationCache({
     onError: (error) => {
-      if (error instanceof NetworkError)
-        toast.error("Oops... Something went wrong", {
-          description: "Please check your internet connection 📶",
-        });
+      if (!(error instanceof ApiError)) toastGlobalError();
     },
   }),
 });
