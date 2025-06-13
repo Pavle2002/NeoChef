@@ -10,7 +10,7 @@ const router = Router();
 
 router.post("/login", validate(loginSchema), login);
 router.post("/register", validate(registerSchema), register);
-router.get("/logout", isAuthenticated, logout);
-router.get("/me", isAuthenticated, getCurrentUser);
+router.post("/logout", isAuthenticated, logout);
+router.get("/me", getCurrentUser);
 
 export { router as authRoutes };

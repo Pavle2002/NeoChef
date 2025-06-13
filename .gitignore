@@ -1,9 +1,6 @@
 /cookies.txt
-# Dependency directories
-/*/node_modules
 node_modules/
-
-# Build outputs
+/*/node_modules
 /*/dist
 
 #server

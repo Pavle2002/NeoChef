@@ -1,8 +1,10 @@
-import type { RegisterInput } from "@app-types/auth-types.js";
-import type { User } from "@models/user.js";
+import type { RegisterInput, SafeUser } from "@app-types/auth-types.js";
 
 export interface IAuthService {
-  getUserById(id: string): Promise<User | null>;
-  authenticateUser(username: string, password: string): Promise<User | null>;
-  registerUser(userData: RegisterInput): Promise<User>;
+  getUserById(id: string): Promise<SafeUser | null>;
+  authenticateUser(
+    username: string,
+    password: string
+  ): Promise<SafeUser | null>;
+  registerUser(userData: RegisterInput): Promise<SafeUser>;
 }

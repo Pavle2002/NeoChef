@@ -1,15 +1,16 @@
-import { ErrorCode } from "@/types/error-code";
+import type { ErrorCode } from "@/lib/error-codes";
 
-type SuccessResponse<T> = {
+export type SuccessResponse<T> = {
   success: true;
   data: T;
   message: string;
 };
 
-type FailResponse = {
+export type FailResponse = {
   success: false;
-  errorCode: ErrorCode;
+  data: null;
   message: string;
+  errorCode: ErrorCode;
 };
 
 export type ApiResponse<T> = SuccessResponse<T> | FailResponse;
