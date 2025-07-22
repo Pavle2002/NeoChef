@@ -5,6 +5,7 @@ import type { RegisterInput } from "@app-types/auth-types.js";
 import { ConflictError, InternalServerError } from "@errors/index.js";
 import { ErrorCodes } from "@utils/error-codes.js";
 import type { IQueryExecutor } from "@interfaces/query-executor.interface.js";
+import { neo4jDateTimeConverter } from "@utils/neo4j-datetime-converter.js";
 
 export class UserRepository implements IUserRepository {
   constructor(private queryExecutor: IQueryExecutor) {}
@@ -15,7 +16,12 @@ export class UserRepository implements IUserRepository {
       { id }
     );
     const record = result.records[0];
-    return record ? (record.get("u").properties as User) : null;
+    if (!record) {
+      return null;
+    }
+    const user = record.get("u").properties;
+    user.createdAt = neo4jDateTimeConverter.toStandardDate(user.createdAt);
+    return user as User;
   }
 
   async findByUsername(username: string): Promise<User | null> {
@@ -24,7 +30,12 @@ export class UserRepository implements IUserRepository {
       { username }
     );
     const record = result.records[0];
-    return record ? (record.get("u").properties as User) : null;
+    if (!record) {
+      return null;
+    }
+    const user = record.get("u").properties;
+    user.createdAt = neo4jDateTimeConverter.toStandardDate(user.createdAt);
+    return user as User;
   }
 
   async findByEmail(email: string): Promise<User | null> {
@@ -33,18 +44,29 @@ export class UserRepository implements IUserRepository {
       { email }
     );
     const record = result.records[0];
-    return record ? (record.get("u").properties as User) : null;
+    if (!record) {
+      return null;
+    }
+    const user = record.get("u").properties;
+    user.createdAt = neo4jDateTimeConverter.toStandardDate(user.createdAt);
+    return user as User;
   }
 
   async findAll(): Promise<User[]> {
     const result = await this.queryExecutor.run("MATCH (u:User) RETURN u");
-    return result.records.map((record) => record.get("u").properties as User);
+    const users = result.records.map((record) => {
+      const user = record.get("u").properties;
+      user.createdAt = neo4jDateTimeConverter.toStandardDate(user.createdAt);
+      return user as User;
+    });
+    return users;
   }
 
   async create(user: RegisterInput): Promise<User> {
     try {
+      ``;
       const result = await this.queryExecutor.run(
-        `CREATE (u:User {id: apoc.create.uuid()})
+        `CREATE (u:User {id: apoc.create.uuid(), createdAt: datetime()})
         SET u += $user
         RETURN u`,
         { user }
@@ -55,7 +77,11 @@ export class UserRepository implements IUserRepository {
         throw new InternalServerError("Failed to create user");
       }
 
-      return record.get("u").properties as User;
+      const newUser = record.get("u").properties;
+      newUser.createdAt = neo4jDateTimeConverter.toStandardDate(
+        newUser.createdAt
+      );
+      return newUser as User;
     } catch (error) {
       if (
         error instanceof Neo4jError &&
@@ -86,7 +112,14 @@ export class UserRepository implements IUserRepository {
     );
 
     const record = result.records[0];
-    return record ? (record.get("u").properties as User) : null;
+    if (!record) {
+      return null;
+    }
+    const updatedUser = record.get("u").properties;
+    updatedUser.createdAt = neo4jDateTimeConverter.toStandardDate(
+      updatedUser.createdAt
+    );
+    return updatedUser as User;
   }
 
   async delete(id: string): Promise<boolean> {
@@ -105,8 +138,9 @@ export class UserRepository implements IUserRepository {
     const result = await this.queryExecutor.run(
       `MATCH (u:User {id: $userId})
        MATCH (r:Recipe {id: $recipeId})
-       MERGE (u)-[:LIKES_RECIPE]->(r)
-       RETURN u, r`,
+       MERGE (u)-[rel:LIKES]->(r)
+       ON CREATE SET rel.likedAt = datetime()
+       RETURN u, r, rel`,
       { userId, recipeId }
     );
 
@@ -119,7 +153,7 @@ export class UserRepository implements IUserRepository {
     const result = await this.queryExecutor.run(
       `MATCH (u:User {id: $userId})
        MATCH (i:Ingredient {id: $ingredientId})
-       MERGE (u)-[:HAS_INGREDIENT]->(i)
+       MERGE (u)-[:HAS]->(i)
        RETURN u, i`,
       { userId, ingredientId }
     );
@@ -138,7 +172,7 @@ export class UserRepository implements IUserRepository {
     const result = await this.queryExecutor.run(
       `MATCH (u:User {id: $userId})
        MATCH (i:Ingredient {id: $ingredientId})
-       MERGE (u)-[:DISLIKES_INGREDIENT]->(i)
+       MERGE (u)-[:DISLIKES]->(i)
        RETURN u, i`,
       { userId, ingredientId }
     );

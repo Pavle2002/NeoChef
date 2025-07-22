@@ -2,7 +2,7 @@ import { apiClient } from "@/lib/api-client";
 import type { User } from "@/types/user";
 import { queryOptions } from "@tanstack/react-query";
 
-export function currentUserQueryOptions() {
+export function getCurrentUserQueryOptions() {
   return queryOptions({
     queryKey: ["currentUser"],
     queryFn: () => apiClient.get<User | null>("/auth/me"),

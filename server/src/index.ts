@@ -10,6 +10,7 @@ import { authRoutes } from "@routes/auth-routes.js";
 import { sendSuccess } from "@utils/response-handler.js";
 import { errorHandler } from "@middlewares/error-handler.js";
 import { morganMiddleware } from "@middlewares/morgan-middleware.js";
+import { recipeRoutes } from "@routes/recipe-routes.js";
 
 const app = express();
 const port = config.port;
@@ -22,6 +23,7 @@ app.use(sessionConfig);
 app.use(passport.initialize());
 app.use(passport.session());
 app.use("/auth", authRoutes);
+app.use("/recipes", recipeRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   sendSuccess(res, 200, null, "Hello World!");

@@ -12,9 +12,8 @@ import { useLogin } from "@/mutations/useLogin";
 import { loginSchema } from "@/schemas/auth-schemas";
 import type { LoginInput } from "@/types/auth-types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 
 export const Route = createFileRoute("/_auth/login")({
   component: RouteComponent,
@@ -31,7 +30,6 @@ function RouteComponent() {
 }
 
 function LoginForm() {
-  const navigate = useNavigate();
   const { mutate: login, isPending, error } = useLogin();
 
   const form = useForm<LoginInput>({
@@ -39,23 +37,7 @@ function LoginForm() {
   });
 
   async function onSubmit(data: LoginInput) {
-    login(data, {
-      onSuccess: () => {
-        const now = new Date();
-        const formattedDate = new Intl.DateTimeFormat("en-US", {
-          weekday: "long",
-          month: "long",
-          day: "numeric",
-          hour: "numeric",
-          minute: "numeric",
-          hour12: true,
-        }).format(now);
-        toast.success("Welcome back. You successfully logged in 🎉", {
-          description: formattedDate + " 📆",
-        });
-        navigate({ to: "/dashboard" });
-      },
-    });
+    login(data);
   }
 
   return (
@@ -117,8 +99,10 @@ function RegisterLink() {
 function Header() {
   return (
     <div className="flex flex-col items-center gap-2 text-center mb-6">
-      <h1 className="text-2xl font-bold text-primary">Login to your account</h1>
-      <p className="text-muted-foreground text-balance text-sm">
+      <h1 className="text-2xl 2xl:text-3xl font-bold text-primary">
+        Login to your account
+      </h1>
+      <p className="text-muted-foreground text-balance text-sm 2xl:text-base">
         Enter your email below to login to your account
       </p>
     </div>

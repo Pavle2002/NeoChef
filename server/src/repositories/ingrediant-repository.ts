@@ -23,4 +23,16 @@ export class IngredientRepository implements IIngredientRepository {
     }
     return record.get("i").properties as Ingredient;
   }
+
+  async findAll(contains: string): Promise<Ingredient[]> {
+    const result = await this.queryExecutor.run(
+      `MATCH (i:Ingredient)
+       WHERE i.name CONTAINS $contains
+       RETURN i`,
+      { contains }
+    );
+
+    const records = result.records;
+    return records.map((record) => record.get("i").properties as Ingredient);
+  }
 }

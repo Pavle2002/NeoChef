@@ -7,14 +7,6 @@ import type { RegisterInput, SafeUser } from "@app-types/auth-types.js";
 export class AuthService implements IAuthService {
   constructor(private userRepository: IUserRepository) {}
 
-  async getUserById(id: string): Promise<SafeUser | null> {
-    const user = await this.userRepository.findById(id);
-    if (!user) return null;
-
-    const { password, ...safeUser } = user;
-    return safeUser;
-  }
-
   async authenticateUser(
     email: string,
     password: string

@@ -9,8 +9,8 @@ import { routeTree } from "./routeTree.gen";
 import "./styles.css";
 import reportWebVitals from "./reportWebVitals.ts";
 import { Spinner } from "@/components/ui/spinner.tsx";
-import { auth } from "@/context/auth.tsx";
 import { Toaster } from "sonner";
+import { auth } from "@/context/auth.tsx";
 
 const queryClient = new QueryClient();
 
@@ -39,13 +39,20 @@ declare module "@tanstack/react-router" {
   }
 }
 
+// function App() {
+//   const auth = useAuth();
+//   return <RouterProvider router={router} context={{ auth }} />;
+// }
+
 const rootElement = document.getElementById("app");
 if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <QueryClientProvider client={queryClient}>
+      {/* <AuthProvider> */}
       <RouterProvider router={router} />
       <Toaster />
+      {/* </AuthProvider> */}
     </QueryClientProvider>
   );
 }

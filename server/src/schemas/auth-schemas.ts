@@ -1,17 +1,23 @@
 import { z } from "zod";
 
 const usernameSchema = z
-  .string({ required_error: "Username is required" })
+  .string({
+    required_error: "Username is required",
+    invalid_type_error: "Username must be a string",
+  })
   .trim()
   .regex(
     /^[a-zA-Z0-9_]+$/,
-    "Username can only contain letters, numbers, and underscores "
+    "Username can only contain letters, numbers, and underscores"
   )
   .min(3, "Username must be at least 3 characters long")
   .max(20, "Username must be at most 20 characters long");
 
 const passwordSchema = z
-  .string({ required_error: "Password is required" })
+  .string({
+    required_error: "Password is required",
+    invalid_type_error: "Password must be a string",
+  })
   .min(8, "Password must be at least 8 characters long")
   .max(32, "Password must be at most 32 characters long")
   .regex(/[a-z]/, "Password must contain at least one lowercase letter")
@@ -23,10 +29,13 @@ const passwordSchema = z
   );
 
 const emailSchema = z
-  .string({ required_error: "Email is required" })
+  .string({
+    required_error: "Email is required",
+    invalid_type_error: "Email must be a string",
+  })
   .email("Invalid email");
 
-export const loginSchema = z.object({
+const loginSchema = z.object({
   body: z
     .object({
       email: emailSchema,
@@ -35,7 +44,7 @@ export const loginSchema = z.object({
     .strict("Invalid format"),
 });
 
-export const registerSchema = z.object({
+const registerSchema = z.object({
   body: z
     .object({
       username: usernameSchema,
@@ -44,3 +53,8 @@ export const registerSchema = z.object({
     })
     .strict("Invalid format"),
 });
+
+export const authSchemas = {
+  loginSchema,
+  registerSchema,
+};

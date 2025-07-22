@@ -9,12 +9,18 @@ import { FileImportProgressManager } from "./file-import-progress-manager.js";
 import { DriverQueryExecutor } from "@utils/driver-query-executor.js";
 import neo4jClient from "@config/neo4j.js";
 import { UnitOfWorkFactory } from "@utils/unit-of-work-factory.js";
+import { UserService } from "./user-service.js";
+import { RecipeService } from "./recipe-service.js";
 
 const queryExecutor = new DriverQueryExecutor(neo4jClient);
 
 const userRepository = new UserRepository(queryExecutor);
 const ingredientRepository = new IngredientRepository(queryExecutor);
 const recipeRepository = new RecipeRepository(queryExecutor);
+
+export const authService = new AuthService(userRepository);
+export const userService = new UserService(userRepository);
+export const recipeService = new RecipeService(recipeRepository);
 
 const spoonacularApiClient = new SpoonacularApiClient(
   config.spoonacular.apiKey,
@@ -24,7 +30,6 @@ const fileImportProgressManager = new FileImportProgressManager(
   config.spoonacular.importProgressFilePath
 );
 
-export const authService = new AuthService(userRepository);
 export const spoonacularImportService = new SpoonacularImportService(
   spoonacularApiClient,
   new UnitOfWorkFactory(neo4jClient),

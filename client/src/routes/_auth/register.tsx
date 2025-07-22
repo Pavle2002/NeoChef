@@ -10,11 +10,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { registerSchema } from "@/schemas/auth-schemas";
 import type { RegisterInput } from "@/types/auth-types";
 import { useRegister } from "@/mutations/useRegister";
-import { toast } from "sonner";
 
 export const Route = createFileRoute("/_auth/register")({
   component: RouteComponent,
@@ -31,26 +30,16 @@ function RouteComponent() {
 }
 
 function RegisterForm() {
-  const navigate = useNavigate();
   const { mutate: register, isPending, error } = useRegister();
 
   const form = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
   });
 
-  async function onSubmit(data: RegisterInput) {
-    register(data, {
-      onSuccess: () => {
-        toast.success("Congratulations! Your account has been created 🎉");
-        navigate({ to: "/login" });
-      },
-    });
-  }
-
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit((data: RegisterInput) => register(data))}
         className="flex flex-col gap-6"
       >
         <FormField
@@ -119,8 +108,10 @@ function LoginLink() {
 function Header() {
   return (
     <div className="flex flex-col items-center gap-2 text-center mb-6">
-      <h1 className="text-2xl font-bold text-primary">Create your account</h1>
-      <p className="text-muted-foreground text-balance text-sm">
+      <h1 className="text-2xl 2xl:text-3xl font-bold text-primary">
+        Create your account
+      </h1>
+      <p className="text-muted-foreground text-balance text-sm 2xl:text-base">
         Enter your email below to create your account
       </p>
     </div>

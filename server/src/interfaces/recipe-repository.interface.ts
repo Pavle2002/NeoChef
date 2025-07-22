@@ -9,6 +9,8 @@ import type { IngredientUsage } from "@app-types/ingredient-types.js";
 export interface IRecipeRepository {
   createOrUpdate(recipe: RecipeData): Promise<Recipe>;
   findById(id: string): Promise<Recipe | null>;
+  findAll(limit?: number, offset?: number): Promise<Recipe[]>;
+  findTrending(): Promise<Recipe[]>;
   addIngredient(
     recipeId: string,
     ingredientId: string,
@@ -18,4 +20,5 @@ export interface IRecipeRepository {
   addCuisine(recipeId: string, cuisine: Cuisine): Promise<void>;
   addDiet(recipeId: string, diet: Diet): Promise<void>;
   addDishType(recipeId: string, dishType: DishType): Promise<void>;
+  countAll(): Promise<number>;
 }

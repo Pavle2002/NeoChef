@@ -12,7 +12,7 @@ function RouteComponent() {
         <div className="flex justify-center gap-2 md:justify-start">
           <Link
             to="/"
-            className="flex items-center gap-2 font-semibold text-primary"
+            className="flex items-center gap-2 font-semibold text-primary 2xl:text-lg"
           >
             <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
               <ChefHat className="size-4" />
@@ -21,7 +21,7 @@ function RouteComponent() {
           </Link>
         </div>
         <div className="flex flex-1 items-center justify-center">
-          <div className="w-full max-w-xs">
+          <div className="w-full max-w-xs 2xl:max-w-sm">
             <Outlet />
           </div>
         </div>

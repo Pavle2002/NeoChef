@@ -15,7 +15,13 @@ import { Route as AboutImport } from './routes/about'
 import { Route as ProtectedRouteImport } from './routes/_protected/route'
 import { Route as AuthRouteImport } from './routes/_auth/route'
 import { Route as IndexImport } from './routes/index'
-import { Route as ProtectedDashboardImport } from './routes/_protected/dashboard'
+import { Route as ProtectedTrendingImport } from './routes/_protected/trending'
+import { Route as ProtectedSettingsImport } from './routes/_protected/settings'
+import { Route as ProtectedProfileImport } from './routes/_protected/profile'
+import { Route as ProtectedPreferencesImport } from './routes/_protected/preferences'
+import { Route as ProtectedHomeImport } from './routes/_protected/home'
+import { Route as ProtectedFridgeImport } from './routes/_protected/fridge'
+import { Route as ProtectedFavoritesImport } from './routes/_protected/favorites'
 import { Route as AuthRegisterImport } from './routes/_auth/register'
 import { Route as AuthLoginImport } from './routes/_auth/login'
 
@@ -43,9 +49,45 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ProtectedDashboardRoute = ProtectedDashboardImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+const ProtectedTrendingRoute = ProtectedTrendingImport.update({
+  id: '/trending',
+  path: '/trending',
+  getParentRoute: () => ProtectedRouteRoute,
+} as any)
+
+const ProtectedSettingsRoute = ProtectedSettingsImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => ProtectedRouteRoute,
+} as any)
+
+const ProtectedProfileRoute = ProtectedProfileImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => ProtectedRouteRoute,
+} as any)
+
+const ProtectedPreferencesRoute = ProtectedPreferencesImport.update({
+  id: '/preferences',
+  path: '/preferences',
+  getParentRoute: () => ProtectedRouteRoute,
+} as any)
+
+const ProtectedHomeRoute = ProtectedHomeImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => ProtectedRouteRoute,
+} as any)
+
+const ProtectedFridgeRoute = ProtectedFridgeImport.update({
+  id: '/fridge',
+  path: '/fridge',
+  getParentRoute: () => ProtectedRouteRoute,
+} as any)
+
+const ProtectedFavoritesRoute = ProtectedFavoritesImport.update({
+  id: '/favorites',
+  path: '/favorites',
   getParentRoute: () => ProtectedRouteRoute,
 } as any)
 
@@ -107,11 +149,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRegisterImport
       parentRoute: typeof AuthRouteImport
     }
-    '/_protected/dashboard': {
-      id: '/_protected/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof ProtectedDashboardImport
+    '/_protected/favorites': {
+      id: '/_protected/favorites'
+      path: '/favorites'
+      fullPath: '/favorites'
+      preLoaderRoute: typeof ProtectedFavoritesImport
+      parentRoute: typeof ProtectedRouteImport
+    }
+    '/_protected/fridge': {
+      id: '/_protected/fridge'
+      path: '/fridge'
+      fullPath: '/fridge'
+      preLoaderRoute: typeof ProtectedFridgeImport
+      parentRoute: typeof ProtectedRouteImport
+    }
+    '/_protected/home': {
+      id: '/_protected/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof ProtectedHomeImport
+      parentRoute: typeof ProtectedRouteImport
+    }
+    '/_protected/preferences': {
+      id: '/_protected/preferences'
+      path: '/preferences'
+      fullPath: '/preferences'
+      preLoaderRoute: typeof ProtectedPreferencesImport
+      parentRoute: typeof ProtectedRouteImport
+    }
+    '/_protected/profile': {
+      id: '/_protected/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProtectedProfileImport
+      parentRoute: typeof ProtectedRouteImport
+    }
+    '/_protected/settings': {
+      id: '/_protected/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof ProtectedSettingsImport
+      parentRoute: typeof ProtectedRouteImport
+    }
+    '/_protected/trending': {
+      id: '/_protected/trending'
+      path: '/trending'
+      fullPath: '/trending'
+      preLoaderRoute: typeof ProtectedTrendingImport
       parentRoute: typeof ProtectedRouteImport
     }
   }
@@ -134,11 +218,23 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 )
 
 interface ProtectedRouteRouteChildren {
-  ProtectedDashboardRoute: typeof ProtectedDashboardRoute
+  ProtectedFavoritesRoute: typeof ProtectedFavoritesRoute
+  ProtectedFridgeRoute: typeof ProtectedFridgeRoute
+  ProtectedHomeRoute: typeof ProtectedHomeRoute
+  ProtectedPreferencesRoute: typeof ProtectedPreferencesRoute
+  ProtectedProfileRoute: typeof ProtectedProfileRoute
+  ProtectedSettingsRoute: typeof ProtectedSettingsRoute
+  ProtectedTrendingRoute: typeof ProtectedTrendingRoute
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
-  ProtectedDashboardRoute: ProtectedDashboardRoute,
+  ProtectedFavoritesRoute: ProtectedFavoritesRoute,
+  ProtectedFridgeRoute: ProtectedFridgeRoute,
+  ProtectedHomeRoute: ProtectedHomeRoute,
+  ProtectedPreferencesRoute: ProtectedPreferencesRoute,
+  ProtectedProfileRoute: ProtectedProfileRoute,
+  ProtectedSettingsRoute: ProtectedSettingsRoute,
+  ProtectedTrendingRoute: ProtectedTrendingRoute,
 }
 
 const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(
@@ -151,7 +247,13 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
-  '/dashboard': typeof ProtectedDashboardRoute
+  '/favorites': typeof ProtectedFavoritesRoute
+  '/fridge': typeof ProtectedFridgeRoute
+  '/home': typeof ProtectedHomeRoute
+  '/preferences': typeof ProtectedPreferencesRoute
+  '/profile': typeof ProtectedProfileRoute
+  '/settings': typeof ProtectedSettingsRoute
+  '/trending': typeof ProtectedTrendingRoute
 }
 
 export interface FileRoutesByTo {
@@ -160,7 +262,13 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
-  '/dashboard': typeof ProtectedDashboardRoute
+  '/favorites': typeof ProtectedFavoritesRoute
+  '/fridge': typeof ProtectedFridgeRoute
+  '/home': typeof ProtectedHomeRoute
+  '/preferences': typeof ProtectedPreferencesRoute
+  '/profile': typeof ProtectedProfileRoute
+  '/settings': typeof ProtectedSettingsRoute
+  '/trending': typeof ProtectedTrendingRoute
 }
 
 export interface FileRoutesById {
@@ -171,14 +279,44 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/register': typeof AuthRegisterRoute
-  '/_protected/dashboard': typeof ProtectedDashboardRoute
+  '/_protected/favorites': typeof ProtectedFavoritesRoute
+  '/_protected/fridge': typeof ProtectedFridgeRoute
+  '/_protected/home': typeof ProtectedHomeRoute
+  '/_protected/preferences': typeof ProtectedPreferencesRoute
+  '/_protected/profile': typeof ProtectedProfileRoute
+  '/_protected/settings': typeof ProtectedSettingsRoute
+  '/_protected/trending': typeof ProtectedTrendingRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/about' | '/login' | '/register' | '/dashboard'
+  fullPaths:
+    | '/'
+    | ''
+    | '/about'
+    | '/login'
+    | '/register'
+    | '/favorites'
+    | '/fridge'
+    | '/home'
+    | '/preferences'
+    | '/profile'
+    | '/settings'
+    | '/trending'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/about' | '/login' | '/register' | '/dashboard'
+  to:
+    | '/'
+    | ''
+    | '/about'
+    | '/login'
+    | '/register'
+    | '/favorites'
+    | '/fridge'
+    | '/home'
+    | '/preferences'
+    | '/profile'
+    | '/settings'
+    | '/trending'
   id:
     | '__root__'
     | '/'
@@ -187,7 +325,13 @@ export interface FileRouteTypes {
     | '/about'
     | '/_auth/login'
     | '/_auth/register'
-    | '/_protected/dashboard'
+    | '/_protected/favorites'
+    | '/_protected/fridge'
+    | '/_protected/home'
+    | '/_protected/preferences'
+    | '/_protected/profile'
+    | '/_protected/settings'
+    | '/_protected/trending'
   fileRoutesById: FileRoutesById
 }
 
@@ -234,7 +378,13 @@ export const routeTree = rootRoute
     "/_protected": {
       "filePath": "_protected/route.tsx",
       "children": [
-        "/_protected/dashboard"
+        "/_protected/favorites",
+        "/_protected/fridge",
+        "/_protected/home",
+        "/_protected/preferences",
+        "/_protected/profile",
+        "/_protected/settings",
+        "/_protected/trending"
       ]
     },
     "/about": {
@@ -248,8 +398,32 @@ export const routeTree = rootRoute
       "filePath": "_auth/register.tsx",
       "parent": "/_auth"
     },
-    "/_protected/dashboard": {
-      "filePath": "_protected/dashboard.tsx",
+    "/_protected/favorites": {
+      "filePath": "_protected/favorites.tsx",
+      "parent": "/_protected"
+    },
+    "/_protected/fridge": {
+      "filePath": "_protected/fridge.tsx",
+      "parent": "/_protected"
+    },
+    "/_protected/home": {
+      "filePath": "_protected/home.tsx",
+      "parent": "/_protected"
+    },
+    "/_protected/preferences": {
+      "filePath": "_protected/preferences.tsx",
+      "parent": "/_protected"
+    },
+    "/_protected/profile": {
+      "filePath": "_protected/profile.tsx",
+      "parent": "/_protected"
+    },
+    "/_protected/settings": {
+      "filePath": "_protected/settings.tsx",
+      "parent": "/_protected"
+    },
+    "/_protected/trending": {
+      "filePath": "_protected/trending.tsx",
       "parent": "/_protected"
     }
   }
