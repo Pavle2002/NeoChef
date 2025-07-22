@@ -13,13 +13,14 @@ import { UserService } from "./user-service.js";
 import { RecipeService } from "./recipe-service.js";
 
 const queryExecutor = new DriverQueryExecutor(neo4jClient);
+const unitOfWorkFactory = new UnitOfWorkFactory(neo4jClient);
 
 const userRepository = new UserRepository(queryExecutor);
 const ingredientRepository = new IngredientRepository(queryExecutor);
 const recipeRepository = new RecipeRepository(queryExecutor);
 
 export const authService = new AuthService(userRepository);
-export const userService = new UserService(userRepository);
+export const userService = new UserService(userRepository, unitOfWorkFactory);
 export const recipeService = new RecipeService(recipeRepository);
 
 const spoonacularApiClient = new SpoonacularApiClient(
@@ -32,6 +33,6 @@ const fileImportProgressManager = new FileImportProgressManager(
 
 export const spoonacularImportService = new SpoonacularImportService(
   spoonacularApiClient,
-  new UnitOfWorkFactory(neo4jClient),
+  unitOfWorkFactory,
   fileImportProgressManager
 );

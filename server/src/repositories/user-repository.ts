@@ -6,6 +6,9 @@ import { ConflictError, InternalServerError } from "@errors/index.js";
 import { ErrorCodes } from "@utils/error-codes.js";
 import type { IQueryExecutor } from "@interfaces/query-executor.interface.js";
 import { neo4jDateTimeConverter } from "@utils/neo4j-datetime-converter.js";
+import type { Diet } from "@models/diet.js";
+import type { Cuisine } from "@models/cuisine.js";
+import type { Ingredient } from "@models/ingredient.js";
 
 export class UserRepository implements IUserRepository {
   constructor(private queryExecutor: IQueryExecutor) {}
@@ -210,5 +213,108 @@ export class UserRepository implements IUserRepository {
     if (!result.records[0]) {
       throw new InternalServerError("Failed to add followed diet for user");
     }
+  }
+
+  async removeLikesRecipe(userId: string, recipeId: string): Promise<boolean> {
+    const result = await this.queryExecutor.run(
+      `MATCH (u:User {id: $userId})-[rel:LIKES]->(r:Recipe {id: $recipeId})
+       DELETE rel
+       RETURN COUNT(rel) AS count`,
+      { userId, recipeId }
+    );
+
+    const record = result.records[0];
+    return record ? record.get("count") > 0 : false;
+  }
+
+  async removeDislikesIngredient(
+    userId: string,
+    ingredientId: string
+  ): Promise<boolean> {
+    const result = await this.queryExecutor.run(
+      `MATCH (u:User {id: $userId})-[rel:DISLIKES]->(i:Ingredient {id: $ingredientId})
+       DELETE rel
+       RETURN COUNT(rel) AS count`,
+      { userId, ingredientId }
+    );
+
+    const record = result.records[0];
+    return record ? record.get("count") > 0 : false;
+  }
+
+  async removePrefersCuisine(
+    userId: string,
+    cuisineName: string
+  ): Promise<boolean> {
+    const result = await this.queryExecutor.run(
+      `MATCH (u:User {id: $userId})-[rel:PREFERS]->(c:Cuisine {name: $cuisineName})
+       DELETE rel
+       RETURN COUNT(rel) AS count`,
+      { userId, cuisineName }
+    );
+
+    const record = result.records[0];
+    return record ? record.get("count") > 0 : false;
+  }
+
+  async removeFollowsDiet(userId: string, dietName: string): Promise<boolean> {
+    const result = await this.queryExecutor.run(
+      `MATCH (u:User {id: $userId})-[rel:FOLLOWS]->(d:Diet {name: $dietName})
+       DELETE rel
+       RETURN COUNT(rel) AS count`,
+      { userId, dietName }
+    );
+
+    const record = result.records[0];
+    return record ? record.get("count") > 0 : false;
+  }
+
+  async removeHasIngredient(
+    userId: string,
+    ingredientId: string
+  ): Promise<boolean> {
+    const result = await this.queryExecutor.run(
+      `MATCH (u:User {id: $userId})-[rel:HAS]->(i:Ingredient {id: $ingredientId})
+       DELETE rel
+       RETURN COUNT(rel) AS count`,
+      { userId, ingredientId }
+    );
+
+    const record = result.records[0];
+    return record ? record.get("count") > 0 : false;
+  }
+
+  async getFollowedDiets(userId: string): Promise<Diet[]> {
+    const result = await this.queryExecutor.run(
+      `MATCH (u:User {id: $userId})-[:FOLLOWS]->(d:Diet)
+       RETURN d`,
+      { userId }
+    );
+
+    return result.records.map((record) => record.get("d").properties as Diet);
+  }
+
+  async getPreferredCuisines(userId: string): Promise<Cuisine[]> {
+    const result = await this.queryExecutor.run(
+      `MATCH (u:User {id: $userId})-[:PREFERS]->(c:Cuisine)
+       RETURN c`,
+      { userId }
+    );
+
+    return result.records.map(
+      (record) => record.get("c").properties as Cuisine
+    );
+  }
+
+  async getDislikedIngredients(userId: string): Promise<Ingredient[]> {
+    const result = await this.queryExecutor.run(
+      `MATCH (u:User {id: $userId})-[:DISLIKES]->(i:Ingredient)
+       RETURN i`,
+      { userId }
+    );
+
+    return result.records.map(
+      (record) => record.get("i").properties as Ingredient
+    );
   }
 }

@@ -1,9 +1,14 @@
 import type { SafeUser } from "@app-types/auth-types.js";
+import type { IUnitOfWorkFactory } from "@interfaces/unit-of-work-factory.interface.js";
 import type { IUserRepository } from "@interfaces/user-repository.interface.js";
 import type { IUserService } from "@interfaces/user-service.interface.js";
+import type { Preferences } from "@models/preferences.js";
 
 export class UserService implements IUserService {
-  constructor(private userRepository: IUserRepository) {}
+  constructor(
+    private userRepository: IUserRepository,
+    private uowFactory: IUnitOfWorkFactory
+  ) {}
 
   async findById(id: string): Promise<SafeUser | null> {
     const user = await this.userRepository.findById(id);
@@ -37,18 +42,76 @@ export class UserService implements IUserService {
     return this.userRepository.addHasIngredient(userId, ingredientId);
   }
 
-  async addDislikesIngredient(
+  async getPreferences(
     userId: string,
-    ingredientId: string
+    userRepository = this.userRepository
+  ): Promise<Preferences> {
+    const [dislikesIngredients, prefersCuisines, followsDiets] =
+      await Promise.all([
+        userRepository.getDislikedIngredients(userId),
+        userRepository.getPreferredCuisines(userId),
+        userRepository.getFollowedDiets(userId),
+      ]);
+
+    return {
+      dislikesIngredients,
+      prefersCuisines,
+      followsDiets,
+    };
+  }
+
+  private async updateSet<T>(
+    current: T[],
+    next: T[],
+    getKey: (item: T) => string,
+    add: (key: string) => Promise<void>,
+    remove: (key: string) => Promise<boolean>
   ): Promise<void> {
-    return this.userRepository.addDislikesIngredient(userId, ingredientId);
+    const currentSet = new Set(current.map(getKey));
+    const nextSet = new Set(next.map(getKey));
+
+    const toRemove = [...currentSet].filter((key) => !nextSet.has(key));
+    const toAdd = [...nextSet].filter((key) => !currentSet.has(key));
+
+    for (const key of toRemove) {
+      await remove(key);
+    }
+    for (const key of toAdd) {
+      await add(key);
+    }
   }
 
-  async addPrefersCuisine(userId: string, cuisineName: string): Promise<void> {
-    return this.userRepository.addPrefersCuisine(userId, cuisineName);
-  }
+  async updatePreferences(
+    userId: string,
+    newPreferences: Preferences
+  ): Promise<Preferences> {
+    return this.uowFactory.execute(async (uow) => {
+      const current = await this.getPreferences(userId, uow.users);
+      await this.updateSet(
+        current.dislikesIngredients,
+        newPreferences.dislikesIngredients,
+        (i) => i.id,
+        (id) => uow.users.addDislikesIngredient(userId, id),
+        (id) => uow.users.removeDislikesIngredient(userId, id)
+      );
 
-  async addFollowsDiet(userId: string, dietName: string): Promise<void> {
-    return this.userRepository.addFollowsDiet(userId, dietName);
+      await this.updateSet(
+        current.prefersCuisines,
+        newPreferences.prefersCuisines,
+        (c) => c.name,
+        (name) => uow.users.addPrefersCuisine(userId, name),
+        (name) => uow.users.removePrefersCuisine(userId, name)
+      );
+
+      await this.updateSet(
+        current.followsDiets,
+        newPreferences.followsDiets,
+        (d) => d.name,
+        (name) => uow.users.addFollowsDiet(userId, name),
+        (name) => uow.users.removeFollowsDiet(userId, name)
+      );
+
+      return this.getPreferences(userId, uow.users);
+    });
   }
 }
