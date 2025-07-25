@@ -1,7 +1,7 @@
 import { Header } from "@/components/header";
 import { Sidebar } from "@/components/sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { getCurrentUserQueryOptions } from "@/queries/get-current-user-query-options";
+import { getCurrentUserQueryOptions } from "@/query-options/get-current-user-query-options";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_protected")({

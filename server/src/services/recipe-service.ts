@@ -1,3 +1,4 @@
+import { NotFoundError } from "@errors/not-found-error.js";
 import type { IRecipeRepository } from "@interfaces/recipe-repository.interface.js";
 import type { IRecipeService } from "@interfaces/recipe-service.interface.js";
 import type { Recipe } from "@models/recipe.js";
@@ -5,11 +6,18 @@ import type { Recipe } from "@models/recipe.js";
 export class RecipeService implements IRecipeService {
   constructor(private recipeRepository: IRecipeRepository) {}
 
-  async findTrending(): Promise<Recipe[]> {
+  async getById(id: string): Promise<Recipe> {
+    const recipe = await this.recipeRepository.findById(id);
+    if (!recipe) throw new NotFoundError(`Recipe with ID ${id} not found`);
+
+    return recipe;
+  }
+
+  async getTrending(): Promise<Recipe[]> {
     return this.recipeRepository.findTrending();
   }
 
-  async findAll(
+  async getAll(
     limit?: number,
     offset?: number
   ): Promise<{ recipes: Recipe[]; totalCount: number }> {
@@ -18,9 +26,5 @@ export class RecipeService implements IRecipeService {
       this.recipeRepository.countAll(),
     ]);
     return { recipes, totalCount };
-  }
-
-  async findById(id: string): Promise<Recipe | null> {
-    return this.recipeRepository.findById(id);
   }
 }

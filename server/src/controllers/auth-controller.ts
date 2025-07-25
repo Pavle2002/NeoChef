@@ -53,16 +53,8 @@ async function logout(
   });
 }
 
-async function getCurrentUser(req: Request, res: Response): Promise<void> {
-  if (!req.isAuthenticated())
-    return sendSuccess(res, 200, null, "No user authenticated");
-  const user = req.user;
-  sendSuccess(res, 200, user, "User retrieved successfully");
-}
-
 export const authController = {
   register,
   login,
   logout,
-  getCurrentUser,
 };

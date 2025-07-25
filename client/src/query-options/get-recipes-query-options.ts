@@ -7,7 +7,7 @@ export function getRecipesQueryOptions(offset = 0, limit = 20) {
     queryKey: ["recipes", "list", { offset, limit }],
     queryFn: () =>
       apiClient.get<{ recipes: Recipe[]; totalCount: number }>(
-        "/recipes?offset=" + offset + "&limit=" + limit
+        `/recipes?offset=${offset}&limit=${limit}`
       ),
   });
 }

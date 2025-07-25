@@ -3,9 +3,8 @@ import type { Preferences } from "@models/preferences.js";
 import type { IUserRepository } from "./user-repository.interface.js";
 
 export interface IUserService {
-  findById(id: string): Promise<SafeUser | null>;
-  findByUsername(username: string): Promise<SafeUser | null>;
-  findByEmail(email: string): Promise<SafeUser | null>;
+  getById(id: string): Promise<SafeUser>;
+  getByEmail(email: string): Promise<SafeUser>;
   addLikesRecipe(userId: string, recipeId: string): Promise<void>;
   addHasIngredient(userId: string, ingredientId: string): Promise<void>;
 

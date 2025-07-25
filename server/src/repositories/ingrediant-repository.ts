@@ -24,12 +24,13 @@ export class IngredientRepository implements IIngredientRepository {
     return record.get("i").properties as Ingredient;
   }
 
-  async findAll(contains: string): Promise<Ingredient[]> {
+  async findAll(queryString = ""): Promise<Ingredient[]> {
     const result = await this.queryExecutor.run(
       `MATCH (i:Ingredient)
-       WHERE i.name CONTAINS $contains
+       WHERE toLower(i.name) CONTAINS toLower($queryString)
+         AND size(split(i.name, ' ')) <= 4
        RETURN i`,
-      { contains }
+      { queryString }
     );
 
     const records = result.records;

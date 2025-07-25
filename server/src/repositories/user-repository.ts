@@ -27,20 +27,6 @@ export class UserRepository implements IUserRepository {
     return user as User;
   }
 
-  async findByUsername(username: string): Promise<User | null> {
-    const result = await this.queryExecutor.run(
-      "MATCH (u:User {username: $username}) RETURN u",
-      { username }
-    );
-    const record = result.records[0];
-    if (!record) {
-      return null;
-    }
-    const user = record.get("u").properties;
-    user.createdAt = neo4jDateTimeConverter.toStandardDate(user.createdAt);
-    return user as User;
-  }
-
   async findByEmail(email: string): Promise<User | null> {
     const result = await this.queryExecutor.run(
       "MATCH (u:User {email: $email}) RETURN u",

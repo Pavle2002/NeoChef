@@ -1,4 +1,4 @@
-import { getRecipesQueryOptions } from "@/queries/get-recipes-query-options";
+import { getRecipesQueryOptions } from "@/query-options/get-recipes-query-options";
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { zodValidator } from "@tanstack/zod-adapter";

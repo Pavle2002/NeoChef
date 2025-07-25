@@ -5,6 +5,7 @@ import { authService, userService } from "@services/index.js";
 import type { User } from "@models/user.js";
 import type { LoginInput } from "@app-types/auth-types.js";
 import { logger } from "@config/index.js";
+import { NotFoundError } from "@errors/not-found-error.js";
 
 const strategty = new Strategy(
   {
@@ -33,9 +34,9 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   logger.debug("Deserialize user");
-  const [error, user] = await safeAwait(userService.findById(id as string));
+  const [error, user] = await safeAwait(userService.getById(id as string));
+  if (error instanceof NotFoundError) return done(null, false);
   if (error) return done(error);
-  if (!user) return done(null, false);
   return done(null, user);
 });
 

@@ -36,14 +36,10 @@ function LoginForm() {
     resolver: zodResolver(loginSchema),
   });
 
-  async function onSubmit(data: LoginInput) {
-    login(data);
-  }
-
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit((data: LoginInput) => login(data))}
         className="flex flex-col gap-6"
       >
         <FormField

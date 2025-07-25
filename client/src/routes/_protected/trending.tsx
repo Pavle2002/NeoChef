@@ -1,6 +1,6 @@
 import { RecipeList } from "@/components/ui/recipe-list";
 import { RecipeListSkeleton } from "@/components/ui/recipe-list-skeleton";
-import { getTrendingRecipesQueryOptions } from "@/queries/get-trending-recipes-query-options";
+import { getTrendingRecipesQueryOptions } from "@/query-options/get-trending-recipes-query-options";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 

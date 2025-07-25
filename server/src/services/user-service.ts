@@ -1,4 +1,5 @@
 import type { SafeUser } from "@app-types/auth-types.js";
+import { NotFoundError } from "@errors/index.js";
 import type { IUnitOfWorkFactory } from "@interfaces/unit-of-work-factory.interface.js";
 import type { IUserRepository } from "@interfaces/user-repository.interface.js";
 import type { IUserService } from "@interfaces/user-service.interface.js";
@@ -10,25 +11,17 @@ export class UserService implements IUserService {
     private uowFactory: IUnitOfWorkFactory
   ) {}
 
-  async findById(id: string): Promise<SafeUser | null> {
+  async getById(id: string): Promise<SafeUser> {
     const user = await this.userRepository.findById(id);
-    if (!user) return null;
+    if (!user) throw new NotFoundError(`User with ID ${id} not found`);
 
     const { password, ...safeUser } = user;
     return safeUser;
   }
 
-  async findByUsername(username: string): Promise<SafeUser | null> {
-    const user = await this.userRepository.findByUsername(username);
-    if (!user) return null;
-
-    const { password, ...safeUser } = user;
-    return safeUser;
-  }
-
-  async findByEmail(email: string): Promise<SafeUser | null> {
+  async getByEmail(email: string): Promise<SafeUser> {
     const user = await this.userRepository.findByEmail(email);
-    if (!user) return null;
+    if (!user) throw new NotFoundError(`User with email ${email} not found`);
 
     const { password, ...safeUser } = user;
     return safeUser;
@@ -46,6 +39,9 @@ export class UserService implements IUserService {
     userId: string,
     userRepository = this.userRepository
   ): Promise<Preferences> {
+    const user = await userRepository.findById(userId);
+    if (!user) throw new NotFoundError(`User with ID ${userId} not found`);
+
     const [dislikesIngredients, prefersCuisines, followsDiets] =
       await Promise.all([
         userRepository.getDislikedIngredients(userId),
