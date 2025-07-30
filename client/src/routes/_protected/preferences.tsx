@@ -4,8 +4,6 @@ import {
   type FieldValues,
   type Path,
 } from "react-hook-form";
-import type { Cuisine } from "@/types/cuisine";
-import type { Diet } from "@/types/diet";
 import { Button } from "@/components/ui/button";
 import { CheckboxGroup } from "@/components/ui/checkbox-group";
 import { ResponsiveIngredientSelector } from "@/components/ingredient-selector";
@@ -19,6 +17,11 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
+import { Separator } from "@/components/ui/separator";
+import { useUpdatePreferences } from "@/mutations/useUpdatePreferences";
+import type { Cuisine } from "@common/schemas/cuisine";
+import type { Diet } from "@common/schemas/diet";
+import type { Ingredient } from "@common/schemas/ingredient";
 
 export const Route = createFileRoute("/_protected/preferences")({
   component: RouteComponent,
@@ -26,30 +29,12 @@ export const Route = createFileRoute("/_protected/preferences")({
     queryClient.ensureQueryData(getCurrentUserPreferencesQueryOptions()),
 });
 
-const diets = [
-  { name: "Vegetarian" },
-  { name: "Vegan" },
-  { name: "Gluten-Free" },
-  { name: "Paleo" },
-  { name: "Keto" },
-  { name: "Mediterranean" },
-];
-
-const cuisines = [
-  { name: "Italian" },
-  { name: "Chinese" },
-  { name: "Mexican" },
-  { name: "Japanese" },
-  { name: "Indian" },
-  { name: "French" },
-  { name: "Thai" },
-  { name: "Greek" },
-];
-
 function RouteComponent() {
   const { data: preferences } = useSuspenseQuery(
     getCurrentUserPreferencesQueryOptions()
   );
+
+  const { mutate: updatePreferences, isPending } = useUpdatePreferences();
 
   const form = useForm({
     defaultValues: preferences,
@@ -58,34 +43,43 @@ function RouteComponent() {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit((data) => console.log(data))}
-        className="space-y-6"
+        onSubmit={form.handleSubmit((data) => {
+          console.log(data);
+          updatePreferences(data);
+        })}
+        className="space-y-7"
       >
-        <CheckboxGroupField
+        <IngredientSearchField
           control={form.control}
-          name="followsDiets"
-          label="Diets you follow"
-          options={diets}
+          name="dislikesIngredients"
         />
+        <Separator />
 
         <CheckboxGroupField
           control={form.control}
           name="prefersCuisines"
           label="Cuisines you prefer"
           options={cuisines}
+          description="(Select the cuisines you prefer)"
         />
+        <Separator />
 
-        <IngredientSearchField
+        <CheckboxGroupField
           control={form.control}
-          name="dislikesIngredients"
+          name="followsDiets"
+          label="Diets you follow"
+          options={diets}
+          description="(Select the diets you follow)"
         />
+        <Separator />
 
         <Button
           type="submit"
-          className="w-full"
-          disabled={form.formState.isSubmitting}
+          size="lg"
+          disabled={isPending}
+          className="ml-auto block"
         >
-          Save Preferences
+          {isPending ? "Saving..." : "Save Preferences"}
         </Button>
       </form>
     </Form>
@@ -97,6 +91,7 @@ type CheckboxGroupFieldProps<T extends FieldValues> = {
   label: string;
   name: Path<T>;
   control: Control<T>;
+  description?: string;
 };
 
 function CheckboxGroupField<T extends FieldValues>({
@@ -104,6 +99,7 @@ function CheckboxGroupField<T extends FieldValues>({
   control,
   name,
   label,
+  description = "",
 }: CheckboxGroupFieldProps<T>) {
   return (
     <FormField
@@ -111,10 +107,15 @@ function CheckboxGroupField<T extends FieldValues>({
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="mb-3 text-base">{label}</FormLabel>
+          <FormLabel className="mb-3 text-xl font-normal block">
+            {label}
+            <span className="text-muted-foreground block sm:inline text-sm ml-1">
+              {description}
+            </span>
+          </FormLabel>
           <FormControl>
             <CheckboxGroup
-              className="flex flex-col gap-3"
+              className="flex flex-wrap gap-3"
               options={options}
               value={field.value}
               onValueChange={field.onChange}
@@ -142,13 +143,33 @@ function IngredientSearchField<T extends FieldValues>({
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="mb-3 text-base">
+          <FormLabel className="text-xl font-normal">
             Ingredients you dislike
+            <ResponsiveIngredientSelector
+              onValueChange={field.onChange}
+              value={field.value}
+            />
           </FormLabel>
-          <ResponsiveIngredientSelector
-            onValueChange={field.onChange}
-            value={field.value}
-          />
+          <span className="block text-muted-foreground text-sm mb-2">
+            (Click on ingredients you want to remove from the list)
+          </span>
+          <FormControl>
+            <div>
+              {(!field.value || field.value.length === 0) && (
+                <p className="text-sm text-muted-foreground">
+                  No ingredients selected
+                </p>
+              )}
+              <CheckboxGroup
+                className="flex flex-wrap gap-3"
+                options={field.value as Ingredient[]}
+                getKey={(ingredient) => ingredient.id}
+                getLabel={(ingredient) => ingredient.name}
+                value={field.value}
+                onValueChange={field.onChange}
+              />
+            </div>
+          </FormControl>
         </FormItem>
       )}
     />

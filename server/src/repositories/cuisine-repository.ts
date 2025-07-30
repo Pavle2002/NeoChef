@@ -1,6 +1,6 @@
 import type { ICuisineRepository } from "@interfaces/cuisine-repository.interface.js";
 import type { IQueryExecutor } from "@interfaces/query-executor.interface.js";
-import type { Cuisine } from "@models/cuisine.js";
+import type { Cuisine } from "@common/schemas/cuisine.js";
 
 export class CuisineRepository implements ICuisineRepository {
   constructor(private queryExecutor: IQueryExecutor) {}

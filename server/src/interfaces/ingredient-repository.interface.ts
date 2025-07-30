@@ -1,5 +1,4 @@
-import type { IngredientData } from "@app-types/ingredient-types.js";
-import type { Ingredient } from "@models/ingredient.js";
+import type { Ingredient, IngredientData } from "@common/schemas/ingredient.js";
 
 export interface IIngredientRepository {
   findAll(contains?: string): Promise<Ingredient[]>;

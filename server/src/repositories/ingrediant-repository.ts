@@ -1,8 +1,7 @@
-import type { IngredientData } from "@app-types/ingredient-types.js";
 import { InternalServerError } from "@errors/internal-server-error.js";
 import type { IIngredientRepository } from "@interfaces/ingredient-repository.interface.js";
 import type { IQueryExecutor } from "@interfaces/query-executor.interface.js";
-import type { Ingredient } from "@models/ingredient.js";
+import type { Ingredient, IngredientData } from "@common/schemas/ingredient.js";
 
 export class IngredientRepository implements IIngredientRepository {
   constructor(private queryExecutor: IQueryExecutor) {}

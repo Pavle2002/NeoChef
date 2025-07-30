@@ -9,8 +9,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useLogin } from "@/mutations/useLogin";
-import { loginSchema } from "@/schemas/auth-schemas";
-import type { LoginInput } from "@/types/auth-types";
+import {
+  UserCredentialsSchema,
+  type UserCredentials,
+} from "@common/schemas/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
@@ -32,14 +34,14 @@ function RouteComponent() {
 function LoginForm() {
   const { mutate: login, isPending, error } = useLogin();
 
-  const form = useForm<LoginInput>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<UserCredentials>({
+    resolver: zodResolver(UserCredentialsSchema),
   });
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit((data: LoginInput) => login(data))}
+        onSubmit={form.handleSubmit((data: UserCredentials) => login(data))}
         className="flex flex-col gap-6"
       >
         <FormField

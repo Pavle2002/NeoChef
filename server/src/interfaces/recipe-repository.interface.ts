@@ -1,10 +1,9 @@
-import type { RecipeData } from "@app-types/recipe-types.js";
-import type { Equipment } from "@models/equipment.js";
-import type { Recipe } from "@models/recipe.js";
-import type { Cuisine } from "@models/cuisine.js";
-import type { Diet } from "@models/diet.js";
-import type { DishType } from "@models/dish-type.js";
-import type { IngredientUsage } from "@app-types/ingredient-types.js";
+import type { Equipment } from "@common/schemas/equipment.js";
+import type { Recipe, RecipeData } from "@common/schemas/recipe.js";
+import type { Cuisine } from "@common/schemas/cuisine.js";
+import type { Diet } from "@common/schemas/diet.js";
+import type { DishType } from "@common/schemas/dish-type.js";
+import type { IngredientUsage } from "@common/schemas/ingredient.js";
 
 export interface IRecipeRepository {
   createOrUpdate(recipe: RecipeData): Promise<Recipe>;

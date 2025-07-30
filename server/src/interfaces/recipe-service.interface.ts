@@ -1,4 +1,4 @@
-import type { Recipe } from "@models/recipe.js";
+import type { Recipe } from "@common/schemas/recipe.js";
 
 export interface IRecipeService {
   getById(id: string): Promise<Recipe>;

@@ -1,4 +1,4 @@
-import type { User } from "@models/user.js";
+import type { User } from "@common/schemas/user.js";
 import { userService } from "@services/index.js";
 import { sendSuccess } from "@utils/response-handler.js";
 import type { Request, Response } from "express";
@@ -28,8 +28,29 @@ async function getCurrentUserPreferences(
   sendSuccess(res, 200, preferences, "User preferences retrieved successfully");
 }
 
+async function updateCurrentUserPreferences(
+  req: Request,
+  res: Response
+): Promise<void> {
+  const user = req.user as User;
+  const newPreferences = req.body;
+
+  const updatedPreferences = await userService.updatePreferences(
+    user.id,
+    newPreferences
+  );
+
+  sendSuccess(
+    res,
+    200,
+    updatedPreferences,
+    "User preferences updated successfully"
+  );
+}
+
 export const userController = {
   getById,
   getCurrentUser,
   getCurrentUserPreferences,
+  updateCurrentUserPreferences,
 };

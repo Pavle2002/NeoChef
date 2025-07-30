@@ -1,4 +1,4 @@
-import type { ErrorCode } from "@/lib/error-codes";
+import type { ErrorCode } from "@common/utils/error-codes";
 
 export class ApiError extends Error {
   readonly statusCode: number;

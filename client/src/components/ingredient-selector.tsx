@@ -1,7 +1,7 @@
-import type { Ingredient } from "@/types/ingredient";
+import type { Ingredient } from "@common/schemas/ingredient";
 import { LiveSearch } from "./ui/live-search";
 import { getIngredientsQueryOptions } from "@/query-options/get-ingredients-query-options";
-import { Check } from "lucide-react";
+import { Check, Plus } from "lucide-react";
 import { Skeleton } from "./ui/skeleton";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
@@ -59,7 +59,10 @@ export function ResponsiveIngredientSelector({
     return (
       <Popover>
         <PopoverTrigger asChild>
-          <Button className="max-w-fit">Select ingredients</Button>
+          <Button size="sm" variant="outline" className="font-normal">
+            <Plus strokeWidth={3} />
+            Add more
+          </Button>
         </PopoverTrigger>
         <PopoverContent>
           <IngredientSelector
@@ -74,7 +77,10 @@ export function ResponsiveIngredientSelector({
     return (
       <Drawer>
         <DrawerTrigger asChild>
-          <Button className="max-w-fit">Select ingredients</Button>
+          <Button size="sm" variant="outline" className="font-normal">
+            Add more
+            <Plus strokeWidth={3} />
+          </Button>
         </DrawerTrigger>
         <DrawerContent>
           <IngredientSelector

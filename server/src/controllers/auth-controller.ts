@@ -2,10 +2,9 @@ import type { NextFunction, Request, Response } from "express";
 import passport from "passport";
 import type { IVerifyOptions } from "passport-local";
 import { authService } from "@services/index.js";
-import type { User } from "@models/user.js";
+import type { User, UserData } from "@common/schemas/user.js";
 import { sendSuccess } from "@utils/response-handler.js";
 import { UnauthorizedError } from "@errors/index.js";
-import type { RegisterInput } from "@app-types/auth-types.js";
 
 function login(req: Request, res: Response, next: NextFunction): void {
   passport.authenticate(
@@ -28,9 +27,7 @@ function login(req: Request, res: Response, next: NextFunction): void {
 }
 
 async function register(req: Request, res: Response): Promise<void> {
-  const user = await authService.registerUser(
-    req.validated?.body as RegisterInput
-  );
+  const user = await authService.registerUser(req.validated?.body as UserData);
   sendSuccess(res, 201, user, "User registered successfully");
 }
 

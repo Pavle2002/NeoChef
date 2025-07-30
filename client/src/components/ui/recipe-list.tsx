@@ -1,4 +1,4 @@
-import type { Recipe } from "@/types/recipe";
+import type { Recipe } from "@common/schemas/recipe";
 import { RecipeCard } from "./recipe-card";
 
 export function RecipeList({ recipes }: { recipes: Recipe[] }) {

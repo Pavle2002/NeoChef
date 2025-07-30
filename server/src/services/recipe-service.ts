@@ -1,7 +1,7 @@
 import { NotFoundError } from "@errors/not-found-error.js";
 import type { IRecipeRepository } from "@interfaces/recipe-repository.interface.js";
 import type { IRecipeService } from "@interfaces/recipe-service.interface.js";
-import type { Recipe } from "@models/recipe.js";
+import type { Recipe } from "@common/schemas/recipe.js";
 
 export class RecipeService implements IRecipeService {
   constructor(private recipeRepository: IRecipeRepository) {}

@@ -1,5 +1,8 @@
-import type { FailResponse, SuccessResponse } from "@app-types/api-response.js";
-import type { ErrorCode } from "@utils/error-codes.js";
+import type {
+  FailResponse,
+  SuccessResponse,
+} from "@common/types/api-response.js";
+import type { ErrorCode } from "@common/utils/error-codes.js";
 import type { Response } from "express";
 
 export function sendSuccess<T>(

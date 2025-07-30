@@ -2,19 +2,19 @@ import passport from "passport";
 import { Strategy } from "passport-local";
 import { safeAwait } from "@utils/safe-await.js";
 import { authService, userService } from "@services/index.js";
-import type { User } from "@models/user.js";
-import type { LoginInput } from "@app-types/auth-types.js";
+import type { UserCredentials } from "@common/schemas/user.js";
 import { logger } from "@config/index.js";
 import { NotFoundError } from "@errors/not-found-error.js";
+import type { User } from "@common/schemas/user.js";
 
-const strategty = new Strategy(
+const strategy = new Strategy(
   {
     usernameField: "email",
     passwordField: "password",
     passReqToCallback: true,
   },
   async (req, e, p, done) => {
-    const { email, password } = req.validated?.body as LoginInput;
+    const { email, password } = req.validated?.body as UserCredentials;
 
     const [error, user] = await safeAwait(
       authService.authenticateUser(email, password)
@@ -25,7 +25,7 @@ const strategty = new Strategy(
   }
 );
 
-passport.use(strategty);
+passport.use(strategy);
 
 passport.serializeUser((user, done) => {
   logger.debug("Serialize user");

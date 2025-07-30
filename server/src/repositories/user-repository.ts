@@ -1,14 +1,14 @@
 import { Neo4jError } from "neo4j-driver";
 import { type IUserRepository } from "@interfaces/user-repository.interface.js";
-import { type User } from "@models/user.js";
-import type { RegisterInput } from "@app-types/auth-types.js";
+import { type User } from "@common/schemas/user.js";
+import type { UserData } from "@common/schemas/user.js";
 import { ConflictError, InternalServerError } from "@errors/index.js";
-import { ErrorCodes } from "@utils/error-codes.js";
+import { ErrorCodes } from "@common/utils/error-codes.js";
 import type { IQueryExecutor } from "@interfaces/query-executor.interface.js";
 import { neo4jDateTimeConverter } from "@utils/neo4j-datetime-converter.js";
-import type { Diet } from "@models/diet.js";
-import type { Cuisine } from "@models/cuisine.js";
-import type { Ingredient } from "@models/ingredient.js";
+import type { Diet } from "@common/schemas/diet.js";
+import type { Cuisine } from "@common/schemas/cuisine.js";
+import type { Ingredient } from "@common/schemas/ingredient.js";
 
 export class UserRepository implements IUserRepository {
   constructor(private queryExecutor: IQueryExecutor) {}
@@ -51,7 +51,7 @@ export class UserRepository implements IUserRepository {
     return users;
   }
 
-  async create(user: RegisterInput): Promise<User> {
+  async create(user: UserData): Promise<User> {
     try {
       ``;
       const result = await this.queryExecutor.run(

@@ -1,9 +1,9 @@
-import type { SafeUser } from "@app-types/auth-types.js";
+import type { SafeUser } from "@common/schemas/user.js";
 import { NotFoundError } from "@errors/index.js";
 import type { IUnitOfWorkFactory } from "@interfaces/unit-of-work-factory.interface.js";
 import type { IUserRepository } from "@interfaces/user-repository.interface.js";
 import type { IUserService } from "@interfaces/user-service.interface.js";
-import type { Preferences } from "@models/preferences.js";
+import type { Preferences } from "@common/schemas/preferences.js";
 
 export class UserService implements IUserService {
   constructor(
@@ -81,6 +81,7 @@ export class UserService implements IUserService {
     userId: string,
     newPreferences: Preferences
   ): Promise<Preferences> {
+    console.log(newPreferences);
     return this.uowFactory.execute(async (uow) => {
       const current = await this.getPreferences(userId, uow.users);
       await this.updateSet(

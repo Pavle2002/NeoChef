@@ -1,12 +1,11 @@
 import type { IImportService } from "@interfaces/import-service.interface.js";
 import type { IApiClient } from "@interfaces/api-client.interface.js";
-import type { IRecipeRepository } from "@interfaces/recipe-repository.interface.js";
-import type { RecipeSearchOptions } from "@app-types/recipe-types.js";
-import type { Recipe } from "@models/recipe.js";
+import type { Recipe } from "@common/schemas/recipe.js";
 import type { IImportProgressManager } from "@interfaces/import-progress-manager.interface.js";
 import { safeAwait } from "@utils/safe-await.js";
 import { CUISINES, DIETS, DISH_TYPES } from "@utils/spoonacular-constants.js";
 import type { IUnitOfWorkFactory } from "@interfaces/unit-of-work-factory.interface.js";
+import type { RecipeSearchOptions } from "@app-types/import-types.js";
 
 export class SpoonacularImportService implements IImportService {
   constructor(

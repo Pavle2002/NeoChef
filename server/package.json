@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "build": "tsc && tsc-alias",
-    "start": "node dist/index.js",
+    "start": "node dist/server/src/index.js",
     "dev": "tsx watch src/index.ts",
-    "import-recipes": "tsx src/scripts/import-recipes.ts"
+    "import-recipes": "tsx src/scripts/import-recipes.ts",
+    "clean": "rm -rf dist"
   },
   "repository": {
     "type": "git",
@@ -30,7 +31,7 @@
     "passport-local": "^1.0.0",
     "redis": "^4.7.0",
     "winston": "^3.17.0",
-    "zod": "^3.24.2"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

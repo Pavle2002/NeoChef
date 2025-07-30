@@ -1,15 +1,14 @@
 import { type IRecipeRepository } from "@interfaces/recipe-repository.interface.js";
-import { type Recipe } from "@models/recipe.js";
-import { type RecipeData } from "@app-types/recipe-types.js";
-import { type Cuisine } from "@models/cuisine.js";
-import { type Diet } from "@models/diet.js";
-import { type DishType } from "@models/dish-type.js";
-import { type Equipment } from "@models/equipment.js";
+import { type Recipe, type RecipeData } from "@common/schemas/recipe.js";
+import { type Cuisine } from "@common/schemas/cuisine.js";
+import { type Diet } from "@common/schemas/diet.js";
+import { type DishType } from "@common/schemas/dish-type.js";
+import { type Equipment } from "@common/schemas/equipment.js";
 import { InternalServerError } from "@errors/index.js";
 import type { IQueryExecutor } from "@interfaces/query-executor.interface.js";
-import type { IngredientUsage } from "@app-types/ingredient-types.js";
 import { neo4jDateTimeConverter } from "@utils/neo4j-datetime-converter.js";
 import { int } from "neo4j-driver";
+import type { IngredientUsage } from "@common/schemas/ingredient.js";
 
 export class RecipeRepository implements IRecipeRepository {
   constructor(private queryExecutor: IQueryExecutor) {}

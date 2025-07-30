@@ -47,8 +47,7 @@ function SidebarMain() {
                   <Link
                     to={page.url}
                     activeProps={{
-                      className:
-                        "bg-accent text-accent-foreground font-semibold",
+                      className: "bg-accent text-accent-foreground font-medium",
                     }}
                   >
                     <page.icon strokeWidth={2.2} />
@@ -141,7 +140,7 @@ function UserInfo() {
   return (
     <div className="flex items-center gap-2">
       <Avatar className="h-8 w-8 rounded-lg">
-        <AvatarImage src={user.avatarUrl} alt={user.username} />
+        <AvatarImage src={undefined} alt={user.username} />
         <AvatarFallback className="rounded-lg">
           {user.username.at(0)?.toUpperCase()}
         </AvatarFallback>

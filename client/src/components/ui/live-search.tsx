@@ -9,7 +9,7 @@ import {
   CommandList,
 } from "./command";
 import { Input } from "./input";
-import { Skeleton } from "./skeleton";
+import { cn } from "@/lib/utils";
 
 export type LiveSearchProps<T> = {
   getQueryOptions: (
@@ -35,6 +35,7 @@ export function LiveSearch<T>({
   getResultKey,
   minQueryLength = 2,
   onSelectItem,
+  className,
   ...props
 }: LiveSearchProps<T>) {
   const [query, setQuery] = useState("");
@@ -46,7 +47,7 @@ export function LiveSearch<T>({
   });
 
   return (
-    <Command className="p-1" {...props}>
+    <Command className={cn("p-1", className)} {...props}>
       <Input
         className="mb-2"
         placeholder={inputPlaceholder}
@@ -56,7 +57,12 @@ export function LiveSearch<T>({
         renderPendingResult
       ) : (
         <CommandList className="max-h-44">
-          <CommandEmpty>No results found.</CommandEmpty>
+          <CommandEmpty className="h-[168px] mx-auto max-w-52 text-center flex flex-col gap-1 justify-center items-center">
+            No results found.{" "}
+            <span className="text-muted-foreground text-xs">
+              Term has to be at least 2 characters. Try a different search term.
+            </span>
+          </CommandEmpty>
           <CommandGroup>
             {data?.map((item) => (
               <CommandItem
@@ -70,15 +76,5 @@ export function LiveSearch<T>({
         </CommandList>
       )}
     </Command>
-  );
-}
-
-export function PendingList() {
-  return (
-    <div className="flex flex-col gap-1.5 p-1">
-      {Array.from({ length: 5 }).map((_, index) => (
-        <Skeleton key={index} className="h-7" />
-      ))}
-    </div>
   );
 }

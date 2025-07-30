@@ -1,8 +1,7 @@
 import bcrypt from "bcrypt";
-import type { User } from "@models/user.js";
 import type { IAuthService } from "@interfaces/auth-service.interface.js";
 import type { IUserRepository } from "@interfaces/user-repository.interface.js";
-import type { RegisterInput, SafeUser } from "@app-types/auth-types.js";
+import type { UserData, SafeUser } from "@common/schemas/user.js";
 
 export class AuthService implements IAuthService {
   constructor(private userRepository: IUserRepository) {}
@@ -21,10 +20,10 @@ export class AuthService implements IAuthService {
     return safeUser;
   }
 
-  async registerUser(userData: RegisterInput): Promise<SafeUser> {
+  async registerUser(userData: UserData): Promise<SafeUser> {
     const hashedPassword = await bcrypt.hash(userData.password, 10);
 
-    const newUserData: RegisterInput = {
+    const newUserData: UserData = {
       ...userData,
       password: hashedPassword,
     };

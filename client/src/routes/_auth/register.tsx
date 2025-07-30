@@ -11,9 +11,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { registerSchema } from "@/schemas/auth-schemas";
-import type { RegisterInput } from "@/types/auth-types";
 import { useRegister } from "@/mutations/useRegister";
+import { UserDataSchema, type UserData } from "@common/schemas/user";
 
 export const Route = createFileRoute("/_auth/register")({
   component: RouteComponent,
@@ -32,14 +31,14 @@ function RouteComponent() {
 function RegisterForm() {
   const { mutate: register, isPending, error } = useRegister();
 
-  const form = useForm<RegisterInput>({
-    resolver: zodResolver(registerSchema),
+  const form = useForm<UserData>({
+    resolver: zodResolver(UserDataSchema),
   });
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit((data: RegisterInput) => register(data))}
+        onSubmit={form.handleSubmit((data: UserData) => register(data))}
         className="flex flex-col gap-6"
       >
         <FormField

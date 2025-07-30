@@ -1,6 +1,6 @@
 import type { IDietRepository } from "@interfaces/diet-repository.interface.js";
 import type { IQueryExecutor } from "@interfaces/query-executor.interface.js";
-import type { Diet } from "@models/diet.js";
+import type { Diet } from "@common/schemas/diet.js";
 
 export class DietRepository implements IDietRepository {
   constructor(private queryExecutor: IQueryExecutor) {}

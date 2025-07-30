@@ -1,8 +1,8 @@
 import { apiClient } from "@/lib/api-client";
 import { getFormatedDate } from "@/lib/utils";
 import { getCurrentUserQueryOptions } from "@/query-options/get-current-user-query-options";
-import type { LoginInput } from "@/types/auth-types";
-import type { User } from "@/types/user";
+import type { UserCredentials } from "@common/schemas/user";
+import type { SafeUser } from "@common/schemas/user";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
@@ -12,8 +12,8 @@ export function useLogin() {
   const navigate = useNavigate();
 
   return useMutation({
-    mutationFn: (credentials: LoginInput) =>
-      apiClient.post<User>("/auth/login", credentials),
+    mutationFn: (credentials: UserCredentials) =>
+      apiClient.post<SafeUser>("/auth/login", credentials),
 
     onSuccess: async (user) => {
       queryClient.setQueryData(getCurrentUserQueryOptions().queryKey, user);

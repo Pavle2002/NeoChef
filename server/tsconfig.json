@@ -4,11 +4,11 @@
     "target": "ES2023", // Specifies the JavaScript version to compile to.
     "module": "NodeNext", // Specifies the module system to use (Node.js with ES modules).
     "moduleResolution": "NodeNext", // Determines how modules are resolved (Node.js with ES modules).
-    "lib": ["ES2023", "DOM"], // Includes built-in type definitions for ES2023 and DOM APIs.
+    "lib": ["ES2023"], // Includes built-in type definitions for ES2023.
 
     // Directory structure
-    "rootDir": "./src", // Specifies the root directory of input files.
     "outDir": "./dist", // Specifies the output directory for compiled files.
+    "rootDirs": ["./src", "../common/src"], // Specifies the root directory of input files.
 
     // Strictness and type checking
     "strict": true, // Enables all strict type-checking options.
@@ -22,30 +22,31 @@
 
     // Performance and debugging
     "skipLibCheck": true, // Skips type checking of declaration files for faster builds.
-    "sourceMap": true, // Disables generation of source maps for debugging.
+    "sourceMap": true, // Enables generation of source maps for debugging.
 
     // Module detection
     "moduleDetection": "force", // Forces explicit module usage (no implicit script files).
 
     // Base URL and paths
-    "baseUrl": "./src", // Sets the base directory for resolving non-relative module names.
+    "baseUrl": ".", // Sets the base directory for resolving non-relative module names.
     "paths": {
       // Define paths for absolute imports
-      "@config/*": ["config/*"],
-      "@models/*": ["models/*"],
-      "@interfaces/*": ["interfaces/*"],
-      "@repositories/*": ["repositories/*"],
-      "@services/*": ["services/*"],
-      "@middlewares/*": ["middlewares/*"],
-      "@routes/*": ["routes/*"],
-      "@controllers/*": ["controllers/*"],
-      "@utils/*": ["utils/*"],
-      "@app-types/*": ["types/*"],
-      "@clients/*": ["clients/*"],
-      "@errors/*": ["errors/*"],
-      "@schemas/*": ["schemas/*"]
+      "@config/*": ["src/config/*"],
+      "@models/*": ["src/models/*"],
+      "@interfaces/*": ["src/interfaces/*"],
+      "@repositories/*": ["src/repositories/*"],
+      "@services/*": ["src/services/*"],
+      "@middlewares/*": ["src/middlewares/*"],
+      "@routes/*": ["src/routes/*"],
+      "@controllers/*": ["src/controllers/*"],
+      "@utils/*": ["src/utils/*"],
+      "@app-types/*": ["src/types/*"],
+      "@clients/*": ["src/clients/*"],
+      "@errors/*": ["src/errors/*"],
+      "@schemas/*": ["src/schemas/*"],
+      "@common/*": ["../common/src/*"]
     }
   },
   "include": ["src"], // Specifies files or directories to include in the compilation.
-  "exclude": ["node_modules"] // Excludes files or directories from the compilation.
+  "exclude": ["node_modules", "dist"] // Excludes files or directories from the compilation.
 }

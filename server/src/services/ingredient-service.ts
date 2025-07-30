@@ -1,6 +1,6 @@
 import type { IIngredientRepository } from "@interfaces/ingredient-repository.interface.js";
 import type { IIngredientService } from "@interfaces/ingredient-service.interface.js";
-import type { Ingredient } from "@models/ingredient.js";
+import type { Ingredient } from "@common/schemas/ingredient.js";
 
 export class IngredientService implements IIngredientService {
   constructor(private ingredientRepository: IIngredientRepository) {}

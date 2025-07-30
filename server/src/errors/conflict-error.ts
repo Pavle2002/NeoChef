@@ -1,4 +1,4 @@
-import { ErrorCodes, type ErrorCode } from "@utils/error-codes.js";
+import { ErrorCodes, type ErrorCode } from "@common/utils/error-codes.js";
 import { AppError } from "@errors/app-error.js";
 
 export class ConflictError extends AppError {

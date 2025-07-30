@@ -1,5 +1,5 @@
 import { apiClient } from "@/lib/api-client";
-import type { Ingredient } from "@/types/ingredient";
+import type { Ingredient } from "@common/schemas/ingredient";
 import { queryOptions } from "@tanstack/react-query";
 
 export function getIngredientsQueryOptions(query: string) {

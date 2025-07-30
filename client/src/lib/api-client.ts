@@ -1,4 +1,4 @@
-import type { ApiResponse } from "@/types/api-response";
+import type { ApiResponse } from "@common/types/api-response";
 import { ApiError } from "@/lib/api-error";
 
 const API_URL = "http://localhost:3000";

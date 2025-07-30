@@ -1,6 +1,6 @@
 import { apiClient } from "@/lib/api-client";
 import { getFormatedDate } from "@/lib/utils";
-import type { RegisterInput } from "@/types/auth-types";
+import type { UserData } from "@common/schemas/user";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
@@ -8,7 +8,7 @@ import { toast } from "sonner";
 export function useRegister() {
   const navigate = useNavigate();
   return useMutation({
-    mutationFn: (credentials: RegisterInput) =>
+    mutationFn: (credentials: UserData) =>
       apiClient.post("/auth/register", credentials),
 
     onSuccess: () => {

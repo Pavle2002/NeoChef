@@ -1,5 +1,5 @@
+import type { ImportProgressState } from "@app-types/import-types.js";
 import type { IImportProgressManager } from "@interfaces/import-progress-manager.interface.js";
-import type { ImportProgressState } from "@models/import-progress-state.js";
 import { promises as fs } from "fs";
 import { dirname } from "path";
 

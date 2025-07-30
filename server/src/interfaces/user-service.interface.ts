@@ -1,5 +1,5 @@
-import type { SafeUser } from "@app-types/auth-types.js";
-import type { Preferences } from "@models/preferences.js";
+import type { SafeUser } from "@common/schemas/user.js";
+import type { Preferences } from "@common/schemas/preferences.js";
 import type { IUserRepository } from "./user-repository.interface.js";
 
 export interface IUserService {

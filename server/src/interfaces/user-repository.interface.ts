@@ -1,15 +1,15 @@
-import type { RegisterInput } from "@app-types/auth-types.js";
-import type { Cuisine } from "@models/cuisine.js";
-import type { Diet } from "@models/diet.js";
-import type { Ingredient } from "@models/ingredient.js";
-import type { User } from "@models/user.js";
+import type { UserData } from "@common/schemas/user.js";
+import type { Cuisine } from "@common/schemas/cuisine.js";
+import type { Diet } from "@common/schemas/diet.js";
+import type { Ingredient } from "@common/schemas/ingredient.js";
+import type { User } from "@common/schemas/user.js";
 
 export interface IUserRepository {
   findById(id: string): Promise<User | null>;
   findByEmail(email: string): Promise<User | null>;
   findAll(): Promise<User[]>;
 
-  create(user: RegisterInput): Promise<User>;
+  create(user: UserData): Promise<User>;
   update(id: string, user: Partial<User>): Promise<User | null>;
   delete(id: string): Promise<boolean>;
 

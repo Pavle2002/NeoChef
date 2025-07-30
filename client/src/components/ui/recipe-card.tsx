@@ -1,4 +1,4 @@
-import type { Recipe } from "@/types/recipe";
+import type { Recipe } from "@common/schemas/recipe";
 import { Separator } from "./separator";
 import { AlarmClock, Cross, Flame } from "lucide-react";
 

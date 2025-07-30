@@ -1,17 +1,15 @@
 import { SpoonacularQuotaExceededError } from "@errors/spoonacular-quota-exceeded-error.js";
 import Bottleneck from "bottleneck";
-import type { RecipeData } from "@app-types/recipe-types.js";
-import type {
-  ExtendedRecipe,
-  RecipeSearchOptions,
-} from "@app-types/recipe-types.js";
-import type { Cuisine } from "@models/cuisine.js";
-import type { Diet } from "@models/diet.js";
-import type { DishType } from "@models/dish-type.js";
-import type { Equipment } from "@models/equipment.js";
+import type { RecipeData } from "@common/schemas/recipe.js";
+import type { ExtendedRecipe } from "@common/schemas/recipe.js";
 import { extractImageName } from "@utils/extract-file-name.js";
-import type { ExtendedIngredient } from "@app-types/ingredient-types.js";
+import type { ExtendedIngredient } from "@common/schemas/ingredient.js";
 import type { IApiClient } from "@interfaces/api-client.interface.js";
+import type { Cuisine } from "@common/schemas/cuisine.js";
+import type { Diet } from "@common/schemas/diet.js";
+import type { DishType } from "@common/schemas/dish-type.js";
+import type { Equipment } from "@common/schemas/equipment.js";
+import type { RecipeSearchOptions } from "@app-types/import-types.js";
 
 export class SpoonacularApiClient implements IApiClient {
   private apiKey: string;
@@ -61,7 +59,7 @@ export class SpoonacularApiClient implements IApiClient {
       );
     }
 
-    const data = await response.json();
+    const data = (await response.json()) as any;
 
     if (!Array.isArray(data.results)) {
       throw new Error("Invalid response format from Spoonacular API");
@@ -99,15 +97,15 @@ export class SpoonacularApiClient implements IApiClient {
 
       const cuisines: Cuisine[] = (recipe.cuisines ?? [])
         .filter((name: string) => name)
-        .map((name: string) => ({ name }));
+        .map((name: string) => ({ name: name.trim() }));
 
       const diets: Diet[] = (recipe.diets ?? [])
         .filter((name: string) => name)
-        .map((name: string) => ({ name }));
+        .map((name: string) => ({ name: name.trim() }));
 
       const dishTypes: DishType[] = (recipe.dishTypes ?? [])
         .filter((name: string) => name)
-        .map((name: string) => ({ name }));
+        .map((name: string) => ({ name: name.trim() }));
 
       const equipmentMap = new Map<string, Equipment>();
       (recipe.analyzedInstructions?.[0]?.steps ?? [])
@@ -117,7 +115,7 @@ export class SpoonacularApiClient implements IApiClient {
           equipmentMap.set(e.id.toString(), {
             sourceId: e.id.toString(),
             sourceName: "Spoonacular",
-            name: e.name,
+            name: e.name.trim(),
             image: extractImageName(e.image ?? ""),
           });
         });
@@ -132,7 +130,7 @@ export class SpoonacularApiClient implements IApiClient {
             ingredientData: {
               sourceId: i.id.toString(),
               sourceName: "Spoonacular",
-              name: i.name,
+              name: i.name.trim(),
               aisle: i.aisle ?? "",
               image: extractImageName(i.image ?? ""),
             },

@@ -1,5 +1,5 @@
 import { apiClient } from "@/lib/api-client";
-import type { Preferences } from "@/types/preferences";
+import type { Preferences } from "@common/schemas/preferences";
 import { queryOptions } from "@tanstack/react-query";
 
 export function getCurrentUserPreferencesQueryOptions() {

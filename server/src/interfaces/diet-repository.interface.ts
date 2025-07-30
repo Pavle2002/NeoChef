@@ -1,4 +1,4 @@
-import type { Diet } from "@models/diet.js";
+import type { Diet } from "@common/schemas/diet.js";
 
 export interface IDietRepository {
   findAll(): Promise<Diet[]>;
