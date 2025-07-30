@@ -4,11 +4,12 @@ import type { IUnitOfWorkFactory } from "@interfaces/unit-of-work-factory.interf
 import type { IUserRepository } from "@interfaces/user-repository.interface.js";
 import type { IUserService } from "@interfaces/user-service.interface.js";
 import type { Preferences } from "@common/schemas/preferences.js";
+import type { Ingredient } from "@common/schemas/ingredient.js";
 
 export class UserService implements IUserService {
   constructor(
-    private userRepository: IUserRepository,
-    private uowFactory: IUnitOfWorkFactory
+    private readonly userRepository: IUserRepository,
+    private readonly uowFactory: IUnitOfWorkFactory
   ) {}
 
   async getById(id: string): Promise<SafeUser> {
@@ -54,6 +55,16 @@ export class UserService implements IUserService {
       prefersCuisines,
       followsDiets,
     };
+  }
+
+  async getFridge(
+    userId: string,
+    userRepository = this.userRepository
+  ): Promise<Ingredient[]> {
+    const user = await userRepository.findById(userId);
+    if (!user) throw new NotFoundError(`User with ID ${userId} not found`);
+
+    return userRepository.getHasIngredients(userId);
   }
 
   private async updateSet<T>(
@@ -109,6 +120,24 @@ export class UserService implements IUserService {
       );
 
       return this.getPreferences(userId, uow.users);
+    });
+  }
+
+  async updateFridge(
+    userId: string,
+    newIngredients: Ingredient[]
+  ): Promise<Ingredient[]> {
+    return this.uowFactory.execute(async (uow) => {
+      const current = await this.getFridge(userId, uow.users);
+      await this.updateSet(
+        current,
+        newIngredients,
+        (i) => i.id,
+        (id) => uow.users.addHasIngredient(userId, id),
+        (id) => uow.users.removeHasIngredient(userId, id)
+      );
+
+      return this.getFridge(userId, uow.users);
     });
   }
 }

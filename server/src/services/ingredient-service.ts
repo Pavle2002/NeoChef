@@ -3,7 +3,7 @@ import type { IIngredientService } from "@interfaces/ingredient-service.interfac
 import type { Ingredient } from "@common/schemas/ingredient.js";
 
 export class IngredientService implements IIngredientService {
-  constructor(private ingredientRepository: IIngredientRepository) {}
+  constructor(private readonly ingredientRepository: IIngredientRepository) {}
 
   async getAll(queryString = ""): Promise<Ingredient[]> {
     return this.ingredientRepository.findAll(queryString);

@@ -1,6 +1,7 @@
 import type { SafeUser } from "@common/schemas/user.js";
 import type { Preferences } from "@common/schemas/preferences.js";
 import type { IUserRepository } from "./user-repository.interface.js";
+import type { Ingredient } from "@common/schemas/ingredient.js";
 
 export interface IUserService {
   getById(id: string): Promise<SafeUser>;
@@ -17,4 +18,14 @@ export interface IUserService {
     userId: string,
     newPreferences: Preferences
   ): Promise<Preferences>;
+
+  getFridge(
+    userId: string,
+    userRepository?: IUserRepository
+  ): Promise<Ingredient[]>;
+
+  updateFridge(
+    userId: string,
+    newIngredients: Ingredient[]
+  ): Promise<Ingredient[]>;
 }

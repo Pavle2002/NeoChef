@@ -303,4 +303,16 @@ export class UserRepository implements IUserRepository {
       (record) => record.get("i").properties as Ingredient
     );
   }
+
+  async getHasIngredients(userId: string): Promise<Ingredient[]> {
+    const result = await this.queryExecutor.run(
+      `MATCH (u:User {id: $userId})-[:HAS]->(i:Ingredient)
+       RETURN i`,
+      { userId }
+    );
+
+    return result.records.map(
+      (record) => record.get("i").properties as Ingredient
+    );
+  }
 }

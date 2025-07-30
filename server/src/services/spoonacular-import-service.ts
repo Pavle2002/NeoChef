@@ -9,9 +9,9 @@ import type { RecipeSearchOptions } from "@app-types/import-types.js";
 
 export class SpoonacularImportService implements IImportService {
   constructor(
-    private spoonacularApiClient: IApiClient,
-    private uowFactory: IUnitOfWorkFactory,
-    private importProgressManager: IImportProgressManager
+    private readonly spoonacularApiClient: IApiClient,
+    private readonly uowFactory: IUnitOfWorkFactory,
+    private readonly importProgressManager: IImportProgressManager
   ) {}
 
   async importRecipes(options: RecipeSearchOptions): Promise<Recipe[]> {

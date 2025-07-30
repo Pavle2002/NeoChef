@@ -1,6 +1,6 @@
 import { recipeController } from "@controllers/recipe-controller.js";
 import { validate } from "@middlewares/validation-middleware.js";
-import { recipeSchemas } from "@schemas/recipe-schemas.js";
+import { recipeSchemas } from "@validation/recipe-schemas.js";
 import { isAuthenticated } from "@middlewares/auth-middleware.js";
 import { Router } from "express";
 

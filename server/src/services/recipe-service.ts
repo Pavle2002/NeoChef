@@ -4,7 +4,7 @@ import type { IRecipeService } from "@interfaces/recipe-service.interface.js";
 import type { Recipe } from "@common/schemas/recipe.js";
 
 export class RecipeService implements IRecipeService {
-  constructor(private recipeRepository: IRecipeRepository) {}
+  constructor(private readonly recipeRepository: IRecipeRepository) {}
 
   async getById(id: string): Promise<Recipe> {
     const recipe = await this.recipeRepository.findById(id);

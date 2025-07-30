@@ -13,6 +13,11 @@ export interface IUserRepository {
   update(id: string, user: Partial<User>): Promise<User | null>;
   delete(id: string): Promise<boolean>;
 
+  getFollowedDiets(userId: string): Promise<Diet[]>;
+  getPreferredCuisines(userId: string): Promise<Cuisine[]>;
+  getDislikedIngredients(userId: string): Promise<Ingredient[]>;
+  getHasIngredients(userId: string): Promise<Ingredient[]>;
+
   addLikesRecipe(userId: string, recipeId: string): Promise<void>;
   addHasIngredient(userId: string, ingredientId: string): Promise<void>;
   addDislikesIngredient(userId: string, ingredientId: string): Promise<void>;
@@ -27,8 +32,4 @@ export interface IUserRepository {
   ): Promise<boolean>;
   removePrefersCuisine(userId: string, cuisineName: string): Promise<boolean>;
   removeFollowsDiet(userId: string, dietName: string): Promise<boolean>;
-
-  getFollowedDiets(userId: string): Promise<Diet[]>;
-  getPreferredCuisines(userId: string): Promise<Cuisine[]>;
-  getDislikedIngredients(userId: string): Promise<Ingredient[]>;
 }

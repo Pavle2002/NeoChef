@@ -8,7 +8,6 @@
 
     // Directory structure
     "outDir": "./dist", // Specifies the output directory for compiled files.
-    "rootDirs": ["./src", "../common/src"], // Specifies the root directory of input files.
 
     // Strictness and type checking
     "strict": true, // Enables all strict type-checking options.
@@ -43,10 +42,10 @@
       "@app-types/*": ["src/types/*"],
       "@clients/*": ["src/clients/*"],
       "@errors/*": ["src/errors/*"],
-      "@schemas/*": ["src/schemas/*"],
+      "@validation/*": ["src/validation/*"],
       "@common/*": ["../common/src/*"]
     }
   },
-  "include": ["src"], // Specifies files or directories to include in the compilation.
+  "include": ["src", "../common/src"], // Specifies files or directories to include in the compilation.
   "exclude": ["node_modules", "dist"] // Excludes files or directories from the compilation.
 }

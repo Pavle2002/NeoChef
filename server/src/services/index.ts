@@ -12,6 +12,10 @@ import { UnitOfWorkFactory } from "@utils/unit-of-work-factory.js";
 import { UserService } from "./user-service.js";
 import { RecipeService } from "./recipe-service.js";
 import { IngredientService } from "./ingredient-service.js";
+import { DietRepository } from "@repositories/diet-repository.js";
+import { CuisineRepository } from "@repositories/cuisine-repository.js";
+import { DietService } from "./diet-service.js";
+import { CuisineService } from "./cuisine-service.js";
 
 const queryExecutor = new DriverQueryExecutor(neo4jClient);
 const unitOfWorkFactory = new UnitOfWorkFactory(neo4jClient);
@@ -19,11 +23,15 @@ const unitOfWorkFactory = new UnitOfWorkFactory(neo4jClient);
 const userRepository = new UserRepository(queryExecutor);
 const ingredientRepository = new IngredientRepository(queryExecutor);
 const recipeRepository = new RecipeRepository(queryExecutor);
+const cuisineRepository = new CuisineRepository(queryExecutor);
+const dietRepository = new DietRepository(queryExecutor);
 
 export const authService = new AuthService(userRepository);
 export const userService = new UserService(userRepository, unitOfWorkFactory);
 export const recipeService = new RecipeService(recipeRepository);
 export const ingredientService = new IngredientService(ingredientRepository);
+export const cuisineService = new CuisineService(cuisineRepository);
+export const dietService = new DietService(dietRepository);
 
 const spoonacularApiClient = new SpoonacularApiClient(
   config.spoonacular.apiKey,

@@ -1,7 +1,7 @@
 import { userController } from "@controllers/user-controller.js";
 import { isAuthenticated } from "@middlewares/auth-middleware.js";
 import { validate } from "@middlewares/validation-middleware.js";
-import { userSchemas } from "@schemas/user-schemas.js";
+import { userSchemas } from "@validation/user-schemas.js";
 import { Router } from "express";
 
 const {
@@ -9,14 +9,26 @@ const {
   getById,
   getCurrentUserPreferences,
   updateCurrentUserPreferences,
+  getCurrentUserFridge,
+  updateCurrentUserFridge,
 } = userController;
-const { getByIdSchema } = userSchemas;
+
+const { getByIdSchema, updatePreferencesSchema, updateFridgeSchema } =
+  userSchemas;
 
 const router = Router();
 
-router.get("/me/preferences", isAuthenticated, getCurrentUserPreferences);
-router.put("/me/preferences", isAuthenticated, updateCurrentUserPreferences);
 router.get("/me", getCurrentUser);
-router.get("/:id", isAuthenticated, validate(getByIdSchema), getById);
+router.use(isAuthenticated);
+
+router.get("/me/preferences", getCurrentUserPreferences);
+router.put(
+  "/me/preferences",
+  validate(updatePreferencesSchema),
+  updateCurrentUserPreferences
+);
+router.get("/me/fridge", getCurrentUserFridge);
+router.put("/me/fridge", validate(updateFridgeSchema), updateCurrentUserFridge);
+router.get("/:id", validate(getByIdSchema), getById);
 
 export { router as userRoutes };

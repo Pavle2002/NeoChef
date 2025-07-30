@@ -4,7 +4,7 @@ import type { IUserRepository } from "@interfaces/user-repository.interface.js";
 import type { UserData, SafeUser } from "@common/schemas/user.js";
 
 export class AuthService implements IAuthService {
-  constructor(private userRepository: IUserRepository) {}
+  constructor(private readonly userRepository: IUserRepository) {}
 
   async authenticateUser(
     email: string,

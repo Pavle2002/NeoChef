@@ -9,7 +9,7 @@ import { CheckboxGroup } from "@/components/ui/checkbox-group";
 import { ResponsiveIngredientSelector } from "@/components/ingredient-selector";
 import { createFileRoute } from "@tanstack/react-router";
 import { getCurrentUserPreferencesQueryOptions } from "@/query-options/get-current-user-preferences-query-options";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseQueries } from "@tanstack/react-query";
 import {
   Form,
   FormControl,
@@ -22,17 +22,27 @@ import { useUpdatePreferences } from "@/mutations/useUpdatePreferences";
 import type { Cuisine } from "@common/schemas/cuisine";
 import type { Diet } from "@common/schemas/diet";
 import type { Ingredient } from "@common/schemas/ingredient";
+import { getCuisinesQueryOptions } from "@/query-options/get-cuisines-query-options";
+import { getDietsQueryOptions } from "@/query-options/get-diets-query-options";
 
 export const Route = createFileRoute("/_protected/preferences")({
   component: RouteComponent,
-  loader: async ({ context: { queryClient } }) =>
-    queryClient.ensureQueryData(getCurrentUserPreferencesQueryOptions()),
+  loader: async ({ context: { queryClient } }) => {
+    queryClient.ensureQueryData(getCurrentUserPreferencesQueryOptions());
+    queryClient.ensureQueryData(getCuisinesQueryOptions());
+    queryClient.ensureQueryData(getDietsQueryOptions());
+  },
 });
 
 function RouteComponent() {
-  const { data: preferences } = useSuspenseQuery(
-    getCurrentUserPreferencesQueryOptions()
-  );
+  const [{ data: preferences }, { data: cuisines }, { data: diets }] =
+    useSuspenseQueries({
+      queries: [
+        getCurrentUserPreferencesQueryOptions(),
+        getCuisinesQueryOptions(),
+        getDietsQueryOptions(),
+      ],
+    });
 
   const { mutate: updatePreferences, isPending } = useUpdatePreferences();
 
@@ -156,7 +166,7 @@ function IngredientSearchField<T extends FieldValues>({
           <FormControl>
             <div>
               {(!field.value || field.value.length === 0) && (
-                <p className="text-sm text-muted-foreground">
+                <p className="mt-4 text-sm text-muted-foreground">
                   No ingredients selected
                 </p>
               )}

@@ -1,10 +1,26 @@
 import { apiClient } from "@/lib/api-client";
+import { getFormatedDate } from "@/lib/utils";
+import { getCurrentUserPreferencesQueryOptions } from "@/query-options/get-current-user-preferences-query-options";
 import type { Preferences } from "@common/schemas/preferences";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 export function useUpdatePreferences() {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (newPreferences: Preferences) =>
-      apiClient.put("/users/me/preferences", newPreferences),
+      apiClient.put<Preferences>("/users/me/preferences", newPreferences),
+
+    onSuccess: async (preferences) => {
+      queryClient.setQueryData(
+        getCurrentUserPreferencesQueryOptions().queryKey,
+        preferences
+      );
+
+      toast.success("Preferences updated successfully 🎉", {
+        description: getFormatedDate() + " 📆",
+      });
+    },
   });
 }
