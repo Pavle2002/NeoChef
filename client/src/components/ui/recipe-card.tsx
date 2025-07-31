@@ -1,6 +1,6 @@
 import type { Recipe } from "@common/schemas/recipe";
 import { Separator } from "./separator";
-import { AlarmClock, Cross, Flame } from "lucide-react";
+import { AlarmClock, Cross, Flame, ThumbsUp } from "lucide-react";
 
 export function RecipeCard(recipe: Recipe) {
   const calories =
@@ -10,6 +10,8 @@ export function RecipeCard(recipe: Recipe) {
 
   const healthScore =
     recipe.healthScore != null ? recipe.healthScore.toFixed(0) : "?";
+
+  console.log("RecipeCard", recipe);
 
   return (
     <div className="w-2xs rounded-md overflow-hidden shadow-lg transition-transform duration-150 hover:-translate-y-1 hover:shadow-xl cursor-pointer">
@@ -27,19 +29,30 @@ export function RecipeCard(recipe: Recipe) {
 
       <Separator />
 
-      <div className="py-2 px-4 flex gap-3 text-xs text-secondary-foreground">
+      <div className="py-2 px-4 flex justify-between text-xs text-secondary-foreground">
+        <p>
+          <ThumbsUp
+            strokeWidth={2.7}
+            className="inline mb-[3.7px] mr-1 text-sky-700"
+            size={13}
+            // fill="currentColor"
+          />
+          {recipe.likeCount} likes
+        </p>
         <p>
           <Flame
-            strokeWidth={2.5}
-            className="inline mb-1 mr-1 size-4 text-amber-600"
+            strokeWidth={2.7}
+            size={13}
+            className="inline mb-[3.7px] mr-0.5 text-amber-500"
             fill="currentColor"
           />
           {calories} cal
         </p>
         <p>
           <Cross
-            strokeWidth={2.5}
-            className="inline mb-1 mr-1 size-4 text-emerald-700"
+            strokeWidth={2.7}
+            size={13}
+            className="inline mb-[3.7px] mr-1 text-emerald-600"
             fill="currentColor"
           />
           {healthScore} / 100
@@ -47,7 +60,8 @@ export function RecipeCard(recipe: Recipe) {
         <p>
           <AlarmClock
             strokeWidth={2.7}
-            className="inline mb-1 mr-1 size-4 text-sky-700"
+            size={13}
+            className="inline mb-[3.7px] mr-1 text-red-700"
           />
           {recipe.readyInMinutes} min
         </p>

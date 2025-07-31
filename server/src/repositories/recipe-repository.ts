@@ -15,7 +15,9 @@ export class RecipeRepository implements IRecipeRepository {
 
   async findById(id: string): Promise<Recipe | null> {
     const result = await this.queryExecutor.run(
-      "MATCH (r:Recipe {id: $id}) RETURN r",
+      `MATCH (r:Recipe {id: $id})
+       OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
+       RETURN r, COUNT(l) AS likeCount`,
       { id }
     );
     const record = result.records[0];
@@ -24,6 +26,7 @@ export class RecipeRepository implements IRecipeRepository {
     }
     const recipe = record.get("r").properties;
     recipe.createdAt = neo4jDateTimeConverter.toStandardDate(recipe.createdAt);
+    recipe.likeCount = record.get("likeCount");
     return recipe as Recipe;
   }
 
@@ -31,7 +34,11 @@ export class RecipeRepository implements IRecipeRepository {
     const parsedLimit = int(limit);
     const parsedOffset = int(offset);
     const result = await this.queryExecutor.run(
-      "MATCH (r:Recipe) RETURN r SKIP $offset LIMIT $limit",
+      `MATCH (r:Recipe)
+       OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
+       WITH r, COUNT(l) AS likeCount
+       SKIP $offset LIMIT $limit
+       RETURN r, likeCount`,
       { limit: parsedLimit, offset: parsedOffset }
     );
     const recipes = result.records.map((record) => {
@@ -39,6 +46,7 @@ export class RecipeRepository implements IRecipeRepository {
       recipe.createdAt = neo4jDateTimeConverter.toStandardDate(
         recipe.createdAt
       );
+      recipe.likeCount = record.get("likeCount");
       return recipe as Recipe;
     });
     return recipes;
@@ -46,8 +54,9 @@ export class RecipeRepository implements IRecipeRepository {
 
   async findTrending(): Promise<Recipe[]> {
     const result = await this.queryExecutor.run(
-      `MATCH (r:Recipe)<-[l:LIKES]-(:User)
-       WHERE l.likedAt >= datetime() - duration('P7D')
+      `MATCH (r:Recipe)
+       OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
+       WHERE l.likedAt >= datetime() - duration('P7D') OR l IS NULL
        WITH r, COUNT(l) AS likeCount
        ORDER BY likeCount DESC
        LIMIT 100
@@ -58,6 +67,7 @@ export class RecipeRepository implements IRecipeRepository {
       recipe.createdAt = neo4jDateTimeConverter.toStandardDate(
         recipe.createdAt
       );
+      recipe.likeCount = record.get("likeCount");
       return recipe as Recipe;
     });
     return recipes;
@@ -69,7 +79,9 @@ export class RecipeRepository implements IRecipeRepository {
       `MERGE (r:Recipe {sourceName: $sourceName, sourceId: $sourceId})
       ON CREATE SET r.id = apoc.create.uuid(), r.createdAt = datetime(), r += $upsertRecipe
       ON MATCH SET r += $upsertRecipe
-      RETURN r`,
+      WITH r
+      OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
+      RETURN r, COUNT(l) AS likeCount`,
       { sourceId, sourceName, upsertRecipe }
     );
     const record = result.records[0];
@@ -80,6 +92,7 @@ export class RecipeRepository implements IRecipeRepository {
     newRecipe.createdAt = neo4jDateTimeConverter.toStandardDate(
       newRecipe.createdAt
     );
+    newRecipe.likeCount = record.get("likeCount");
     return newRecipe as Recipe;
   }
 

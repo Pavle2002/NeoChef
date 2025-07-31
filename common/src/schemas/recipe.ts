@@ -24,11 +24,13 @@ export const RecipeSchema = z.object({
   percentFat: z.number().optional(),
   percentCarbs: z.number().optional(),
   createdAt: z.date(),
+  likeCount: z.number(),
 });
 
 export const RecipeDataSchema = RecipeSchema.omit({
   id: true,
   createdAt: true,
+  likeCount: true,
 });
 
 export const ExtendedRecipeSchema = z.object({

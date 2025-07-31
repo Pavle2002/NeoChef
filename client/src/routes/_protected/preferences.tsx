@@ -57,7 +57,7 @@ function RouteComponent() {
           console.log(data);
           updatePreferences(data);
         })}
-        className="space-y-7"
+        className="space-y-7 max-w-4xl"
       >
         <IngredientSearchField
           control={form.control}

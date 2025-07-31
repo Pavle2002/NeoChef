@@ -43,7 +43,7 @@ function RouteComponent() {
         onSubmit={form.handleSubmit((data) => {
           updateFridge(data.fridge);
         })}
-        className="space-y-7"
+        className="space-y-7 max-w-4xl"
       >
         <IngredientSearchField control={form.control} name="fridge" />
         <Separator />
