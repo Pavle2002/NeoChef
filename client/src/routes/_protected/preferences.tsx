@@ -6,7 +6,7 @@ import {
 } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { CheckboxGroup } from "@/components/ui/checkbox-group";
-import { ResponsiveIngredientSelector } from "@/components/ingredient-selector";
+import { IngredientSelectorPopover } from "@/components/ui/ingredient-selector";
 import { createFileRoute } from "@tanstack/react-router";
 import { getCurrentUserPreferencesQueryOptions } from "@/query-options/get-current-user-preferences-query-options";
 import { useSuspenseQueries } from "@tanstack/react-query";
@@ -50,6 +50,12 @@ function RouteComponent() {
     defaultValues: preferences,
   });
 
+  function handleReset() {
+    form.setValue("dislikesIngredients", []);
+    form.setValue("prefersCuisines", []);
+    form.setValue("followsDiets", []);
+  }
+
   return (
     <Form {...form}>
       <form
@@ -83,14 +89,19 @@ function RouteComponent() {
         />
         <Separator />
 
-        <Button
-          type="submit"
-          size="lg"
-          disabled={isPending}
-          className="ml-auto block"
-        >
-          {isPending ? "Saving..." : "Save Preferences"}
-        </Button>
+        <div className="flex justify-end gap-3 mt-4">
+          <Button
+            type="button"
+            onClick={handleReset}
+            variant="outline"
+            size="lg"
+          >
+            Clear Preferences
+          </Button>
+          <Button type="submit" size="lg" disabled={isPending}>
+            {isPending ? "Saving..." : "Save Preferences"}
+          </Button>
+        </div>
       </form>
     </Form>
   );
@@ -155,7 +166,7 @@ function IngredientSearchField<T extends FieldValues>({
         <FormItem>
           <FormLabel className="text-xl font-normal">
             Ingredients you dislike
-            <ResponsiveIngredientSelector
+            <IngredientSelectorPopover
               onValueChange={field.onChange}
               value={field.value}
             />

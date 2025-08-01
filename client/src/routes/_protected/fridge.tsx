@@ -1,4 +1,4 @@
-import { ResponsiveIngredientSelector } from "@/components/ingredient-selector";
+import { IngredientSelectorPopover } from "@/components/ui/ingredient-selector";
 import { Button } from "@/components/ui/button";
 import { CheckboxGroup } from "@/components/ui/checkbox-group";
 import {
@@ -37,6 +37,10 @@ function RouteComponent() {
     defaultValues: { fridge },
   });
 
+  function handleReset() {
+    form.setValue("fridge", []);
+  }
+
   return (
     <Form {...form}>
       <form
@@ -48,14 +52,19 @@ function RouteComponent() {
         <IngredientSearchField control={form.control} name="fridge" />
         <Separator />
 
-        <Button
-          type="submit"
-          size="lg"
-          disabled={isPending}
-          className="ml-auto block"
-        >
-          {isPending ? "Saving..." : "Save Fridge"}
-        </Button>
+        <div className="flex justify-end gap-3 mt-4">
+          <Button
+            type="button"
+            onClick={handleReset}
+            variant="outline"
+            size="lg"
+          >
+            Empty Fridge
+          </Button>
+          <Button type="submit" size="lg" disabled={isPending}>
+            {isPending ? "Saving..." : "Save Fridge"}
+          </Button>
+        </div>
       </form>
     </Form>
   );
@@ -78,7 +87,7 @@ function IngredientSearchField<T extends FieldValues>({
         <FormItem>
           <FormLabel className="text-xl font-normal">
             Ingredients you have in your fridge
-            <ResponsiveIngredientSelector
+            <IngredientSelectorPopover
               onValueChange={field.onChange}
               value={field.value}
             />

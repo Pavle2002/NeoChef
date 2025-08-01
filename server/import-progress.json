@@ -1,8 +1,8 @@
 {
   "position": {
-    "cuisineIndex": 2,
-    "dietIndex": 1,
-    "dishTypeIndex": 11
+    "cuisineIndex": 3,
+    "dietIndex": 0,
+    "dishTypeIndex": 5
   },
   "combinations": {
     "italian|gluten free|main course": {
@@ -1335,6 +1335,542 @@
     },
     "chinese|ketogenic|marinade": {
       "offset": 0,
+      "done": true
+    },
+    "chinese|ketogenic|fingerfood": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|ketogenic|snack": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|ketogenic|drink": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|vegetarian|main course": {
+      "offset": 2,
+      "done": true
+    },
+    "chinese|vegetarian|side dish": {
+      "offset": 6,
+      "done": true
+    },
+    "chinese|vegetarian|dessert": {
+      "offset": 1,
+      "done": true
+    },
+    "chinese|vegetarian|appetizer": {
+      "offset": 5,
+      "done": true
+    },
+    "chinese|vegetarian|salad": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|vegetarian|bread": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|vegetarian|breakfast": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|vegetarian|soup": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|vegetarian|beverage": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|vegetarian|sauce": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|vegetarian|marinade": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|vegetarian|fingerfood": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|vegetarian|snack": {
+      "offset": 5,
+      "done": true
+    },
+    "chinese|vegetarian|drink": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|vegan|main course": {
+      "offset": 1,
+      "done": true
+    },
+    "chinese|vegan|side dish": {
+      "offset": 4,
+      "done": true
+    },
+    "chinese|vegan|dessert": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|vegan|appetizer": {
+      "offset": 4,
+      "done": true
+    },
+    "chinese|vegan|salad": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|vegan|bread": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|vegan|breakfast": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|vegan|soup": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|vegan|beverage": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|vegan|sauce": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|vegan|marinade": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|vegan|fingerfood": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|vegan|snack": {
+      "offset": 4,
+      "done": true
+    },
+    "chinese|vegan|drink": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|lacto-vegetarian|main course": {
+      "offset": 1,
+      "done": true
+    },
+    "chinese|lacto-vegetarian|side dish": {
+      "offset": 4,
+      "done": true
+    },
+    "chinese|lacto-vegetarian|dessert": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|lacto-vegetarian|appetizer": {
+      "offset": 4,
+      "done": true
+    },
+    "chinese|lacto-vegetarian|salad": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|lacto-vegetarian|bread": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|lacto-vegetarian|breakfast": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|lacto-vegetarian|soup": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|lacto-vegetarian|beverage": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|lacto-vegetarian|sauce": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|lacto-vegetarian|marinade": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|lacto-vegetarian|fingerfood": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|lacto-vegetarian|snack": {
+      "offset": 4,
+      "done": true
+    },
+    "chinese|lacto-vegetarian|drink": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|ovo-vegetarian|main course": {
+      "offset": 1,
+      "done": true
+    },
+    "chinese|ovo-vegetarian|side dish": {
+      "offset": 4,
+      "done": true
+    },
+    "chinese|ovo-vegetarian|dessert": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|ovo-vegetarian|appetizer": {
+      "offset": 4,
+      "done": true
+    },
+    "chinese|ovo-vegetarian|salad": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|ovo-vegetarian|bread": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|ovo-vegetarian|breakfast": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|ovo-vegetarian|soup": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|ovo-vegetarian|beverage": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|ovo-vegetarian|sauce": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|ovo-vegetarian|marinade": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|ovo-vegetarian|fingerfood": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|ovo-vegetarian|snack": {
+      "offset": 4,
+      "done": true
+    },
+    "chinese|ovo-vegetarian|drink": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|pescetarian|main course": {
+      "offset": 3,
+      "done": true
+    },
+    "chinese|pescetarian|side dish": {
+      "offset": 4,
+      "done": true
+    },
+    "chinese|pescetarian|dessert": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|pescetarian|appetizer": {
+      "offset": 3,
+      "done": true
+    },
+    "chinese|pescetarian|salad": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|pescetarian|bread": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|pescetarian|breakfast": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|pescetarian|soup": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|pescetarian|beverage": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|pescetarian|sauce": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|pescetarian|marinade": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|pescetarian|fingerfood": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|pescetarian|snack": {
+      "offset": 3,
+      "done": true
+    },
+    "chinese|pescetarian|drink": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|paleo|main course": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|paleo|side dish": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|paleo|dessert": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|paleo|appetizer": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|paleo|salad": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|paleo|bread": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|paleo|breakfast": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|paleo|soup": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|paleo|beverage": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|paleo|sauce": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|paleo|marinade": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|paleo|fingerfood": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|paleo|snack": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|paleo|drink": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|primal|main course": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|primal|side dish": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|primal|dessert": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|primal|appetizer": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|primal|salad": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|primal|bread": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|primal|breakfast": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|primal|soup": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|primal|beverage": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|primal|sauce": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|primal|marinade": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|primal|fingerfood": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|primal|snack": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|primal|drink": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|low fodmap|main course": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|low fodmap|side dish": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|low fodmap|dessert": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|low fodmap|appetizer": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|low fodmap|salad": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|low fodmap|bread": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|low fodmap|breakfast": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|low fodmap|soup": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|low fodmap|beverage": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|low fodmap|sauce": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|low fodmap|marinade": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|low fodmap|fingerfood": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|low fodmap|snack": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|low fodmap|drink": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|whole30|main course": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|whole30|side dish": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|whole30|dessert": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|whole30|appetizer": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|whole30|salad": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|whole30|bread": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|whole30|breakfast": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|whole30|soup": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|whole30|beverage": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|whole30|sauce": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|whole30|marinade": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|whole30|fingerfood": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|whole30|snack": {
+      "offset": 0,
+      "done": true
+    },
+    "chinese|whole30|drink": {
+      "offset": 0,
+      "done": true
+    },
+    "american|gluten free|main course": {
+      "offset": 20,
+      "done": false
+    },
+    "american|gluten free|side dish": {
+      "offset": 20,
+      "done": false
+    },
+    "american|gluten free|dessert": {
+      "offset": 16,
+      "done": true
+    },
+    "american|gluten free|appetizer": {
+      "offset": 20,
+      "done": false
+    },
+    "american|gluten free|salad": {
+      "offset": 4,
       "done": true
     }
   }

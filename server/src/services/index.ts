@@ -16,6 +16,8 @@ import { DietRepository } from "@repositories/diet-repository.js";
 import { CuisineRepository } from "@repositories/cuisine-repository.js";
 import { DietService } from "./diet-service.js";
 import { CuisineService } from "./cuisine-service.js";
+import { DishTypeRepository } from "@repositories/dish-type-repository.js";
+import { DishTypeService } from "./dish-type-service.js";
 
 const queryExecutor = new DriverQueryExecutor(neo4jClient);
 const unitOfWorkFactory = new UnitOfWorkFactory(neo4jClient);
@@ -25,6 +27,7 @@ const ingredientRepository = new IngredientRepository(queryExecutor);
 const recipeRepository = new RecipeRepository(queryExecutor);
 const cuisineRepository = new CuisineRepository(queryExecutor);
 const dietRepository = new DietRepository(queryExecutor);
+const dishTypeRepository = new DishTypeRepository(queryExecutor);
 
 export const authService = new AuthService(userRepository);
 export const userService = new UserService(userRepository, unitOfWorkFactory);
@@ -32,6 +35,7 @@ export const recipeService = new RecipeService(recipeRepository);
 export const ingredientService = new IngredientService(ingredientRepository);
 export const cuisineService = new CuisineService(cuisineRepository);
 export const dietService = new DietService(dietRepository);
+export const dishTypeService = new DishTypeService(dishTypeRepository);
 
 const spoonacularApiClient = new SpoonacularApiClient(
   config.spoonacular.apiKey,

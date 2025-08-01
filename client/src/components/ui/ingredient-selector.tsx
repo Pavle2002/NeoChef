@@ -1,12 +1,12 @@
 import type { Ingredient } from "@common/schemas/ingredient";
-import { LiveSearch } from "./ui/live-search";
+import { LiveSearch } from "./live-search";
 import { getIngredientsQueryOptions } from "@/query-options/get-ingredients-query-options";
 import { Check, Plus } from "lucide-react";
-import { Skeleton } from "./ui/skeleton";
+import { Skeleton } from "./skeleton";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { Button } from "./ui/button";
-import { Drawer, DrawerContent, DrawerTrigger } from "./ui/drawer";
+import { Popover, PopoverContent, PopoverTrigger } from "./popover";
+import { Button } from "./button";
+import { Drawer, DrawerContent, DrawerTrigger } from "./drawer";
 
 export type IngredientSelectorProps = {
   value: Ingredient[];
@@ -48,7 +48,7 @@ export function IngredientSelector({
   );
 }
 
-export function ResponsiveIngredientSelector({
+export function IngredientSelectorPopover({
   onValueChange,
   value,
   ...props
@@ -82,7 +82,7 @@ export function ResponsiveIngredientSelector({
             <Plus strokeWidth={3} />
           </Button>
         </DrawerTrigger>
-        <DrawerContent>
+        <DrawerContent className="px-2">
           <IngredientSelector
             onValueChange={onValueChange}
             value={value}

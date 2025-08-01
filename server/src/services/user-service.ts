@@ -92,7 +92,6 @@ export class UserService implements IUserService {
     userId: string,
     newPreferences: Preferences
   ): Promise<Preferences> {
-    console.log(newPreferences);
     return this.uowFactory.execute(async (uow) => {
       const current = await this.getPreferences(userId, uow.users);
       await this.updateSet(

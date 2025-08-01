@@ -1,6 +1,7 @@
 import React from "react";
-import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { Checkbox, checkboxVariants } from "./checkbox";
+import type { VariantProps } from "class-variance-authority";
 
 export type CheckboxGroupProps<T> = {
   options: T[];
@@ -8,9 +9,11 @@ export type CheckboxGroupProps<T> = {
   onValueChange: (value: T[]) => void;
   getKey: (option: T) => string;
   getLabel?: (option: T) => string;
-} & React.HTMLAttributes<HTMLDivElement>;
+} & React.HTMLAttributes<HTMLDivElement> &
+  VariantProps<typeof checkboxVariants>;
 
 export function CheckboxGroup<T>({
+  size,
   options,
   value,
   onValueChange,
@@ -25,7 +28,7 @@ export function CheckboxGroup<T>({
         const key = getKey(option);
         const checked = value.some((d) => getKey(d) === key);
 
-        function handleCheckboxChange() {
+        function handleCheckedChange(checked: boolean) {
           if (checked) {
             onValueChange(value.filter((d) => getKey(d) !== key));
           } else {
@@ -35,27 +38,13 @@ export function CheckboxGroup<T>({
 
         return (
           <div className="flex items-center gap-2.5" key={key}>
-            <input
-              type="checkbox"
+            <Checkbox
+              size={size}
               id={`checkbox-group-${key}`}
-              className="peer sr-only"
               checked={checked}
-              tabIndex={-1}
-              onChange={handleCheckboxChange}
+              onCheckedChange={handleCheckedChange}
+              label={getLabel(option)}
             />
-            <Label
-              className="block w-full text-left font-normal px-4 py-2 text-primary/90 rounded-md border border-primary/15 transition-colors duration-150 peer-checked:font-medium peer-checked:border-primary peer-checked:bg-secondary peer-checked:text-primary cursor-pointer hover:bg-accent/80 focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] focus-visible:ring-offset-2"
-              htmlFor={`checkbox-group-${key}`}
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  handleCheckboxChange();
-                }
-              }}
-            >
-              {getLabel(option)}
-            </Label>
           </div>
         );
       })}

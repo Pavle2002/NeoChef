@@ -42,6 +42,13 @@ export const ExtendedRecipeSchema = z.object({
   dishTypes: z.array(DishTypeSchema),
 });
 
+export const RecipeFiltersSchema = z.object({
+  cuisines: z.array(z.string()).optional(),
+  diets: z.array(z.string()).optional(),
+  dishTypes: z.array(z.string()).optional(),
+});
+
 export type Recipe = z.infer<typeof RecipeSchema>;
 export type RecipeData = z.infer<typeof RecipeDataSchema>;
 export type ExtendedRecipe = z.infer<typeof ExtendedRecipeSchema>;
+export type RecipeFilters = z.infer<typeof RecipeFiltersSchema>;

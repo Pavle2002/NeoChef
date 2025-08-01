@@ -15,6 +15,7 @@ import { userRoutes } from "@routes/user-routes.js";
 import { ingredientRoutes } from "@routes/ingredient-routes.js";
 import { cuisineRoutes } from "@routes/cuisine-routes.js";
 import { dietRoutes } from "@routes/diet-routes.js";
+import { dishTypeRoutes } from "@routes/dish-type-route.js";
 
 const app = express();
 const port = config.port;
@@ -32,6 +33,7 @@ app.use("/recipes", recipeRoutes);
 app.use("/ingredients", ingredientRoutes);
 app.use("/cuisines", cuisineRoutes);
 app.use("/diets", dietRoutes);
+app.use("/dish-types", dishTypeRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   sendSuccess(res, 200, null, "Hello World!");

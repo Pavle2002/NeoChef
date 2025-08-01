@@ -11,8 +11,6 @@ export function RecipeCard(recipe: Recipe) {
   const healthScore =
     recipe.healthScore != null ? recipe.healthScore.toFixed(0) : "?";
 
-  console.log("RecipeCard", recipe);
-
   return (
     <div className="w-2xs rounded-md overflow-hidden shadow-lg transition-transform duration-150 hover:-translate-y-1 hover:shadow-xl cursor-pointer">
       <img
