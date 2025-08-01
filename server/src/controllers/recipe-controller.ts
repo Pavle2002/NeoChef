@@ -12,7 +12,13 @@ async function getAll(req: Request, res: Response): Promise<void> {
   const limit = req.validated?.query?.limit as number;
   const offset = req.validated?.query?.offset as number;
 
-  const recipes = await recipeService.getAll(limit, offset);
+  const filters = {
+    cuisines: req.validated?.query?.cuisines as string[] | undefined,
+    diets: req.validated?.query?.diets as string[] | undefined,
+    dishTypes: req.validated?.query?.dishTypes as string[] | undefined,
+  };
+
+  const recipes = await recipeService.getAll(limit, offset, filters);
   sendSuccess(res, 200, recipes, "Recipes retrieved successfully");
 }
 

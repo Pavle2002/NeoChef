@@ -10,15 +10,13 @@ import { getDietsQueryOptions } from "@/query-options/get-diets-query-options";
 import { getCuisinesQueryOptions } from "@/query-options/get-cuisines-query-options";
 import { getDishTypesQueryOptions } from "@/query-options/get-dish-types-query-options";
 import { FiltersPopover } from "@/components/ui/filters-popover";
+import { RecipeFiltersSchema } from "@common/schemas/recipe";
 
 const PAGE_SIZE = 21;
 
-const RecipeSearchSchema = z.object({
+const RecipeSearchSchema = RecipeFiltersSchema.extend({
   page: fallback(z.number().int().positive(), 1).default(1),
   size: fallback(z.number().int().positive(), PAGE_SIZE).default(PAGE_SIZE),
-  cuisines: z.array(z.string()).optional(),
-  diets: z.array(z.string()).optional(),
-  dishTypes: z.array(z.string()).optional(),
 });
 
 export const Route = createFileRoute("/_protected/home")({

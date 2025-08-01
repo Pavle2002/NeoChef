@@ -27,7 +27,7 @@ function SidebarLayout() {
       <Sidebar />
       <SidebarInset>
         <Header />
-        <div className="my-10 mx-8">
+        <div className="my-6 mx-8">
           <Outlet />
         </div>
       </SidebarInset>

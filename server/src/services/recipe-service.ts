@@ -1,7 +1,7 @@
 import { NotFoundError } from "@errors/not-found-error.js";
 import type { IRecipeRepository } from "@interfaces/recipe-repository.interface.js";
 import type { IRecipeService } from "@interfaces/recipe-service.interface.js";
-import type { Recipe } from "@common/schemas/recipe.js";
+import type { Recipe, RecipeFilters } from "@common/schemas/recipe.js";
 
 export class RecipeService implements IRecipeService {
   constructor(private readonly recipeRepository: IRecipeRepository) {}
@@ -19,11 +19,12 @@ export class RecipeService implements IRecipeService {
 
   async getAll(
     limit?: number,
-    offset?: number
+    offset?: number,
+    filters: RecipeFilters = {}
   ): Promise<{ recipes: Recipe[]; totalCount: number }> {
     const [recipes, totalCount] = await Promise.all([
-      this.recipeRepository.findAll(limit, offset),
-      this.recipeRepository.countAll(),
+      this.recipeRepository.findAll(limit, offset, filters),
+      this.recipeRepository.countAll(filters),
     ]);
     return { recipes, totalCount };
   }

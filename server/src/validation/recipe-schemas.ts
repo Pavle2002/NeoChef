@@ -1,35 +1,38 @@
+import { RecipeFiltersSchema, RecipeSchema } from "@common/schemas/recipe.js";
+import { queryParamsParser } from "@utils/query-params-parser.js";
 import { z } from "zod";
 
-const positiveInt = z
-  .preprocess(
-    (val) => (val === undefined ? undefined : Number(val)),
-    z
-      .number()
-      .int({ message: "Limit must be an integer" })
-      .positive({ message: "Limit must be a positive integer" })
-      .optional()
-  )
-  .refine((val) => val === undefined || !Number.isNaN(val), {
-    message: "Limit must be a number",
-  });
+const { parseArray, parseNumber } = queryParamsParser;
 
-const nonNegativeInt = z
-  .preprocess(
-    (val) => (val === undefined ? undefined : Number(val)),
-    z
-      .number()
-      .int({ message: "Offset must be an integer" })
-      .nonnegative({ message: "Offset must be a non-negative integer" })
-      .optional()
-  )
-  .refine((val) => val === undefined || !Number.isNaN(val), {
-    message: "Offset must be a number",
-  });
+const DEFAULT_PAGE_SIZE = 21;
+const DEFAULT_OFFSET = 0;
+
+const NormalizedRecipeFiltersSchema = RecipeFiltersSchema.extend({
+  cuisines: z.preprocess(parseArray, z.array(z.string()).optional()),
+  diets: z.preprocess(parseArray, z.array(z.string()).optional()),
+  dishTypes: z.preprocess(parseArray, z.array(z.string()).optional()),
+});
 
 const getAllSchema = z.object({
-  query: z.object({
-    limit: positiveInt,
-    offset: nonNegativeInt,
+  query: NormalizedRecipeFiltersSchema.extend({
+    limit: z
+      .preprocess(
+        parseNumber,
+        z
+          .number({ message: "Limit must be a number" })
+          .int({ message: "Limit must be an integer" })
+          .positive({ message: "Limit must be a positive integer" })
+      )
+      .default(DEFAULT_PAGE_SIZE),
+    offset: z
+      .preprocess(
+        parseNumber,
+        z
+          .number({ message: "Offset must be a number" })
+          .int({ message: "Offset must be an integer" })
+          .nonnegative({ message: "Offset must be a non-negative integer" })
+      )
+      .default(DEFAULT_OFFSET),
   }),
 });
 
