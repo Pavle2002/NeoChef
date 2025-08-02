@@ -3,6 +3,7 @@ import type {
   Recipe,
   RecipeData,
   RecipeFilters,
+  RecipeSortOptions,
 } from "@common/schemas/recipe.js";
 import type { Cuisine } from "@common/schemas/cuisine.js";
 import type { Diet } from "@common/schemas/diet.js";
@@ -15,7 +16,8 @@ export interface IRecipeRepository {
   findAll(
     limit?: number,
     offset?: number,
-    filters?: RecipeFilters
+    filters?: RecipeFilters,
+    sortOptions?: RecipeSortOptions
   ): Promise<Recipe[]>;
   findTrending(): Promise<Recipe[]>;
   addIngredient(

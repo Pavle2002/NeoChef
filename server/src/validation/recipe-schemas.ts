@@ -1,4 +1,7 @@
-import { RecipeFiltersSchema, RecipeSchema } from "@common/schemas/recipe.js";
+import {
+  RecipeFiltersSchema,
+  RecipeSortOptionsSchema,
+} from "@common/schemas/recipe.js";
 import { queryParamsParser } from "@utils/query-params-parser.js";
 import { z } from "zod";
 
@@ -14,7 +17,7 @@ const NormalizedRecipeFiltersSchema = RecipeFiltersSchema.extend({
 });
 
 const getAllSchema = z.object({
-  query: NormalizedRecipeFiltersSchema.extend({
+  query: NormalizedRecipeFiltersSchema.merge(RecipeSortOptionsSchema).extend({
     limit: z
       .preprocess(
         parseNumber,

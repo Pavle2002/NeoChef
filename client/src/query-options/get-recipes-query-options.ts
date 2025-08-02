@@ -1,18 +1,31 @@
 import { apiClient } from "@/lib/api-client";
-import type { Recipe, RecipeFilters } from "@common/schemas/recipe";
+import {
+  DEFAULT_PAGE_SIZE,
+  DEFAULT_SORT_BY,
+  DEFAULT_SORT_ORDER,
+  type Recipe,
+  type RecipeFilters,
+  type RecipeSortOptions,
+} from "@common/schemas/recipe";
 import { queryOptions } from "@tanstack/react-query";
 
 export function getRecipesQueryOptions(
   offset = 0,
-  limit = 20,
-  filters: RecipeFilters = {}
+  limit = DEFAULT_PAGE_SIZE,
+  filters: RecipeFilters = {},
+  sortOptions: RecipeSortOptions = {
+    sortBy: DEFAULT_SORT_BY,
+    sortOrder: DEFAULT_SORT_ORDER,
+  }
 ) {
   return queryOptions({
-    queryKey: ["recipes", "list", { offset, limit }, filters],
+    queryKey: ["recipes", "list", { offset, limit }, filters, sortOptions],
     queryFn: () => {
       const params = new URLSearchParams({
         offset: offset.toString(),
         limit: limit.toString(),
+        sortBy: sortOptions.sortBy,
+        sortOrder: sortOptions.sortOrder,
       });
 
       if (filters.cuisines && filters.cuisines.length > 0) {

@@ -62,7 +62,10 @@ function Pagination({ routePath, page, totalPageCount }: PaginationProps) {
         <PaginationItem>
           <PaginationNext
             from={routePath}
-            search={(prev) => ({ ...prev, page: prev.page + 1 })}
+            search={(prev) => ({
+              ...prev,
+              page: Math.min(totalPageCount, prev.page + 1),
+            })}
           />
         </PaginationItem>
       </PaginationContent>

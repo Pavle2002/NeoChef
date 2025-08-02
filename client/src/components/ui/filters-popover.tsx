@@ -49,7 +49,7 @@ function FiltersPopover({ defaultValues = {}, onApply }: FiltersFormProps) {
     return (
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button variant="outline" className="font-normal mb-5">
+          <Button variant="outline" className="font-normal">
             <ListFilter strokeWidth={2.5} />
             Filters
           </Button>
@@ -67,7 +67,7 @@ function FiltersPopover({ defaultValues = {}, onApply }: FiltersFormProps) {
     return (
       <Drawer open={open} onOpenChange={setOpen}>
         <DrawerTrigger asChild>
-          <Button variant="outline" className="font-normal mb-5">
+          <Button variant="outline" className="font-normal">
             <ListFilter strokeWidth={2.5} />
             Filters
           </Button>

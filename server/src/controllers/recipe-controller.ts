@@ -1,3 +1,7 @@
+import type {
+  RecipeFilters,
+  RecipeSortOptions,
+} from "@common/schemas/recipe.js";
 import { recipeService } from "@services/index.js";
 import { sendSuccess } from "@utils/response-handler.js";
 import type { Request, Response } from "express";
@@ -13,12 +17,22 @@ async function getAll(req: Request, res: Response): Promise<void> {
   const offset = req.validated?.query?.offset as number;
 
   const filters = {
-    cuisines: req.validated?.query?.cuisines as string[] | undefined,
-    diets: req.validated?.query?.diets as string[] | undefined,
-    dishTypes: req.validated?.query?.dishTypes as string[] | undefined,
-  };
+    cuisines: req.validated?.query?.cuisines,
+    diets: req.validated?.query?.diets,
+    dishTypes: req.validated?.query?.dishTypes,
+  } as RecipeFilters;
 
-  const recipes = await recipeService.getAll(limit, offset, filters);
+  const sortOptions = {
+    sortBy: req.validated?.query?.sortBy,
+    sortOrder: req.validated?.query?.sortOrder,
+  } as RecipeSortOptions;
+
+  const recipes = await recipeService.getAll(
+    limit,
+    offset,
+    filters,
+    sortOptions
+  );
   sendSuccess(res, 200, recipes, "Recipes retrieved successfully");
 }
 

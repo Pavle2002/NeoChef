@@ -1,8 +1,11 @@
 import { type IRecipeRepository } from "@interfaces/recipe-repository.interface.js";
 import {
+  DEFAULT_SORT_BY,
+  DEFAULT_SORT_ORDER,
   type Recipe,
   type RecipeData,
   type RecipeFilters,
+  type RecipeSortOptions,
 } from "@common/schemas/recipe.js";
 import { type Cuisine } from "@common/schemas/cuisine.js";
 import { type Diet } from "@common/schemas/diet.js";
@@ -39,9 +42,22 @@ export class RecipeRepository implements IRecipeRepository {
   async findAll(
     limit = 20,
     offset = 0,
-    filters: RecipeFilters = {}
+    filters: RecipeFilters = {},
+    sortOptions: RecipeSortOptions = {
+      sortBy: DEFAULT_SORT_BY,
+      sortOrder: DEFAULT_SORT_ORDER,
+    }
   ): Promise<Recipe[]> {
-    console.log(filters);
+    const { sortBy } = sortOptions;
+    let orderByClause = "";
+    const sortOrder = sortOptions.sortOrder === "asc" ? "ASC" : "DESC";
+
+    if (sortBy === "likeCount") {
+      orderByClause = `ORDER BY likeCount ${sortOrder}`;
+    } else {
+      orderByClause = `ORDER BY r.${sortBy} ${sortOrder}`;
+    }
+
     const { matchClauses, whereClauses, params } =
       this.buildRecipeFilterQuery(filters);
 
@@ -56,11 +72,11 @@ export class RecipeRepository implements IRecipeRepository {
     ${whereString}
     OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
     WITH r, COUNT(l) AS likeCount
+    ${orderByClause}
     SKIP $offset LIMIT $limit
     RETURN r, likeCount
   `;
 
-    console.log(cypher, params);
     const result = await this.queryExecutor.run(cypher, params);
 
     const recipes = result.records.map((record) => {
@@ -130,7 +146,6 @@ export class RecipeRepository implements IRecipeRepository {
       RETURN r`,
       { recipeId, cuisine }
     );
-
     if (!result.records[0]) {
       throw new InternalServerError("Failed to add cuisine to recipe");
     }
@@ -144,7 +159,6 @@ export class RecipeRepository implements IRecipeRepository {
       RETURN r`,
       { recipeId, diet }
     );
-
     if (!result.records[0]) {
       throw new InternalServerError("Failed to add diet to recipe");
     }
@@ -158,7 +172,6 @@ export class RecipeRepository implements IRecipeRepository {
       RETURN r`,
       { recipeId, dishType }
     );
-
     if (!result.records[0]) {
       throw new InternalServerError("Failed to add dish type to recipe");
     }
@@ -173,7 +186,6 @@ export class RecipeRepository implements IRecipeRepository {
       RETURN r`,
       { recipeId, equipment }
     );
-
     if (!result.records[0]) {
       throw new InternalServerError("Failed to add equipment to recipe");
     }
@@ -196,7 +208,6 @@ export class RecipeRepository implements IRecipeRepository {
         usage,
       }
     );
-
     if (!result.records[0]) {
       throw new InternalServerError("Failed to add ingredient to recipe");
     }
