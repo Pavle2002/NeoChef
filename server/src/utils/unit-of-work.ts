@@ -5,7 +5,7 @@ import type { IRecipeRepository } from "@interfaces/recipe-repository.interface.
 import type { IIngredientRepository } from "@interfaces/ingredient-repository.interface.js";
 import { UserRepository } from "@repositories/user-repository.js";
 import { RecipeRepository } from "@repositories/recipe-repository.js";
-import { IngredientRepository } from "@repositories/ingrediant-repository.js";
+import { IngredientRepository } from "@repositories/ingredient-repository.js";
 import { TransactionQueryExecutor } from "./transaction-query-executor.js";
 
 export class UnitOfWork implements IUnitOfWork {

@@ -15,7 +15,7 @@ import { userRoutes } from "@routes/user-routes.js";
 import { ingredientRoutes } from "@routes/ingredient-routes.js";
 import { cuisineRoutes } from "@routes/cuisine-routes.js";
 import { dietRoutes } from "@routes/diet-routes.js";
-import { dishTypeRoutes } from "@routes/dish-type-route.js";
+import { dishTypeRoutes } from "@routes/dish-type-routes.js";
 
 const app = express();
 const port = config.port;

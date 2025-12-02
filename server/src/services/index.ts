@@ -3,7 +3,7 @@ import neo4jClient from "@config/neo4j.js";
 import { AuthService } from "@services/auth-service.js";
 import { UserRepository } from "@repositories/user-repository.js";
 import { RecipeRepository } from "@repositories/recipe-repository.js";
-import { IngredientRepository } from "@repositories/ingrediant-repository.js";
+import { IngredientRepository } from "@repositories/ingredient-repository.js";
 import { SpoonacularImportService } from "@services/spoonacular-import-service.js";
 import { SpoonacularApiClient } from "@clients/spoonacular-api-client.js";
 import { FileImportProgressManager } from "./file-import-progress-manager.js";

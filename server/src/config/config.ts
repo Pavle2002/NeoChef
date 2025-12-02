@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const requiredEnvVars = [
+  "SESSION_SECRET",
   "NEO4J_URL",
   "NEO4J_USERNAME",
   "NEO4J_PASSWORD",
@@ -21,7 +22,7 @@ const config = {
   port: parseInt(process.env.PORT || "3000", 10),
   clientOrigin: process.env.CLIENT_ORIGIN as string,
   logLevel: process.env.LOG_LEVEL || "info",
-  sessionSecret: process.env.SESSION_SECRET || "default_secret",
+  sessionSecret: process.env.SESSION_SECRET as string,
   redis: { url: process.env.REDIS_URL as string },
   neo4j: {
     url: process.env.NEO4J_URL as string,

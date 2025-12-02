@@ -1,4 +1,3 @@
-import type { User } from "@models/user.ts";
 import "express";
 
 declare module "express" {

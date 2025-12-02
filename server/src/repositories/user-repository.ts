@@ -53,7 +53,6 @@ export class UserRepository implements IUserRepository {
 
   async create(user: UserData): Promise<User> {
     try {
-      ``;
       const result = await this.queryExecutor.run(
         `CREATE (u:User {id: apoc.create.uuid(), createdAt: datetime()})
         SET u += $user
