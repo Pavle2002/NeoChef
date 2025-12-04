@@ -21,8 +21,8 @@ export class RecipeService implements IRecipeService {
     return recipe;
   }
 
-  async getByIdExtended(id: string): Promise<ExtendedRecipe> {
-    const recipe = await this.recipeRepository.findByIdExtended(id);
+  async getByIdExtended(id: string, userId: string): Promise<ExtendedRecipe> {
+    const recipe = await this.recipeRepository.findByIdExtended(id, userId);
     if (!recipe) throw new NotFoundError(`Recipe with ID ${id} not found`);
 
     return recipe;

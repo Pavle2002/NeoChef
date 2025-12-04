@@ -41,7 +41,7 @@ export const RecipeSchema = z.object({
 });
 
 export const ExtendedRecipeSchema = z.object({
-  recipe: RecipeSchema,
+  recipe: RecipeSchema.extend({ isLiked: z.boolean(), isSaved: z.boolean() }),
   extendedIngredients: z.array(ExtendedIngredientSchema),
   diets: z.array(DietSchema),
   cuisines: z.array(CuisineSchema),

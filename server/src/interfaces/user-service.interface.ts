@@ -6,8 +6,8 @@ import type { Ingredient } from "@common/schemas/ingredient.js";
 export interface IUserService {
   getById(id: string): Promise<SafeUser>;
   getByEmail(email: string): Promise<SafeUser>;
-  addLikesRecipe(userId: string, recipeId: string): Promise<void>;
-  addHasIngredient(userId: string, ingredientId: string): Promise<void>;
+  //addLikesRecipe(userId: string, recipeId: string): Promise<void>;
+  // addHasIngredient(userId: string, ingredientId: string): Promise<void>;
 
   getPreferences(
     userId: string,
@@ -28,4 +28,16 @@ export interface IUserService {
     userId: string,
     newIngredients: Ingredient[]
   ): Promise<Ingredient[]>;
+
+  toggleLikesRecipe(
+    userId: string,
+    recipeId: string,
+    likes: boolean
+  ): Promise<void>;
+
+  toggleSavedRecipe(
+    userId: string,
+    recipeId: string,
+    save: boolean
+  ): Promise<void>;
 }

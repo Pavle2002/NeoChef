@@ -137,6 +137,21 @@ export class UserRepository implements IUserRepository {
     }
   }
 
+  async addSavedRecipe(userId: string, recipeId: string): Promise<void> {
+    const result = await this.queryExecutor.run(
+      `MATCH (u:User {id: $userId})
+       MATCH (r:Recipe {id: $recipeId})
+       MERGE (u)-[rel:SAVED]->(r)
+       ON CREATE SET rel.savedAt = datetime()
+       RETURN u, r, rel`,
+      { userId, recipeId }
+    );
+
+    if (!result.records[0]) {
+      throw new InternalServerError("Failed to add saved recipe for user");
+    }
+  }
+
   async addHasIngredient(userId: string, ingredientId: string): Promise<void> {
     const result = await this.queryExecutor.run(
       `MATCH (u:User {id: $userId})
@@ -203,6 +218,18 @@ export class UserRepository implements IUserRepository {
   async removeLikesRecipe(userId: string, recipeId: string): Promise<boolean> {
     const result = await this.queryExecutor.run(
       `MATCH (u:User {id: $userId})-[rel:LIKES]->(r:Recipe {id: $recipeId})
+       DELETE rel
+       RETURN COUNT(rel) AS count`,
+      { userId, recipeId }
+    );
+
+    const record = result.records[0];
+    return record ? record.get("count") > 0 : false;
+  }
+
+  async removeSavedRecipe(userId: string, recipeId: string): Promise<boolean> {
+    const result = await this.queryExecutor.run(
+      `MATCH (u:User {id: $userId})-[rel:SAVED]->(r:Recipe {id: $recipeId})
        DELETE rel
        RETURN COUNT(rel) AS count`,
       { userId, recipeId }

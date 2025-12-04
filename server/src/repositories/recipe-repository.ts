@@ -43,24 +43,31 @@ export class RecipeRepository implements IRecipeRepository {
     return recipe as Recipe;
   }
 
-  async findByIdExtended(id: string): Promise<ExtendedRecipe | null> {
+  async findByIdExtended(
+    id: string,
+    userId: string
+  ): Promise<ExtendedRecipe | null> {
     const result = await this.queryExecutor.run(
       `MATCH (r:Recipe {id: $id})
       OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
+      OPTIONAL MATCH (r)<-[ul:LIKES]-(:User {id: $userId})
+      OPTIONAL MATCH (r)<-[us:SAVED]-(:User {id: $userId})
       OPTIONAL MATCH (r)-[:BELONGS_TO]->(c:Cuisine)
       OPTIONAL MATCH (r)-[:IS_OF_TYPE]->(t:DishType)
       OPTIONAL MATCH (r)-[u:CONTAINS]->(i:Ingredient)
       OPTIONAL MATCH (r)-[:REQUIRES]->(e:Equipment)
       OPTIONAL MATCH (r)-[:SUITABLE_FOR]->(d:Diet)
       WITH r,
-        COUNT(l) AS likeCount,
+        COUNT(DISTINCT ul) > 0 AS isLiked,
+        COUNT(DISTINCT us) > 0 AS isSaved,
+        COUNT(DISTINCT l) AS likeCount,
         collect(DISTINCT c) AS cuisines,
         collect(DISTINCT d) AS diets,
         collect(DISTINCT t) AS dishTypes,
         collect(DISTINCT e) AS equipment,
         collect(DISTINCT { ingredient: properties(i), usage: properties(u) }) AS ingredientUsages
-      RETURN r, likeCount, cuisines, diets, dishTypes, equipment, ingredientUsages`,
-      { id }
+      RETURN r, isLiked, isSaved, likeCount, cuisines, diets, dishTypes, equipment, ingredientUsages`,
+      { id, userId }
     );
 
     const record = result.records[0];
@@ -71,6 +78,8 @@ export class RecipeRepository implements IRecipeRepository {
     const recipe = record.get("r").properties;
     recipe.createdAt = neo4jDateTimeConverter.toStandardDate(recipe.createdAt);
     recipe.likeCount = record.get("likeCount");
+    recipe.isLiked = record.get("isLiked");
+    recipe.isSaved = record.get("isSaved");
 
     const extendedIngredients = record
       .get("ingredientUsages")

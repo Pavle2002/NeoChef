@@ -28,13 +28,13 @@ export class UserService implements IUserService {
     return safeUser;
   }
 
-  async addLikesRecipe(userId: string, recipeId: string): Promise<void> {
-    return this.userRepository.addLikesRecipe(userId, recipeId);
-  }
+  // async addLikesRecipe(userId: string, recipeId: string): Promise<void> {
+  //   return this.userRepository.addLikesRecipe(userId, recipeId);
+  // }
 
-  async addHasIngredient(userId: string, ingredientId: string): Promise<void> {
-    return this.userRepository.addHasIngredient(userId, ingredientId);
-  }
+  // async addHasIngredient(userId: string, ingredientId: string): Promise<void> {
+  //   return this.userRepository.addHasIngredient(userId, ingredientId);
+  // }
 
   async getPreferences(
     userId: string,
@@ -138,5 +138,29 @@ export class UserService implements IUserService {
 
       return this.getFridge(userId, uow.users);
     });
+  }
+
+  async toggleLikesRecipe(
+    userId: string,
+    recipeId: string,
+    likes: boolean
+  ): Promise<void> {
+    if (likes) {
+      await this.userRepository.addLikesRecipe(userId, recipeId);
+    } else {
+      await this.userRepository.removeLikesRecipe(userId, recipeId);
+    }
+  }
+
+  async toggleSavedRecipe(
+    userId: string,
+    recipeId: string,
+    save: boolean
+  ): Promise<void> {
+    if (save) {
+      await this.userRepository.addSavedRecipe(userId, recipeId);
+    } else {
+      await this.userRepository.removeSavedRecipe(userId, recipeId);
+    }
   }
 }

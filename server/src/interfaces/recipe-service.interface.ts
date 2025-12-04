@@ -7,7 +7,7 @@ import type {
 
 export interface IRecipeService {
   getById(id: string): Promise<Recipe>;
-  getByIdExtended(id: string): Promise<ExtendedRecipe>;
+  getByIdExtended(id: string, userId: string): Promise<ExtendedRecipe>;
   getAll(
     limit?: number,
     offset?: number,
