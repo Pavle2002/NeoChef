@@ -66,6 +66,7 @@ export const Route = createFileRoute("/_protected/home")({
     queryClient.ensureQueryData(getCuisinesQueryOptions());
     queryClient.ensureQueryData(getDishTypesQueryOptions());
   },
+  staticData: { title: "Home" },
 });
 
 function RouteComponent() {

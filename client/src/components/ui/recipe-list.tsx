@@ -3,7 +3,7 @@ import { RecipeCard } from "./recipe-card";
 
 export function RecipeList({ recipes }: { recipes: Recipe[] }) {
   return (
-    <div className="flex flex-wrap gap-6 justify-center items-center">
+    <div className="flex flex-wrap gap-7 justify-center items-center 2xl:gap-8">
       {recipes.length === 0 ? (
         <p className="w-sm py-36 text-center text-xl">
           No recipes found <br />

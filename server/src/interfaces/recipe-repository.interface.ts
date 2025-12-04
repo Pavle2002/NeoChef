@@ -1,5 +1,6 @@
 import type { Equipment } from "@common/schemas/equipment.js";
 import type {
+  ExtendedRecipe,
   Recipe,
   RecipeData,
   RecipeFilters,
@@ -13,6 +14,7 @@ import type { IngredientUsage } from "@common/schemas/ingredient.js";
 export interface IRecipeRepository {
   createOrUpdate(recipe: RecipeData): Promise<Recipe>;
   findById(id: string): Promise<Recipe | null>;
+  findByIdExtended(id: string): Promise<ExtendedRecipe | null>;
   findAll(
     limit?: number,
     offset?: number,

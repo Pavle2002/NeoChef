@@ -9,6 +9,7 @@ export const Route = createFileRoute("/_protected/trending")({
   loader: async ({ context: { queryClient } }) =>
     queryClient.ensureQueryData(getTrendingRecipesQueryOptions()),
   pendingComponent: PendingComponent,
+  staticData: { title: "Trending" },
 });
 
 const LIST_LENGTH = 50;

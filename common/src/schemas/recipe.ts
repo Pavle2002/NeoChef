@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ExtendedIngredientDataSchema } from "./ingredient.js";
 import { ExtendedIngredientSchema } from "./ingredient.js";
 import { CuisineSchema } from "./cuisine.js";
 import { DietSchema } from "./diet.js";
@@ -39,15 +40,24 @@ export const RecipeSchema = z.object({
   likeCount: z.number(),
 });
 
+export const ExtendedRecipeSchema = z.object({
+  recipe: RecipeSchema,
+  extendedIngredients: z.array(ExtendedIngredientSchema),
+  diets: z.array(DietSchema),
+  cuisines: z.array(CuisineSchema),
+  equipment: z.array(EquipmentSchema),
+  dishTypes: z.array(DishTypeSchema),
+});
+
 export const RecipeDataSchema = RecipeSchema.omit({
   id: true,
   createdAt: true,
   likeCount: true,
 });
 
-export const ExtendedRecipeSchema = z.object({
+export const ExtendedRecipeDataSchema = z.object({
   recipeData: RecipeDataSchema,
-  extendedIngredients: z.array(ExtendedIngredientSchema),
+  extendedIngredients: z.array(ExtendedIngredientDataSchema),
   diets: z.array(DietSchema),
   cuisines: z.array(CuisineSchema),
   equipment: z.array(EquipmentSchema),
@@ -66,7 +76,8 @@ export const RecipeSortOptionsSchema = z.object({
 });
 
 export type Recipe = z.infer<typeof RecipeSchema>;
-export type RecipeData = z.infer<typeof RecipeDataSchema>;
 export type ExtendedRecipe = z.infer<typeof ExtendedRecipeSchema>;
+export type RecipeData = z.infer<typeof RecipeDataSchema>;
+export type ExtendedRecipeData = z.infer<typeof ExtendedRecipeDataSchema>;
 export type RecipeFilters = z.infer<typeof RecipeFiltersSchema>;
 export type RecipeSortOptions = z.infer<typeof RecipeSortOptionsSchema>;

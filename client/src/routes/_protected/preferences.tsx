@@ -32,6 +32,7 @@ export const Route = createFileRoute("/_protected/preferences")({
     queryClient.ensureQueryData(getCuisinesQueryOptions());
     queryClient.ensureQueryData(getDietsQueryOptions());
   },
+  staticData: { title: "Preferences" },
 });
 
 function RouteComponent() {

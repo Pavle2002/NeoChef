@@ -2,6 +2,7 @@ import { type IRecipeRepository } from "@interfaces/recipe-repository.interface.
 import {
   DEFAULT_SORT_BY,
   DEFAULT_SORT_ORDER,
+  type ExtendedRecipe,
   type Recipe,
   type RecipeData,
   type RecipeFilters,
@@ -15,7 +16,10 @@ import { InternalServerError } from "@errors/index.js";
 import type { IQueryExecutor } from "@interfaces/query-executor.interface.js";
 import { neo4jDateTimeConverter } from "@utils/neo4j-datetime-converter.js";
 import { int } from "neo4j-driver";
-import type { IngredientUsage } from "@common/schemas/ingredient.js";
+import type {
+  ExtendedIngredient,
+  IngredientUsage,
+} from "@common/schemas/ingredient.js";
 
 export class RecipeRepository implements IRecipeRepository {
   constructor(private queryExecutor: IQueryExecutor) {}
@@ -37,6 +41,60 @@ export class RecipeRepository implements IRecipeRepository {
     recipe.createdAt = neo4jDateTimeConverter.toStandardDate(recipe.createdAt);
     recipe.likeCount = record.get("likeCount");
     return recipe as Recipe;
+  }
+
+  async findByIdExtended(id: string): Promise<ExtendedRecipe | null> {
+    const result = await this.queryExecutor.run(
+      `MATCH (r:Recipe {id: $id})
+      OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
+      OPTIONAL MATCH (r)-[:BELONGS_TO]->(c:Cuisine)
+      OPTIONAL MATCH (r)-[:IS_OF_TYPE]->(t:DishType)
+      OPTIONAL MATCH (r)-[u:CONTAINS]->(i:Ingredient)
+      OPTIONAL MATCH (r)-[:REQUIRES]->(e:Equipment)
+      OPTIONAL MATCH (r)-[:SUITABLE_FOR]->(d:Diet)
+      WITH r,
+        COUNT(l) AS likeCount,
+        collect(DISTINCT c) AS cuisines,
+        collect(DISTINCT d) AS diets,
+        collect(DISTINCT t) AS dishTypes,
+        collect(DISTINCT e) AS equipment,
+        collect(DISTINCT { ingredient: properties(i), usage: properties(u) }) AS ingredientUsages
+      RETURN r, likeCount, cuisines, diets, dishTypes, equipment, ingredientUsages`,
+      { id }
+    );
+
+    const record = result.records[0];
+    if (!record) {
+      return null;
+    }
+
+    const recipe = record.get("r").properties;
+    recipe.createdAt = neo4jDateTimeConverter.toStandardDate(recipe.createdAt);
+    recipe.likeCount = record.get("likeCount");
+
+    const extendedIngredients = record
+      .get("ingredientUsages")
+      .map((iu: any) => ({
+        ingredient: iu.ingredient,
+        usage: iu.usage,
+      })) as ExtendedIngredient[];
+
+    const extendedRecipe: ExtendedRecipe = {
+      recipe,
+      extendedIngredients,
+      cuisines: record
+        .get("cuisines")
+        .map((c: any) => c.properties) as Cuisine[],
+      diets: record.get("diets").map((d: any) => d.properties) as Diet[],
+      dishTypes: record
+        .get("dishTypes")
+        .map((t: any) => t.properties) as DishType[],
+      equipment: record
+        .get("equipment")
+        .map((e: any) => e.properties) as Equipment[],
+    };
+
+    return extendedRecipe;
   }
 
   async findAll(

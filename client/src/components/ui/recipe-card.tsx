@@ -1,6 +1,7 @@
 import type { Recipe } from "@common/schemas/recipe";
 import { Separator } from "./separator";
 import { AlarmClock, Cross, Flame, ThumbsUp } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 
 export function RecipeCard(recipe: Recipe) {
   const calories =
@@ -12,58 +13,60 @@ export function RecipeCard(recipe: Recipe) {
     recipe.healthScore != null ? recipe.healthScore.toFixed(0) : "?";
 
   return (
-    <div className="w-2xs rounded-md overflow-hidden shadow-lg transition-transform duration-150 hover:-translate-y-1 hover:shadow-xl cursor-pointer">
-      <img
-        className="w-full h-36 object-cover"
-        src={`https://img.spoonacular.com/recipes/${recipe.sourceId}-480x360.${recipe.imageType}`}
-        alt={recipe.title}
-      />
+    <Link to="/recipes/$recipeId" params={{ recipeId: recipe.id }}>
+      <div className="w-2xs rounded-md overflow-hidden shadow-md transition-transform duration-150 hover:-translate-y-1 hover:shadow-lg cursor-pointer">
+        <img
+          className="w-full h-36 object-cover"
+          src={`https://img.spoonacular.com/recipes/${recipe.sourceId}-480x360.${recipe.imageType}`}
+          alt={recipe.title}
+        />
 
-      <div className="py-3 px-4">
-        <h3 className="text-base font-medium truncate whitespace-nowrap overflow-hidden">
-          {recipe.title}
-        </h3>
+        <div className="py-3 px-4">
+          <h3 className="text-base font-medium truncate whitespace-nowrap overflow-hidden">
+            {recipe.title}
+          </h3>
+        </div>
+
+        <Separator />
+
+        <div className="py-2 px-4 flex justify-between text-xs text-secondary-foreground">
+          <p>
+            <ThumbsUp
+              strokeWidth={2.7}
+              className="inline mb-[3.7px] mr-1 text-sky-700"
+              size={13}
+              // fill="currentColor"
+            />
+            {recipe.likeCount} likes
+          </p>
+          <p>
+            <Flame
+              strokeWidth={2.7}
+              size={13}
+              className="inline mb-[3.7px] mr-0.5 text-amber-500"
+              fill="currentColor"
+            />
+            {calories} cal
+          </p>
+          <p>
+            <Cross
+              strokeWidth={2.7}
+              size={13}
+              className="inline mb-[3.7px] mr-1 text-emerald-600"
+              fill="currentColor"
+            />
+            {healthScore} / 100
+          </p>
+          <p>
+            <AlarmClock
+              strokeWidth={2.7}
+              size={13}
+              className="inline mb-[3.7px] mr-1 text-red-700"
+            />
+            {recipe.readyInMinutes} min
+          </p>
+        </div>
       </div>
-
-      <Separator />
-
-      <div className="py-2 px-4 flex justify-between text-xs text-secondary-foreground">
-        <p>
-          <ThumbsUp
-            strokeWidth={2.7}
-            className="inline mb-[3.7px] mr-1 text-sky-700"
-            size={13}
-            // fill="currentColor"
-          />
-          {recipe.likeCount} likes
-        </p>
-        <p>
-          <Flame
-            strokeWidth={2.7}
-            size={13}
-            className="inline mb-[3.7px] mr-0.5 text-amber-500"
-            fill="currentColor"
-          />
-          {calories} cal
-        </p>
-        <p>
-          <Cross
-            strokeWidth={2.7}
-            size={13}
-            className="inline mb-[3.7px] mr-1 text-emerald-600"
-            fill="currentColor"
-          />
-          {healthScore} / 100
-        </p>
-        <p>
-          <AlarmClock
-            strokeWidth={2.7}
-            size={13}
-            className="inline mb-[3.7px] mr-1 text-red-700"
-          />
-          {recipe.readyInMinutes} min
-        </p>
-      </div>
-    </div>
+    </Link>
   );
 }

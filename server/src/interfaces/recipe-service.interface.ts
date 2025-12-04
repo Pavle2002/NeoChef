@@ -1,4 +1,5 @@
 import type {
+  ExtendedRecipe,
   Recipe,
   RecipeFilters,
   RecipeSortOptions,
@@ -6,6 +7,7 @@ import type {
 
 export interface IRecipeService {
   getById(id: string): Promise<Recipe>;
+  getByIdExtended(id: string): Promise<ExtendedRecipe>;
   getAll(
     limit?: number,
     offset?: number,

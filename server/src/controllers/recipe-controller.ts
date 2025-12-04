@@ -8,7 +8,7 @@ import type { Request, Response } from "express";
 
 async function getById(req: Request, res: Response): Promise<void> {
   const recipeId = req.validated?.params?.id as string;
-  const recipe = await recipeService.getById(recipeId);
+  const recipe = await recipeService.getByIdExtended(recipeId);
   sendSuccess(res, 200, recipe, "Recipe retrieved successfully");
 }
 

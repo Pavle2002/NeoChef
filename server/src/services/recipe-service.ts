@@ -5,6 +5,7 @@ import {
   DEFAULT_PAGE_SIZE,
   DEFAULT_SORT_BY,
   DEFAULT_SORT_ORDER,
+  type ExtendedRecipe,
   type Recipe,
   type RecipeFilters,
   type RecipeSortOptions,
@@ -15,6 +16,13 @@ export class RecipeService implements IRecipeService {
 
   async getById(id: string): Promise<Recipe> {
     const recipe = await this.recipeRepository.findById(id);
+    if (!recipe) throw new NotFoundError(`Recipe with ID ${id} not found`);
+
+    return recipe;
+  }
+
+  async getByIdExtended(id: string): Promise<ExtendedRecipe> {
+    const recipe = await this.recipeRepository.findByIdExtended(id);
     if (!recipe) throw new NotFoundError(`Recipe with ID ${id} not found`);
 
     return recipe;

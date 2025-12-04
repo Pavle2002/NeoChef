@@ -26,6 +26,7 @@ export const Route = createFileRoute("/_protected/fridge")({
     queryClient.ensureQueryData(getCurrentUserFridgeQueryOptions());
   },
   component: RouteComponent,
+  staticData: { title: "Fridge" },
 });
 
 function RouteComponent() {

@@ -9,10 +9,6 @@ export const IngredientSchema = z.object({
   aisle: z.string(),
 });
 
-export const IngredientDataSchema = IngredientSchema.omit({
-  id: true,
-});
-
 export const IngredientUsageSchema = z.object({
   amount: z.number(),
   unit: z.string(),
@@ -20,11 +16,23 @@ export const IngredientUsageSchema = z.object({
 });
 
 export const ExtendedIngredientSchema = z.object({
+  ingredient: IngredientSchema,
+  usage: IngredientUsageSchema,
+});
+
+export const IngredientDataSchema = IngredientSchema.omit({
+  id: true,
+});
+
+export const ExtendedIngredientDataSchema = z.object({
   ingredientData: IngredientDataSchema,
   usage: IngredientUsageSchema,
 });
 
 export type Ingredient = z.infer<typeof IngredientSchema>;
+export type ExtendedIngredient = z.infer<typeof ExtendedIngredientSchema>;
 export type IngredientData = z.infer<typeof IngredientDataSchema>;
 export type IngredientUsage = z.infer<typeof IngredientUsageSchema>;
-export type ExtendedIngredient = z.infer<typeof ExtendedIngredientSchema>;
+export type ExtendedIngredientData = z.infer<
+  typeof ExtendedIngredientDataSchema
+>;

@@ -1,6 +1,6 @@
 import type { RecipeSearchOptions } from "@app-types/import-types.js";
-import type { ExtendedRecipe } from "@common/schemas/recipe.js";
+import type { ExtendedRecipeData } from "@common/schemas/recipe.js";
 
 export interface IApiClient {
-  searchRecipes(options: RecipeSearchOptions): Promise<ExtendedRecipe[]>;
+  searchRecipes(options: RecipeSearchOptions): Promise<ExtendedRecipeData[]>;
 }

@@ -1,9 +1,9 @@
 import { SpoonacularQuotaExceededError } from "@errors/spoonacular-quota-exceeded-error.js";
 import Bottleneck from "bottleneck";
 import type { RecipeData } from "@common/schemas/recipe.js";
-import type { ExtendedRecipe } from "@common/schemas/recipe.js";
+import type { ExtendedRecipeData } from "@common/schemas/recipe.js";
 import { extractImageName } from "@utils/extract-file-name.js";
-import type { ExtendedIngredient } from "@common/schemas/ingredient.js";
+import type { ExtendedIngredientData } from "@common/schemas/ingredient.js";
 import type { IApiClient } from "@interfaces/api-client.interface.js";
 import type { Cuisine } from "@common/schemas/cuisine.js";
 import type { Diet } from "@common/schemas/diet.js";
@@ -25,7 +25,9 @@ export class SpoonacularApiClient implements IApiClient {
     });
   }
 
-  async searchRecipes(options: RecipeSearchOptions): Promise<ExtendedRecipe[]> {
+  async searchRecipes(
+    options: RecipeSearchOptions
+  ): Promise<ExtendedRecipeData[]> {
     const { cuisine, diet, type, number, offset } = options;
 
     const searchParams = {
@@ -65,7 +67,7 @@ export class SpoonacularApiClient implements IApiClient {
       throw new Error("Invalid response format from Spoonacular API");
     }
 
-    return data.results.map((recipe: any): ExtendedRecipe => {
+    return data.results.map((recipe: any): ExtendedRecipeData => {
       const nutrition = recipe.nutrition ?? {};
       const caloricBreakdown = nutrition.caloricBreakdown ?? {};
       const weightPerServing = nutrition.weightPerServing?.amount ?? 0;
@@ -121,12 +123,12 @@ export class SpoonacularApiClient implements IApiClient {
         });
       const equipment = Array.from(equipmentMap.values());
 
-      const extendedIngredients: ExtendedIngredient[] = (
+      const extendedIngredients: ExtendedIngredientData[] = (
         recipe.missedIngredients ?? []
       )
         .filter((i: any) => i?.id && i?.name)
         .map(
-          (i: any): ExtendedIngredient => ({
+          (i: any): ExtendedIngredientData => ({
             ingredientData: {
               sourceId: i.id.toString(),
               sourceName: "Spoonacular",

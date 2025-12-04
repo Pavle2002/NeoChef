@@ -24,6 +24,7 @@ import { Route as ProtectedFridgeImport } from './routes/_protected/fridge'
 import { Route as ProtectedFavoritesImport } from './routes/_protected/favorites'
 import { Route as AuthRegisterImport } from './routes/_auth/register'
 import { Route as AuthLoginImport } from './routes/_auth/login'
+import { Route as ProtectedRecipesRecipeIdImport } from './routes/_protected/recipes.$recipeId'
 
 // Create/Update Routes
 
@@ -101,6 +102,12 @@ const AuthLoginRoute = AuthLoginImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => AuthRouteRoute,
+} as any)
+
+const ProtectedRecipesRecipeIdRoute = ProtectedRecipesRecipeIdImport.update({
+  id: '/recipes/$recipeId',
+  path: '/recipes/$recipeId',
+  getParentRoute: () => ProtectedRouteRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -198,6 +205,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedTrendingImport
       parentRoute: typeof ProtectedRouteImport
     }
+    '/_protected/recipes/$recipeId': {
+      id: '/_protected/recipes/$recipeId'
+      path: '/recipes/$recipeId'
+      fullPath: '/recipes/$recipeId'
+      preLoaderRoute: typeof ProtectedRecipesRecipeIdImport
+      parentRoute: typeof ProtectedRouteImport
+    }
   }
 }
 
@@ -225,6 +239,7 @@ interface ProtectedRouteRouteChildren {
   ProtectedProfileRoute: typeof ProtectedProfileRoute
   ProtectedSettingsRoute: typeof ProtectedSettingsRoute
   ProtectedTrendingRoute: typeof ProtectedTrendingRoute
+  ProtectedRecipesRecipeIdRoute: typeof ProtectedRecipesRecipeIdRoute
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
@@ -235,6 +250,7 @@ const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedProfileRoute: ProtectedProfileRoute,
   ProtectedSettingsRoute: ProtectedSettingsRoute,
   ProtectedTrendingRoute: ProtectedTrendingRoute,
+  ProtectedRecipesRecipeIdRoute: ProtectedRecipesRecipeIdRoute,
 }
 
 const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(
@@ -254,6 +270,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProtectedProfileRoute
   '/settings': typeof ProtectedSettingsRoute
   '/trending': typeof ProtectedTrendingRoute
+  '/recipes/$recipeId': typeof ProtectedRecipesRecipeIdRoute
 }
 
 export interface FileRoutesByTo {
@@ -269,6 +286,7 @@ export interface FileRoutesByTo {
   '/profile': typeof ProtectedProfileRoute
   '/settings': typeof ProtectedSettingsRoute
   '/trending': typeof ProtectedTrendingRoute
+  '/recipes/$recipeId': typeof ProtectedRecipesRecipeIdRoute
 }
 
 export interface FileRoutesById {
@@ -286,6 +304,7 @@ export interface FileRoutesById {
   '/_protected/profile': typeof ProtectedProfileRoute
   '/_protected/settings': typeof ProtectedSettingsRoute
   '/_protected/trending': typeof ProtectedTrendingRoute
+  '/_protected/recipes/$recipeId': typeof ProtectedRecipesRecipeIdRoute
 }
 
 export interface FileRouteTypes {
@@ -303,6 +322,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/settings'
     | '/trending'
+    | '/recipes/$recipeId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -317,6 +337,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/settings'
     | '/trending'
+    | '/recipes/$recipeId'
   id:
     | '__root__'
     | '/'
@@ -332,6 +353,7 @@ export interface FileRouteTypes {
     | '/_protected/profile'
     | '/_protected/settings'
     | '/_protected/trending'
+    | '/_protected/recipes/$recipeId'
   fileRoutesById: FileRoutesById
 }
 
@@ -384,7 +406,8 @@ export const routeTree = rootRoute
         "/_protected/preferences",
         "/_protected/profile",
         "/_protected/settings",
-        "/_protected/trending"
+        "/_protected/trending",
+        "/_protected/recipes/$recipeId"
       ]
     },
     "/about": {
@@ -424,6 +447,10 @@ export const routeTree = rootRoute
     },
     "/_protected/trending": {
       "filePath": "_protected/trending.tsx",
+      "parent": "/_protected"
+    },
+    "/_protected/recipes/$recipeId": {
+      "filePath": "_protected/recipes.$recipeId.tsx",
       "parent": "/_protected"
     }
   }
