@@ -1,6 +1,6 @@
 import type { Recipe } from "@common/schemas/recipe";
 import { Separator } from "./separator";
-import { AlarmClock, Cross, Flame, ThumbsUp } from "lucide-react";
+import { Cross } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 
 export function RecipeCard(recipe: Recipe) {
@@ -31,39 +31,39 @@ export function RecipeCard(recipe: Recipe) {
 
         <div className="py-2 px-4 flex justify-between text-xs text-secondary-foreground">
           <p>
-            <ThumbsUp
+            {/* <ThumbsUp
               strokeWidth={2.7}
               className="inline mb-[3.7px] mr-1 text-sky-700"
               size={13}
               // fill="currentColor"
-            />
-            {recipe.likeCount} likes
+            /> */}
+            ❤️ {recipe.likeCount} likes
           </p>
           <p>
-            <Flame
+            {/* <Flame
               strokeWidth={2.7}
               size={13}
               className="inline mb-[3.7px] mr-0.5 text-amber-500"
               fill="currentColor"
-            />
-            {calories} cal
+            /> */}
+            🔥 {calories} cal
           </p>
           <p>
             <Cross
-              strokeWidth={2.7}
+              strokeWidth={2}
               size={13}
-              className="inline mb-[3.7px] mr-1 text-emerald-600"
+              className="inline mb-[3.5px] mr-1.5 text-emerald-600"
               fill="currentColor"
             />
             {healthScore} / 100
           </p>
           <p>
-            <AlarmClock
+            {/* <AlarmClock
               strokeWidth={2.7}
               size={13}
               className="inline mb-[3.7px] mr-1 text-red-700"
-            />
-            {recipe.readyInMinutes} min
+            /> */}
+            ⏰ {recipe.readyInMinutes} min
           </p>
         </div>
       </div>

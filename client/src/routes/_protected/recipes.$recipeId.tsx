@@ -22,7 +22,6 @@ function RouteComponent() {
     getRecipeQueryOptions(recipeId)
   );
 
-  console.dir(extendedRecipe);
   const { recipe, cuisines, diets, dishTypes, equipment, extendedIngredients } =
     extendedRecipe;
 
@@ -152,7 +151,7 @@ function ActionButtons({ recipe }: Pick<ExtendedRecipe, "recipe">) {
     <div className="flex flex-col lg:flex-row gap-10 items-center pb-6 border-b border-accent">
       <div className="flex-1">
         <h3 className="text-primary text-2xl font-bold mb-3">
-          About this recipe
+          About this recipe ℹ️
         </h3>
         <div
           className="prose prose-md max-h-44 text-secondary-foreground overflow-y-scroll"
@@ -167,7 +166,7 @@ function ActionButtons({ recipe }: Pick<ExtendedRecipe, "recipe">) {
           }
           variant="secondary"
           size="xl"
-          className=" font-semibold shadow-md flex-1 lg:flex-none flex items-center justify-center gap-2"
+          className="font-semibold shadow-md flex-1 lg:flex-none flex items-center justify-center gap-2"
         >
           <Heart
             className={`size-5 transition-colors duration-300 fill-current ${
@@ -183,7 +182,7 @@ function ActionButtons({ recipe }: Pick<ExtendedRecipe, "recipe">) {
           }
           variant="secondary"
           size="xl"
-          className=" font-semibold shadow-md flex-1 lg:flex-none flex items-center justify-center gap-2"
+          className="font-semibold shadow-md flex-1 lg:flex-none flex items-center justify-center gap-2"
         >
           <Bookmark
             className={`size-5 transition-colors duration-300 fill-current ${
@@ -202,7 +201,7 @@ function IngredientsList({
 }: Pick<ExtendedRecipe, "extendedIngredients">) {
   return (
     <div className="bg-primary-foreground px-6 py-4 rounded-lg shadow-md">
-      <h2 className="text-primary text-2xl font-bold mb-4">Ingredients</h2>
+      <h2 className="text-primary text-2xl font-bold mb-4">📝 Ingredients</h2>
       <ul className="space-y-4">
         {ingredients.map((ing) => (
           <li
@@ -223,7 +222,7 @@ function IngredientsList({
 function NutritionInfo({ recipe }: Pick<ExtendedRecipe, "recipe">) {
   return (
     <div className="bg-primary-foreground px-6 py-4 rounded-lg shadow-md">
-      <h2 className="text-primary text-2xl font-bold mb-4">Nutrition</h2>
+      <h2 className="text-primary text-2xl font-bold mb-4">🥗 Nutrition</h2>
       <div className="space-y-5">
         <div className="flex justify-between items-center">
           <span className="text-muted-foreground">Calories</span>
@@ -249,7 +248,7 @@ function NutritionInfo({ recipe }: Pick<ExtendedRecipe, "recipe">) {
             {recipe.percentCarbs || "N/A"}%
           </span>
         </div>
-        <div className="flex justify-between items-center py-2 border-b border-accent/50">
+        <div className="flex justify-between items-center">
           <span className="text-muted-foreground">Health Score</span>
           <span className="font-semibold text-primary">
             {recipe.healthScore || "N/A"} / 100
@@ -263,7 +262,7 @@ function NutritionInfo({ recipe }: Pick<ExtendedRecipe, "recipe">) {
 function EquipmentList({ equipment }: Pick<ExtendedRecipe, "equipment">) {
   return (
     <div className="bg-primary-foreground pl-6 pr-4 py-4 rounded-lg shadow-md">
-      <h2 className="text-primary text-2xl font-bold mb-4">Equipment</h2>
+      <h2 className="text-primary text-2xl font-bold mb-4">🛠️ Equipment</h2>
       <ul className="flex flex-wrap gap-3">
         {equipment.map((eq, idx) => (
           <li
@@ -281,7 +280,7 @@ function EquipmentList({ equipment }: Pick<ExtendedRecipe, "equipment">) {
 function Instructions({ instructions }: { instructions: string[] }) {
   return (
     <div className="space-y-8">
-      <h2 className="text-primary text-3xl font-bold mb-7">Instructions</h2>
+      <h2 className="text-primary text-3xl font-bold mb-7">📖 Instructions</h2>
       {instructions.map((step, index) => (
         <div key={index} className="flex gap-4 group">
           <div className="flex-shrink-0 size-10 bg-primary text-background rounded-full flex items-center justify-center font-bold shadow-md">
