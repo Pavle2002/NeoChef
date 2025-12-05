@@ -12,7 +12,13 @@ import { Spinner } from "@/components/ui/spinner.tsx";
 import { Toaster } from "sonner";
 import { auth } from "@/context/auth.tsx";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60,
+    },
+  },
+});
 
 const router = createRouter({
   defaultPendingComponent: () => (

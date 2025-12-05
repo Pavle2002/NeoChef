@@ -29,7 +29,7 @@ export function RecipeCard(recipe: Recipe) {
 
         <Separator />
 
-        <div className="py-2 px-4 flex justify-between text-xs text-secondary-foreground">
+        <div className="py-2.5 px-4 flex justify-between text-xs text-secondary-foreground">
           <p>
             {/* <ThumbsUp
               strokeWidth={2.7}

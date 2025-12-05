@@ -9,6 +9,7 @@ import { neo4jDateTimeConverter } from "@utils/neo4j-datetime-converter.js";
 import type { Diet } from "@common/schemas/diet.js";
 import type { Cuisine } from "@common/schemas/cuisine.js";
 import type { Ingredient } from "@common/schemas/ingredient.js";
+import type { Recipe } from "@common/schemas/recipe.js";
 
 export class UserRepository implements IUserRepository {
   constructor(private queryExecutor: IQueryExecutor) {}
@@ -340,5 +341,26 @@ export class UserRepository implements IUserRepository {
     return result.records.map(
       (record) => record.get("i").properties as Ingredient
     );
+  }
+
+  async getSavedRecipes(userId: string): Promise<Recipe[]> {
+    const result = await this.queryExecutor.run(
+      `MATCH (u:User {id: $userId})-[s:SAVED]->(r:Recipe)
+       OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
+       ORDER BY s.savedAt DESC
+       RETURN r, COUNT(l) AS likeCount`,
+      { userId }
+    );
+
+    const recipes = result.records.map((record) => {
+      const recipe = record.get("r").properties;
+      recipe.createdAt = neo4jDateTimeConverter.toStandardDate(
+        recipe.createdAt
+      );
+      recipe.likeCount = record.get("likeCount");
+      return recipe as Recipe;
+    });
+
+    return recipes;
   }
 }

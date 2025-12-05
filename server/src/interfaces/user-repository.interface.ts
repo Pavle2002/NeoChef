@@ -3,6 +3,7 @@ import type { Cuisine } from "@common/schemas/cuisine.js";
 import type { Diet } from "@common/schemas/diet.js";
 import type { Ingredient } from "@common/schemas/ingredient.js";
 import type { User } from "@common/schemas/user.js";
+import type { Recipe } from "@common/schemas/recipe.js";
 
 export interface IUserRepository {
   findById(id: string): Promise<User | null>;
@@ -17,6 +18,7 @@ export interface IUserRepository {
   getPreferredCuisines(userId: string): Promise<Cuisine[]>;
   getDislikedIngredients(userId: string): Promise<Ingredient[]>;
   getHasIngredients(userId: string): Promise<Ingredient[]>;
+  getSavedRecipes(userId: string): Promise<Recipe[]>;
 
   addLikesRecipe(userId: string, recipeId: string): Promise<void>;
   addSavedRecipe(userId: string, recipeId: string): Promise<void>;

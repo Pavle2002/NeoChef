@@ -49,6 +49,7 @@ export function useToggleLike() {
       if (context) {
         queryClient.invalidateQueries({ queryKey: context.queryKey });
       }
+      queryClient.invalidateQueries({ queryKey: ["recipes", "list"] });
     },
   });
 }

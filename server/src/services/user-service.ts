@@ -5,6 +5,7 @@ import type { IUserRepository } from "@interfaces/user-repository.interface.js";
 import type { IUserService } from "@interfaces/user-service.interface.js";
 import type { Preferences } from "@common/schemas/preferences.js";
 import type { Ingredient } from "@common/schemas/ingredient.js";
+import type { Recipe } from "@common/schemas/recipe.js";
 
 export class UserService implements IUserService {
   constructor(
@@ -27,14 +28,6 @@ export class UserService implements IUserService {
     const { password, ...safeUser } = user;
     return safeUser;
   }
-
-  // async addLikesRecipe(userId: string, recipeId: string): Promise<void> {
-  //   return this.userRepository.addLikesRecipe(userId, recipeId);
-  // }
-
-  // async addHasIngredient(userId: string, ingredientId: string): Promise<void> {
-  //   return this.userRepository.addHasIngredient(userId, ingredientId);
-  // }
 
   async getPreferences(
     userId: string,
@@ -65,6 +58,13 @@ export class UserService implements IUserService {
     if (!user) throw new NotFoundError(`User with ID ${userId} not found`);
 
     return userRepository.getHasIngredients(userId);
+  }
+
+  async getSavedRecipes(userId: string): Promise<Recipe[]> {
+    const user = await this.userRepository.findById(userId);
+    if (!user) throw new NotFoundError(`User with ID ${userId} not found`);
+
+    return this.userRepository.getSavedRecipes(userId);
   }
 
   private async updateSet<T>(

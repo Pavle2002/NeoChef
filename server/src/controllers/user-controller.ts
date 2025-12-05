@@ -40,6 +40,16 @@ async function getCurrentUserFridge(
   sendSuccess(res, 200, fridge, "User fridge retrieved successfully");
 }
 
+async function getCurrentUserSavedRecipes(
+  req: Request,
+  res: Response
+): Promise<void> {
+  const user = req.user as User;
+  const recipes = await userService.getSavedRecipes(user.id);
+
+  sendSuccess(res, 200, recipes, "User saved recipes retrieved successfully");
+}
+
 async function updateCurrentUserPreferences(
   req: Request,
   res: Response
@@ -77,6 +87,7 @@ export const userController = {
   getCurrentUser,
   getCurrentUserPreferences,
   getCurrentUserFridge,
+  getCurrentUserSavedRecipes,
   updateCurrentUserPreferences,
   updateCurrentUserFridge,
 };

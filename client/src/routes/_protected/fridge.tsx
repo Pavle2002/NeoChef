@@ -59,10 +59,16 @@ function RouteComponent() {
             onClick={handleReset}
             variant="outline"
             size="lg"
+            className="shadow-sm"
           >
             Empty Fridge
           </Button>
-          <Button type="submit" size="lg" disabled={isPending}>
+          <Button
+            type="submit"
+            size="lg"
+            disabled={isPending}
+            className="shadow-sm"
+          >
             {isPending ? "Saving..." : "Save Fridge"}
           </Button>
         </div>

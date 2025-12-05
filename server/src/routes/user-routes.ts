@@ -11,6 +11,7 @@ const {
   updateCurrentUserPreferences,
   getCurrentUserFridge,
   updateCurrentUserFridge,
+  getCurrentUserSavedRecipes,
 } = userController;
 
 const { getByIdSchema, updatePreferencesSchema, updateFridgeSchema } =
@@ -29,6 +30,7 @@ router.put(
 );
 router.get("/me/fridge", getCurrentUserFridge);
 router.put("/me/fridge", validate(updateFridgeSchema), updateCurrentUserFridge);
+router.get("/me/saved-recipes", getCurrentUserSavedRecipes);
 router.get("/:id", validate(getByIdSchema), getById);
 
 export { router as userRoutes };

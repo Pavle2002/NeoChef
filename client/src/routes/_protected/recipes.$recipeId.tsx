@@ -134,7 +134,7 @@ function HeaderSection({
               💵 Price per serving
             </p>
             <p className="text-primary font-semibold">
-              ${recipe.pricePerServing}
+              ${(recipe.pricePerServing / 100).toFixed(2)}
             </p>
           </div>
         </div>
@@ -209,7 +209,7 @@ function IngredientsList({
             className="flex items-start gap-2 text-md"
           >
             <span className="font-medium text-primary">
-              {ing.usage.amount} {ing.usage.unit}
+              {Number.parseFloat(ing.usage.amount.toFixed(2))} {ing.usage.unit}
             </span>
             <span className="text-muted-foreground">{ing.ingredient.name}</span>
           </li>
@@ -263,7 +263,7 @@ function EquipmentList({ equipment }: Pick<ExtendedRecipe, "equipment">) {
   return (
     <div className="bg-primary-foreground pl-6 pr-4 py-4 rounded-lg shadow-md">
       <h2 className="text-primary text-2xl font-bold mb-4">🛠️ Equipment</h2>
-      <ul className="flex flex-wrap gap-3">
+      <ul className="flex flex-wrap gap-2.5">
         {equipment.map((eq, idx) => (
           <li
             key={idx}
