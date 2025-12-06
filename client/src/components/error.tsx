@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Button } from "./button";
+import { Button } from "./ui/button";
 import {
   Empty,
   EmptyContent,
@@ -7,7 +7,7 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "./empty";
+} from "./ui/empty";
 import { TriangleAlert } from "lucide-react";
 
 type ErrorComponentProps = {
@@ -28,8 +28,10 @@ export function ErrorComponent({ reset }: ErrorComponentProps) {
       </EmptyHeader>
       <EmptyContent>
         <div className="flex gap-2">
-          <Button onClick={reset}>Try Again</Button>
-          <Button variant="outline" asChild>
+          <Button onClick={reset} className="shadow-sm">
+            Try Again
+          </Button>
+          <Button variant="outline" asChild className="shadow-sm">
             <Link to="/home">Go Home</Link>
           </Button>
         </div>

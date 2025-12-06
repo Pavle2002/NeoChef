@@ -7,7 +7,8 @@ import reportWebVitals from "./reportWebVitals.ts";
 import { Spinner } from "@/components/ui/spinner.tsx";
 import { Toaster } from "sonner";
 import { auth } from "@/context/auth.tsx";
-import { ErrorComponent } from "./components/ui/error.tsx";
+import { ErrorComponent } from "./components/error.tsx";
+import { NotFoundComponent } from "./components/not-found.tsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,17 +20,22 @@ const queryClient = new QueryClient({
 
 const router = createRouter({
   defaultPendingComponent: () => (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex flex-1 items-center justify-center h-full w-full">
       <Spinner />
     </div>
   ),
-  defaultErrorComponent: ({ error, reset }) => (
+  defaultErrorComponent: ({ reset }) => (
     <ErrorComponent
       reset={() => {
         queryClient.resetQueries();
         reset();
       }}
     />
+  ),
+  defaultNotFoundComponent: () => (
+    <div className="h-screen">
+      <NotFoundComponent />
+    </div>
   ),
   defaultPendingMs: 500,
   routeTree,
