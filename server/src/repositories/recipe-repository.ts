@@ -161,11 +161,18 @@ export class RecipeRepository implements IRecipeRepository {
     const result = await this.queryExecutor.run(
       `MATCH (r:Recipe)
        OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
-       WHERE l.likedAt >= datetime() - duration('P7D') OR l IS NULL
-       WITH r, COUNT(l) AS likeCount
-       ORDER BY likeCount DESC
+       WITH r, 
+            COUNT(l) AS totalLikes, 
+            SUM(CASE WHEN l.likedAt >= datetime() - duration('P7D') THEN 1 ELSE 0 END) AS recentLikes
+
+       OPTIONAL MATCH (r)<-[s:SAVED]-(:User)
+       WHERE s.savedAt >= datetime() - duration('P7D')
+       WITH r, totalLikes, recentLikes, COUNT(s) AS recentSaves
+
+       WITH r, totalLikes, (recentLikes + (recentSaves * 2)) AS score
+       ORDER BY score DESC
        LIMIT 100
-       RETURN r, likeCount`
+       RETURN r, totalLikes`
     );
 
     const recipes = result.records.map((record) => {
@@ -173,7 +180,7 @@ export class RecipeRepository implements IRecipeRepository {
       recipe.createdAt = neo4jDateTimeConverter.toStandardDate(
         recipe.createdAt
       );
-      recipe.likeCount = record.get("likeCount");
+      recipe.likeCount = record.get("totalLikes");
       return recipe as Recipe;
     });
     return recipes;

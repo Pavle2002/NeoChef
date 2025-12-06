@@ -105,8 +105,8 @@ function IngredientSearchField<T extends FieldValues>({
           <FormControl>
             <div>
               {(!field.value || field.value.length === 0) && (
-                <p className="mt-4 text-sm text-muted-foreground">
-                  You have no ingredients in your fridge.
+                <p className="mt-4 text-md text-muted-foreground">
+                  You have no ingredients in your fridge
                 </p>
               )}
               <CheckboxGroup

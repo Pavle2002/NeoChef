@@ -1,9 +1,5 @@
 import ReactDOM from "react-dom/client";
-import {
-  ErrorComponent,
-  RouterProvider,
-  createRouter,
-} from "@tanstack/react-router";
+import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { routeTree } from "./routeTree.gen";
 import "./styles.css";
@@ -11,6 +7,7 @@ import reportWebVitals from "./reportWebVitals.ts";
 import { Spinner } from "@/components/ui/spinner.tsx";
 import { Toaster } from "sonner";
 import { auth } from "@/context/auth.tsx";
+import { ErrorComponent } from "./components/ui/error.tsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,7 +23,14 @@ const router = createRouter({
       <Spinner />
     </div>
   ),
-  defaultErrorComponent: ({ error }) => <ErrorComponent error={error} />,
+  defaultErrorComponent: ({ error, reset }) => (
+    <ErrorComponent
+      reset={() => {
+        queryClient.resetQueries();
+        reset();
+      }}
+    />
+  ),
   defaultPendingMs: 500,
   routeTree,
   context: {

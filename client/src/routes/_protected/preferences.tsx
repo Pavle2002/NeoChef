@@ -184,7 +184,7 @@ function IngredientSearchField<T extends FieldValues>({
           <FormControl>
             <div>
               {(!field.value || field.value.length === 0) && (
-                <p className="mt-4 text-sm text-muted-foreground">
+                <p className="mt-4 text-md text-muted-foreground">
                   No ingredients selected
                 </p>
               )}

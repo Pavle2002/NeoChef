@@ -211,7 +211,14 @@ function IngredientsList({
             <span className="font-medium text-primary">
               {Number.parseFloat(ing.usage.amount.toFixed(2))} {ing.usage.unit}
             </span>
-            <span className="text-muted-foreground">{ing.ingredient.name}</span>
+            <span className="text-muted-foreground">
+              {
+                ing.ingredient.name
+                  .split(".")[0]
+                  .split(" to ")[0]
+                  .split(" but ")[0]
+              }
+            </span>
           </li>
         ))}
       </ul>

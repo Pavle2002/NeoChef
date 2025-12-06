@@ -19,6 +19,7 @@ export function IngredientSelector({
 }: IngredientSelectorProps) {
   const valueSet = new Set(value.map((i) => i.id));
 
+  console.log(valueSet);
   return (
     <LiveSearch
       inputPlaceholder="Search ingredients..."
