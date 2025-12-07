@@ -63,6 +63,7 @@ declare module "@tanstack/react-router" {
 
 const handleGlobalError = (error: Error) => {
   if (error instanceof ApiError && error.statusCode === 401) {
+    queryClient.clear();
     toast.error("Your session has expired. Please login again.", {
       description: getFormatedDate() + " 📆",
     });

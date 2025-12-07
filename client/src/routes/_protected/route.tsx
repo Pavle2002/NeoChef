@@ -12,18 +12,12 @@ export const Route = createFileRoute("/_protected")({
     auth.setUser(user);
 
     if (!auth.user) {
-      queryClient.clear();
       throw redirect({ to: "/login", replace: true });
     }
     return {
       user: auth.user,
     };
   },
-  // pendingComponent: () => (
-  //   <div className="flex flex-col flex-1">
-  //     <Spinner />
-  //   </div>
-  // ),
   component: SidebarLayout,
 });
 
