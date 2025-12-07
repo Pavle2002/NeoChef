@@ -12,6 +12,7 @@ export const Route = createFileRoute("/_protected")({
     auth.setUser(user);
 
     if (!auth.user) {
+      queryClient.clear();
       throw redirect({ to: "/login", replace: true });
     }
     return {

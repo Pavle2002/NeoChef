@@ -5,15 +5,21 @@ import { routeTree } from "./routeTree.gen";
 import "./styles.css";
 import reportWebVitals from "./reportWebVitals.ts";
 import { Spinner } from "@/components/ui/spinner.tsx";
-import { Toaster } from "sonner";
+import { toast, Toaster } from "sonner";
 import { auth } from "@/context/auth.tsx";
 import { ErrorComponent } from "./components/error.tsx";
 import { NotFoundComponent } from "./components/not-found.tsx";
+import { ApiError } from "@/lib/api-error.ts";
+import { getFormatedDate } from "@/lib/utils.ts";
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60,
+      retry: (failureCount, error) => {
+        if (error instanceof ApiError && error.statusCode === 401) return false;
+        return failureCount < 3;
+      },
     },
   },
 });
@@ -55,20 +61,25 @@ declare module "@tanstack/react-router" {
   }
 }
 
-// function App() {
-//   const auth = useAuth();
-//   return <RouterProvider router={router} context={{ auth }} />;
-// }
+const handleGlobalError = (error: Error) => {
+  if (error instanceof ApiError && error.statusCode === 401) {
+    toast.error("Your session has expired. Please login again.", {
+      description: getFormatedDate() + " 📆",
+    });
+    router.invalidate();
+  }
+};
+
+queryClient.getQueryCache().config.onError = handleGlobalError;
+queryClient.getMutationCache().config.onError = handleGlobalError;
 
 const rootElement = document.getElementById("app");
 if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <QueryClientProvider client={queryClient}>
-      {/* <AuthProvider> */}
       <RouterProvider router={router} />
-      <Toaster />
-      {/* </AuthProvider> */}
+      <Toaster expand={true} />
     </QueryClientProvider>
   );
 }
