@@ -78,7 +78,7 @@ export class RecommendationRepository implements IRecommendationRepository {
            (socialScore * 2) AS score
 
       ORDER BY score DESC
-      LIMIT 5
+      LIMIT 10
       
       // 4. Return Recipe Data
       // Fetch likeCount for the recipe to be consistent with other endpoints
@@ -93,7 +93,7 @@ export class RecommendationRepository implements IRecommendationRepository {
       recipe.createdAt = neo4jDateTimeConverter.toStandardDate(
         recipe.createdAt
       );
-      recipe.likeCount = record.get("likeCount").toNumber();
+      recipe.likeCount = record.get("likeCount");
       return recipe as Recipe;
     });
   }

@@ -1,4 +1,5 @@
 import type { Recipe } from "@common/schemas/recipe";
+import { cn } from "@/lib/utils";
 import { RecipeCard } from "./recipe-card";
 import {
   Empty,
@@ -9,7 +10,7 @@ import {
 } from "./empty";
 import { UtensilsCrossed } from "lucide-react";
 
-type RecipeListProps = {
+type RecipeListProps = React.ComponentProps<"div"> & {
   recipes: Recipe[];
   emptyTitle?: string;
   emptyDescription?: string;
@@ -19,9 +20,17 @@ export function RecipeList({
   recipes,
   emptyTitle,
   emptyDescription,
+  className,
+  ...props
 }: RecipeListProps) {
   return (
-    <div className="flex flex-wrap gap-7 justify-center items-center 2xl:gap-8">
+    <div
+      className={cn(
+        "flex flex-wrap gap-7 justify-center items-center 2xl:gap-8",
+        className
+      )}
+      {...props}
+    >
       {recipes.length === 0 ? (
         <Empty>
           <EmptyHeader>
