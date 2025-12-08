@@ -5,6 +5,7 @@ import {
   Star,
   TrendingUp,
   User,
+  Search,
 } from "lucide-react";
 
 export const PAGES = [
@@ -12,6 +13,11 @@ export const PAGES = [
     title: "Home",
     url: "/home",
     icon: Home,
+  },
+  {
+    title: "Search",
+    url: "/search",
+    icon: Search,
   },
   {
     title: "Trending",

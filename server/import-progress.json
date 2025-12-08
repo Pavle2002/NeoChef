@@ -1,8 +1,8 @@
 {
   "position": {
     "cuisineIndex": 3,
-    "dietIndex": 0,
-    "dishTypeIndex": 3
+    "dietIndex": 7,
+    "dishTypeIndex": 6
   },
   "combinations": {
     "italian|gluten free|main course": {
@@ -1863,6 +1863,410 @@
     },
     "american|gluten free|dessert": {
       "offset": 16,
+      "done": true
+    },
+    "american|gluten free|appetizer": {
+      "offset": 20,
+      "done": false
+    },
+    "american|gluten free|salad": {
+      "offset": 4,
+      "done": true
+    },
+    "american|gluten free|bread": {
+      "offset": 0,
+      "done": true
+    },
+    "american|gluten free|breakfast": {
+      "offset": 1,
+      "done": true
+    },
+    "american|gluten free|soup": {
+      "offset": 20,
+      "done": false
+    },
+    "american|gluten free|beverage": {
+      "offset": 0,
+      "done": true
+    },
+    "american|gluten free|sauce": {
+      "offset": 1,
+      "done": true
+    },
+    "american|gluten free|marinade": {
+      "offset": 0,
+      "done": true
+    },
+    "american|gluten free|fingerfood": {
+      "offset": 6,
+      "done": true
+    },
+    "american|gluten free|snack": {
+      "offset": 20,
+      "done": false
+    },
+    "american|gluten free|drink": {
+      "offset": 0,
+      "done": true
+    },
+    "american|ketogenic|main course": {
+      "offset": 6,
+      "done": true
+    },
+    "american|ketogenic|side dish": {
+      "offset": 3,
+      "done": true
+    },
+    "american|ketogenic|dessert": {
+      "offset": 0,
+      "done": true
+    },
+    "american|ketogenic|appetizer": {
+      "offset": 5,
+      "done": true
+    },
+    "american|ketogenic|salad": {
+      "offset": 2,
+      "done": true
+    },
+    "american|ketogenic|bread": {
+      "offset": 0,
+      "done": true
+    },
+    "american|ketogenic|breakfast": {
+      "offset": 0,
+      "done": true
+    },
+    "american|ketogenic|soup": {
+      "offset": 0,
+      "done": true
+    },
+    "american|ketogenic|beverage": {
+      "offset": 0,
+      "done": true
+    },
+    "american|ketogenic|sauce": {
+      "offset": 0,
+      "done": true
+    },
+    "american|ketogenic|marinade": {
+      "offset": 0,
+      "done": true
+    },
+    "american|ketogenic|fingerfood": {
+      "offset": 0,
+      "done": true
+    },
+    "american|ketogenic|snack": {
+      "offset": 5,
+      "done": true
+    },
+    "american|ketogenic|drink": {
+      "offset": 0,
+      "done": true
+    },
+    "american|vegetarian|main course": {
+      "offset": 10,
+      "done": true
+    },
+    "american|vegetarian|side dish": {
+      "offset": 20,
+      "done": false
+    },
+    "american|vegetarian|dessert": {
+      "offset": 20,
+      "done": false
+    },
+    "american|vegetarian|appetizer": {
+      "offset": 20,
+      "done": false
+    },
+    "american|vegetarian|salad": {
+      "offset": 0,
+      "done": true
+    },
+    "american|vegetarian|bread": {
+      "offset": 1,
+      "done": true
+    },
+    "american|vegetarian|breakfast": {
+      "offset": 12,
+      "done": true
+    },
+    "american|vegetarian|soup": {
+      "offset": 8,
+      "done": true
+    },
+    "american|vegetarian|beverage": {
+      "offset": 1,
+      "done": true
+    },
+    "american|vegetarian|sauce": {
+      "offset": 1,
+      "done": true
+    },
+    "american|vegetarian|marinade": {
+      "offset": 0,
+      "done": true
+    },
+    "american|vegetarian|fingerfood": {
+      "offset": 2,
+      "done": true
+    },
+    "american|vegetarian|snack": {
+      "offset": 20,
+      "done": false
+    },
+    "american|vegetarian|drink": {
+      "offset": 1,
+      "done": true
+    },
+    "american|vegan|main course": {
+      "offset": 4,
+      "done": true
+    },
+    "american|vegan|side dish": {
+      "offset": 10,
+      "done": true
+    },
+    "american|vegan|dessert": {
+      "offset": 2,
+      "done": true
+    },
+    "american|vegan|appetizer": {
+      "offset": 14,
+      "done": true
+    },
+    "american|vegan|salad": {
+      "offset": 0,
+      "done": true
+    },
+    "american|vegan|bread": {
+      "offset": 0,
+      "done": true
+    },
+    "american|vegan|breakfast": {
+      "offset": 1,
+      "done": true
+    },
+    "american|vegan|soup": {
+      "offset": 8,
+      "done": true
+    },
+    "american|vegan|beverage": {
+      "offset": 0,
+      "done": true
+    },
+    "american|vegan|sauce": {
+      "offset": 1,
+      "done": true
+    },
+    "american|vegan|marinade": {
+      "offset": 0,
+      "done": true
+    },
+    "american|vegan|fingerfood": {
+      "offset": 0,
+      "done": true
+    },
+    "american|vegan|snack": {
+      "offset": 14,
+      "done": true
+    },
+    "american|vegan|drink": {
+      "offset": 0,
+      "done": true
+    },
+    "american|lacto-vegetarian|main course": {
+      "offset": 8,
+      "done": true
+    },
+    "american|lacto-vegetarian|side dish": {
+      "offset": 20,
+      "done": false
+    },
+    "american|lacto-vegetarian|dessert": {
+      "offset": 5,
+      "done": true
+    },
+    "american|lacto-vegetarian|appetizer": {
+      "offset": 18,
+      "done": true
+    },
+    "american|lacto-vegetarian|salad": {
+      "offset": 0,
+      "done": true
+    },
+    "american|lacto-vegetarian|bread": {
+      "offset": 0,
+      "done": true
+    },
+    "american|lacto-vegetarian|breakfast": {
+      "offset": 2,
+      "done": true
+    },
+    "american|lacto-vegetarian|soup": {
+      "offset": 8,
+      "done": true
+    },
+    "american|lacto-vegetarian|beverage": {
+      "offset": 1,
+      "done": true
+    },
+    "american|lacto-vegetarian|sauce": {
+      "offset": 1,
+      "done": true
+    },
+    "american|lacto-vegetarian|marinade": {
+      "offset": 0,
+      "done": true
+    },
+    "american|lacto-vegetarian|fingerfood": {
+      "offset": 2,
+      "done": true
+    },
+    "american|lacto-vegetarian|snack": {
+      "offset": 18,
+      "done": true
+    },
+    "american|lacto-vegetarian|drink": {
+      "offset": 1,
+      "done": true
+    },
+    "american|ovo-vegetarian|main course": {
+      "offset": 5,
+      "done": true
+    },
+    "american|ovo-vegetarian|side dish": {
+      "offset": 11,
+      "done": true
+    },
+    "american|ovo-vegetarian|dessert": {
+      "offset": 3,
+      "done": true
+    },
+    "american|ovo-vegetarian|appetizer": {
+      "offset": 17,
+      "done": true
+    },
+    "american|ovo-vegetarian|salad": {
+      "offset": 0,
+      "done": true
+    },
+    "american|ovo-vegetarian|bread": {
+      "offset": 0,
+      "done": true
+    },
+    "american|ovo-vegetarian|breakfast": {
+      "offset": 2,
+      "done": true
+    },
+    "american|ovo-vegetarian|soup": {
+      "offset": 8,
+      "done": true
+    },
+    "american|ovo-vegetarian|beverage": {
+      "offset": 0,
+      "done": true
+    },
+    "american|ovo-vegetarian|sauce": {
+      "offset": 1,
+      "done": true
+    },
+    "american|ovo-vegetarian|marinade": {
+      "offset": 0,
+      "done": true
+    },
+    "american|ovo-vegetarian|fingerfood": {
+      "offset": 0,
+      "done": true
+    },
+    "american|ovo-vegetarian|snack": {
+      "offset": 17,
+      "done": true
+    },
+    "american|ovo-vegetarian|drink": {
+      "offset": 0,
+      "done": true
+    },
+    "american|pescetarian|main course": {
+      "offset": 14,
+      "done": true
+    },
+    "american|pescetarian|side dish": {
+      "offset": 6,
+      "done": true
+    },
+    "american|pescetarian|dessert": {
+      "offset": 0,
+      "done": true
+    },
+    "american|pescetarian|appetizer": {
+      "offset": 1,
+      "done": true
+    },
+    "american|pescetarian|salad": {
+      "offset": 3,
+      "done": true
+    },
+    "american|pescetarian|bread": {
+      "offset": 0,
+      "done": true
+    },
+    "american|pescetarian|breakfast": {
+      "offset": 0,
+      "done": true
+    },
+    "american|pescetarian|soup": {
+      "offset": 0,
+      "done": true
+    },
+    "american|pescetarian|beverage": {
+      "offset": 0,
+      "done": true
+    },
+    "american|pescetarian|sauce": {
+      "offset": 0,
+      "done": true
+    },
+    "american|pescetarian|marinade": {
+      "offset": 0,
+      "done": true
+    },
+    "american|pescetarian|fingerfood": {
+      "offset": 0,
+      "done": true
+    },
+    "american|pescetarian|snack": {
+      "offset": 1,
+      "done": true
+    },
+    "american|pescetarian|drink": {
+      "offset": 0,
+      "done": true
+    },
+    "american|paleo|main course": {
+      "offset": 8,
+      "done": true
+    },
+    "american|paleo|side dish": {
+      "offset": 5,
+      "done": true
+    },
+    "american|paleo|dessert": {
+      "offset": 0,
+      "done": true
+    },
+    "american|paleo|appetizer": {
+      "offset": 3,
+      "done": true
+    },
+    "american|paleo|salad": {
+      "offset": 2,
+      "done": true
+    },
+    "american|paleo|bread": {
+      "offset": 0,
       "done": true
     }
   }

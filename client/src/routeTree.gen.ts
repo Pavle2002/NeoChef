@@ -17,6 +17,7 @@ import { Route as AuthRouteImport } from './routes/_auth/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as ProtectedTrendingImport } from './routes/_protected/trending'
 import { Route as ProtectedSettingsImport } from './routes/_protected/settings'
+import { Route as ProtectedSearchImport } from './routes/_protected/search'
 import { Route as ProtectedProfileImport } from './routes/_protected/profile'
 import { Route as ProtectedPreferencesImport } from './routes/_protected/preferences'
 import { Route as ProtectedHomeImport } from './routes/_protected/home'
@@ -59,6 +60,12 @@ const ProtectedTrendingRoute = ProtectedTrendingImport.update({
 const ProtectedSettingsRoute = ProtectedSettingsImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => ProtectedRouteRoute,
+} as any)
+
+const ProtectedSearchRoute = ProtectedSearchImport.update({
+  id: '/search',
+  path: '/search',
   getParentRoute: () => ProtectedRouteRoute,
 } as any)
 
@@ -191,6 +198,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedProfileImport
       parentRoute: typeof ProtectedRouteImport
     }
+    '/_protected/search': {
+      id: '/_protected/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof ProtectedSearchImport
+      parentRoute: typeof ProtectedRouteImport
+    }
     '/_protected/settings': {
       id: '/_protected/settings'
       path: '/settings'
@@ -237,6 +251,7 @@ interface ProtectedRouteRouteChildren {
   ProtectedHomeRoute: typeof ProtectedHomeRoute
   ProtectedPreferencesRoute: typeof ProtectedPreferencesRoute
   ProtectedProfileRoute: typeof ProtectedProfileRoute
+  ProtectedSearchRoute: typeof ProtectedSearchRoute
   ProtectedSettingsRoute: typeof ProtectedSettingsRoute
   ProtectedTrendingRoute: typeof ProtectedTrendingRoute
   ProtectedRecipesRecipeIdRoute: typeof ProtectedRecipesRecipeIdRoute
@@ -248,6 +263,7 @@ const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedHomeRoute: ProtectedHomeRoute,
   ProtectedPreferencesRoute: ProtectedPreferencesRoute,
   ProtectedProfileRoute: ProtectedProfileRoute,
+  ProtectedSearchRoute: ProtectedSearchRoute,
   ProtectedSettingsRoute: ProtectedSettingsRoute,
   ProtectedTrendingRoute: ProtectedTrendingRoute,
   ProtectedRecipesRecipeIdRoute: ProtectedRecipesRecipeIdRoute,
@@ -268,6 +284,7 @@ export interface FileRoutesByFullPath {
   '/home': typeof ProtectedHomeRoute
   '/preferences': typeof ProtectedPreferencesRoute
   '/profile': typeof ProtectedProfileRoute
+  '/search': typeof ProtectedSearchRoute
   '/settings': typeof ProtectedSettingsRoute
   '/trending': typeof ProtectedTrendingRoute
   '/recipes/$recipeId': typeof ProtectedRecipesRecipeIdRoute
@@ -284,6 +301,7 @@ export interface FileRoutesByTo {
   '/home': typeof ProtectedHomeRoute
   '/preferences': typeof ProtectedPreferencesRoute
   '/profile': typeof ProtectedProfileRoute
+  '/search': typeof ProtectedSearchRoute
   '/settings': typeof ProtectedSettingsRoute
   '/trending': typeof ProtectedTrendingRoute
   '/recipes/$recipeId': typeof ProtectedRecipesRecipeIdRoute
@@ -302,6 +320,7 @@ export interface FileRoutesById {
   '/_protected/home': typeof ProtectedHomeRoute
   '/_protected/preferences': typeof ProtectedPreferencesRoute
   '/_protected/profile': typeof ProtectedProfileRoute
+  '/_protected/search': typeof ProtectedSearchRoute
   '/_protected/settings': typeof ProtectedSettingsRoute
   '/_protected/trending': typeof ProtectedTrendingRoute
   '/_protected/recipes/$recipeId': typeof ProtectedRecipesRecipeIdRoute
@@ -320,6 +339,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/preferences'
     | '/profile'
+    | '/search'
     | '/settings'
     | '/trending'
     | '/recipes/$recipeId'
@@ -335,6 +355,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/preferences'
     | '/profile'
+    | '/search'
     | '/settings'
     | '/trending'
     | '/recipes/$recipeId'
@@ -351,6 +372,7 @@ export interface FileRouteTypes {
     | '/_protected/home'
     | '/_protected/preferences'
     | '/_protected/profile'
+    | '/_protected/search'
     | '/_protected/settings'
     | '/_protected/trending'
     | '/_protected/recipes/$recipeId'
@@ -405,6 +427,7 @@ export const routeTree = rootRoute
         "/_protected/home",
         "/_protected/preferences",
         "/_protected/profile",
+        "/_protected/search",
         "/_protected/settings",
         "/_protected/trending",
         "/_protected/recipes/$recipeId"
@@ -439,6 +462,10 @@ export const routeTree = rootRoute
     },
     "/_protected/profile": {
       "filePath": "_protected/profile.tsx",
+      "parent": "/_protected"
+    },
+    "/_protected/search": {
+      "filePath": "_protected/search.tsx",
       "parent": "/_protected"
     },
     "/_protected/settings": {
