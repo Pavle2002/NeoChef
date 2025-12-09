@@ -24,7 +24,7 @@ export function RecipeCard(recipe: Recipe) {
         </div>
 
         <div className="py-3 px-4">
-          <h3 className="text-base font-medium truncate whitespace-nowrap overflow-hidden">
+          <h3 className="text-primary text-base font-medium truncate whitespace-nowrap overflow-hidden">
             {recipe.title}
           </h3>
         </div>

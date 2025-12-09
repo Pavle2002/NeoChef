@@ -6,7 +6,7 @@ import { neo4jDateTimeConverter } from "@utils/neo4j-datetime-converter.js";
 export class RecommendationRepository implements IRecommendationRepository {
   constructor(private queryExecutor: IQueryExecutor) {}
 
-  async findRecommendedRecipes(userId: string): Promise<Recipe[]> {
+  async findTopPicks(userId: string): Promise<Recipe[]> {
     const query = `
       MATCH (u:User {id: $userId})
 
@@ -96,5 +96,96 @@ export class RecommendationRepository implements IRecommendationRepository {
       recipe.likeCount = record.get("likeCount");
       return recipe as Recipe;
     });
+  }
+
+  async findFridgeBased(userId: string): Promise<Recipe[]> {
+    const query = `
+      MATCH (u:User {id: $userId})
+      MATCH (u)-[:HAS]->(i:Ingredient)<-[:CONTAINS]-(r:Recipe)
+      WHERE NOT (u)-[:LIKES|SAVED]->(r)
+      
+      WITH r, count(DISTINCT i) as matchCount
+      
+      // Find total ingredients for these candidate recipes to calculate coverage
+      MATCH (r)-[:CONTAINS]->(all:Ingredient)
+      WITH r, matchCount, count(DISTINCT all) as totalIngredients
+      
+      // Calculate score:
+      // 1. Coverage (How much of the recipe can I make?)
+      // 2. Usage (How many of my ingredients does it use?)
+      WITH r, matchCount, totalIngredients, 
+           (toFloat(matchCount) / totalIngredients) as coverage
+      
+      // Filter out recipes with very low coverage (e.g., < 20%) to avoid irrelevant suggestions
+      WHERE coverage >= 0.15
+           
+      ORDER BY coverage DESC, matchCount DESC
+      LIMIT 10
+      
+      OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
+      RETURN r, count(l) as likeCount
+    `;
+
+    const result = await this.queryExecutor.run(query, { userId });
+
+    return result.records.map((record) => {
+      const recipe = record.get("r").properties;
+      recipe.createdAt = neo4jDateTimeConverter.toStandardDate(
+        recipe.createdAt
+      );
+      recipe.likeCount = record.get("likeCount");
+      return recipe as Recipe;
+    });
+  }
+
+  async findSimilarToLastLiked(
+    userId: string
+  ): Promise<{ basedOn: string; recipes: Recipe[] } | null> {
+    const query = `
+      MATCH (u:User {id: $userId})-[l:LIKES]->(last:Recipe)
+      WITH u, last
+      ORDER BY l.likedAt DESC
+      LIMIT 1
+      
+      // Optimization: Only find recipes that share at least one attribute
+      // (Cuisine, DishType, or Ingredient) to avoid scanning the whole DB.
+      MATCH (last)-[:BELONGS_TO|IS_OF_TYPE|CONTAINS]->(common)<-[:BELONGS_TO|IS_OF_TYPE|CONTAINS]-(r:Recipe)
+      WHERE r.id <> last.id 
+        AND NOT (u)-[:LIKES|SAVED]->(r)
+      
+      // Calculate score based on the type of shared attribute
+      WITH last, r, 
+           sum(CASE 
+             WHEN 'Cuisine' IN labels(common) THEN 10 
+             WHEN 'DishType' IN labels(common) THEN 5 
+             WHEN 'Ingredient' IN labels(common) THEN 2 
+             ELSE 0 
+           END) as totalScore
+      
+      ORDER BY totalScore DESC
+      LIMIT 10
+      
+      OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
+      RETURN last.title as basedOn, r, count(l) as likeCount
+    `;
+
+    const result = await this.queryExecutor.run(query, { userId });
+
+    const firstRecord = result.records[0];
+    if (!firstRecord) {
+      return null;
+    }
+
+    const basedOn = firstRecord.get("basedOn");
+    const recipes = result.records.map((record) => {
+      const recipe = record.get("r").properties;
+      recipe.createdAt = neo4jDateTimeConverter.toStandardDate(
+        recipe.createdAt
+      );
+      recipe.likeCount = record.get("likeCount");
+      return recipe as Recipe;
+    });
+
+    return { basedOn, recipes };
   }
 }

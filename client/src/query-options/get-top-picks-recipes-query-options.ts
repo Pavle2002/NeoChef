@@ -2,9 +2,9 @@ import { apiClient } from "@/lib/api-client";
 import type { Recipe } from "@common/schemas/recipe";
 import { queryOptions } from "@tanstack/react-query";
 
-export function getRecommendedRecipesQueryOptions() {
+export function getTopPicksRecipesQueryOptions() {
   return queryOptions({
-    queryKey: ["recipes", "list", "recommended"],
+    queryKey: ["recipes", "list", "top-picks"],
     queryFn: () => apiClient.get<Recipe[]>("/recipes/recommended"),
   });
 }

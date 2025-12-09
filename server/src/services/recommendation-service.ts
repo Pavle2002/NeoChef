@@ -5,7 +5,17 @@ import type { IRecommendationService } from "@interfaces/recommendation-service.
 export class RecommendationService implements IRecommendationService {
   constructor(private recommendationRepository: IRecommendationRepository) {}
 
-  async getRecommendedRecipes(userId: string): Promise<Recipe[]> {
-    return this.recommendationRepository.findRecommendedRecipes(userId);
+  async getTopPicks(userId: string): Promise<Recipe[]> {
+    return this.recommendationRepository.findTopPicks(userId);
+  }
+
+  async getFridgeBased(userId: string): Promise<Recipe[]> {
+    return this.recommendationRepository.findFridgeBased(userId);
+  }
+
+  async getSimilarToLastLiked(
+    userId: string
+  ): Promise<{ basedOn: string; recipes: Recipe[] } | null> {
+    return this.recommendationRepository.findSimilarToLastLiked(userId);
   }
 }

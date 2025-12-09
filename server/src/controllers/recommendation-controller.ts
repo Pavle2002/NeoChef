@@ -8,8 +8,30 @@ async function getRecommendedRecipes(
   res: Response
 ): Promise<void> {
   const user = req.user as User;
-  const recipes = await recommendationService.getRecommendedRecipes(user.id);
+  const recipes = await recommendationService.getTopPicks(user.id);
   sendSuccess(res, 200, recipes, "Recommended recipes retrieved successfully");
 }
 
-export const recommendationController = { getRecommendedRecipes };
+async function getFridgeBasedRecipes(
+  req: Request,
+  res: Response
+): Promise<void> {
+  const user = req.user as User;
+  const recipes = await recommendationService.getFridgeBased(user.id);
+  sendSuccess(res, 200, recipes, "Fridge-based recipes retrieved successfully");
+}
+
+async function getSimilarToLastLiked(
+  req: Request,
+  res: Response
+): Promise<void> {
+  const user = req.user as User;
+  const result = await recommendationService.getSimilarToLastLiked(user.id);
+  sendSuccess(res, 200, result, "Similar recipes retrieved successfully");
+}
+
+export const recommendationController = {
+  getRecommendedRecipes,
+  getFridgeBasedRecipes,
+  getSimilarToLastLiked,
+};
