@@ -132,7 +132,14 @@ export class SpoonacularApiClient implements IApiClient {
             ingredientData: {
               sourceId: i.id.toString(),
               sourceName: "Spoonacular",
-              name: i.name.trim(),
+              name: i.name
+                .split(". ")[0]
+                .split(" to ")[0]
+                .split(" but ")[0]
+                .split(" or ")[0]
+                .split(" if ")[0]
+                .trim()
+                .toLowerCase(),
               aisle: i.aisle ?? "",
               image: extractImageName(i.image ?? ""),
             },

@@ -7,13 +7,13 @@ export class IngredientRepository implements IIngredientRepository {
   constructor(private queryExecutor: IQueryExecutor) {}
 
   async createOrUpdate(ingrediant: IngredientData): Promise<Ingredient> {
-    const { sourceId, sourceName, ...upsertIngredient } = ingrediant;
+    const { name, ...upsertIngredient } = ingrediant;
     const result = await this.queryExecutor.run(
-      `MERGE (i:Ingredient {sourceName: $sourceName, sourceId: $sourceId})
+      `MERGE (i:Ingredient {name: $name})
             ON CREATE SET i.id = apoc.create.uuid(), i += $upsertIngredient
             ON MATCH SET i += $upsertIngredient
             RETURN i`,
-      { sourceId, sourceName, upsertIngredient }
+      { name, upsertIngredient }
     );
 
     const record = result.records[0];

@@ -101,7 +101,7 @@ function Hero() {
             <Link to="/about">ℹ️ Learn More</Link>
           </Button>
         </div>
-        <div className="flex flex-wrap gap-x-7 text-muted-foreground">
+        <div className="flex justify-center lg:justify-start flex-wrap gap-y-2 gap-x-7 text-muted-foreground">
           <div className="flex gap-2 text-nowrap">
             <Check color="green" />
             AI Powered Recipes 🤖

@@ -214,9 +214,11 @@ function IngredientsList({
             <span className="text-muted-foreground">
               {
                 ing.ingredient.name
-                  .split(".")[0]
+                  .split(". ")[0]
                   .split(" to ")[0]
                   .split(" but ")[0]
+                  .split(" or ")[0]
+                  .split(" if ")[0]
               }
             </span>
           </li>

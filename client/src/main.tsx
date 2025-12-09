@@ -11,13 +11,18 @@ import { ErrorComponent } from "./components/error.tsx";
 import { NotFoundComponent } from "./components/not-found.tsx";
 import { ApiError } from "@/lib/api-error.ts";
 import { getFormatedDate } from "@/lib/utils.ts";
+import { ErrorCodes } from "@common/utils/error-codes.ts";
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60,
       retry: (failureCount, error) => {
-        if (error instanceof ApiError && error.statusCode === 401) return false;
+        if (
+          error instanceof ApiError &&
+          error.errorCode === ErrorCodes.AUTH_EXPIRED
+        )
+          return false;
         return failureCount < 3;
       },
     },
@@ -62,7 +67,10 @@ declare module "@tanstack/react-router" {
 }
 
 const handleGlobalError = (error: Error) => {
-  if (error instanceof ApiError && error.statusCode === 401) {
+  if (
+    error instanceof ApiError &&
+    error.errorCode === ErrorCodes.AUTH_EXPIRED
+  ) {
     queryClient.clear();
     toast.error("Your session has expired. Please login again.", {
       description: getFormatedDate() + " 📆",
