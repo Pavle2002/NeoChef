@@ -4,7 +4,7 @@ import { queryOptions } from "@tanstack/react-query";
 
 export function getDishTypesQueryOptions() {
   return queryOptions({
-    queryKey: ["dishTypes", "list"],
+    queryKey: ["dish-types", "list"],
     queryFn: () => apiClient.get<DishType[]>(`/dish-types`),
   });
 }

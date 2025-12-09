@@ -57,7 +57,7 @@ function RouteComponent() {
       <RecipeCarousel recipes={fridgeBased} />
       <div className="space-y-1 mt-10">
         <h2 className="text-primary text-4xl font-bold">
-          Similar to Your Last Liked Recipe ❤️
+          Similar to What You Liked ❤️
         </h2>
         <p className="text-lg text-muted-foreground">
           Explore recipes similar to <i>"{similarToLastLiked.basedOn}"</i>.
