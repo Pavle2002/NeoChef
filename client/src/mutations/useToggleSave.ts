@@ -1,10 +1,8 @@
 import { apiClient } from "@/lib/api-client";
-import { getFormatedDate } from "@/lib/utils";
 import { getCurrentUserSavedRecipesQueryOptions } from "@/query-options/get-current-user-saved-recipes-query-options";
 import { getRecipeQueryOptions } from "@/query-options/get-recipe-query-options";
 import { getTrendingRecipesQueryOptions } from "@/query-options/get-trending-recipes-query-options";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 
 type ToggleSaveParams = {
   recipeId: string;
@@ -72,9 +70,6 @@ export function useToggleSave() {
           context.previousSavedRecipes
         );
       }
-      toast.error("Oops! Something went wrong", {
-        description: getFormatedDate() + " 📆",
-      });
     },
 
     onSettled: (_data, _error, _variables, context) => {

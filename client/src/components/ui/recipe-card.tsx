@@ -15,11 +15,13 @@ export function RecipeCard(recipe: Recipe) {
   return (
     <Link to="/recipes/$recipeId" params={{ recipeId: recipe.id }}>
       <div className="w-2xs rounded-md overflow-hidden shadow-md transition-transform duration-150 hover:-translate-y-1 hover:shadow-lg cursor-pointer">
-        <img
-          className="w-full h-36 object-cover"
-          src={`https://img.spoonacular.com/recipes/${recipe.sourceId}-480x360.${recipe.imageType}`}
-          alt={recipe.title}
-        />
+        <div className="overflow-hidden h-[150px]">
+          <img
+            className="w-full h-full object-cover scale-y-105 scale-x-110"
+            src={`https://img.spoonacular.com/recipes/${recipe.sourceId}-480x360.${recipe.imageType}`}
+            alt={recipe.title}
+          />
+        </div>
 
         <div className="py-3 px-4">
           <h3 className="text-base font-medium truncate whitespace-nowrap overflow-hidden">

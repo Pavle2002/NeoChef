@@ -1,8 +1,6 @@
 import { apiClient } from "@/lib/api-client";
-import { getFormatedDate } from "@/lib/utils";
 import { getRecipeQueryOptions } from "@/query-options/get-recipe-query-options";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 
 type ToggleLikeParams = {
   recipeId: string;
@@ -45,9 +43,6 @@ export function useToggleLike() {
       if (context) {
         queryClient.setQueryData(context.queryKey, context.previousRecipe);
       }
-      toast.error("Oops! Something went wrong", {
-        description: getFormatedDate() + " 📆",
-      });
     },
 
     onSettled: (_data, _error, _variables, context) => {

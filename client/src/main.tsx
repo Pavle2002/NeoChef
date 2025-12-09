@@ -76,6 +76,10 @@ const handleGlobalError = (error: Error) => {
       description: getFormatedDate() + " 📆",
     });
     router.invalidate();
+  } else if (error instanceof ApiError && error.statusCode >= 500) {
+    toast.error("Oops! Something went wrong. Please try again later.", {
+      description: getFormatedDate() + " 📆",
+    });
   }
 };
 

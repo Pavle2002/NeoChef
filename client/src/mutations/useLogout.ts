@@ -19,11 +19,5 @@ export function useLogout() {
         description: getFormatedDate() + " 📆",
       });
     },
-
-    onError: (error) => {
-      toast.error("Oops! Logout failed: " + error.message, {
-        description: getFormatedDate() + " 📆",
-      });
-    },
   });
 }

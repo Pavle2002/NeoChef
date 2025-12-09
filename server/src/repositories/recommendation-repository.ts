@@ -72,9 +72,9 @@ export class RecommendationRepository implements IRecommendationRepository {
 
       // Final Weighted Score
       WITH r, 
-           (ingredientMatches * 10) + 
-           (dietMatches * 5) + 
-           (cuisineMatches * 3) + 
+           (ingredientMatches * 3) + 
+           (dietMatches * 20) + 
+           (cuisineMatches * 10) + 
            (socialScore * 2) AS score
 
       ORDER BY score DESC
