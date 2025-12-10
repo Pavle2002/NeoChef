@@ -102,7 +102,6 @@ export class RecommendationRepository implements IRecommendationRepository {
     const query = `
       MATCH (u:User {id: $userId})
       MATCH (u)-[:HAS]->(i:Ingredient)<-[:CONTAINS]-(r:Recipe)
-      WHERE NOT (u)-[:LIKES|SAVED]->(r)
       
       WITH r, count(DISTINCT i) as matchCount
       
