@@ -4,7 +4,7 @@ import type { IQueryExecutor } from "@interfaces/query-executor.interface.js";
 import type { Ingredient, IngredientData } from "@common/schemas/ingredient.js";
 
 export class IngredientRepository implements IIngredientRepository {
-  constructor(private queryExecutor: IQueryExecutor) {}
+  constructor(private readonly queryExecutor: IQueryExecutor) {}
 
   async createOrUpdate(ingrediant: IngredientData): Promise<Ingredient> {
     const { name, ...upsertIngredient } = ingrediant;

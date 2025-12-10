@@ -1,9 +1,6 @@
 import { apiClient } from "@/lib/api-client";
 import { getCurrentUserSavedRecipesQueryOptions } from "@/query-options/get-current-user-saved-recipes-query-options";
 import { getRecipeQueryOptions } from "@/query-options/get-recipe-query-options";
-import { getSimilarToLastLikedRecipesQueryOptions } from "@/query-options/get-similar-to-last-liked-recipes-query-options";
-import { getTopPicksRecipesQueryOptions } from "@/query-options/get-top-picks-recipes-query-options";
-import { getTrendingRecipesQueryOptions } from "@/query-options/get-trending-recipes-query-options";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type ToggleSaveParams = {
@@ -81,15 +78,6 @@ export function useToggleSave() {
           queryKey: context.savedRecipesQueryKey,
         });
       }
-      queryClient.invalidateQueries({
-        queryKey: getTrendingRecipesQueryOptions().queryKey,
-      });
-      queryClient.invalidateQueries({
-        queryKey: getTopPicksRecipesQueryOptions().queryKey,
-      });
-      queryClient.invalidateQueries({
-        queryKey: getSimilarToLastLikedRecipesQueryOptions().queryKey,
-      });
     },
   });
 }

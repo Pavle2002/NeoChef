@@ -17,13 +17,13 @@ export function useToggleLike() {
     },
 
     onMutate: async ({ recipeId, isLiked }) => {
-      const queryKey = getRecipeQueryOptions(recipeId).queryKey;
+      const recipeQueryKey = getRecipeQueryOptions(recipeId).queryKey;
 
-      await queryClient.cancelQueries({ queryKey });
+      await queryClient.cancelQueries({ queryKey: recipeQueryKey });
 
-      const previousRecipe = queryClient.getQueryData(queryKey);
+      const previousRecipe = queryClient.getQueryData(recipeQueryKey);
 
-      queryClient.setQueryData(queryKey, (old: any) => {
+      queryClient.setQueryData(recipeQueryKey, (old: any) => {
         if (!old) return old;
         return {
           ...old,
@@ -36,18 +36,25 @@ export function useToggleLike() {
           },
         };
       });
-      return { previousRecipe, queryKey };
+
+      return {
+        previousRecipe,
+        recipeQueryKey,
+      };
     },
 
     onError: (_err, _variables, context) => {
       if (context) {
-        queryClient.setQueryData(context.queryKey, context.previousRecipe);
+        queryClient.setQueryData(
+          context.recipeQueryKey,
+          context.previousRecipe
+        );
       }
     },
 
     onSettled: (_data, _error, _variables, context) => {
       if (context) {
-        queryClient.invalidateQueries({ queryKey: context.queryKey });
+        queryClient.invalidateQueries({ queryKey: context.recipeQueryKey });
       }
       queryClient.invalidateQueries({ queryKey: ["recipes", "list"] });
     },

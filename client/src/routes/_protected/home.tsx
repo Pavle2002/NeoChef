@@ -20,7 +20,7 @@ export const Route = createFileRoute("/_protected/home")({
 
 function RouteComponent() {
   return (
-    <div className="">
+    <div>
       <div className="space-y-1">
         <h2 className="text-primary text-4xl font-bold">
           Top Picks For You ✨
@@ -33,7 +33,7 @@ function RouteComponent() {
         <TopPicksSection />
       </Suspense>
 
-      <div className="space-y-1 mt-10">
+      <div className="space-y-1 mt-8">
         <h2 className="text-primary text-4xl font-bold">
           Based on Your Fridge 🧊
         </h2>
@@ -45,7 +45,7 @@ function RouteComponent() {
         <FridgeBasedSection />
       </Suspense>
 
-      <div className="space-y-1 mt-10">
+      <div className="space-y-1 mt-8">
         <h2 className="text-primary text-4xl font-bold">
           Similar to What You Liked ❤️
         </h2>

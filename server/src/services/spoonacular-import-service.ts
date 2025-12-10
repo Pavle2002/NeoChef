@@ -6,12 +6,15 @@ import { safeAwait } from "@utils/safe-await.js";
 import { CUISINES, DIETS, DISH_TYPES } from "@utils/spoonacular-constants.js";
 import type { IUnitOfWorkFactory } from "@interfaces/unit-of-work-factory.interface.js";
 import type { RecipeSearchOptions } from "@app-types/import-types.js";
+import type { ICacheService } from "@interfaces/cache-service.interface.js";
+import { CacheKeys } from "@utils/cache-keys.js";
 
 export class SpoonacularImportService implements IImportService {
   constructor(
     private readonly spoonacularApiClient: IApiClient,
     private readonly uowFactory: IUnitOfWorkFactory,
-    private readonly importProgressManager: IImportProgressManager
+    private readonly importProgressManager: IImportProgressManager,
+    private readonly cacheService: ICacheService
   ) {}
 
   async importRecipes(options: RecipeSearchOptions): Promise<Recipe[]> {
@@ -86,6 +89,7 @@ export class SpoonacularImportService implements IImportService {
             position.dietIndex = j;
             position.dishTypeIndex = k;
             await this.importProgressManager.save(progress);
+            await this.invalidateCache();
             throw error;
           }
 
@@ -100,5 +104,14 @@ export class SpoonacularImportService implements IImportService {
     position.cuisineIndex = 0;
 
     await this.importProgressManager.save(progress);
+    await this.invalidateCache();
+  }
+
+  private async invalidateCache() {
+    await Promise.all([
+      safeAwait(this.cacheService.del(CacheKeys.CUISINES_ALL)),
+      safeAwait(this.cacheService.del(CacheKeys.DIETS_ALL)),
+      safeAwait(this.cacheService.del(CacheKeys.DISH_TYPES_ALL)),
+    ]);
   }
 }

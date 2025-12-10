@@ -6,11 +6,15 @@ import type { IUserService } from "@interfaces/user-service.interface.js";
 import type { Preferences } from "@common/schemas/preferences.js";
 import type { Ingredient } from "@common/schemas/ingredient.js";
 import type { Recipe } from "@common/schemas/recipe.js";
+import type { ICacheService } from "@interfaces/cache-service.interface.js";
+import { safeAwait } from "@utils/safe-await.js";
+import { CacheKeys } from "@utils/cache-keys.js";
 
 export class UserService implements IUserService {
   constructor(
     private readonly userRepository: IUserRepository,
-    private readonly uowFactory: IUnitOfWorkFactory
+    private readonly uowFactory: IUnitOfWorkFactory,
+    private readonly cacheService: ICacheService
   ) {}
 
   async getById(id: string): Promise<SafeUser> {
@@ -92,7 +96,7 @@ export class UserService implements IUserService {
     userId: string,
     newPreferences: Preferences
   ): Promise<Preferences> {
-    return this.uowFactory.execute(async (uow) => {
+    const updatedPreferences = await this.uowFactory.execute(async (uow) => {
       const current = await this.getPreferences(userId, uow.users);
       await this.updateSet(
         current.dislikesIngredients,
@@ -120,13 +124,18 @@ export class UserService implements IUserService {
 
       return this.getPreferences(userId, uow.users);
     });
+
+    await safeAwait(
+      this.cacheService.del(CacheKeys.recommendations.topPicks(userId))
+    );
+    return updatedPreferences;
   }
 
   async updateFridge(
     userId: string,
     newIngredients: Ingredient[]
   ): Promise<Ingredient[]> {
-    return this.uowFactory.execute(async (uow) => {
+    const fridge = await this.uowFactory.execute(async (uow) => {
       const current = await this.getFridge(userId, uow.users);
       await this.updateSet(
         current,
@@ -138,6 +147,11 @@ export class UserService implements IUserService {
 
       return this.getFridge(userId, uow.users);
     });
+
+    await safeAwait(
+      this.cacheService.del(CacheKeys.recommendations.fridge(userId))
+    );
+    return fridge;
   }
 
   async toggleLikesRecipe(
@@ -150,6 +164,9 @@ export class UserService implements IUserService {
     } else {
       await this.userRepository.removeLikesRecipe(userId, recipeId);
     }
+    await safeAwait(
+      this.cacheService.del(CacheKeys.recommendations.similar(userId))
+    );
   }
 
   async toggleSavedRecipe(

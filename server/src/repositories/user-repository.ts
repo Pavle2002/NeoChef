@@ -12,7 +12,7 @@ import type { Ingredient } from "@common/schemas/ingredient.js";
 import type { Recipe } from "@common/schemas/recipe.js";
 
 export class UserRepository implements IUserRepository {
-  constructor(private queryExecutor: IQueryExecutor) {}
+  constructor(private readonly queryExecutor: IQueryExecutor) {}
 
   async findById(id: string): Promise<User | null> {
     const result = await this.queryExecutor.run(

@@ -9,5 +9,6 @@ export function getSimilarToLastLikedRecipesQueryOptions() {
       apiClient.get<{ basedOn: String; recipes: Recipe[] }>(
         "/recipes/recommended/similar"
       ),
+    staleTime: 1000 * 60 * 15, // 15 minutes
   });
 }

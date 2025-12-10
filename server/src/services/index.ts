@@ -20,9 +20,12 @@ import { DishTypeRepository } from "@repositories/dish-type-repository.js";
 import { DishTypeService } from "./dish-type-service.js";
 import { RecommendationRepository } from "@repositories/recommendation-repository.js";
 import { RecommendationService } from "./recommendation-service.js";
+import { RedisService } from "./redis-service.js";
+import redisClient from "@config/redis.js";
 
 const queryExecutor = new DriverQueryExecutor(neo4jClient);
 const unitOfWorkFactory = new UnitOfWorkFactory(neo4jClient);
+const cacheService = new RedisService(redisClient);
 
 const userRepository = new UserRepository(queryExecutor);
 const ingredientRepository = new IngredientRepository(queryExecutor);
@@ -33,14 +36,25 @@ const dishTypeRepository = new DishTypeRepository(queryExecutor);
 const recommendationRepository = new RecommendationRepository(queryExecutor);
 
 export const authService = new AuthService(userRepository);
-export const userService = new UserService(userRepository, unitOfWorkFactory);
+export const userService = new UserService(
+  userRepository,
+  unitOfWorkFactory,
+  cacheService
+);
 export const recipeService = new RecipeService(recipeRepository);
 export const ingredientService = new IngredientService(ingredientRepository);
-export const cuisineService = new CuisineService(cuisineRepository);
-export const dietService = new DietService(dietRepository);
-export const dishTypeService = new DishTypeService(dishTypeRepository);
+export const cuisineService = new CuisineService(
+  cuisineRepository,
+  cacheService
+);
+export const dietService = new DietService(dietRepository, cacheService);
+export const dishTypeService = new DishTypeService(
+  dishTypeRepository,
+  cacheService
+);
 export const recommendationService = new RecommendationService(
-  recommendationRepository
+  recommendationRepository,
+  cacheService
 );
 
 const spoonacularApiClient = new SpoonacularApiClient(
@@ -54,5 +68,6 @@ const fileImportProgressManager = new FileImportProgressManager(
 export const spoonacularImportService = new SpoonacularImportService(
   spoonacularApiClient,
   unitOfWorkFactory,
-  fileImportProgressManager
+  fileImportProgressManager,
+  cacheService
 );

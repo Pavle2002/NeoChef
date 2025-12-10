@@ -18,6 +18,7 @@ import { dietRoutes } from "@routes/diet-routes.js";
 import { dishTypeRoutes } from "@routes/dish-type-routes.js";
 
 const app = express();
+if (config.env === "development") app.disable("etag");
 const port = config.port;
 
 app.use(morganMiddleware);

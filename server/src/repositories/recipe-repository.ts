@@ -22,7 +22,7 @@ import type {
 } from "@common/schemas/ingredient.js";
 
 export class RecipeRepository implements IRecipeRepository {
-  constructor(private queryExecutor: IQueryExecutor) {}
+  constructor(private readonly queryExecutor: IQueryExecutor) {}
 
   async findById(id: string): Promise<Recipe | null> {
     const result = await this.queryExecutor.run(

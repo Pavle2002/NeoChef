@@ -3,7 +3,7 @@ import type { IQueryExecutor } from "@interfaces/query-executor.interface.js";
 import type { Diet } from "@common/schemas/diet.js";
 
 export class DietRepository implements IDietRepository {
-  constructor(private queryExecutor: IQueryExecutor) {}
+  constructor(private readonly queryExecutor: IQueryExecutor) {}
 
   async findAll(): Promise<Diet[]> {
     const result = await this.queryExecutor.run(`MATCH (d:Diet) RETURN d`);

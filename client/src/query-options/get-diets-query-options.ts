@@ -6,5 +6,6 @@ export function getDietsQueryOptions() {
   return queryOptions({
     queryKey: ["diets", "list"],
     queryFn: () => apiClient.get<Diet[]>(`/diets`),
+    staleTime: 1000 * 60 * 60, // 1 hour
   });
 }

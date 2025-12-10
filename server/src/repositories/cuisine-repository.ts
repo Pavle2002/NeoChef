@@ -3,7 +3,7 @@ import type { IQueryExecutor } from "@interfaces/query-executor.interface.js";
 import type { Cuisine } from "@common/schemas/cuisine.js";
 
 export class CuisineRepository implements ICuisineRepository {
-  constructor(private queryExecutor: IQueryExecutor) {}
+  constructor(private readonly queryExecutor: IQueryExecutor) {}
 
   async findAll(): Promise<Cuisine[]> {
     const result = await this.queryExecutor.run(`MATCH (c:Cuisine) RETURN c`);

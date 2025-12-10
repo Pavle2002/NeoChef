@@ -6,5 +6,6 @@ export function getDishTypesQueryOptions() {
   return queryOptions({
     queryKey: ["dish-types", "list"],
     queryFn: () => apiClient.get<DishType[]>(`/dish-types`),
+    staleTime: 1000 * 60 * 60, // 1 hour
   });
 }
