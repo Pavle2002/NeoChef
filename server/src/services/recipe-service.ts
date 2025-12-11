@@ -10,9 +10,15 @@ import {
   type RecipeFilters,
   type RecipeSortOptions,
 } from "@common/schemas/recipe.js";
+import type { ICacheService } from "@interfaces/cache-service.interface.js";
+import { CacheKeys } from "@utils/cache-keys.js";
+import { safeAwait } from "@utils/safe-await.js";
 
 export class RecipeService implements IRecipeService {
-  constructor(private readonly recipeRepository: IRecipeRepository) {}
+  constructor(
+    private readonly recipeRepository: IRecipeRepository,
+    private readonly cacheService: ICacheService
+  ) {}
 
   async getById(id: string): Promise<Recipe> {
     const recipe = await this.recipeRepository.findById(id);
@@ -29,7 +35,28 @@ export class RecipeService implements IRecipeService {
   }
 
   async getTrending(): Promise<Recipe[]> {
-    return this.recipeRepository.findTrending();
+    const cacheKey = CacheKeys.recipes.trending;
+
+    const [error, cached] = await safeAwait(
+      this.cacheService.zRange(cacheKey, 0, -1)
+    );
+    if (!error && cached && cached.length > 0) {
+      return this.recipeRepository.findByIds(cached);
+    }
+
+    const result = await this.recipeRepository.findTrending();
+
+    await safeAwait(this.cacheService.del(cacheKey));
+    await safeAwait(
+      Promise.all(
+        result.map(({ recipe, score }) =>
+          this.cacheService.zAdd(cacheKey, score, recipe.id)
+        )
+      )
+    );
+    await safeAwait(this.cacheService.expire(cacheKey, CacheKeys.recipes.TTL));
+
+    return result.map((r) => r.recipe);
   }
 
   async getAll(

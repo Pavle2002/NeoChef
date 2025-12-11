@@ -9,6 +9,7 @@ import type { Recipe } from "@common/schemas/recipe.js";
 import type { ICacheService } from "@interfaces/cache-service.interface.js";
 import { safeAwait } from "@utils/safe-await.js";
 import { CacheKeys } from "@utils/cache-keys.js";
+import { writeHeapSnapshot } from "v8";
 
 export class UserService implements IUserService {
   constructor(
@@ -164,8 +165,16 @@ export class UserService implements IUserService {
     } else {
       await this.userRepository.removeLikesRecipe(userId, recipeId);
     }
+
     await safeAwait(
-      this.cacheService.del(CacheKeys.recommendations.similar(userId))
+      Promise.all([
+        this.cacheService.del(CacheKeys.recommendations.similar(userId)),
+        this.cacheService.zIncrBy(
+          CacheKeys.recipes.trending,
+          likes ? 1 : -1,
+          recipeId
+        ),
+      ])
     );
   }
 
@@ -179,5 +188,12 @@ export class UserService implements IUserService {
     } else {
       await this.userRepository.removeSavedRecipe(userId, recipeId);
     }
+    await safeAwait(
+      this.cacheService.zIncrBy(
+        CacheKeys.recipes.trending,
+        save ? 2 : -2,
+        recipeId
+      )
+    );
   }
 }

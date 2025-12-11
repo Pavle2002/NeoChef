@@ -10,4 +10,9 @@ export const CacheKeys = {
     similar: (userId: string) => `rec:similar:${userId}`,
     TTL: 900,
   },
+
+  recipes: {
+    trending: "recipes:trending",
+    TTL: 3600,
+  },
 };

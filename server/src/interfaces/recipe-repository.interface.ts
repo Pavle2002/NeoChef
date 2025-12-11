@@ -14,6 +14,7 @@ import type { IngredientUsage } from "@common/schemas/ingredient.js";
 export interface IRecipeRepository {
   createOrUpdate(recipe: RecipeData): Promise<Recipe>;
   findById(id: string): Promise<Recipe | null>;
+  findByIds(ids: string[]): Promise<Recipe[]>;
   findByIdExtended(id: string, userId: string): Promise<ExtendedRecipe | null>;
   findAll(
     limit?: number,
@@ -21,7 +22,7 @@ export interface IRecipeRepository {
     filters?: RecipeFilters,
     sortOptions?: RecipeSortOptions
   ): Promise<Recipe[]>;
-  findTrending(): Promise<Recipe[]>;
+  findTrending(): Promise<{ recipe: Recipe; score: number }[]>;
   addIngredient(
     recipeId: string,
     ingredientId: string,

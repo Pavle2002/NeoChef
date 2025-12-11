@@ -35,6 +35,15 @@ function RouteComponent() {
 
       <div className="space-y-1 mt-8">
         <h2 className="text-primary text-4xl font-bold">
+          Similar to Last Liked ❤️
+        </h2>
+      </div>
+      <Suspense fallback={<SimilarToLastLikedSkeleton />}>
+        <SimilarToLastLikedSection />
+      </Suspense>
+
+      <div className="space-y-1 mt-8">
+        <h2 className="text-primary text-4xl font-bold">
           Based on Your Fridge 🧊
         </h2>
         <p className="text-lg text-muted-foreground">
@@ -43,15 +52,6 @@ function RouteComponent() {
       </div>
       <Suspense fallback={<RecipeCarouselSkeleton />}>
         <FridgeBasedSection />
-      </Suspense>
-
-      <div className="space-y-1 mt-8">
-        <h2 className="text-primary text-4xl font-bold">
-          Similar to What You Liked ❤️
-        </h2>
-      </div>
-      <Suspense fallback={<SimilarToLastLikedSkeleton />}>
-        <SimilarToLastLikedSection />
       </Suspense>
     </div>
   );

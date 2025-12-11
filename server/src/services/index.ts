@@ -41,7 +41,7 @@ export const userService = new UserService(
   unitOfWorkFactory,
   cacheService
 );
-export const recipeService = new RecipeService(recipeRepository);
+export const recipeService = new RecipeService(recipeRepository, cacheService);
 export const ingredientService = new IngredientService(ingredientRepository);
 export const cuisineService = new CuisineService(
   cuisineRepository,

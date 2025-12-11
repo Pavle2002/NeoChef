@@ -43,6 +43,32 @@ export class RecipeRepository implements IRecipeRepository {
     return recipe as Recipe;
   }
 
+  async findByIds(ids: string[]): Promise<Recipe[]> {
+    if (ids.length === 0) {
+      return [];
+    }
+
+    const result = await this.queryExecutor.run(
+      `MATCH (r:Recipe)
+       WHERE r.id IN $ids
+       OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
+       RETURN r, COUNT(l) AS likeCount`,
+      { ids }
+    );
+
+    const recipeMap = new Map<string, Recipe>();
+    result.records.forEach((record) => {
+      const recipe = record.get("r").properties;
+      recipe.createdAt = neo4jDateTimeConverter.toStandardDate(
+        recipe.createdAt
+      );
+      recipe.likeCount = record.get("likeCount");
+      recipeMap.set(recipe.id, recipe as Recipe);
+    });
+
+    return ids.map((id) => recipeMap.get(id)!);
+  }
+
   async findByIdExtended(
     id: string,
     userId: string
@@ -157,7 +183,7 @@ export class RecipeRepository implements IRecipeRepository {
     return recipes;
   }
 
-  async findTrending(): Promise<Recipe[]> {
+  async findTrending(): Promise<{ recipe: Recipe; score: number }[]> {
     const result = await this.queryExecutor.run(
       `MATCH (r:Recipe)
        OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
@@ -171,8 +197,8 @@ export class RecipeRepository implements IRecipeRepository {
 
        WITH r, totalLikes, (recentLikes + (recentSaves * 2)) AS score
        ORDER BY score DESC
-       LIMIT 100
-       RETURN r, totalLikes`
+       LIMIT 24
+       RETURN r, totalLikes, score`
     );
 
     const recipes = result.records.map((record) => {
@@ -181,7 +207,8 @@ export class RecipeRepository implements IRecipeRepository {
         recipe.createdAt
       );
       recipe.likeCount = record.get("totalLikes");
-      return recipe as Recipe;
+      const score = record.get("score");
+      return { recipe, score } as { recipe: Recipe; score: number };
     });
     return recipes;
   }
