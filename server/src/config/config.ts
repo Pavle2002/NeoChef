@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import { register } from "module";
 dotenv.config();
 
 const requiredEnvVars = [
@@ -34,6 +35,25 @@ const config = {
     apiKey: process.env.SPOONACULAR_API_KEY as string,
     importProgressFilePath:
       process.env.IMPORT_PROGRESS_FILE_PATH || "./import-progress.json",
+  },
+  rateLimit: {
+    enabled: process.env.RATE_LIMIT_ENABLED !== "false",
+    global: {
+      windowMs: 1 * 60 * 1000, // 1 minute
+      maxRequests: parseInt(process.env.RATE_LIMIT_GLOBAL_MAX || "100", 10),
+    },
+    login: {
+      windowMs: 15 * 60 * 1000, // 15 minutes
+      maxRequests: parseInt(process.env.RATE_LIMIT_AUTH_MAX || "10", 10),
+    },
+    register: {
+      windowMs: 60 * 60 * 1000, // 1 hour
+      maxRequests: parseInt(process.env.RATE_LIMIT_REGISTER_MAX || "3", 10),
+    },
+    strict: {
+      windowMs: 1 * 60 * 1000, // 1 minute
+      maxRequests: parseInt(process.env.RATE_LIMIT_STRICT_MAX || "25", 10),
+    },
   },
 };
 

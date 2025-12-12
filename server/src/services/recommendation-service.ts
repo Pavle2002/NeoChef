@@ -16,7 +16,6 @@ export class RecommendationService implements IRecommendationService {
 
     const [error, cached] = await safeAwait(this.cacheService.get(cacheKey));
     if (!error && cached) {
-      console.log("Cache hit for top picks recommendations");
       return JSON.parse(cached) as Recipe[];
     }
 
@@ -37,7 +36,6 @@ export class RecommendationService implements IRecommendationService {
     const cacheKey = CacheKeys.recommendations.fridge(userId);
 
     const [error, cached] = await safeAwait(this.cacheService.get(cacheKey));
-    console.log("Cache hit for top picks recommendations");
 
     if (!error && cached) {
       return JSON.parse(cached) as Recipe[];
@@ -62,7 +60,6 @@ export class RecommendationService implements IRecommendationService {
     const cacheKey = CacheKeys.recommendations.similar(userId);
 
     const [error, cached] = await safeAwait(this.cacheService.get(cacheKey));
-    console.log("Cache hit for top picks recommendations");
 
     if (!error && cached) {
       return JSON.parse(cached) as { basedOn: string; recipes: Recipe[] };

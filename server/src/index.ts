@@ -16,10 +16,14 @@ import { ingredientRoutes } from "@routes/ingredient-routes.js";
 import { cuisineRoutes } from "@routes/cuisine-routes.js";
 import { dietRoutes } from "@routes/diet-routes.js";
 import { dishTypeRoutes } from "@routes/dish-type-routes.js";
+import { rateLimiter } from "@middlewares/rate-limiter.js";
 
 const app = express();
+app.set("trust proxy", 1);
 if (config.env === "development") app.disable("etag");
 const port = config.port;
+
+const { maxRequests, windowMs } = config.rateLimit.global;
 
 app.use(morganMiddleware);
 app.use(corsConfig);
@@ -28,6 +32,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(sessionConfig);
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(rateLimiter(maxRequests, windowMs));
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/recipes", recipeRoutes);

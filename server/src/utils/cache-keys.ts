@@ -15,4 +15,6 @@ export const CacheKeys = {
     trending: "recipes:trending",
     TTL: 3600,
   },
+
+  RATE_LIMIT: "rl:",
 };

@@ -22,6 +22,7 @@ import { RecommendationRepository } from "@repositories/recommendation-repositor
 import { RecommendationService } from "./recommendation-service.js";
 import { RedisService } from "./redis-service.js";
 import redisClient from "@config/redis.js";
+import { RedisRateLimitService } from "./redis-rate-limit-service.js";
 
 const queryExecutor = new DriverQueryExecutor(neo4jClient);
 const unitOfWorkFactory = new UnitOfWorkFactory(neo4jClient);
@@ -56,6 +57,7 @@ export const recommendationService = new RecommendationService(
   recommendationRepository,
   cacheService
 );
+export const rateLimitService = new RedisRateLimitService(redisClient);
 
 const spoonacularApiClient = new SpoonacularApiClient(
   config.spoonacular.apiKey,

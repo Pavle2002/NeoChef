@@ -12,6 +12,8 @@ export const ErrorCodes = {
   RES_CONFLICT_EMAIL: "RES_003",
   RES_CONFLICT_USERNAME: "RES_004",
 
+  RL_EXCEEDED: "RL_001",
+
   API_ERROR: "EXT_001",
   API_QUOTA: "EXT_002",
 
