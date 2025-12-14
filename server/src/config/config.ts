@@ -36,6 +36,15 @@ const config = {
     importProgressFilePath:
       process.env.IMPORT_PROGRESS_FILE_PATH || "./import-progress.json",
   },
+  caching_ttls: {
+    userSession: parseInt(process.env.USER_SESSION_TTL || "3600", 10), // 1 hour
+    trendingRecipes: parseInt(process.env.TRENDING_RECIPES_TTL || "3600", 10), // 15 minutes
+    recommendedRecipes: parseInt(
+      process.env.RECOMMENDED_RECIPES_TTL || "900",
+      10
+    ), // 15 minutes
+    filterOptions: parseInt(process.env.FILTER_OPTIONS_TTL || "86400", 10), // 24 hours
+  },
   rateLimit: {
     enabled: process.env.RATE_LIMIT_ENABLED !== "false",
     global: {
@@ -52,7 +61,7 @@ const config = {
     },
     strict: {
       windowMs: 1 * 60 * 1000, // 1 minute
-      maxRequests: parseInt(process.env.RATE_LIMIT_STRICT_MAX || "25", 10),
+      maxRequests: parseInt(process.env.RATE_LIMIT_STRICT_MAX || "50", 10),
     },
   },
 };

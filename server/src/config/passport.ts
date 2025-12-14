@@ -28,12 +28,10 @@ const strategy = new Strategy(
 passport.use(strategy);
 
 passport.serializeUser((user, done) => {
-  logger.debug("Serialize user");
   done(null, (user as User).id);
 });
 
 passport.deserializeUser(async (id, done) => {
-  logger.debug("Deserialize user");
   const [error, user] = await safeAwait(userService.getById(id as string));
   if (error instanceof NotFoundError) return done(null, false);
   if (error) return done(error);

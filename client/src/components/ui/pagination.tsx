@@ -108,7 +108,10 @@ function PaginationItem({ ...props }: React.ComponentProps<"li">) {
 type PaginationLinkProps = {
   isActive?: boolean;
 } & Pick<React.ComponentProps<typeof Button>, "size"> &
-  React.ComponentProps<typeof Link>;
+  Omit<React.ComponentProps<typeof Link>, "from" | "search"> & {
+    from: string;
+    search?: (prev: any) => any;
+  };
 
 function PaginationLink({
   className,
@@ -128,7 +131,7 @@ function PaginationLink({
         }),
         className
       )}
-      {...props}
+      {...(props as any)}
     />
   );
 }

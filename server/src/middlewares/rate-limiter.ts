@@ -24,7 +24,7 @@ export const rateLimiter = (
     res.set("X-RateLimit-Remaining", result.remaining.toString());
     res.set("X-RateLimit-Reset", Math.ceil(result.resetAt / 1000).toString());
 
-    if (!result.allowed) throw new RateLimitError("Rate limit exceeded");
+    if (!result.allowed) throw new RateLimitError(`Rate limit exceeded`);
 
     next();
   };
