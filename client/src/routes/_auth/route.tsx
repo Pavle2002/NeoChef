@@ -1,5 +1,6 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import { ChefHat } from "lucide-react";
+import image from "@/assets/images/auth-image.jpg";
 
 export const Route = createFileRoute("/_auth")({
   component: RouteComponent,
@@ -27,11 +28,11 @@ function RouteComponent() {
         </div>
       </div>
       <div className="bg-primary relative hidden lg:block">
-        {/* <img
-          src="/placeholder.svg"
+        <img
+          src={image}
           alt="Image"
-          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-        /> */}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
       </div>
     </div>
   );

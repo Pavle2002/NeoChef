@@ -1,4 +1,4 @@
-import { useDebounce } from "@/hooks/useDebounce";
+import { useDebounce } from "@/hooks/use-debounce";
 import { useQuery, queryOptions } from "@tanstack/react-query";
 import { useState } from "react";
 import {

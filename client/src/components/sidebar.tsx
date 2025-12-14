@@ -13,7 +13,7 @@ import {
 } from "./ui/sidebar";
 import { Link, useRouteContext } from "@tanstack/react-router";
 import { ChefHat, LogOut, MoreVertical, User } from "lucide-react";
-import { useLogout } from "@/mutations/useLogout";
+import { useLogout } from "@/mutations/use-logout";
 import {
   DropdownMenu,
   DropdownMenuContent,

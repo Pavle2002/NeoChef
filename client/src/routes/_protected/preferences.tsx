@@ -18,7 +18,7 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
-import { useUpdatePreferences } from "@/mutations/useUpdatePreferences";
+import { useUpdatePreferences } from "@/mutations/use-update-preferences";
 import type { Cuisine } from "@common/schemas/cuisine";
 import type { Diet } from "@common/schemas/diet";
 import type { Ingredient } from "@common/schemas/ingredient";

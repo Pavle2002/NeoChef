@@ -9,7 +9,7 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
-import { useUpdateFridge } from "@/mutations/useUpdateFridge";
+import { useUpdateFridge } from "@/mutations/use-update-fridge";
 import { getCurrentUserFridgeQueryOptions } from "@/query-options/get-current-user-fridge-query-options";
 import type { Ingredient } from "@common/schemas/ingredient";
 import { useSuspenseQuery } from "@tanstack/react-query";

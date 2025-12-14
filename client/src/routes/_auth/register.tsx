@@ -11,8 +11,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useRegister } from "@/mutations/useRegister";
+import { useRegister } from "@/mutations/use-register";
 import { UserDataSchema, type UserData } from "@common/schemas/user";
+import image from "@/assets/images/landing/pexels-dmytro-1259064-2732663.jpg";
 
 export const Route = createFileRoute("/_auth/register")({
   component: RouteComponent,

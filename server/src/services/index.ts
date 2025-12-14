@@ -5,7 +5,7 @@ import { UserRepository } from "@repositories/user-repository.js";
 import { RecipeRepository } from "@repositories/recipe-repository.js";
 import { IngredientRepository } from "@repositories/ingredient-repository.js";
 import { SpoonacularImportService } from "@services/spoonacular-import-service.js";
-import { SpoonacularApiClient } from "@clients/spoonacular-api-client.js";
+import { SpoonacularApiClient } from "@utils/spoonacular-api-client.js";
 import { FileImportProgressManager } from "./file-import-progress-manager.js";
 import { DriverQueryExecutor } from "@utils/driver-query-executor.js";
 import { UnitOfWorkFactory } from "@utils/unit-of-work-factory.js";

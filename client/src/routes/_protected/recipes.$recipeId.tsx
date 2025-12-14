@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { formatCompactNumber } from "@/lib/format-number";
-import { useToggleLike } from "@/mutations/useToggleLike";
-import { useToggleSave } from "@/mutations/useToggleSave";
+import { useToggleLike } from "@/mutations/use-toggle-like";
+import { useToggleSave } from "@/mutations/use-toggle-save";
 import { getRecipeQueryOptions } from "@/query-options/get-recipe-query-options";
 import type { ExtendedRecipe } from "@common/schemas/recipe";
 import { useSuspenseQuery } from "@tanstack/react-query";
