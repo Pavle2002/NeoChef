@@ -12,7 +12,14 @@ import {
   useSidebar,
 } from "./ui/sidebar";
 import { Link, useRouteContext } from "@tanstack/react-router";
-import { ChefHat, LogOut, MoreVertical, User } from "lucide-react";
+import {
+  ChefHat,
+  LogOut,
+  MoreVertical,
+  Refrigerator,
+  Star,
+  User,
+} from "lucide-react";
 import { useLogout } from "@/mutations/use-logout";
 import {
   DropdownMenu,
@@ -41,7 +48,7 @@ function SidebarMain() {
       <SidebarGroup>
         <SidebarGroupContent>
           <SidebarMenu>
-            {PAGES.filter((page) => page.url !== "/profile").map((page) => (
+            {PAGES.map((page) => (
               <SidebarMenuItem key={page.title}>
                 <SidebarMenuButton asChild>
                   <Link
@@ -74,7 +81,7 @@ function SidebarLogo() {
           >
             <Link to="/home">
               <ChefHat className="!size-5 " />
-              <span className="text-base font-semibold">NeoChef</span>
+              <span className="text-base font-semibold mt-0.5">NeoChef</span>
             </Link>
           </SidebarMenuButton>
         </SidebarMenuItem>
@@ -114,10 +121,22 @@ function SidebarUserMenu() {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                <Link to="/profile" className="w-full">
+                <Link to="/preferences" className="w-full">
                   <DropdownMenuItem>
                     <User />
-                    Profile
+                    Preferences
+                  </DropdownMenuItem>
+                </Link>
+                <Link to="/fridge" className="w-full">
+                  <DropdownMenuItem>
+                    <Refrigerator />
+                    Fridge
+                  </DropdownMenuItem>
+                </Link>
+                <Link to="/favorites" className="w-full">
+                  <DropdownMenuItem>
+                    <Star />
+                    Favorites
                   </DropdownMenuItem>
                 </Link>
               </DropdownMenuGroup>

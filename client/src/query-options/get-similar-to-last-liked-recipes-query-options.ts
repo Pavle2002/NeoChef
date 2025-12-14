@@ -6,7 +6,7 @@ export function getSimilarToLastLikedRecipesQueryOptions() {
   return queryOptions({
     queryKey: ["recipes", "list", "similar"],
     queryFn: () =>
-      apiClient.get<{ basedOn: String; recipes: Recipe[] }>(
+      apiClient.get<{ basedOn: String; recipes: Recipe[] } | null>(
         "/recipes/recommended/similar"
       ),
     staleTime: 1000 * 60 * 15, // 15 minutes

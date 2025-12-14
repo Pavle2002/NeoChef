@@ -25,7 +25,7 @@ export const Route = createFileRoute("/")({
 
 function RouteComponent() {
   return (
-    <div className="flex flex-col min-h-screen items-center justify-center mx-6 xl:mx-10 2xl:mx-16">
+    <div className="flex flex-col min-h-screen items-center justify-center mx-5 sm:mx-6 xl:mx-10 2xl:mx-16">
       <Header />
       <main className="flex-1 w-full">
         <Hero />
@@ -44,18 +44,18 @@ function Header() {
           className="text-primary flex items-center text-base gap-2 font-bold"
         >
           <ChefHat className="size-6" />
-          NeoChef
+          <span className="mt-1">NeoChef</span>
         </Link>
         <div className="flex items-center gap-10">
           <Link
             to="/about"
-            className="text-primary font-semibold border-b-2 border-transparent hover:border-primary transition-all duration-300 ease-in-out"
+            className="hidden sm:block text-primary font-semibold border-b-2 border-transparent hover:border-primary transition-all duration-300 ease-in-out"
           >
             Our story
           </Link>
           <Link
             to="/"
-            className="text-primary font-semibold border-b-2 border-transparent hover:border-primary transition-all duration-300 ease-in-out"
+            className="hidden sm:block text-primary font-semibold border-b-2 border-transparent hover:border-primary transition-all duration-300 ease-in-out"
           >
             Contact us
           </Link>
@@ -72,45 +72,47 @@ function Header() {
 
 function Hero() {
   return (
-    <section className="container grid items-center lg:grid-cols-2 py-16 2xl:py-28 p-3 mx-auto gap-12">
-      <div className="flex flex-col gap-7">
+    <section className="container grid items-center lg:grid-cols-2 py-16 2xl:py-28 sm:px-3 mx-auto gap-12">
+      <div className="flex flex-col gap-6 sm:gap-7">
         <div>
           <Badge className="flex lg:inline-flex mx-auto text-sm font-medium px-4 py-1.5 text-secondary-foreground bg-secondary border shadow-md rounded-full mb-3.5">
             <ChefHat /> Smart Cooking
           </Badge>
-          <h1 className="text-center lg:text-left text-5xl xl:text-6xl font-bold bg-gradient-to-r from-primary via-foreground/80 to-foreground/70 tracking-tight text-transparent bg-clip-text">
+          <h1 className="text-center lg:text-left text-4xl sm:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-primary via-foreground/80 to-foreground/70 tracking-tight text-transparent bg-clip-text">
             You Personal <span className="font-medium italic">AI Chef</span>,{" "}
             <br />
             Ready to Cook
           </h1>
         </div>
-        <p className="text-center lg:text-left mx-auto lg:mx-0 text-lg xl:text-xl 2xl:text-2xl font-normal text-muted-foreground max-w-lg lg:max-w-[600px]">
+        <p className="text-center lg:text-left mx-auto lg:mx-0 text-base sm:text-lg xl:text-xl 2xl:text-2xl font-normal text-muted-foreground max-w-lg lg:max-w-[600px]">
           We can find delicious recipes, smart meal plans, and culinary
           inspiration — tailored exactly to your taste 🫵.
         </p>
-        <div className="flex gap-7 justify-center lg:justify-start">
-          <Button className="text-base lg:text-lg shadow-md" asChild size="xl">
+        <div className="flex gap-4 sm:gap-7 justify-center lg:justify-start">
+          <Button
+            className="text-base lg:text-lg shadow-md h-11 rounded-md px-5 sm:px-8"
+            asChild
+          >
             <Link to="/register">🚀 Get Started</Link>
           </Button>
           <Button
-            className="text-base lg:text-lg shadow-md"
+            className="text-base lg:text-lg shadow-md h-11 rounded-md px-5 sm:px-8 "
             asChild
-            size="xl"
             variant="outline"
           >
             <Link to="/about">ℹ️ Learn More</Link>
           </Button>
         </div>
-        <div className="flex justify-center lg:justify-start flex-wrap gap-y-2 gap-x-7 text-muted-foreground">
-          <div className="flex gap-2 text-nowrap">
+        <div className=" flex justify-center lg:justify-start flex-wrap gap-y-2 gap-x-7 text-muted-foreground">
+          <div className="text-sm sm:text-base flex gap-2 text-nowrap">
             <Check color="green" />
             AI Powered Recipes 🤖
           </div>
-          <div className="flex gap-2 text-nowrap">
+          <div className="text-sm sm:text-base flex gap-2 text-nowrap">
             <Check color="green" />
             Smart Meal Planning 📅
           </div>
-          <div className="flex gap-2 text-nowrap">
+          <div className="text-sm sm:text-base flex gap-2 text-nowrap">
             <Check color="green" />
             Personalized For You ✨
           </div>
@@ -129,21 +131,21 @@ function Hero() {
 
 function Categories() {
   return (
-    <div className=" w-full">
-      <section className="container mx-auto py-20 ">
-        <div className="flex flex-col gap-3 lg:gap-4 items-center text-center">
+    <div className="w-full">
+      <section className="container mx-auto py-10 sm:py-20 ">
+        <div className="flex flex-col gap-2 sm:gap-3 lg:gap-4 items-center text-center">
           <Badge className="text-sm font-medium px-4 py-1.5 text-secondary-foreground bg-secondary border shadow-md rounded-full">
             <ChefHat /> Food Categories
           </Badge>
-          <h2 className="text-4xl lg:text-5xl py-1 font-bold tracking-tight text-transparent from-foreground to-foreground/80 bg-gradient-to-r bg-clip-text">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl py-1 font-bold tracking-tight text-transparent from-foreground to-foreground/80 bg-gradient-to-r bg-clip-text">
             Something for everybody
           </h2>
-          <p className="text-xl lg:text-2xl text-muted-foreground">
+          <p className="text-base sm:text-xl lg:text-2xl text-muted-foreground">
             From quick snacks to gourmet meals, find the perfect recipe for any
             moment.
           </p>
         </div>
-        <div className="grid lg:grid-cols-4 grid-cols-2 justify-items-center-safe mx-auto py-20 p-10  gap-10 max-lg:max-w-xl">
+        <div className="grid grid-cols-1 lg:grid-cols-4 sm:grid-cols-2 justify-items-center-safe mx-auto py-14 sm:py-20 px-10  gap-10 max-lg:max-w-xl">
           {categories.map((categorie, index) => {
             return (
               <div className="flex flex-col gap-5" key={index}>

@@ -44,9 +44,4 @@ export const PAGES = [
     url: "/settings",
     icon: Settings,
   },
-  {
-    title: "Profile",
-    url: "/profile",
-    icon: Settings,
-  },
 ] as const;

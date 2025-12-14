@@ -1,10 +1,12 @@
+import { Button } from "@/components/ui/button";
 import { RecipeCarousel } from "@/components/ui/recipe-carousel";
 import { RecipeCarouselSkeleton } from "@/components/ui/recipe-carousel-skeleton";
 import { getFridgeBasedRecipesQueryOptions } from "@/query-options/get-fridge-based-recipes-query-options";
 import { getSimilarToLastLikedRecipesQueryOptions } from "@/query-options/get-similar-to-last-liked-recipes-query-options";
 import { getTopPicksRecipesQueryOptions } from "@/query-options/get-top-picks-recipes-query-options";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { UtensilsCrossed } from "lucide-react";
 import { Suspense } from "react";
 
 export const Route = createFileRoute("/_protected/home")({
@@ -22,10 +24,10 @@ function RouteComponent() {
   return (
     <div>
       <div className="space-y-1">
-        <h2 className="text-primary text-4xl font-bold">
+        <h2 className="text-primary text-3xl md:text-4xl font-bold">
           Top Picks For You ✨
         </h2>
-        <p className="text-lg text-muted-foreground">
+        <p className="text-base md:text-lg text-muted-foreground">
           Discover recipes handpicked just for you.
         </p>
       </div>
@@ -34,7 +36,7 @@ function RouteComponent() {
       </Suspense>
 
       <div className="space-y-1 mt-8">
-        <h2 className="text-primary text-4xl font-bold">
+        <h2 className="text-primary text-3xl md:text-4xl font-bold">
           Similar to Last Liked ❤️
         </h2>
       </div>
@@ -43,12 +45,9 @@ function RouteComponent() {
       </Suspense>
 
       <div className="space-y-1 mt-8">
-        <h2 className="text-primary text-4xl font-bold">
+        <h2 className="text-primary text-3xl md:text-4xl font-bold">
           Based on Your Fridge 🧊
         </h2>
-        <p className="text-lg text-muted-foreground">
-          Cook something delicious with what you have on hand.
-        </p>
       </div>
       <Suspense fallback={<RecipeCarouselSkeleton />}>
         <FridgeBasedSection />
@@ -64,18 +63,55 @@ function TopPicksSection() {
 
 function FridgeBasedSection() {
   const { data } = useSuspenseQuery(getFridgeBasedRecipesQueryOptions());
-  return <RecipeCarousel recipes={data} />;
+  return data.length > 0 ? (
+    <>
+      <p className="text-base md:text-lg text-muted-foreground">
+        Cook something delicious with what you have on hand.
+      </p>
+      <RecipeCarousel recipes={data} />
+    </>
+  ) : (
+    <div className="flex flex-col w-[95%] max-w-6xl items-center justify-center space-y-1 bg-accent/50 rounded-xl px-8 py-4 mt-6 border border-accent shadow-md">
+      <div className="bg-accent p-2.5 shadow-sm rounded-lg mb-3">
+        <UtensilsCrossed size={25} />
+      </div>
+      <p className="text-xl font-semibold text-secondary-foreground text-center">
+        No recipes found with your fridge ingredients
+      </p>
+      <p className="text-base text-muted-foreground mb-4 text-center">
+        Try adding more ingredients to your fridge to get better recipe matches!
+      </p>
+      <Button asChild className="px-6">
+        <Link to="/fridge">Go to Fridge</Link>
+      </Button>
+    </div>
+  );
 }
 
 function SimilarToLastLikedSection() {
   const { data } = useSuspenseQuery(getSimilarToLastLikedRecipesQueryOptions());
-  return (
+  return data != null ? (
     <>
-      <p className="text-lg text-muted-foreground">
+      <p className="text-base md:text-lg text-muted-foreground">
         Explore recipes similar to <i>"{data.basedOn}"</i>.
       </p>
       <RecipeCarousel recipes={data.recipes} />
     </>
+  ) : (
+    <div className="flex flex-col w-[95%] max-w-6xl items-center justify-center space-y-1 bg-accent/50 rounded-xl px-8 py-4 mt-6 border border-accent shadow-md">
+      <div className="bg-accent p-2.5 shadow-sm rounded-lg  mb-3">
+        <UtensilsCrossed size={25} />
+      </div>
+      <p className="text-xl font-semibold text-secondary-foreground text-center">
+        No similar recipes found yet
+      </p>
+      <p className="text-base text-muted-foreground mb-4 text-center">
+        Like some recipes to get personalized recommendations!
+      </p>
+      <Button asChild className="px-6">
+        <Link to="/search">Go to Search</Link>
+      </Button>
+    </div>
   );
 }
 

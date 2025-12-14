@@ -55,6 +55,7 @@ export const dishTypeService = new DishTypeService(
 );
 export const recommendationService = new RecommendationService(
   recommendationRepository,
+  recipeService,
   cacheService
 );
 export const rateLimitService = new RedisRateLimitService(redisClient);
