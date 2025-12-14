@@ -1,5 +1,4 @@
 import dotenv from "dotenv";
-import { register } from "module";
 dotenv.config();
 
 const requiredEnvVars = [

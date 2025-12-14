@@ -2,6 +2,7 @@ import type { Recipe } from "@common/schemas/recipe";
 import { Separator } from "./separator";
 import { Cross } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { formatCompactNumber } from "@/lib/format-number";
 
 export function RecipeCard(recipe: Recipe) {
   const calories =
@@ -39,7 +40,7 @@ export function RecipeCard(recipe: Recipe) {
               size={13}
               // fill="currentColor"
             /> */}
-            ❤️ {recipe.likeCount} likes
+            ❤️ {formatCompactNumber(recipe.likeCount)} likes
           </p>
           <p>
             {/* <Flame

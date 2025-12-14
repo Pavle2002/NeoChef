@@ -12,11 +12,13 @@ import { NotFoundComponent } from "./components/not-found.tsx";
 import { ApiError } from "@/lib/api-error.ts";
 import { getFormatedDate } from "@/lib/utils.ts";
 import { ErrorCodes } from "@common/utils/error-codes.ts";
+import { formatDuration } from "./lib/format-duration.ts";
+import config from "./config.ts";
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60,
+      staleTime: config.cacheStaleTimeSeconds * 1000,
       retry: (failureCount, error) => {
         if (
           error instanceof ApiError &&
@@ -74,11 +76,34 @@ const handleGlobalError = (error: Error) => {
     queryClient.clear();
     toast.error("Your session has expired. Please login again.", {
       description: getFormatedDate() + " 📆",
+      id: "session-expired",
     });
     router.invalidate();
+  } else if (
+    error instanceof ApiError &&
+    error.errorCode === ErrorCodes.RL_EXCEEDED
+  ) {
+    let message = "Top many requests. Please slow down.";
+
+    if (error.retryAfter) {
+      const now = Date.now();
+      const resetTime = error.retryAfter * 1000;
+      const diffSeconds = Math.ceil((resetTime - now) / 1000);
+
+      if (diffSeconds > 0) {
+        const timeString = formatDuration(diffSeconds);
+        message = `Too many requests. Try again in ${timeString}.`;
+      }
+    }
+
+    toast.error(message, {
+      description: getFormatedDate() + " 📆",
+      id: "rate-limit",
+    });
   } else if (error instanceof ApiError && error.statusCode >= 500) {
     toast.error("Oops! Something went wrong. Please try again later.", {
       description: getFormatedDate() + " 📆",
+      id: "server-error",
     });
   }
 };

@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { formatCompactNumber } from "@/lib/format-number";
 import { useToggleLike } from "@/mutations/useToggleLike";
 import { useToggleSave } from "@/mutations/useToggleSave";
 import { getRecipeQueryOptions } from "@/query-options/get-recipe-query-options";
@@ -173,7 +174,7 @@ function ActionButtons({ recipe }: Pick<ExtendedRecipe, "recipe">) {
               recipe.isLiked ? "text-red-500" : "text-muted-foreground/40"
             }`}
           />
-          {recipe.likeCount} Likes
+          {formatCompactNumber(recipe.likeCount)} Likes
         </Button>
         <Button
           type="button"

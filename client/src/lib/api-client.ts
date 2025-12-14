@@ -1,7 +1,8 @@
 import type { ApiResponse } from "@common/types/api-response";
 import { ApiError } from "@/lib/api-error";
+import config from "@/config";
 
-const API_URL = "http://localhost:3000";
+const API_URL = `${config.apiUrl}:${config.apiPort}`;
 
 class ApiClient {
   private baseUrl: string;
@@ -18,14 +19,27 @@ class ApiClient {
       });
       const resBody = (await res.json()) as ApiResponse<T>;
 
-      if (!resBody.success)
-        throw new ApiError(resBody.message, res.status, resBody.errorCode);
+      if (!resBody.success) {
+        let retryAfter: number | undefined;
+        if (res.status === 429) {
+          const resetHeader = res.headers.get("X-RateLimit-Reset");
+          if (resetHeader) {
+            retryAfter = parseInt(resetHeader, 10);
+          }
+        }
+
+        throw new ApiError(
+          resBody.message,
+          res.status,
+          resBody.errorCode,
+          retryAfter
+        );
+      }
 
       return resBody.data;
     } catch (error) {
-      if (error instanceof ApiError) {
-        throw error;
-      }
+      if (error instanceof ApiError) throw error;
+
       throw Error("Something went wrong");
     }
   }
