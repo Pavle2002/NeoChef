@@ -10,19 +10,19 @@ import type { Recipe } from "@common/schemas/recipe";
 export function RecipeCarousel({ recipes }: { recipes: Recipe[] }) {
   return (
     <Carousel
-      className="w-[95%] max-w-6xl"
+      className="sm:w-[95%] max-w-6xl"
       opts={{ align: "start", loop: true }}
     >
-      <CarouselContent className="-ml-4 mr-3">
+      <CarouselContent className="-ml-4 sm:mr-3">
         {recipes.map((recipe) => (
           <CarouselItem
             key={recipe.id}
-            className="basis-1/2 md:basis-1/3 lg:basis-1/4 2xl:basis-1/5 pl-4 py-4"
+            className="basis-1/2 sm:basis-1/3 lg:basis-1/4 2xl:basis-1/5 pl-4 py-4"
           >
             <Link
               to="/recipes/$recipeId"
               params={{ recipeId: recipe.id }}
-              className="group relative block overflow-hidden rounded-xl shadow-lg "
+              className="group relative block overflow-hidden rounded-lg sm:rounded-xl shadow-lg "
             >
               <div className="aspect-4/3 w-full overflow-hidden ">
                 <img
@@ -34,7 +34,7 @@ export function RecipeCarousel({ recipes }: { recipes: Recipe[] }) {
 
               <div className="absolute inset-0 bg-gradient-to-t from-foreground/85 via-foreground/30 to-transparent" />
 
-              <div className="absolute bottom-0 w-full p-4">
+              <div className="absolute bottom-0 w-full p-3 sm:p-4">
                 <h3 className="line-clamp-2 text-sm xl:text-base font-medium leading-tight text-background">
                   {recipe.title}
                 </h3>
@@ -43,7 +43,7 @@ export function RecipeCarousel({ recipes }: { recipes: Recipe[] }) {
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselNext />
+      <CarouselNext className="hidden sm:flex" />
     </Carousel>
   );
 }

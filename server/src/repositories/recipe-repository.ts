@@ -1,5 +1,6 @@
 import { type IRecipeRepository } from "@interfaces/recipe-repository.interface.js";
 import {
+  DEFAULT_PAGE_SIZE,
   DEFAULT_SORT_BY,
   DEFAULT_SORT_ORDER,
   type ExtendedRecipe,
@@ -133,7 +134,7 @@ export class RecipeRepository implements IRecipeRepository {
   }
 
   async findAll(
-    limit = 20,
+    limit = DEFAULT_PAGE_SIZE,
     offset = 0,
     filters: RecipeFilters = {},
     sortOptions: RecipeSortOptions = {

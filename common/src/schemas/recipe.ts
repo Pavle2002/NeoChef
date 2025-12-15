@@ -6,7 +6,7 @@ import { DietSchema } from "./diet.js";
 import { EquipmentSchema } from "./equipment.js";
 import { DishTypeSchema } from "./dish-type.js";
 
-export const DEFAULT_PAGE_SIZE = 21;
+export const DEFAULT_PAGE_SIZE = 24;
 export const DEFAULT_SORT_BY = "createdAt";
 export const DEFAULT_SORT_ORDER = "desc";
 export const SORT_BY_OPTIONS = [

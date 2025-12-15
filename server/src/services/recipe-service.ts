@@ -38,7 +38,7 @@ export class RecipeService implements IRecipeService {
     const cacheKey = CacheKeys.recipes.trending;
 
     const [error, cached] = await safeAwait(
-      this.cacheService.zRange(cacheKey, 0, -1)
+      this.cacheService.zRange(cacheKey, 0, DEFAULT_PAGE_SIZE - 1)
     );
     if (!error && cached && cached.length > 0) {
       return this.recipeRepository.findByIds(cached);

@@ -24,10 +24,10 @@ function RouteComponent() {
   return (
     <div>
       <div className="space-y-1">
-        <h2 className="text-primary text-3xl md:text-4xl font-bold">
+        <h2 className="text-primary text-3xl sm:text-4xl font-bold">
           Top Picks For You ✨
         </h2>
-        <p className="text-base md:text-lg text-muted-foreground">
+        <p className="text-base sm:text-lg text-muted-foreground">
           Discover recipes handpicked just for you.
         </p>
       </div>
@@ -36,7 +36,7 @@ function RouteComponent() {
       </Suspense>
 
       <div className="space-y-1 mt-8">
-        <h2 className="text-primary text-3xl md:text-4xl font-bold">
+        <h2 className="text-primary text-3xl sm:text-4xl font-bold">
           Similar to Last Liked ❤️
         </h2>
       </div>
@@ -45,7 +45,7 @@ function RouteComponent() {
       </Suspense>
 
       <div className="space-y-1 mt-8">
-        <h2 className="text-primary text-3xl md:text-4xl font-bold">
+        <h2 className="text-primary text-3xl sm:text-4xl font-bold">
           Based on Your Fridge 🧊
         </h2>
       </div>
@@ -65,13 +65,13 @@ function FridgeBasedSection() {
   const { data } = useSuspenseQuery(getFridgeBasedRecipesQueryOptions());
   return data.length > 0 ? (
     <>
-      <p className="text-base md:text-lg text-muted-foreground">
+      <p className="text-base sm:text-lg text-muted-foreground">
         Cook something delicious with what you have on hand.
       </p>
       <RecipeCarousel recipes={data} />
     </>
   ) : (
-    <div className="flex flex-col w-[95%] max-w-6xl items-center justify-center space-y-1 bg-accent/50 rounded-xl px-8 py-4 mt-6 border border-accent shadow-md">
+    <div className="flex flex-col sm:w-[95%] max-w-6xl items-center justify-center space-y-1 bg-accent/30 rounded-xl px-8 py-4 mt-6 border border-accent shadow-md">
       <div className="bg-accent p-2.5 shadow-sm rounded-lg mb-3">
         <UtensilsCrossed size={25} />
       </div>
@@ -92,13 +92,13 @@ function SimilarToLastLikedSection() {
   const { data } = useSuspenseQuery(getSimilarToLastLikedRecipesQueryOptions());
   return data != null ? (
     <>
-      <p className="text-base md:text-lg text-muted-foreground">
+      <p className="text-base sm:text-lg text-muted-foreground">
         Explore recipes similar to <i>"{data.basedOn}"</i>.
       </p>
       <RecipeCarousel recipes={data.recipes} />
     </>
   ) : (
-    <div className="flex flex-col w-[95%] max-w-6xl items-center justify-center space-y-1 bg-accent/50 rounded-xl px-8 py-4 mt-6 border border-accent shadow-md">
+    <div className="flex flex-col sm:w-[95%] max-w-6xl items-center justify-center space-y-1 bg-accent/30 rounded-xl px-8 py-4 mt-6 border border-accent shadow-md">
       <div className="bg-accent p-2.5 shadow-sm rounded-lg  mb-3">
         <UtensilsCrossed size={25} />
       </div>

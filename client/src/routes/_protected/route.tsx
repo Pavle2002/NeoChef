@@ -27,7 +27,7 @@ function SidebarLayout() {
       <Sidebar />
       <SidebarInset>
         <Header />
-        <div className="flex flex-col flex-1 my-6 mx-8">
+        <div className="flex flex-col flex-1 my-6 mx-4 sm:mx-8">
           <Outlet />
         </div>
       </SidebarInset>
