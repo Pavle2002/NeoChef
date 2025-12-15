@@ -37,8 +37,8 @@ function RouteComponent() {
 
 function Header() {
   return (
-    <header className="sticky top-0 z-50 w-full backdrop-blur-lg bg-transparent">
-      <nav className="container flex px-3 py-4 mx-auto justify-between items-center">
+    <header className="sticky left-0 right-0 top-0 z-50 w-full backdrop-blur-lg bg-transparent">
+      <nav className="container flex px-3 py-4 xl:py-5 mx-auto justify-between items-center">
         <Link
           to="/"
           className="text-primary flex items-center text-base gap-2 font-bold"
@@ -48,7 +48,7 @@ function Header() {
         </Link>
         <div className="flex items-center gap-10">
           <Link
-            to="/about"
+            to="/"
             className="hidden sm:block text-primary font-semibold border-b-2 border-transparent hover:border-primary transition-all duration-300 ease-in-out"
           >
             Our story
@@ -75,7 +75,7 @@ function Hero() {
     <section className="container grid items-center lg:grid-cols-2 py-16 2xl:py-28 sm:px-3 mx-auto gap-12">
       <div className="flex flex-col gap-6 sm:gap-7">
         <div>
-          <Badge className="flex lg:inline-flex mx-auto text-sm font-medium px-4 py-1.5 text-secondary-foreground bg-secondary border shadow-md rounded-full mb-3.5">
+          <Badge className="flex lg:inline-flex mx-auto text-xs sm:text-sm font-medium px-4 py-1.5 text-secondary-foreground bg-secondary border shadow-md rounded-full mb-3.5">
             <ChefHat /> Smart Cooking
           </Badge>
           <h1 className="text-center lg:text-left text-4xl sm:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-primary via-foreground/80 to-foreground/70 tracking-tight text-transparent bg-clip-text">
@@ -100,7 +100,7 @@ function Hero() {
             asChild
             variant="outline"
           >
-            <Link to="/about">ℹ️ Learn More</Link>
+            <Link to="/">ℹ️ Learn More</Link>
           </Button>
         </div>
         <div className=" flex justify-center lg:justify-start flex-wrap gap-y-2 gap-x-7 text-muted-foreground">
@@ -134,7 +134,7 @@ function Categories() {
     <div className="w-full">
       <section className="container mx-auto py-10 sm:py-20 ">
         <div className="flex flex-col gap-2 sm:gap-3 lg:gap-4 items-center text-center">
-          <Badge className="text-sm font-medium px-4 py-1.5 text-secondary-foreground bg-secondary border shadow-md rounded-full">
+          <Badge className="text-xs sm:text-sm font-medium px-4 py-1.5 text-secondary-foreground bg-secondary border shadow-md rounded-full">
             <ChefHat /> Food Categories
           </Badge>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl py-1 font-bold tracking-tight text-transparent from-foreground to-foreground/80 bg-gradient-to-r bg-clip-text">

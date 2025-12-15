@@ -10,6 +10,7 @@ import {
 } from "./command";
 import { Input } from "./input";
 import { cn } from "@/lib/utils";
+import { UtensilsCrossed } from "lucide-react";
 
 export type LiveSearchProps<T> = {
   getQueryOptions: (
@@ -56,16 +57,20 @@ export function LiveSearch<T>({
       {isLoading ? (
         renderPendingResult
       ) : (
-        <CommandList className="max-h-44">
-          <CommandEmpty className="h-[168px] mx-auto max-w-52 text-center flex flex-col gap-1 justify-center items-center">
-            No results found.{" "}
-            <span className="text-muted-foreground text-xs">
+        <CommandList className="max-h-60">
+          <CommandEmpty className="h-[232px] mx-auto max-w-52 text-center flex flex-col gap-1 justify-center items-center text-primary font-medium">
+            <div className="bg-accent p-2.5 shadow-sm rounded-lg mb-1">
+              <UtensilsCrossed size={15} />
+            </div>
+            No results found <br />
+            <span className="text-muted-foreground text-xs font-light">
               Term has to be at least 2 characters. Try a different search term.
             </span>
           </CommandEmpty>
           <CommandGroup>
             {data?.map((item) => (
               <CommandItem
+                className="text-primary"
                 key={getResultKey(item)}
                 onSelect={() => onSelectItem?.(item)}
               >

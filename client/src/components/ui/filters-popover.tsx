@@ -20,8 +20,13 @@ import {
 } from "@/components/ui/form";
 import { CheckboxGroup } from "@/components/ui/checkbox-group";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import type { RecipeFilters } from "@common/schemas/recipe";
 import { Suspense, useState } from "react";
 import { useSuspenseQueries } from "@tanstack/react-query";
@@ -72,14 +77,16 @@ function FiltersPopover({ defaultValues = {}, onApply }: FiltersFormProps) {
             Filters
           </Button>
         </DrawerTrigger>
+        <DrawerHeader className="hidden">
+          <DrawerTitle>Filter Recipes</DrawerTitle>
+        </DrawerHeader>
         <DrawerContent className="mb-2 px-4">
-          <Suspense fallback={<FiltersFormPendingComponent className="h-96" />}>
-            <ScrollArea className="h-96">
-              <FiltersForm
-                defaultValues={defaultValues}
-                onApply={handleApply}
-              />
-            </ScrollArea>
+          <Suspense
+            fallback={<FiltersFormPendingComponent className="h-[470px]" />}
+          >
+            {/* <ScrollArea className="h-[470px]"> */}
+            <FiltersForm defaultValues={defaultValues} onApply={handleApply} />
+            {/* </ScrollArea> */}
           </Suspense>
         </DrawerContent>
       </Drawer>
@@ -121,7 +128,10 @@ function FiltersForm({ defaultValues = {}, onApply }: FiltersFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onApply)} className="space-y-4">
+      <form
+        onSubmit={form.handleSubmit(onApply)}
+        className="space-y-4 py-3 md:py-0"
+      >
         <CheckboxGroupField
           control={form.control}
           name="cuisines"

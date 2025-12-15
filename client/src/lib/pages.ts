@@ -1,7 +1,6 @@
 import {
   Home,
   Refrigerator,
-  Settings,
   Star,
   TrendingUp,
   User,
@@ -38,10 +37,5 @@ export const PAGES = [
     title: "Favorites",
     url: "/favorites",
     icon: Star,
-  },
-  {
-    title: "Settings",
-    url: "/settings",
-    icon: Settings,
   },
 ] as const;

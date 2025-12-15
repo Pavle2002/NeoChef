@@ -22,6 +22,7 @@ export function IngredientSelector({
   console.log(valueSet);
   return (
     <LiveSearch
+      className="py-3"
       inputPlaceholder="Search ingredients..."
       getQueryOptions={getIngredientsQueryOptions}
       getResultKey={(ingredient) => ingredient.id}
@@ -33,8 +34,8 @@ export function IngredientSelector({
       )}
       renderPendingResult={
         <div className="flex flex-col gap-1.5 p-1">
-          {Array.from({ length: 5 }).map((_, index) => (
-            <Skeleton key={index} className="h-7" />
+          {Array.from({ length: 7 }).map((_, index) => (
+            <Skeleton key={index} className="h-[28px]" />
           ))}
         </div>
       }
