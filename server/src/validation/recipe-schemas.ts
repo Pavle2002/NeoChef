@@ -1,13 +1,13 @@
 import {
+  DEFAULT_PAGE_SIZE,
   RecipeFiltersSchema,
   RecipeSortOptionsSchema,
-} from "@common/schemas/recipe.js";
+} from "@neochef/common";
 import { queryParamsParser } from "@utils/query-params-parser.js";
 import { z } from "zod";
 
 const { parseArray, parseNumber } = queryParamsParser;
 
-const DEFAULT_PAGE_SIZE = 21;
 const DEFAULT_OFFSET = 0;
 
 const NormalizedRecipeFiltersSchema = RecipeFiltersSchema.extend({

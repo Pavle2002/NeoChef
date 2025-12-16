@@ -3,7 +3,7 @@ import { formatCompactNumber } from "@/lib/format-number";
 import { useToggleLike } from "@/mutations/use-toggle-like";
 import { useToggleSave } from "@/mutations/use-toggle-save";
 import { getRecipeQueryOptions } from "@/query-options/get-recipe-query-options";
-import type { ExtendedRecipe } from "@common/schemas/recipe";
+import type { ExtendedRecipe } from "@neochef/common";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { Bookmark, Heart } from "lucide-react";
@@ -293,7 +293,7 @@ function Instructions({ instructions }: { instructions: string[] }) {
       <h2 className="text-primary text-3xl font-bold mb-7">📖 Instructions</h2>
       {instructions.map((step, index) => (
         <div key={index} className="flex gap-4 group">
-          <div className="flex-shrink-0 size-10 bg-primary text-background rounded-full flex items-center justify-center font-bold shadow-md">
+          <div className="shrink-0 size-10 bg-primary text-background rounded-full flex items-center justify-center font-bold shadow-md">
             {index + 1}
           </div>
           <div className="pt-1.5">

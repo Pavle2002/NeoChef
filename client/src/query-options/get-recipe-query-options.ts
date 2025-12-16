@@ -1,5 +1,5 @@
 import { apiClient } from "@/lib/api-client";
-import type { ExtendedRecipe } from "@common/schemas/recipe";
+import type { ExtendedRecipe } from "@neochef/common";
 import { queryOptions } from "@tanstack/react-query";
 
 export function getRecipeQueryOptions(recipeId: string) {

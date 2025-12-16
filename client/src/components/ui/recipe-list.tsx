@@ -1,4 +1,4 @@
-import type { Recipe } from "@common/schemas/recipe";
+import type { Recipe } from "@neochef/common";
 import { cn } from "@/lib/utils";
 import { RecipeCard } from "./recipe-card";
 import {

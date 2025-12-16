@@ -1,4 +1,4 @@
-import type { ApiResponse } from "@common/types/api-response";
+import type { ApiResponse } from "@neochef/common";
 import { ApiError } from "@/lib/api-error";
 import config from "@/config";
 

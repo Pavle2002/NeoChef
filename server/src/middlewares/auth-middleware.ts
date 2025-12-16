@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import { UnauthorizedError } from "@errors/index.js";
-import { ErrorCodes } from "@common/utils/error-codes.js";
+import { ErrorCodes } from "@neochef/common";
 
 export function isAuthenticated(
   req: Request,

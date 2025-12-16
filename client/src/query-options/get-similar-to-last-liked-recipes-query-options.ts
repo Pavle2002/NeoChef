@@ -1,5 +1,5 @@
 import { apiClient } from "@/lib/api-client";
-import type { Recipe } from "@common/schemas/recipe";
+import type { Recipe } from "@neochef/common";
 import { queryOptions } from "@tanstack/react-query";
 
 export function getSimilarToLastLikedRecipesQueryOptions() {

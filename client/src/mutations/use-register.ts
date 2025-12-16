@@ -1,6 +1,6 @@
 import { apiClient } from "@/lib/api-client";
 import { getFormatedDate } from "@/lib/utils";
-import type { UserData } from "@common/schemas/user";
+import type { UserData } from "@neochef/common";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";

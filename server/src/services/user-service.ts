@@ -1,15 +1,16 @@
-import type { SafeUser } from "@common/schemas/user.js";
 import { NotFoundError } from "@errors/index.js";
 import type { IUnitOfWorkFactory } from "@interfaces/unit-of-work-factory.interface.js";
 import type { IUserRepository } from "@interfaces/user-repository.interface.js";
 import type { IUserService } from "@interfaces/user-service.interface.js";
-import type { Preferences } from "@common/schemas/preferences.js";
-import type { Ingredient } from "@common/schemas/ingredient.js";
-import type { Recipe } from "@common/schemas/recipe.js";
+import type {
+  Ingredient,
+  Preferences,
+  Recipe,
+  SafeUser,
+} from "@neochef/common";
 import type { ICacheService } from "@interfaces/cache-service.interface.js";
 import { safeAwait } from "@utils/safe-await.js";
 import { CacheKeys } from "@utils/cache-keys.js";
-import { writeHeapSnapshot } from "v8";
 
 export class UserService implements IUserService {
   constructor(

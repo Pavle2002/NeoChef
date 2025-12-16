@@ -3,7 +3,7 @@ import type {
   Recipe,
   RecipeFilters,
   RecipeSortOptions,
-} from "@common/schemas/recipe.js";
+} from "@neochef/common";
 
 export interface IRecipeService {
   getById(id: string): Promise<Recipe>;

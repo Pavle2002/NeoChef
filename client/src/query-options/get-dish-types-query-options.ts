@@ -1,5 +1,5 @@
 import { apiClient } from "@/lib/api-client";
-import type { DishType } from "@common/schemas/dish-type";
+import type { DishType } from "@neochef/common";
 import { queryOptions } from "@tanstack/react-query";
 
 export function getDishTypesQueryOptions() {

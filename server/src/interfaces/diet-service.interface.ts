@@ -1,4 +1,4 @@
-import type { Diet } from "@common/schemas/diet.js";
+import type { Diet } from "@neochef/common";
 
 export interface IDietService {
   getAll(): Promise<Diet[]>;

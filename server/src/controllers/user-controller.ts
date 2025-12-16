@@ -1,6 +1,4 @@
-import type { Ingredient } from "@common/schemas/ingredient.js";
-import type { Preferences } from "@common/schemas/preferences.js";
-import type { User } from "@common/schemas/user.js";
+import type { User, Ingredient, Preferences } from "@neochef/common";
 import { userService } from "@services/index.js";
 import { sendSuccess } from "@utils/response-handler.js";
 import type { Request, Response } from "express";

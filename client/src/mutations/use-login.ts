@@ -1,8 +1,7 @@
 import { apiClient } from "@/lib/api-client";
 import { getFormatedDate } from "@/lib/utils";
 import { getCurrentUserQueryOptions } from "@/query-options/get-current-user-query-options";
-import type { UserCredentials } from "@common/schemas/user";
-import type { SafeUser } from "@common/schemas/user";
+import type { UserCredentials, SafeUser } from "@neochef/common";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";

@@ -6,7 +6,7 @@ import {
   type Recipe,
   type RecipeFilters,
   type RecipeSortOptions,
-} from "@common/schemas/recipe";
+} from "@neochef/common";
 import { queryOptions } from "@tanstack/react-query";
 
 export function getRecipesQueryOptions(

@@ -78,13 +78,13 @@ function Hero() {
           <Badge className="flex lg:inline-flex mx-auto text-xs sm:text-sm font-medium px-4 py-1.5 text-secondary-foreground bg-secondary border shadow-md rounded-full mb-3.5">
             <ChefHat /> Smart Cooking
           </Badge>
-          <h1 className="text-center lg:text-left text-4xl sm:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-primary via-foreground/80 to-foreground/70 tracking-tight text-transparent bg-clip-text">
+          <h1 className="text-center lg:text-left text-4xl sm:text-5xl xl:text-6xl font-bold bg-linear-to-r from-primary via-foreground/80 to-foreground/70 tracking-tight text-transparent bg-clip-text">
             You Personal <span className="font-medium italic">AI Chef</span>,{" "}
             <br />
             Ready to Cook
           </h1>
         </div>
-        <p className="text-center lg:text-left mx-auto lg:mx-0 text-base sm:text-lg xl:text-xl 2xl:text-2xl font-normal text-muted-foreground max-w-lg lg:max-w-[600px]">
+        <p className="text-center lg:text-left mx-auto lg:mx-0 text-base sm:text-lg xl:text-xl 2xl:text-2xl font-normal text-muted-foreground max-w-lg lg:max-w-150">
           We can find delicious recipes, smart meal plans, and culinary
           inspiration — tailored exactly to your taste 🫵.
         </p>
@@ -137,7 +137,7 @@ function Categories() {
           <Badge className="text-xs sm:text-sm font-medium px-4 py-1.5 text-secondary-foreground bg-secondary border shadow-md rounded-full">
             <ChefHat /> Food Categories
           </Badge>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl py-1 font-bold tracking-tight text-transparent from-foreground to-foreground/80 bg-gradient-to-r bg-clip-text">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl py-1 font-bold tracking-tight text-primary">
             Something for everybody
           </h2>
           <p className="text-base sm:text-xl lg:text-2xl text-muted-foreground">

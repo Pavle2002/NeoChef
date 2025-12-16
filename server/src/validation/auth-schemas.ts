@@ -1,4 +1,4 @@
-import { UserCredentialsSchema, UserDataSchema } from "@common/schemas/user.js";
+import { UserCredentialsSchema, UserDataSchema } from "@neochef/common";
 import { z } from "zod";
 
 const loginSchema = z.object({

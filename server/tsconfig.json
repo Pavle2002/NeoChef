@@ -42,10 +42,9 @@
       "@app-types/*": ["src/types/*"],
       "@clients/*": ["src/clients/*"],
       "@errors/*": ["src/errors/*"],
-      "@validation/*": ["src/validation/*"],
-      "@common/*": ["../common/src/*"]
+      "@validation/*": ["src/validation/*"]
     }
   },
-  "include": ["src", "../common/src"], // Specifies files or directories to include in the compilation.
+  "include": ["src"], // Specifies files or directories to include in the compilation.
   "exclude": ["node_modules", "dist"] // Excludes files or directories from the compilation.
 }

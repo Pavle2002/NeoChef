@@ -1,15 +1,15 @@
-import type { Equipment } from "@common/schemas/equipment.js";
 import type {
+  Cuisine,
+  Diet,
+  DishType,
+  Equipment,
   ExtendedRecipe,
+  IngredientUsage,
   Recipe,
   RecipeData,
   RecipeFilters,
   RecipeSortOptions,
-} from "@common/schemas/recipe.js";
-import type { Cuisine } from "@common/schemas/cuisine.js";
-import type { Diet } from "@common/schemas/diet.js";
-import type { DishType } from "@common/schemas/dish-type.js";
-import type { IngredientUsage } from "@common/schemas/ingredient.js";
+} from "@neochef/common";
 
 export interface IRecipeRepository {
   createOrUpdate(recipe: RecipeData): Promise<Recipe>;

@@ -1,5 +1,5 @@
 import { apiClient } from "@/lib/api-client";
-import type { Cuisine } from "@common/schemas/cuisine";
+import type { Cuisine } from "@neochef/common";
 import { queryOptions } from "@tanstack/react-query";
 
 export function getCuisinesQueryOptions() {

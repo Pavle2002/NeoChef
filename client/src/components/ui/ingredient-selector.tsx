@@ -1,4 +1,4 @@
-import type { Ingredient } from "@common/schemas/ingredient";
+import type { Ingredient } from "@neochef/common";
 import { LiveSearch } from "./live-search";
 import { getIngredientsQueryOptions } from "@/query-options/get-ingredients-query-options";
 import { Check, Plus } from "lucide-react";
@@ -35,7 +35,7 @@ export function IngredientSelector({
       renderPendingResult={
         <div className="flex flex-col gap-1.5 p-1">
           {Array.from({ length: 7 }).map((_, index) => (
-            <Skeleton key={index} className="h-[28px]" />
+            <Skeleton key={index} className="h-7" />
           ))}
         </div>
       }

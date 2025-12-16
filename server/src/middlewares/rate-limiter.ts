@@ -1,4 +1,4 @@
-import type { User } from "@common/schemas/user.js";
+import type { User } from "@neochef/common";
 import { RateLimitError } from "@errors/rate-limit-error.js";
 import { rateLimitService } from "@services/index.js";
 import { safeAwait } from "@utils/safe-await.js";

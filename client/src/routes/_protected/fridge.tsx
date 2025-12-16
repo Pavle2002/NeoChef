@@ -11,7 +11,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { useUpdateFridge } from "@/mutations/use-update-fridge";
 import { getCurrentUserFridgeQueryOptions } from "@/query-options/get-current-user-fridge-query-options";
-import type { Ingredient } from "@common/schemas/ingredient";
+import type { Ingredient } from "@neochef/common";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import {

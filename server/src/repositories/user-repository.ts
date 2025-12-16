@@ -1,15 +1,17 @@
 import { Neo4jError } from "neo4j-driver";
 import { type IUserRepository } from "@interfaces/user-repository.interface.js";
-import { type User } from "@common/schemas/user.js";
-import type { UserData } from "@common/schemas/user.js";
 import { ConflictError, InternalServerError } from "@errors/index.js";
-import { ErrorCodes } from "@common/utils/error-codes.js";
 import type { IQueryExecutor } from "@interfaces/query-executor.interface.js";
 import { neo4jDateTimeConverter } from "@utils/neo4j-datetime-converter.js";
-import type { Diet } from "@common/schemas/diet.js";
-import type { Cuisine } from "@common/schemas/cuisine.js";
-import type { Ingredient } from "@common/schemas/ingredient.js";
-import type { Recipe } from "@common/schemas/recipe.js";
+import {
+  ErrorCodes,
+  type Cuisine,
+  type Diet,
+  type Ingredient,
+  type Recipe,
+  type User,
+  type UserData,
+} from "@neochef/common";
 
 export class UserRepository implements IUserRepository {
   constructor(private readonly queryExecutor: IQueryExecutor) {}

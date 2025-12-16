@@ -9,7 +9,7 @@ import {
   type Recipe,
   type RecipeFilters,
   type RecipeSortOptions,
-} from "@common/schemas/recipe.js";
+} from "@neochef/common";
 import type { ICacheService } from "@interfaces/cache-service.interface.js";
 import { CacheKeys } from "@utils/cache-keys.js";
 import { safeAwait } from "@utils/safe-await.js";

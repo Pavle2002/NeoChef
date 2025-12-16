@@ -19,7 +19,7 @@ import {
   SORT_ORDER_OPTIONS,
   type RecipeFilters,
   type RecipeSortOptions,
-} from "@common/schemas/recipe";
+} from "@neochef/common";
 import { SortOptionsPopover } from "@/components/ui/sort-popover";
 import { Suspense } from "react";
 

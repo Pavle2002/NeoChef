@@ -1,4 +1,4 @@
-import { ErrorCodes, type ErrorCode } from "@common/utils/error-codes.js";
+import { ErrorCodes, type ErrorCode } from "@neochef/common";
 import { AppError } from "./app-error.js";
 
 export class SpoonacularQuotaExceededError extends AppError {

@@ -8,200 +8,273 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-// Import Routes
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
+import { Route as AuthRouteRouteImport } from './routes/_auth/route'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProtectedTrendingRouteImport } from './routes/_protected/trending'
+import { Route as ProtectedSearchRouteImport } from './routes/_protected/search'
+import { Route as ProtectedProfileRouteImport } from './routes/_protected/profile'
+import { Route as ProtectedPreferencesRouteImport } from './routes/_protected/preferences'
+import { Route as ProtectedHomeRouteImport } from './routes/_protected/home'
+import { Route as ProtectedFridgeRouteImport } from './routes/_protected/fridge'
+import { Route as ProtectedFavoritesRouteImport } from './routes/_protected/favorites'
+import { Route as AuthRegisterRouteImport } from './routes/_auth/register'
+import { Route as AuthLoginRouteImport } from './routes/_auth/login'
+import { Route as ProtectedRecipesRecipeIdRouteImport } from './routes/_protected/recipes.$recipeId'
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as ProtectedRouteImport } from './routes/_protected/route'
-import { Route as AuthRouteImport } from './routes/_auth/route'
-import { Route as IndexImport } from './routes/index'
-import { Route as ProtectedTrendingImport } from './routes/_protected/trending'
-import { Route as ProtectedSearchImport } from './routes/_protected/search'
-import { Route as ProtectedProfileImport } from './routes/_protected/profile'
-import { Route as ProtectedPreferencesImport } from './routes/_protected/preferences'
-import { Route as ProtectedHomeImport } from './routes/_protected/home'
-import { Route as ProtectedFridgeImport } from './routes/_protected/fridge'
-import { Route as ProtectedFavoritesImport } from './routes/_protected/favorites'
-import { Route as AuthRegisterImport } from './routes/_auth/register'
-import { Route as AuthLoginImport } from './routes/_auth/login'
-import { Route as ProtectedRecipesRecipeIdImport } from './routes/_protected/recipes.$recipeId'
-
-// Create/Update Routes
-
-const ProtectedRouteRoute = ProtectedRouteImport.update({
+const ProtectedRouteRoute = ProtectedRouteRouteImport.update({
   id: '/_protected',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const AuthRouteRoute = AuthRouteImport.update({
+const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/_auth',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const IndexRoute = IndexImport.update({
+const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const ProtectedTrendingRoute = ProtectedTrendingImport.update({
+const ProtectedTrendingRoute = ProtectedTrendingRouteImport.update({
   id: '/trending',
   path: '/trending',
   getParentRoute: () => ProtectedRouteRoute,
 } as any)
-
-const ProtectedSearchRoute = ProtectedSearchImport.update({
+const ProtectedSearchRoute = ProtectedSearchRouteImport.update({
   id: '/search',
   path: '/search',
   getParentRoute: () => ProtectedRouteRoute,
 } as any)
-
-const ProtectedProfileRoute = ProtectedProfileImport.update({
+const ProtectedProfileRoute = ProtectedProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
   getParentRoute: () => ProtectedRouteRoute,
 } as any)
-
-const ProtectedPreferencesRoute = ProtectedPreferencesImport.update({
+const ProtectedPreferencesRoute = ProtectedPreferencesRouteImport.update({
   id: '/preferences',
   path: '/preferences',
   getParentRoute: () => ProtectedRouteRoute,
 } as any)
-
-const ProtectedHomeRoute = ProtectedHomeImport.update({
+const ProtectedHomeRoute = ProtectedHomeRouteImport.update({
   id: '/home',
   path: '/home',
   getParentRoute: () => ProtectedRouteRoute,
 } as any)
-
-const ProtectedFridgeRoute = ProtectedFridgeImport.update({
+const ProtectedFridgeRoute = ProtectedFridgeRouteImport.update({
   id: '/fridge',
   path: '/fridge',
   getParentRoute: () => ProtectedRouteRoute,
 } as any)
-
-const ProtectedFavoritesRoute = ProtectedFavoritesImport.update({
+const ProtectedFavoritesRoute = ProtectedFavoritesRouteImport.update({
   id: '/favorites',
   path: '/favorites',
   getParentRoute: () => ProtectedRouteRoute,
 } as any)
-
-const AuthRegisterRoute = AuthRegisterImport.update({
+const AuthRegisterRoute = AuthRegisterRouteImport.update({
   id: '/register',
   path: '/register',
   getParentRoute: () => AuthRouteRoute,
 } as any)
-
-const AuthLoginRoute = AuthLoginImport.update({
+const AuthLoginRoute = AuthLoginRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const ProtectedRecipesRecipeIdRoute =
+  ProtectedRecipesRecipeIdRouteImport.update({
+    id: '/recipes/$recipeId',
+    path: '/recipes/$recipeId',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
 
-const ProtectedRecipesRecipeIdRoute = ProtectedRecipesRecipeIdImport.update({
-  id: '/recipes/$recipeId',
-  path: '/recipes/$recipeId',
-  getParentRoute: () => ProtectedRouteRoute,
-} as any)
-
-// Populate the FileRoutesByPath interface
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/login': typeof AuthLoginRoute
+  '/register': typeof AuthRegisterRoute
+  '/favorites': typeof ProtectedFavoritesRoute
+  '/fridge': typeof ProtectedFridgeRoute
+  '/home': typeof ProtectedHomeRoute
+  '/preferences': typeof ProtectedPreferencesRoute
+  '/profile': typeof ProtectedProfileRoute
+  '/search': typeof ProtectedSearchRoute
+  '/trending': typeof ProtectedTrendingRoute
+  '/recipes/$recipeId': typeof ProtectedRecipesRecipeIdRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/login': typeof AuthLoginRoute
+  '/register': typeof AuthRegisterRoute
+  '/favorites': typeof ProtectedFavoritesRoute
+  '/fridge': typeof ProtectedFridgeRoute
+  '/home': typeof ProtectedHomeRoute
+  '/preferences': typeof ProtectedPreferencesRoute
+  '/profile': typeof ProtectedProfileRoute
+  '/search': typeof ProtectedSearchRoute
+  '/trending': typeof ProtectedTrendingRoute
+  '/recipes/$recipeId': typeof ProtectedRecipesRecipeIdRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/_auth': typeof AuthRouteRouteWithChildren
+  '/_protected': typeof ProtectedRouteRouteWithChildren
+  '/_auth/login': typeof AuthLoginRoute
+  '/_auth/register': typeof AuthRegisterRoute
+  '/_protected/favorites': typeof ProtectedFavoritesRoute
+  '/_protected/fridge': typeof ProtectedFridgeRoute
+  '/_protected/home': typeof ProtectedHomeRoute
+  '/_protected/preferences': typeof ProtectedPreferencesRoute
+  '/_protected/profile': typeof ProtectedProfileRoute
+  '/_protected/search': typeof ProtectedSearchRoute
+  '/_protected/trending': typeof ProtectedTrendingRoute
+  '/_protected/recipes/$recipeId': typeof ProtectedRecipesRecipeIdRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/register'
+    | '/favorites'
+    | '/fridge'
+    | '/home'
+    | '/preferences'
+    | '/profile'
+    | '/search'
+    | '/trending'
+    | '/recipes/$recipeId'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/login'
+    | '/register'
+    | '/favorites'
+    | '/fridge'
+    | '/home'
+    | '/preferences'
+    | '/profile'
+    | '/search'
+    | '/trending'
+    | '/recipes/$recipeId'
+  id:
+    | '__root__'
+    | '/'
+    | '/_auth'
+    | '/_protected'
+    | '/_auth/login'
+    | '/_auth/register'
+    | '/_protected/favorites'
+    | '/_protected/fridge'
+    | '/_protected/home'
+    | '/_protected/preferences'
+    | '/_protected/profile'
+    | '/_protected/search'
+    | '/_protected/trending'
+    | '/_protected/recipes/$recipeId'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  ProtectedRouteRoute: typeof ProtectedRouteRouteWithChildren
+}
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
+    '/_protected': {
+      id: '/_protected'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof ProtectedRouteRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_auth': {
       id: '/_auth'
       path: ''
       fullPath: ''
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthRouteRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_protected': {
-      id: '/_protected'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof ProtectedRouteImport
-      parentRoute: typeof rootRoute
-    }
-    '/_auth/login': {
-      id: '/_auth/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof AuthLoginImport
-      parentRoute: typeof AuthRouteImport
-    }
-    '/_auth/register': {
-      id: '/_auth/register'
-      path: '/register'
-      fullPath: '/register'
-      preLoaderRoute: typeof AuthRegisterImport
-      parentRoute: typeof AuthRouteImport
-    }
-    '/_protected/favorites': {
-      id: '/_protected/favorites'
-      path: '/favorites'
-      fullPath: '/favorites'
-      preLoaderRoute: typeof ProtectedFavoritesImport
-      parentRoute: typeof ProtectedRouteImport
-    }
-    '/_protected/fridge': {
-      id: '/_protected/fridge'
-      path: '/fridge'
-      fullPath: '/fridge'
-      preLoaderRoute: typeof ProtectedFridgeImport
-      parentRoute: typeof ProtectedRouteImport
-    }
-    '/_protected/home': {
-      id: '/_protected/home'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof ProtectedHomeImport
-      parentRoute: typeof ProtectedRouteImport
-    }
-    '/_protected/preferences': {
-      id: '/_protected/preferences'
-      path: '/preferences'
-      fullPath: '/preferences'
-      preLoaderRoute: typeof ProtectedPreferencesImport
-      parentRoute: typeof ProtectedRouteImport
-    }
-    '/_protected/profile': {
-      id: '/_protected/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProtectedProfileImport
-      parentRoute: typeof ProtectedRouteImport
-    }
-    '/_protected/search': {
-      id: '/_protected/search'
-      path: '/search'
-      fullPath: '/search'
-      preLoaderRoute: typeof ProtectedSearchImport
-      parentRoute: typeof ProtectedRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_protected/trending': {
       id: '/_protected/trending'
       path: '/trending'
       fullPath: '/trending'
-      preLoaderRoute: typeof ProtectedTrendingImport
-      parentRoute: typeof ProtectedRouteImport
+      preLoaderRoute: typeof ProtectedTrendingRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/search': {
+      id: '/_protected/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof ProtectedSearchRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/profile': {
+      id: '/_protected/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProtectedProfileRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/preferences': {
+      id: '/_protected/preferences'
+      path: '/preferences'
+      fullPath: '/preferences'
+      preLoaderRoute: typeof ProtectedPreferencesRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/home': {
+      id: '/_protected/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof ProtectedHomeRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/fridge': {
+      id: '/_protected/fridge'
+      path: '/fridge'
+      fullPath: '/fridge'
+      preLoaderRoute: typeof ProtectedFridgeRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/favorites': {
+      id: '/_protected/favorites'
+      path: '/favorites'
+      fullPath: '/favorites'
+      preLoaderRoute: typeof ProtectedFavoritesRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_auth/register': {
+      id: '/_auth/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof AuthRegisterRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/_auth/login': {
+      id: '/_auth/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof AuthRouteRoute
     }
     '/_protected/recipes/$recipeId': {
       id: '/_protected/recipes/$recipeId'
       path: '/recipes/$recipeId'
       fullPath: '/recipes/$recipeId'
-      preLoaderRoute: typeof ProtectedRecipesRecipeIdImport
-      parentRoute: typeof ProtectedRouteImport
+      preLoaderRoute: typeof ProtectedRecipesRecipeIdRouteImport
+      parentRoute: typeof ProtectedRouteRoute
     }
   }
 }
-
-// Create and export the route tree
 
 interface AuthRouteRouteChildren {
   AuthLoginRoute: typeof AuthLoginRoute
@@ -243,190 +316,11 @@ const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(
   ProtectedRouteRouteChildren,
 )
 
-export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '': typeof ProtectedRouteRouteWithChildren
-  '/login': typeof AuthLoginRoute
-  '/register': typeof AuthRegisterRoute
-  '/favorites': typeof ProtectedFavoritesRoute
-  '/fridge': typeof ProtectedFridgeRoute
-  '/home': typeof ProtectedHomeRoute
-  '/preferences': typeof ProtectedPreferencesRoute
-  '/profile': typeof ProtectedProfileRoute
-  '/search': typeof ProtectedSearchRoute
-  '/trending': typeof ProtectedTrendingRoute
-  '/recipes/$recipeId': typeof ProtectedRecipesRecipeIdRoute
-}
-
-export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '': typeof ProtectedRouteRouteWithChildren
-  '/login': typeof AuthLoginRoute
-  '/register': typeof AuthRegisterRoute
-  '/favorites': typeof ProtectedFavoritesRoute
-  '/fridge': typeof ProtectedFridgeRoute
-  '/home': typeof ProtectedHomeRoute
-  '/preferences': typeof ProtectedPreferencesRoute
-  '/profile': typeof ProtectedProfileRoute
-  '/search': typeof ProtectedSearchRoute
-  '/trending': typeof ProtectedTrendingRoute
-  '/recipes/$recipeId': typeof ProtectedRecipesRecipeIdRoute
-}
-
-export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/_auth': typeof AuthRouteRouteWithChildren
-  '/_protected': typeof ProtectedRouteRouteWithChildren
-  '/_auth/login': typeof AuthLoginRoute
-  '/_auth/register': typeof AuthRegisterRoute
-  '/_protected/favorites': typeof ProtectedFavoritesRoute
-  '/_protected/fridge': typeof ProtectedFridgeRoute
-  '/_protected/home': typeof ProtectedHomeRoute
-  '/_protected/preferences': typeof ProtectedPreferencesRoute
-  '/_protected/profile': typeof ProtectedProfileRoute
-  '/_protected/search': typeof ProtectedSearchRoute
-  '/_protected/trending': typeof ProtectedTrendingRoute
-  '/_protected/recipes/$recipeId': typeof ProtectedRecipesRecipeIdRoute
-}
-
-export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | ''
-    | '/login'
-    | '/register'
-    | '/favorites'
-    | '/fridge'
-    | '/home'
-    | '/preferences'
-    | '/profile'
-    | '/search'
-    | '/trending'
-    | '/recipes/$recipeId'
-  fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | ''
-    | '/login'
-    | '/register'
-    | '/favorites'
-    | '/fridge'
-    | '/home'
-    | '/preferences'
-    | '/profile'
-    | '/search'
-    | '/trending'
-    | '/recipes/$recipeId'
-  id:
-    | '__root__'
-    | '/'
-    | '/_auth'
-    | '/_protected'
-    | '/_auth/login'
-    | '/_auth/register'
-    | '/_protected/favorites'
-    | '/_protected/fridge'
-    | '/_protected/home'
-    | '/_protected/preferences'
-    | '/_protected/profile'
-    | '/_protected/search'
-    | '/_protected/trending'
-    | '/_protected/recipes/$recipeId'
-  fileRoutesById: FileRoutesById
-}
-
-export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AuthRouteRoute: typeof AuthRouteRouteWithChildren
-  ProtectedRouteRoute: typeof ProtectedRouteRouteWithChildren
-}
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   ProtectedRouteRoute: ProtectedRouteRouteWithChildren,
 }
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/",
-        "/_auth",
-        "/_protected"
-      ]
-    },
-    "/": {
-      "filePath": "index.tsx"
-    },
-    "/_auth": {
-      "filePath": "_auth/route.tsx",
-      "children": [
-        "/_auth/login",
-        "/_auth/register"
-      ]
-    },
-    "/_protected": {
-      "filePath": "_protected/route.tsx",
-      "children": [
-        "/_protected/favorites",
-        "/_protected/fridge",
-        "/_protected/home",
-        "/_protected/preferences",
-        "/_protected/profile",
-        "/_protected/search",
-        "/_protected/trending",
-        "/_protected/recipes/$recipeId"
-      ]
-    },
-    "/_auth/login": {
-      "filePath": "_auth/login.tsx",
-      "parent": "/_auth"
-    },
-    "/_auth/register": {
-      "filePath": "_auth/register.tsx",
-      "parent": "/_auth"
-    },
-    "/_protected/favorites": {
-      "filePath": "_protected/favorites.tsx",
-      "parent": "/_protected"
-    },
-    "/_protected/fridge": {
-      "filePath": "_protected/fridge.tsx",
-      "parent": "/_protected"
-    },
-    "/_protected/home": {
-      "filePath": "_protected/home.tsx",
-      "parent": "/_protected"
-    },
-    "/_protected/preferences": {
-      "filePath": "_protected/preferences.tsx",
-      "parent": "/_protected"
-    },
-    "/_protected/profile": {
-      "filePath": "_protected/profile.tsx",
-      "parent": "/_protected"
-    },
-    "/_protected/search": {
-      "filePath": "_protected/search.tsx",
-      "parent": "/_protected"
-    },
-    "/_protected/trending": {
-      "filePath": "_protected/trending.tsx",
-      "parent": "/_protected"
-    },
-    "/_protected/recipes/$recipeId": {
-      "filePath": "_protected/recipes.$recipeId.tsx",
-      "parent": "/_protected"
-    }
-  }
-}
-ROUTE_MANIFEST_END */

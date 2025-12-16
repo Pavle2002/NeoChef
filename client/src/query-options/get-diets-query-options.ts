@@ -1,5 +1,5 @@
 import { apiClient } from "@/lib/api-client";
-import type { Diet } from "@common/schemas/diet";
+import type { Diet } from "@neochef/common";
 import { queryOptions } from "@tanstack/react-query";
 
 export function getDietsQueryOptions() {

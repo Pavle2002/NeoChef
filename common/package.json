@@ -1,13 +1,19 @@
 {
-  "name": "common",
+  "name": "@neochef/common",
   "version": "1.0.0",
   "type": "module",
   "description": "Shared types, schemas and utils",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "clean": "rm -rf dist",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "clean": "rm -rf dist"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
   },
   "author": "Pavle Velickovic",
   "license": "ISC",

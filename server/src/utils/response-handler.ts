@@ -1,8 +1,4 @@
-import type {
-  FailResponse,
-  SuccessResponse,
-} from "@common/types/api-response.js";
-import type { ErrorCode } from "@common/utils/error-codes.js";
+import type { ErrorCode, FailResponse, SuccessResponse } from "@neochef/common";
 import type { Response } from "express";
 
 export function sendSuccess<T>(

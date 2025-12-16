@@ -1,5 +1,5 @@
 import { apiClient } from "@/lib/api-client";
-import type { SafeUser } from "@common/schemas/user";
+import type { SafeUser } from "@neochef/common";
 import { queryOptions } from "@tanstack/react-query";
 
 export function getCurrentUserQueryOptions() {

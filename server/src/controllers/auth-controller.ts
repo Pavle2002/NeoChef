@@ -2,7 +2,7 @@ import type { NextFunction, Request, Response } from "express";
 import passport from "passport";
 import type { IVerifyOptions } from "passport-local";
 import { authService } from "@services/index.js";
-import type { User, UserData } from "@common/schemas/user.js";
+import type { User, UserData } from "@neochef/common";
 import { sendSuccess } from "@utils/response-handler.js";
 import { UnauthorizedError } from "@errors/index.js";
 

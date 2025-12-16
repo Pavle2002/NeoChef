@@ -1,4 +1,4 @@
-import type { Diet } from "@common/schemas/diet.js";
+import type { Diet } from "@neochef/common";
 import type { ICacheService } from "@interfaces/cache-service.interface.js";
 import type { IDietRepository } from "@interfaces/diet-repository.interface.js";
 import type { IDietService } from "@interfaces/diet-service.interface.js";

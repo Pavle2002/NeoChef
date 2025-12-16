@@ -2,7 +2,7 @@ import { apiClient } from "@/lib/api-client";
 import { getFormatedDate } from "@/lib/utils";
 import { getCurrentUserFridgeQueryOptions } from "@/query-options/get-current-user-fridge-query-options";
 import { getFridgeBasedRecipesQueryOptions } from "@/query-options/get-fridge-based-recipes-query-options";
-import type { Ingredient } from "@common/schemas/ingredient";
+import type { Ingredient } from "@neochef/common";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 

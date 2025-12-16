@@ -2,10 +2,8 @@ import passport from "passport";
 import { Strategy } from "passport-local";
 import { safeAwait } from "@utils/safe-await.js";
 import { authService, userService } from "@services/index.js";
-import type { UserCredentials } from "@common/schemas/user.js";
-import { logger } from "@config/index.js";
+import type { UserCredentials, User } from "@neochef/common";
 import { NotFoundError } from "@errors/not-found-error.js";
-import type { User } from "@common/schemas/user.js";
 
 const strategy = new Strategy(
   {

@@ -5,7 +5,7 @@ import {
   CarouselItem,
   CarouselNext,
 } from "./carousel";
-import type { Recipe } from "@common/schemas/recipe";
+import type { Recipe } from "@neochef/common";
 
 export function RecipeCarousel({ recipes }: { recipes: Recipe[] }) {
   return (
@@ -32,7 +32,7 @@ export function RecipeCarousel({ recipes }: { recipes: Recipe[] }) {
                 />
               </div>
 
-              <div className="absolute inset-0 bg-gradient-to-t from-foreground/85 via-foreground/30 to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-foreground/85 via-foreground/30 to-transparent" />
 
               <div className="absolute bottom-0 w-full p-3 sm:p-4">
                 <h3 className="line-clamp-2 text-sm xl:text-base font-medium leading-tight text-background">

@@ -1,8 +1,10 @@
-import type { SafeUser } from "@common/schemas/user.js";
-import type { Preferences } from "@common/schemas/preferences.js";
+import type {
+  Ingredient,
+  Preferences,
+  Recipe,
+  SafeUser,
+} from "@neochef/common";
 import type { IUserRepository } from "./user-repository.interface.js";
-import type { Ingredient } from "@common/schemas/ingredient.js";
-import type { Recipe } from "@common/schemas/recipe.js";
 
 export interface IUserService {
   getById(id: string): Promise<SafeUser>;

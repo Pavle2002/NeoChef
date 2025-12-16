@@ -1,4 +1,4 @@
-import type { Cuisine } from "@common/schemas/cuisine.js";
+import type { Cuisine } from "@neochef/common";
 import type { ICacheService } from "@interfaces/cache-service.interface.js";
 import type { ICuisineRepository } from "@interfaces/cuisine-repository.interface.js";
 import type { ICuisineService } from "@interfaces/cuisine-service.interface.js";

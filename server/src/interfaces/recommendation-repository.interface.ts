@@ -1,4 +1,4 @@
-import type { Recipe } from "@common/schemas/recipe.js";
+import type { Recipe } from "@neochef/common";
 
 export interface IRecommendationRepository {
   findTopPicks(userId: string): Promise<Recipe[]>;

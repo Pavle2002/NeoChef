@@ -1,4 +1,4 @@
-import type { Cuisine } from "@common/schemas/cuisine.js";
+import type { Cuisine } from "@neochef/common";
 
 export interface ICuisineService {
   getAll(): Promise<Cuisine[]>;

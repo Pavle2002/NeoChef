@@ -1,5 +1,5 @@
 {
-  "include": ["**/*.ts", "**/*.tsx", "../common/**/*.ts"],
+  "include": ["src"],
   "compilerOptions": {
     "target": "ES2022",
     "jsx": "react-jsx",
@@ -22,8 +22,7 @@
     "noUncheckedSideEffectImports": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@common/*": ["../common/src/*"]
+      "@/*": ["./src/*"]
     }
   }
 }

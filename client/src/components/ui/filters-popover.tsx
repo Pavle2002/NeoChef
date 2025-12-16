@@ -27,7 +27,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import type { RecipeFilters } from "@common/schemas/recipe";
+import type { RecipeFilters } from "@neochef/common";
 import { Suspense, useState } from "react";
 import { useSuspenseQueries } from "@tanstack/react-query";
 import { getCuisinesQueryOptions } from "@/query-options/get-cuisines-query-options";
@@ -61,7 +61,7 @@ function FiltersPopover({ defaultValues = {}, onApply }: FiltersFormProps) {
         </PopoverTrigger>
         <PopoverContent className="w-lg px-4">
           <Suspense
-            fallback={<FiltersFormPendingComponent className="h-[370px]" />}
+            fallback={<FiltersFormPendingComponent className="h-92.5" />}
           >
             <FiltersForm defaultValues={defaultValues} onApply={handleApply} />
           </Suspense>
@@ -82,7 +82,7 @@ function FiltersPopover({ defaultValues = {}, onApply }: FiltersFormProps) {
         </DrawerHeader>
         <DrawerContent className="mb-2 px-4">
           <Suspense
-            fallback={<FiltersFormPendingComponent className="h-[470px]" />}
+            fallback={<FiltersFormPendingComponent className="h-117.5" />}
           >
             {/* <ScrollArea className="h-[470px]"> */}
             <FiltersForm defaultValues={defaultValues} onApply={handleApply} />

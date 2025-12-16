@@ -1,9 +1,11 @@
-import type { UserData } from "@common/schemas/user.js";
-import type { Cuisine } from "@common/schemas/cuisine.js";
-import type { Diet } from "@common/schemas/diet.js";
-import type { Ingredient } from "@common/schemas/ingredient.js";
-import type { User } from "@common/schemas/user.js";
-import type { Recipe } from "@common/schemas/recipe.js";
+import type {
+  Cuisine,
+  Diet,
+  Ingredient,
+  Recipe,
+  User,
+  UserData,
+} from "@neochef/common";
 
 export interface IUserRepository {
   findById(id: string): Promise<User | null>;

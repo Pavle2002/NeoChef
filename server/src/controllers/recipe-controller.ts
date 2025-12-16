@@ -1,8 +1,4 @@
-import type {
-  RecipeFilters,
-  RecipeSortOptions,
-} from "@common/schemas/recipe.js";
-import type { User } from "@common/schemas/user.js";
+import type { RecipeFilters, RecipeSortOptions, User } from "@neochef/common";
 import { recipeService, userService } from "@services/index.js";
 import { sendSuccess } from "@utils/response-handler.js";
 import type { Request, Response } from "express";

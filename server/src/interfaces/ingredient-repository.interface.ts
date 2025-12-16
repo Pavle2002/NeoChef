@@ -1,4 +1,4 @@
-import type { Ingredient, IngredientData } from "@common/schemas/ingredient.js";
+import type { Ingredient, IngredientData } from "@neochef/common";
 
 export interface IIngredientRepository {
   findAll(contains?: string): Promise<Ingredient[]>;

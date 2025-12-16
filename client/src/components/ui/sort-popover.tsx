@@ -1,4 +1,4 @@
-import { type RecipeSortOptions } from "@common/schemas/recipe";
+import { type RecipeSortOptions } from "@neochef/common";
 import {
   DropdownMenu,
   DropdownMenuContent,

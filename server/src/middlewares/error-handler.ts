@@ -2,7 +2,7 @@ import type { NextFunction, Request, Response } from "express";
 import { ZodError } from "zod";
 import { sendError } from "@utils/response-handler.js";
 import { AppError } from "@errors/index.js";
-import { ErrorCodes, type ErrorCode } from "@common/utils/error-codes.js";
+import { ErrorCodes, type ErrorCode } from "@neochef/common";
 import { mapZodIssueToErrorCode } from "@utils/map-ZodIssue-to-ErrorCode.js";
 import { logger } from "@config/index.js";
 

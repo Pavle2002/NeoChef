@@ -1,4 +1,4 @@
-import type { User } from "@common/schemas/user.js";
+import type { User } from "@neochef/common";
 import { recommendationService } from "@services/index.js";
 import { sendSuccess } from "@utils/response-handler.js";
 import type { Request, Response } from "express";

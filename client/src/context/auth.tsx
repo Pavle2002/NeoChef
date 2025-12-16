@@ -1,4 +1,4 @@
-import type { SafeUser } from "@common/schemas/user";
+import type { SafeUser } from "@neochef/common";
 
 export type AuthContext = {
   isAuthenticated: boolean;

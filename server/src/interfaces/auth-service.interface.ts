@@ -1,4 +1,4 @@
-import type { UserData, SafeUser } from "@common/schemas/user.js";
+import type { UserData, SafeUser } from "@neochef/common";
 
 export interface IAuthService {
   authenticateUser(

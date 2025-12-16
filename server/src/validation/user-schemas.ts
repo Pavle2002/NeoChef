@@ -1,5 +1,5 @@
-import { IngredientSchema } from "@common/schemas/ingredient.js";
-import { PreferencesSchema } from "@common/schemas/preferences.js";
+import { IngredientSchema } from "@neochef/common";
+import { PreferencesSchema } from "@neochef/common";
 import { z } from "zod";
 
 const getByIdSchema = z.object({

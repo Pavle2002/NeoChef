@@ -1,5 +1,5 @@
 import { apiClient } from "@/lib/api-client";
-import type { Ingredient } from "@common/schemas/ingredient";
+import type { Ingredient } from "@neochef/common";
 import { queryOptions } from "@tanstack/react-query";
 
 export function getIngredientsQueryOptions(query: string) {

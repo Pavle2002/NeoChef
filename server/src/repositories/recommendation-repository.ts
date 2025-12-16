@@ -1,6 +1,6 @@
 import type { IQueryExecutor } from "@interfaces/query-executor.interface.js";
 import type { IRecommendationRepository } from "@interfaces/recommendation-repository.interface.js";
-import type { Recipe } from "@common/schemas/recipe.js";
+import type { Recipe } from "@neochef/common";
 import { neo4jDateTimeConverter } from "@utils/neo4j-datetime-converter.js";
 
 export class RecommendationRepository implements IRecommendationRepository {

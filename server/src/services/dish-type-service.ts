@@ -1,4 +1,4 @@
-import type { DishType } from "@common/schemas/dish-type.js";
+import type { DishType } from "@neochef/common";
 import type { ICacheService } from "@interfaces/cache-service.interface.js";
 import type { IDishTypeRepository } from "@interfaces/dish-type-repositoy.interface.js";
 import type { IDishTypeService } from "@interfaces/dish-type-service.interface.js";

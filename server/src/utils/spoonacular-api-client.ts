@@ -1,14 +1,16 @@
 import { SpoonacularQuotaExceededError } from "@errors/spoonacular-quota-exceeded-error.js";
 import Bottleneck from "bottleneck";
-import type { RecipeData } from "@common/schemas/recipe.js";
-import type { ExtendedRecipeData } from "@common/schemas/recipe.js";
 import { extractImageName } from "@utils/extract-file-name.js";
-import type { ExtendedIngredientData } from "@common/schemas/ingredient.js";
 import type { IApiClient } from "@interfaces/api-client.interface.js";
-import type { Cuisine } from "@common/schemas/cuisine.js";
-import type { Diet } from "@common/schemas/diet.js";
-import type { DishType } from "@common/schemas/dish-type.js";
-import type { Equipment } from "@common/schemas/equipment.js";
+import type {
+  Cuisine,
+  Diet,
+  DishType,
+  Equipment,
+  ExtendedIngredientData,
+  ExtendedRecipeData,
+  RecipeData,
+} from "@neochef/common";
 import type { RecipeSearchOptions } from "@app-types/import-types.js";
 
 export class SpoonacularApiClient implements IApiClient {

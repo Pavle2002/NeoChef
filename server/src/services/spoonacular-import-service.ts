@@ -1,6 +1,6 @@
 import type { IImportService } from "@interfaces/import-service.interface.js";
 import type { IApiClient } from "@interfaces/api-client.interface.js";
-import type { Recipe } from "@common/schemas/recipe.js";
+import type { Recipe } from "@neochef/common";
 import type { IImportProgressManager } from "@interfaces/import-progress-manager.interface.js";
 import { safeAwait } from "@utils/safe-await.js";
 import { CUISINES, DIETS, DISH_TYPES } from "@utils/spoonacular-constants.js";

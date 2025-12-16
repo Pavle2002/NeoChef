@@ -11,7 +11,7 @@ import { ErrorComponent } from "./components/error.tsx";
 import { NotFoundComponent } from "./components/not-found.tsx";
 import { ApiError } from "@/lib/api-error.ts";
 import { getFormatedDate } from "@/lib/utils.ts";
-import { ErrorCodes } from "@common/utils/error-codes.ts";
+import { ErrorCodes } from "@neochef/common";
 import { formatDuration } from "./lib/format-duration.ts";
 import config from "./config.ts";
 

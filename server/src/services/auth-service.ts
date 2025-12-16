@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import type { IAuthService } from "@interfaces/auth-service.interface.js";
 import type { IUserRepository } from "@interfaces/user-repository.interface.js";
-import type { UserData, SafeUser } from "@common/schemas/user.js";
+import type { UserData, SafeUser } from "@neochef/common";
 
 export class AuthService implements IAuthService {
   constructor(private readonly userRepository: IUserRepository) {}

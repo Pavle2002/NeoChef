@@ -1,4 +1,4 @@
-import type { DishType } from "@common/schemas/dish-type.js";
+import type { DishType } from "@neochef/common";
 
 export interface IDishTypeRepository {
   findAll(): Promise<DishType[]>;

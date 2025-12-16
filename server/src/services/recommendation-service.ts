@@ -1,4 +1,4 @@
-import type { Recipe } from "@common/schemas/recipe.js";
+import type { Recipe } from "@neochef/common";
 import type { ICacheService } from "@interfaces/cache-service.interface.js";
 import type { IRecipeService } from "@interfaces/recipe-service.interface.js";
 import type { IRecommendationRepository } from "@interfaces/recommendation-repository.interface.js";
@@ -72,9 +72,8 @@ export class RecommendationService implements IRecommendationService {
       return JSON.parse(cached) as { basedOn: string; recipes: Recipe[] };
     }
 
-    const result = await this.recommendationRepository.findSimilarToLastLiked(
-      userId
-    );
+    const result =
+      await this.recommendationRepository.findSimilarToLastLiked(userId);
 
     await safeAwait(
       this.cacheService.setEx(

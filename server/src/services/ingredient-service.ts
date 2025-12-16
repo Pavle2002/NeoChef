@@ -1,6 +1,6 @@
 import type { IIngredientRepository } from "@interfaces/ingredient-repository.interface.js";
 import type { IIngredientService } from "@interfaces/ingredient-service.interface.js";
-import type { Ingredient } from "@common/schemas/ingredient.js";
+import type { Ingredient } from "@neochef/common";
 
 export class IngredientService implements IIngredientService {
   constructor(private readonly ingredientRepository: IIngredientRepository) {}
