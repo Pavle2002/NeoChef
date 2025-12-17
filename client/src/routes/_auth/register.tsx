@@ -33,6 +33,11 @@ function RegisterForm() {
 
   const form = useForm<UserData>({
     resolver: zodResolver(UserDataSchema),
+    defaultValues: {
+      email: "",
+      username: "",
+      password: "",
+    },
   });
 
   return (

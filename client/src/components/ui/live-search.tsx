@@ -58,7 +58,7 @@ export function LiveSearch<T>({
         renderPendingResult
       ) : (
         <CommandList className="max-h-60">
-          <CommandEmpty className="h-[232px] mx-auto max-w-52 text-center flex flex-col gap-1 justify-center items-center text-primary font-medium">
+          <CommandEmpty className="h-58 mx-auto max-w-52 text-center flex flex-col gap-1 justify-center items-center text-primary font-medium">
             <div className="bg-accent p-2.5 shadow-sm rounded-lg mb-1">
               <UtensilsCrossed size={15} />
             </div>

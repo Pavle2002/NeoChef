@@ -33,6 +33,10 @@ function LoginForm() {
 
   const form = useForm<UserCredentials>({
     resolver: zodResolver(UserCredentialsSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
 
   return (
