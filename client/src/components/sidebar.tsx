@@ -77,10 +77,10 @@ function SidebarLogo() {
         <SidebarMenuItem>
           <SidebarMenuButton
             asChild
-            className="data-[slot=sidebar-menu-button]:!p-1.5"
+            className="data-[slot=sidebar-menu-button]:p-1.5!"
           >
             <Link to="/home">
-              <ChefHat className="!size-5 " />
+              <ChefHat className="size-5! " />
               <span className="text-base font-semibold mt-0.5">NeoChef</span>
             </Link>
           </SidebarMenuButton>

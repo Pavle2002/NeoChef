@@ -35,27 +35,28 @@ const logger = winston.createLogger({
     errors({ stack: config.env === "development" }),
     json()
   ),
-});
-
-if (config.env === "production") {
-  logger.add(
-    new File({
-      filename: "logs/combined.log",
-      level: "info",
-    })
-  );
-  logger.add(
-    new File({
-      filename: "logs/error.log",
-      level: "error",
-    })
-  );
-} else {
-  logger.add(
+  transports: [
     new Console({
       format: combine(colorize(), myFormat),
-    })
-  );
-}
+    }),
+  ],
+});
+
+// ------ Log files are not recommended in Docker containers ------ //
+
+// if (config.env === "production") {
+//   logger.add(
+//     new File({
+//       filename: "logs/combined.log",
+//       level: "info",
+//     })
+//   );
+//   logger.add(
+//     new File({
+//       filename: "logs/error.log",
+//       level: "error",
+//     })
+//   );
+// }
 
 export default logger;
