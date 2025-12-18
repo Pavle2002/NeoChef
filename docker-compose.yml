@@ -1,7 +1,6 @@
 services:
-  api:
-    build:
-      context: .
+  server:
+    image: ghcr.io/pavle2002/neochef:latest
     ports:
       - "3000:3000"
     env_file:
