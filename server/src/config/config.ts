@@ -20,7 +20,7 @@ requiredEnvVars.forEach((key) => {
 const config = {
   env: process.env.NODE_ENV || "development",
   port: parseInt(process.env.PORT || "3000", 10),
-  clientOrigin: process.env.CLIENT_ORIGIN as string,
+  clientOrigin: process.env.CLIENT_ORIGIN!.split(","),
   logLevel: process.env.LOG_LEVEL || "info",
   sessionSecret: process.env.SESSION_SECRET as string,
   redis: { url: process.env.REDIS_URL as string },

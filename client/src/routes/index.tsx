@@ -6,6 +6,7 @@ import sweets from "@/assets/images/landing/sweet.jpg";
 import pastry from "@/assets/images/landing/pastry.jpg";
 import soup from "@/assets/images/landing/soup.jpg";
 import gourmet from "@/assets/images/landing/gourmet.jpg";
+import salad from "@/assets/images/landing/salad.jpg";
 
 type Category = {
   name: string;
@@ -119,10 +120,18 @@ function Hero() {
         </div>
       </div>
 
-      <div className="hidden lg:flex flex-col justify-between aspect-4/3 2xl:aspect-3/2 w-full max-w-2xl my-auto place-self-end overflow-hidden border shadow-xl/20 rounded-2xl bg-cover bg-center bg-[url(/home/pavle/NeoChef/client/src/assets/images/landing/salad.jpg)]">
-        <div className="flex items-center justify-between p-3 font-mono border-b bg-background">
-          <p>🥗 Vitamin Bomb</p>
-          <p>❤️ 423</p>
+      <div className="hidden lg:flex flex-col justify-between aspect-4/3 2xl:aspect-3/2 w-full max-w-2xl my-auto place-self-end overflow-hidden border shadow-xl/20 rounded-2xl">
+        <div className="relative w-full h-full flex-1 flex flex-col justify-between">
+          <img
+            src={salad}
+            alt="Vitamin Bomb"
+            className="absolute inset-0 w-full h-full object-cover object-center select-none pointer-events-none"
+            draggable="false"
+          />
+          <div className="relative z-10 flex items-center justify-between p-3 font-mono border-b bg-background bg-opacity-80">
+            <p>🥗 Vitamin Bomb</p>
+            <p>❤️ 423</p>
+          </div>
         </div>
       </div>
     </section>
