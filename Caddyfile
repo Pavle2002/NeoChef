@@ -1,0 +1,3 @@
+api.neochef.app {
+    reverse_proxy server:3000
+}

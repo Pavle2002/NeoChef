@@ -2,7 +2,7 @@ import type { ApiResponse } from "@neochef/common";
 import { ApiError } from "@/lib/api-error";
 import config from "@/config";
 
-const API_URL = `${config.apiUrl}:${config.apiPort}`;
+const API_URL = config.apiUrl;
 
 class ApiClient {
   private baseUrl: string;

@@ -11,11 +11,11 @@ export const Route = createFileRoute("/_protected")({
     );
     auth.setUser(user);
 
-    if (!auth.user) {
+    if (!user) {
       throw redirect({ to: "/login", replace: true });
     }
     return {
-      user: auth.user,
+      user,
     };
   },
   component: SidebarLayout,
