@@ -10,7 +10,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@neochef/common": "*",
+    "@neochef/common": "file:../common",
     "@hookform/resolvers": "^5.1.1",
     "@radix-ui/react-avatar": "^1.1.10",
     "@radix-ui/react-checkbox": "^1.3.2",
