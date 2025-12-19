@@ -12,16 +12,12 @@
   "exports": {
     ".": {
       "import": "./dist/index.js",
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+      "types": "./dist/index.d.ts"
     }
   },
   "author": "Pavle Velickovic",
   "license": "ISC",
   "dependencies": {
     "zod": "^3.23.8"
-  },
-  "devDependencies": {
-    "typescript": "^5.9.3"
   }
 }
