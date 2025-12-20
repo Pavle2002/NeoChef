@@ -7,18 +7,14 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 # Copy workspace package files
-COPY common/package.json ./common/
-COPY server/package.json ./server/
+COPY common ./common
+COPY server ./server
 # We need client/package.json because it is referenced in package-lock.json
 # even if we don't build it.
 COPY client/package.json ./client/
 
 # Install dependencies
 RUN npm ci
-
-# Copy source code for common and server
-COPY common ./common
-COPY server ./server
 
 # Build common first, then server
 RUN npm run build -w common
