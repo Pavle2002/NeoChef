@@ -1,8 +1,15 @@
 import type { SafeUser } from "@neochef/common";
 
-export type AuthContext = {
-  isAuthenticated: boolean;
-  user: SafeUser | null;
+type Auth = {
+  isAuthenticated: true;
+  user: SafeUser;
+};
+type UnAuth = {
+  isAuthenticated: false;
+  user: null;
+};
+
+export type AuthContext = (Auth | UnAuth) & {
   setUser: (user: SafeUser | null) => void;
 };
 
