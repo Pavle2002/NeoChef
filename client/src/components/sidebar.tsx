@@ -161,13 +161,13 @@ function UserInfo() {
       <Avatar className="h-8 w-8 rounded-lg">
         <AvatarImage src={undefined} alt={user.username ?? "User"} />
         <AvatarFallback className="rounded-lg">
-          {user.username?.at(0)?.toUpperCase() ?? "U"}
+          {user.username?.at(0)?.toUpperCase() || "U"}
         </AvatarFallback>
       </Avatar>
       <div className="grid flex-1 text-left text-sm leading-tight">
-        <span className="truncate font-medium">{user.username}</span>
+        <span className="truncate font-medium">{user.username ?? "User"}</span>
         <span className="text-muted-foreground truncate text-xs">
-          {user.email}
+          {user.email ?? "user@example.com"}
         </span>
       </div>
     </div>
