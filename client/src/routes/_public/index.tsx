@@ -20,7 +20,7 @@ const categories: Category[] = [
   { name: "Soups", image: soup },
 ];
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/_public/")({
   component: RouteComponent,
 });
 

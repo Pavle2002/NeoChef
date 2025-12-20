@@ -159,9 +159,9 @@ function UserInfo() {
   return (
     <div className="flex items-center gap-2">
       <Avatar className="h-8 w-8 rounded-lg">
-        <AvatarImage src={undefined} alt={user?.username ?? "User"} />
+        <AvatarImage src={undefined} alt={user.username ?? "User"} />
         <AvatarFallback className="rounded-lg">
-          {user.username.at(0)?.toUpperCase()}
+          {user.username?.at(0)?.toUpperCase() ?? "U"}
         </AvatarFallback>
       </Avatar>
       <div className="grid flex-1 text-left text-sm leading-tight">

@@ -1,3 +1,5 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -8,13 +10,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useLogin } from "@/mutations/use-login";
-import { UserCredentialsSchema, type UserCredentials } from "@neochef/common";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useForm } from "react-hook-form";
+import { useRegister } from "@/mutations/use-register";
+import { UserDataSchema, type UserData } from "@neochef/common";
 
-export const Route = createFileRoute("/_auth/login")({
+export const Route = createFileRoute("/_public/_auth/register")({
   component: RouteComponent,
 });
 
@@ -22,19 +22,20 @@ function RouteComponent() {
   return (
     <>
       <Header />
-      <LoginForm />
-      <RegisterLink />
+      <RegisterForm />
+      <LoginLink />
     </>
   );
 }
 
-function LoginForm() {
-  const { mutate: login, isPending, error } = useLogin();
+function RegisterForm() {
+  const { mutate: register, isPending, error } = useRegister();
 
-  const form = useForm<UserCredentials>({
-    resolver: zodResolver(UserCredentialsSchema),
+  const form = useForm<UserData>({
+    resolver: zodResolver(UserDataSchema),
     defaultValues: {
       email: "",
+      username: "",
       password: "",
     },
   });
@@ -42,7 +43,7 @@ function LoginForm() {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit((data: UserCredentials) => login(data))}
+        onSubmit={form.handleSubmit((data: UserData) => register(data))}
         className="flex flex-col gap-6"
       >
         <FormField
@@ -53,6 +54,19 @@ function LoginForm() {
               <FormLabel>Email</FormLabel>
               <FormControl>
                 <Input type="email" placeholder="you@example.com" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Username</FormLabel>
+              <FormControl>
+                <Input placeholder="Your username" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -77,19 +91,19 @@ function LoginForm() {
         )}
 
         <Button className="w-full" type="submit" disabled={isPending}>
-          {isPending ? "Logging in..." : "Login with email"}
+          {isPending ? "Creating account..." : "Create Account"}
         </Button>
       </form>
     </Form>
   );
 }
 
-function RegisterLink() {
+function LoginLink() {
   return (
     <div className="text-center text-sm mt-4">
-      Don&apos;t have an account?{" "}
-      <Link to="/register" className="underline underline-offset-4">
-        Register
+      Already have an account?{" "}
+      <Link to="/login" className="underline underline-offset-4">
+        Log in
       </Link>
     </div>
   );
@@ -99,10 +113,10 @@ function Header() {
   return (
     <div className="flex flex-col items-center gap-2 text-center mb-6">
       <h1 className="text-2xl 2xl:text-3xl font-bold text-primary">
-        Login to your account
+        Create your account
       </h1>
       <p className="text-muted-foreground text-balance text-sm 2xl:text-base">
-        Enter your email below to login to your account
+        Enter your email below to create your account
       </p>
     </div>
   );
