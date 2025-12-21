@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import { ChefHat } from "lucide-react";
-import image from "@/assets/images/pancakes.webp";
+import image from "@/assets/images/pancakes.avif";
 import { Image } from "@/components/ui/image";
 
 export const Route = createFileRoute("/_public/_auth")({

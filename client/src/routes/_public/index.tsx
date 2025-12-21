@@ -2,12 +2,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Check, ChefHat } from "lucide-react";
-import sweets from "@/assets/images/landing/sweet.webp";
-import pastry from "@/assets/images/landing/pastry.webp";
-import soup from "@/assets/images/landing/soup.webp";
-import gourmet from "@/assets/images/landing/gourmet.webp";
-import salad from "@/assets/images/landing/salad.webp";
 import { Image } from "@/components/ui/image";
+import sweets from "@/assets/images/landing/sweet.avif";
+import pastry from "@/assets/images/landing/pastry.avif";
+import soup from "@/assets/images/landing/soup.avif";
+import gourmet from "@/assets/images/landing/gourmet.avif";
+import salad from "@/assets/images/landing/salad.avif";
 
 type Category = {
   name: string;
