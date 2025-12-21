@@ -2,6 +2,7 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { routeTree } from "./routeTree.gen";
+import "./fonts.css";
 import "./styles.css";
 import reportWebVitals from "./reportWebVitals.ts";
 import { Spinner } from "@/components/ui/spinner.tsx";
@@ -117,7 +118,7 @@ if (rootElement && !rootElement.innerHTML) {
   root.render(
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
-      <Toaster expand={true} />
+      <Toaster expand={true} position="top-right" />
     </QueryClientProvider>
   );
 }
