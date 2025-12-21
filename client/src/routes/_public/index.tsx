@@ -122,7 +122,12 @@ function Hero() {
       </div>
 
       <div className="hidden lg:flex relative w-full flex-1 flex-col justify-between aspect-4/3 2xl:aspect-3/2 max-w-2xl my-auto place-self-end overflow-hidden border shadow-xl/20 rounded-2xl">
-        <Image src={salad} alt="Vitamin Bomb" className="absolute" />
+        <Image
+          src={salad}
+          alt="Vitamin Bomb"
+          className="absolute"
+          fetchPriority="high"
+        />
         <div className="z-10 flex items-center justify-between p-3 font-mono border-b bg-background bg-opacity-80">
           <p>🥗 Vitamin Bomb</p>
           <p>❤️ 423</p>
