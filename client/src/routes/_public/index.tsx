@@ -7,6 +7,7 @@ import pastry from "@/assets/images/landing/pastry.webp";
 import soup from "@/assets/images/landing/soup.webp";
 import gourmet from "@/assets/images/landing/gourmet.webp";
 import salad from "@/assets/images/landing/salad.webp";
+import { Image } from "@/components/ui/image";
 
 type Category = {
   name: string;
@@ -120,18 +121,11 @@ function Hero() {
         </div>
       </div>
 
-      <div className="hidden lg:flex flex-col justify-between aspect-4/3 2xl:aspect-3/2 w-full max-w-2xl my-auto place-self-end overflow-hidden border shadow-xl/20 rounded-2xl">
-        <div className="relative w-full h-full flex-1 flex flex-col justify-between">
-          <img
-            src={salad}
-            alt="Vitamin Bomb"
-            className="absolute inset-0 w-full h-full object-cover object-center select-none pointer-events-none"
-            draggable="false"
-          />
-          <div className="relative z-10 flex items-center justify-between p-3 font-mono border-b bg-background bg-opacity-80">
-            <p>🥗 Vitamin Bomb</p>
-            <p>❤️ 423</p>
-          </div>
+      <div className="hidden lg:flex relative w-full flex-1 flex-col justify-between aspect-4/3 2xl:aspect-3/2 max-w-2xl my-auto place-self-end overflow-hidden border shadow-xl/20 rounded-2xl">
+        <Image src={salad} alt="Vitamin Bomb" className="absolute" />
+        <div className="z-10 flex items-center justify-between p-3 font-mono border-b bg-background bg-opacity-80">
+          <p>🥗 Vitamin Bomb</p>
+          <p>❤️ 423</p>
         </div>
       </div>
     </section>
@@ -158,9 +152,11 @@ function Categories() {
           {categories.map((categorie, index) => {
             return (
               <div className="flex flex-col gap-5" key={index}>
-                <img
+                <Image
+                  loading="lazy"
+                  alt={categorie.name}
                   src={categorie.image}
-                  className="object-cover object-center max-w-48 xl:max-w-52 2xl:max-w-64 aspect-square rounded-xl overflow-clip shadow-lg"
+                  className="w-48 xl:w-52 2xl:w-64 aspect-square rounded-xl shadow-lg"
                 />
                 <h2 className="text-xl xl:text-2xl font-semibold px-2 mx-auto">
                   {categorie.name}

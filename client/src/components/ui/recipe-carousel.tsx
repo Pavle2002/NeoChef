@@ -6,6 +6,7 @@ import {
   CarouselNext,
 } from "./carousel";
 import type { Recipe } from "@neochef/common";
+import { Image } from "./image";
 
 export function RecipeCarousel({ recipes }: { recipes: Recipe[] }) {
   return (
@@ -25,10 +26,10 @@ export function RecipeCarousel({ recipes }: { recipes: Recipe[] }) {
               className="group relative block overflow-hidden rounded-lg sm:rounded-xl shadow-lg "
             >
               <div className="aspect-4/3 w-full overflow-hidden ">
-                <img
+                <Image
                   src={`https://img.spoonacular.com/recipes/${recipe.sourceId}-480x360.${recipe.imageType}`}
                   alt={recipe.title}
-                  className="h-full w-full object-cover object-center scale-120 transition-transform duration-250 group-hover:scale-125"
+                  className="scale-120 transition-transform duration-250 group-hover:scale-125"
                 />
               </div>
 

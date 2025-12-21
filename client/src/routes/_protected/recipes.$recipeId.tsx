@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Image } from "@/components/ui/image";
 import { formatCompactNumber } from "@/lib/format-number";
 import { useToggleLike } from "@/mutations/use-toggle-like";
 import { useToggleSave } from "@/mutations/use-toggle-save";
@@ -70,8 +71,8 @@ function HeaderSection({
   return (
     <div className="flex flex-col lg:flex-row gap-8">
       <div className="lg:w-1/2 relative shadow-md rounded-xl overflow-hidden aspect-2/1 lg:aspect-auto">
-        <img
-          className="w-full h-full lg:absolute lg:inset-0 object-cover scale-115"
+        <Image
+          className="lg:absolute lg:inset-0 scale-115"
           src={`https://img.spoonacular.com/recipes/${recipe.sourceId}-636x393.${recipe.imageType}`}
           alt={recipe.title}
         />
