@@ -17,7 +17,7 @@ export function useLogin() {
     onSuccess: async (user) => {
       queryClient.setQueryData(getCurrentUserQueryOptions().queryKey, user);
 
-      toast.success("Welcome back. You successfully logged in 🎉", {
+      toast.success("You have successfully logged in 🎉", {
         description: getFormatedDate() + " 📆",
       });
 

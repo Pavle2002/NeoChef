@@ -3,12 +3,6 @@ import { SidebarTrigger } from "./ui/sidebar";
 import { Separator } from "./ui/separator";
 
 export function Header() {
-  // const { pathname } = useLocation();
-  // const getCurrentPageTitle = () => {
-  //   const currentPage = PAGES.find((page) => page.url === pathname);
-  //   return currentPage?.title || "NeoChef";
-  // };
-
   const matches = useMatches();
 
   const matchWithTitle = [...matches]

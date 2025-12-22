@@ -21,7 +21,7 @@ RUN npm run build -w common
 RUN npm run build -w server
 
 # Prune dev dependencies to reduce image size
-RUN npm prune --production
+RUN npm ci --omit=dev
 
 # Stage 2: Runner
 FROM node:22-alpine AS runner
@@ -37,12 +37,18 @@ COPY --from=builder /app/common/package.json ./common/package.json
 COPY --from=builder /app/common/dist ./common/dist
 COPY --from=builder /app/server/package.json ./server/package.json
 COPY --from=builder /app/server/dist ./server/dist
+COPY --from=builder /app/server/import-progress.json ./data/import-progress.json
+COPY --from=builder /app/server/import-cron.sh ./server/import-cron.sh
+
 
 # Log files are not recommended in Docker containers 
 # Create logs directory and set permissions
 # RUN mkdir -p /app/logs && chown -R node:node /app/logs
 
-# Create a non-root user for security
+RUN chmod +x /app/server/import-cron.sh
+RUN chown node:node /app/data/import-progress.json
+RUN chown node:node /app/server/import-cron.sh
+# Switch to non-root user for security
 USER node
 
 # Expose the port defined in config

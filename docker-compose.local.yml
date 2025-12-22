@@ -10,6 +10,18 @@ services:
       - redis
     restart: unless-stopped
 
+  import-cron:
+    build:
+      context: .
+    command: ["sh", "server/import-cron.sh"]
+    env_file:
+      - server/.env
+    depends_on:
+      - redis
+    restart: unless-stopped
+    volumes:
+      - import_progress:/app/data
+
   redis:
     image: redis:alpine
     restart: unless-stopped
@@ -18,3 +30,4 @@ services:
 
 volumes:
   redis_data:
+  import_progress:
