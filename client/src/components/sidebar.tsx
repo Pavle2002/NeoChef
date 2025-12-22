@@ -43,6 +43,8 @@ export function Sidebar() {
 }
 
 function SidebarMain() {
+  const { setOpenMobile } = useSidebar();
+
   return (
     <SidebarContent>
       <SidebarGroup>
@@ -52,6 +54,7 @@ function SidebarMain() {
               <SidebarMenuItem key={page.title}>
                 <SidebarMenuButton asChild>
                   <Link
+                    onClick={() => setOpenMobile(false)}
                     to={page.url}
                     activeProps={{
                       className: "bg-accent text-accent-foreground font-medium",
@@ -71,6 +74,7 @@ function SidebarMain() {
 }
 
 function SidebarLogo() {
+  const { setOpenMobile } = useSidebar();
   return (
     <SidebarHeader>
       <SidebarMenu>
@@ -79,7 +83,7 @@ function SidebarLogo() {
             asChild
             className="data-[slot=sidebar-menu-button]:p-1.5!"
           >
-            <Link to="/home">
+            <Link to="/home" onClick={() => setOpenMobile(false)}>
               <ChefHat className="size-5! " />
               <span className="text-base font-semibold mt-0.5">NeoChef</span>
             </Link>
@@ -91,7 +95,7 @@ function SidebarLogo() {
 }
 
 function SidebarUserMenu() {
-  const { isMobile } = useSidebar();
+  const { isMobile, setOpenMobile } = useSidebar();
   const { mutate: logout, isPending } = useLogout();
 
   return (
@@ -121,19 +125,31 @@ function SidebarUserMenu() {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                <Link to="/preferences" className="w-full">
+                <Link
+                  to="/preferences"
+                  className="w-full"
+                  onClick={() => setOpenMobile(false)}
+                >
                   <DropdownMenuItem>
                     <User />
                     Preferences
                   </DropdownMenuItem>
                 </Link>
-                <Link to="/fridge" className="w-full">
+                <Link
+                  to="/fridge"
+                  className="w-full"
+                  onClick={() => setOpenMobile(false)}
+                >
                   <DropdownMenuItem>
                     <Refrigerator />
                     Fridge
                   </DropdownMenuItem>
                 </Link>
-                <Link to="/favorites" className="w-full">
+                <Link
+                  to="/favorites"
+                  className="w-full"
+                  onClick={() => setOpenMobile(false)}
+                >
                   <DropdownMenuItem>
                     <Star />
                     Favorites

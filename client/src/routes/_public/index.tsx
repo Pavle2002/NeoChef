@@ -148,12 +148,12 @@ function Categories() {
           <h2 className="text-3xl sm:text-4xl lg:text-5xl py-1 font-bold tracking-tight text-primary">
             Something for everybody
           </h2>
-          <p className="text-base sm:text-xl lg:text-2xl text-muted-foreground">
+          <p className="text-base sm:text-xl lg:text-2xl text-muted-foreground max-w-sm sm:max-w-lg lg:max-w-4xl">
             From quick snacks to gourmet meals, find the perfect recipe for any
             moment.
           </p>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-4 sm:grid-cols-2 justify-items-center-safe mx-auto py-14 sm:py-20 px-10  gap-10 max-lg:max-w-xl">
+        <div className="grid grid-cols-1 lg:grid-cols-4 sm:grid-cols-2 justify-items-center-safe mx-auto py-14 sm:py-16 px-10 gap-10 max-lg:max-w-xl">
           {categories.map((categorie, index) => {
             return (
               <div className="flex flex-col gap-5" key={index}>
