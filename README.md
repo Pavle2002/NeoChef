@@ -31,6 +31,7 @@
   - 🖥️ API server
   - ⏱️ Background import‑cron service
   - ⚡Redis
+  - 🧭 Caddy reverse proxy
 - 🌍 **Frontend** deployed to **Vercel** with CDN distribution and automatic deployments.
 - 🏗️ **Backend** deployed on an **Oracle VPS**.
 
