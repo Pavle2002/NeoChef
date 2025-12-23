@@ -12,7 +12,6 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as PublicRouteRouteImport } from './routes/_public/route'
 import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
-import { Route as PublicAboutRouteImport } from './routes/_public/about'
 import { Route as ProtectedTrendingRouteImport } from './routes/_protected/trending'
 import { Route as ProtectedSearchRouteImport } from './routes/_protected/search'
 import { Route as ProtectedProfileRouteImport } from './routes/_protected/profile'
@@ -36,11 +35,6 @@ const ProtectedRouteRoute = ProtectedRouteRouteImport.update({
 const PublicIndexRoute = PublicIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => PublicRouteRoute,
-} as any)
-const PublicAboutRoute = PublicAboutRouteImport.update({
-  id: '/about',
-  path: '/about',
   getParentRoute: () => PublicRouteRoute,
 } as any)
 const ProtectedTrendingRoute = ProtectedTrendingRouteImport.update({
@@ -107,7 +101,6 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProtectedProfileRoute
   '/search': typeof ProtectedSearchRoute
   '/trending': typeof ProtectedTrendingRoute
-  '/about': typeof PublicAboutRoute
   '/': typeof PublicIndexRoute
   '/recipes/$recipeId': typeof ProtectedRecipesRecipeIdRoute
   '/login': typeof PublicAuthLoginRoute
@@ -121,7 +114,6 @@ export interface FileRoutesByTo {
   '/profile': typeof ProtectedProfileRoute
   '/search': typeof ProtectedSearchRoute
   '/trending': typeof ProtectedTrendingRoute
-  '/about': typeof PublicAboutRoute
   '/': typeof PublicIndexRoute
   '/recipes/$recipeId': typeof ProtectedRecipesRecipeIdRoute
   '/login': typeof PublicAuthLoginRoute
@@ -139,7 +131,6 @@ export interface FileRoutesById {
   '/_protected/profile': typeof ProtectedProfileRoute
   '/_protected/search': typeof ProtectedSearchRoute
   '/_protected/trending': typeof ProtectedTrendingRoute
-  '/_public/about': typeof PublicAboutRoute
   '/_public/': typeof PublicIndexRoute
   '/_protected/recipes/$recipeId': typeof ProtectedRecipesRecipeIdRoute
   '/_public/_auth/login': typeof PublicAuthLoginRoute
@@ -155,7 +146,6 @@ export interface FileRouteTypes {
     | '/profile'
     | '/search'
     | '/trending'
-    | '/about'
     | '/'
     | '/recipes/$recipeId'
     | '/login'
@@ -169,7 +159,6 @@ export interface FileRouteTypes {
     | '/profile'
     | '/search'
     | '/trending'
-    | '/about'
     | '/'
     | '/recipes/$recipeId'
     | '/login'
@@ -186,7 +175,6 @@ export interface FileRouteTypes {
     | '/_protected/profile'
     | '/_protected/search'
     | '/_protected/trending'
-    | '/_public/about'
     | '/_public/'
     | '/_protected/recipes/$recipeId'
     | '/_public/_auth/login'
@@ -219,13 +207,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof PublicIndexRouteImport
-      parentRoute: typeof PublicRouteRoute
-    }
-    '/_public/about': {
-      id: '/_public/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof PublicAboutRouteImport
       parentRoute: typeof PublicRouteRoute
     }
     '/_protected/trending': {
@@ -350,13 +331,11 @@ const PublicAuthRouteRouteWithChildren = PublicAuthRouteRoute._addFileChildren(
 
 interface PublicRouteRouteChildren {
   PublicAuthRouteRoute: typeof PublicAuthRouteRouteWithChildren
-  PublicAboutRoute: typeof PublicAboutRoute
   PublicIndexRoute: typeof PublicIndexRoute
 }
 
 const PublicRouteRouteChildren: PublicRouteRouteChildren = {
   PublicAuthRouteRoute: PublicAuthRouteRouteWithChildren,
-  PublicAboutRoute: PublicAboutRoute,
   PublicIndexRoute: PublicIndexRoute,
 }
 

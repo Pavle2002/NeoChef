@@ -105,7 +105,7 @@ function Hero() {
             asChild
             variant="outline"
           >
-            <Link to="/about">ℹ️ Learn More</Link>
+            <Link to="/">ℹ️ Learn More</Link>
           </Button>
         </div>
         <div className=" flex justify-center lg:justify-start flex-wrap gap-y-2 gap-x-7 text-muted-foreground">
