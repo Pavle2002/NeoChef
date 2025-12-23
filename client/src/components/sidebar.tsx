@@ -83,9 +83,15 @@ function SidebarLogo() {
             asChild
             className="data-[slot=sidebar-menu-button]:p-1.5!"
           >
-            <Link to="/home" onClick={() => setOpenMobile(false)}>
-              <ChefHat className="size-5! " />
-              <span className="text-base font-semibold mt-0.5">NeoChef</span>
+            <Link
+              to="/home"
+              className="flex items-center gap-2 font-semibold text-primary"
+              onClick={() => setOpenMobile(false)}
+            >
+              <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
+                <ChefHat className="size-4" />
+              </div>
+              <span className="mt-0.5">NeoChef</span>
             </Link>
           </SidebarMenuButton>
         </SidebarMenuItem>
