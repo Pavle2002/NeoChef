@@ -145,21 +145,21 @@ function RouteComponent() {
       <footer className="mt-14 flex flex-col items-center text-center gap-6 ">
         <div>
           <h2 className="text-3xl sm:text-4xl font-bold mb-3">
-            Ready to Cook Smarter?
+            Ready to Cook Smarter
           </h2>
-          <p className="text-muted-foreground text-xl">
+          <p className="text-muted-foreground text-lg sm:text-xl">
             Start discovering personalized recipes with NeoChef today.
           </p>
         </div>
-        <div className="flex gap-4 sm:gap-7 justify-center lg:justify-start">
+        <div className="flex flex-wrap sm:flex-nowrap gap-4 sm:gap-7 justify-center lg:justify-start">
           <Button
-            className="text-base lg:text-lg shadow-md h-11 rounded-md px-5 sm:px-8"
+            className="w-full sm:max-w-3xs text-base lg:text-lg shadow-md h-11 rounded-md px-5 sm:px-8"
             asChild
           >
-            <Link to="/register">🍲 Crate Free Account</Link>
+            <Link to="/register">🍲 Create Free Account</Link>
           </Button>
           <Button
-            className="text-primary text-base lg:text-lg shadow-md h-11 rounded-md px-5 sm:px-8 "
+            className="w-full sm:max-w-3xs text-primary text-base lg:text-lg shadow-md h-11 rounded-md px-5 sm:px-8 "
             asChild
             variant="outline"
           >
