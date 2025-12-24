@@ -16,6 +16,16 @@ import { useForm } from "react-hook-form";
 
 export const Route = createFileRoute("/_public/_auth/login")({
   component: RouteComponent,
+  head: () => ({
+    meta: [
+      { title: "NeoChef - Login" },
+      {
+        name: "description",
+        description:
+          "Login to your NeoChef account to access personalized features.",
+      },
+    ],
+  }),
 });
 
 function RouteComponent() {

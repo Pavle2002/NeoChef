@@ -3,19 +3,36 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="theme-color" content="#000000" />
+
+    <title>NeoChef - Smart Recipe Recommendations</title>
     <meta
       name="description"
-      content="NeoChef is your personal AI-powered chef. Discover smart recipe recommendations, personalized meal plans, and culinary inspiration tailored to your taste."
+      content="NeoChef is your personal AI-powered chef. Discover smart recipe recommendations and find culinary inspiration tailored to your taste."
     />
+
+    <link rel="preconnect" href="https://api.neochef.app" crossorigin />
+    <link rel="canonical" href="https://www.neochef.app/" />
+
+    <link rel="icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/logo192.png" />
     <link rel="manifest" href="/manifest.json" />
-    <link rel="preconnect" href="https://api.neochef.app" crossorigin />
-    <title>NeoChef - Smart Recipe Recommendations & Meal Planning</title>
+    <meta name="theme-color" content="#000000" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="NeoChef" />
+    <meta
+      property="og:title"
+      content="NeoChef - Smart Recipe Recommendations"
+    />
+    <meta
+      property="og:description"
+      content="Discover smart recipe recommendations and find culinary inspiration tailored to your taste."
+    />
+    <meta property="og:url" content="https://www.neochef.app/" />
+    <meta property="og:image" content="https://www.neochef.app/og-image.png" />
   </head>
   <body>
-    <div id="app" style="height: 100vh"></div>
+    <div id="app" class="flex flex-col flex-1 min-h-screen"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

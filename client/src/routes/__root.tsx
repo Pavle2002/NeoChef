@@ -1,5 +1,9 @@
 import type { QueryClient } from "@tanstack/react-query";
-import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
+import {
+  HeadContent,
+  Outlet,
+  createRootRouteWithContext,
+} from "@tanstack/react-router";
 import type { AuthContext } from "@/context/auth";
 import { getCurrentUserQueryOptions } from "@/query-options/get-current-user-query-options";
 
@@ -17,8 +21,11 @@ export const Route = createRootRouteWithContext<RouterContext>()({
   },
 
   component: () => (
-    <div className="h-screen">
-      <Outlet />
-    </div>
+    <>
+      <HeadContent />
+      <div className="flex flex-col flex-1 min-h-screen">
+        <Outlet />
+      </div>
+    </>
   ),
 });

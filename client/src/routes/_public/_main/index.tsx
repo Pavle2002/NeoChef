@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Check, ChefHat } from "lucide-react";
+import { Check, ChefHat } from "lucide-react";
 import { Image } from "@/components/ui/image";
 import sweets from "@/assets/images/landing/sweet.avif";
 import pastry from "@/assets/images/landing/pastry.avif";
@@ -21,62 +21,32 @@ const categories: Category[] = [
   { name: "Soups", image: soup },
 ];
 
-export const Route = createFileRoute("/_public/")({
+export const Route = createFileRoute("/_public/_main/")({
   component: RouteComponent,
+  head: () => ({
+    meta: [
+      { title: "NeoChef - Smart Recipe Recommendations" },
+      {
+        name: "description",
+        content:
+          "NeoChef is your personal AI-powered chef. Discover smart recipe recommendations and find culinary inspiration tailored to your taste.",
+      },
+    ],
+  }),
 });
 
 function RouteComponent() {
   return (
-    <div className="min-h-screen w-full">
-      <Header />
-      <main className="mx-3.5 sm:mx-6 xl:mx-10 2xl:mx-20">
-        <Hero />
-        <Categories />
-      </main>
-    </div>
-  );
-}
-
-function Header() {
-  return (
-    <header className="sticky flex justify-center items-center left-0 right-0 top-0 z-50 w-full backdrop-blur-lg bg-transparent">
-      <nav className="container flex py-4 xl:py-5 justify-between items-center mx-3.5 sm:mx-6 xl:mx-10 2xl:mx-20">
-        <Link
-          to="/"
-          className="flex items-center gap-2 font-semibold text-primary 2xl:text-lg"
-        >
-          <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
-            <ChefHat className="size-4" />
-          </div>
-          <span className="mt-0.5">NeoChef</span>
-        </Link>
-        <div className="flex items-center gap-10">
-          <Link
-            to="/"
-            className="hidden sm:block text-primary font-semibold border-b-2 border-transparent hover:border-primary transition-all duration-300 ease-in-out"
-          >
-            Our story
-          </Link>
-          <Link
-            to="/"
-            className="hidden sm:block text-primary font-semibold border-b-2 border-transparent hover:border-primary transition-all duration-300 ease-in-out"
-          >
-            Contact us
-          </Link>
-          <Button className="text-base shadow-md" asChild>
-            <Link to="/login">
-              Login <ArrowRight />
-            </Link>
-          </Button>
-        </div>
-      </nav>
-    </header>
+    <main className="space-y-24 sm:space-y-28 md:space-y-32 lg:space-y-36 xl:space-y-40 py-16 2xl:py-28">
+      <Hero />
+      <Categories />
+    </main>
   );
 }
 
 function Hero() {
   return (
-    <section className="container grid items-center lg:grid-cols-2 py-16 2xl:py-28 mx-auto gap-10 xl:gap-12">
+    <section className="container grid items-center lg:grid-cols-2 mx-auto gap-10 xl:gap-12">
       <div className="flex flex-col gap-6 sm:gap-7">
         <div>
           <Badge className="flex lg:inline-flex mx-auto text-xs sm:text-sm font-medium px-4 py-1.5 text-secondary-foreground bg-secondary border shadow-md rounded-full mb-3.5">
@@ -105,7 +75,7 @@ function Hero() {
             asChild
             variant="outline"
           >
-            <Link to="/">ℹ️ Learn More</Link>
+            <Link to="/about">🔎 Learn More</Link>
           </Button>
         </div>
         <div className=" flex justify-center lg:justify-start flex-wrap gap-y-2 gap-x-7 text-muted-foreground">
@@ -143,7 +113,7 @@ function Hero() {
 function Categories() {
   return (
     <div className="w-full">
-      <section className="container mx-auto py-10 sm:py-20 ">
+      <section className="container mx-auto">
         <div className="flex flex-col gap-2 sm:gap-3 lg:gap-4 items-center text-center">
           <Badge className="text-xs sm:text-sm font-medium px-4 py-1.5 text-secondary-foreground bg-secondary border shadow-md rounded-full">
             <ChefHat /> Food Categories

@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PublicRouteRouteImport } from './routes/_public/route'
 import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
-import { Route as PublicIndexRouteImport } from './routes/_public/index'
 import { Route as ProtectedTrendingRouteImport } from './routes/_protected/trending'
 import { Route as ProtectedSearchRouteImport } from './routes/_protected/search'
 import { Route as ProtectedProfileRouteImport } from './routes/_protected/profile'
@@ -19,7 +18,10 @@ import { Route as ProtectedPreferencesRouteImport } from './routes/_protected/pr
 import { Route as ProtectedHomeRouteImport } from './routes/_protected/home'
 import { Route as ProtectedFridgeRouteImport } from './routes/_protected/fridge'
 import { Route as ProtectedFavoritesRouteImport } from './routes/_protected/favorites'
+import { Route as PublicMainRouteRouteImport } from './routes/_public/_main/route'
 import { Route as PublicAuthRouteRouteImport } from './routes/_public/_auth/route'
+import { Route as PublicMainIndexRouteImport } from './routes/_public/_main/index'
+import { Route as PublicMainAboutRouteImport } from './routes/_public/_main/about'
 import { Route as PublicAuthRegisterRouteImport } from './routes/_public/_auth/register'
 import { Route as PublicAuthLoginRouteImport } from './routes/_public/_auth/login'
 import { Route as ProtectedRecipesRecipeIdRouteImport } from './routes/_protected/recipes.$recipeId'
@@ -31,11 +33,6 @@ const PublicRouteRoute = PublicRouteRouteImport.update({
 const ProtectedRouteRoute = ProtectedRouteRouteImport.update({
   id: '/_protected',
   getParentRoute: () => rootRouteImport,
-} as any)
-const PublicIndexRoute = PublicIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => PublicRouteRoute,
 } as any)
 const ProtectedTrendingRoute = ProtectedTrendingRouteImport.update({
   id: '/trending',
@@ -72,9 +69,23 @@ const ProtectedFavoritesRoute = ProtectedFavoritesRouteImport.update({
   path: '/favorites',
   getParentRoute: () => ProtectedRouteRoute,
 } as any)
+const PublicMainRouteRoute = PublicMainRouteRouteImport.update({
+  id: '/_main',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
 const PublicAuthRouteRoute = PublicAuthRouteRouteImport.update({
   id: '/_auth',
   getParentRoute: () => PublicRouteRoute,
+} as any)
+const PublicMainIndexRoute = PublicMainIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PublicMainRouteRoute,
+} as any)
+const PublicMainAboutRoute = PublicMainAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => PublicMainRouteRoute,
 } as any)
 const PublicAuthRegisterRoute = PublicAuthRegisterRouteImport.update({
   id: '/register',
@@ -101,10 +112,11 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProtectedProfileRoute
   '/search': typeof ProtectedSearchRoute
   '/trending': typeof ProtectedTrendingRoute
-  '/': typeof PublicIndexRoute
   '/recipes/$recipeId': typeof ProtectedRecipesRecipeIdRoute
   '/login': typeof PublicAuthLoginRoute
   '/register': typeof PublicAuthRegisterRoute
+  '/about': typeof PublicMainAboutRoute
+  '/': typeof PublicMainIndexRoute
 }
 export interface FileRoutesByTo {
   '/favorites': typeof ProtectedFavoritesRoute
@@ -114,16 +126,18 @@ export interface FileRoutesByTo {
   '/profile': typeof ProtectedProfileRoute
   '/search': typeof ProtectedSearchRoute
   '/trending': typeof ProtectedTrendingRoute
-  '/': typeof PublicIndexRoute
   '/recipes/$recipeId': typeof ProtectedRecipesRecipeIdRoute
   '/login': typeof PublicAuthLoginRoute
   '/register': typeof PublicAuthRegisterRoute
+  '/about': typeof PublicMainAboutRoute
+  '/': typeof PublicMainIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_protected': typeof ProtectedRouteRouteWithChildren
   '/_public': typeof PublicRouteRouteWithChildren
   '/_public/_auth': typeof PublicAuthRouteRouteWithChildren
+  '/_public/_main': typeof PublicMainRouteRouteWithChildren
   '/_protected/favorites': typeof ProtectedFavoritesRoute
   '/_protected/fridge': typeof ProtectedFridgeRoute
   '/_protected/home': typeof ProtectedHomeRoute
@@ -131,10 +145,11 @@ export interface FileRoutesById {
   '/_protected/profile': typeof ProtectedProfileRoute
   '/_protected/search': typeof ProtectedSearchRoute
   '/_protected/trending': typeof ProtectedTrendingRoute
-  '/_public/': typeof PublicIndexRoute
   '/_protected/recipes/$recipeId': typeof ProtectedRecipesRecipeIdRoute
   '/_public/_auth/login': typeof PublicAuthLoginRoute
   '/_public/_auth/register': typeof PublicAuthRegisterRoute
+  '/_public/_main/about': typeof PublicMainAboutRoute
+  '/_public/_main/': typeof PublicMainIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -146,10 +161,11 @@ export interface FileRouteTypes {
     | '/profile'
     | '/search'
     | '/trending'
-    | '/'
     | '/recipes/$recipeId'
     | '/login'
     | '/register'
+    | '/about'
+    | '/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/favorites'
@@ -159,15 +175,17 @@ export interface FileRouteTypes {
     | '/profile'
     | '/search'
     | '/trending'
-    | '/'
     | '/recipes/$recipeId'
     | '/login'
     | '/register'
+    | '/about'
+    | '/'
   id:
     | '__root__'
     | '/_protected'
     | '/_public'
     | '/_public/_auth'
+    | '/_public/_main'
     | '/_protected/favorites'
     | '/_protected/fridge'
     | '/_protected/home'
@@ -175,10 +193,11 @@ export interface FileRouteTypes {
     | '/_protected/profile'
     | '/_protected/search'
     | '/_protected/trending'
-    | '/_public/'
     | '/_protected/recipes/$recipeId'
     | '/_public/_auth/login'
     | '/_public/_auth/register'
+    | '/_public/_main/about'
+    | '/_public/_main/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -201,13 +220,6 @@ declare module '@tanstack/react-router' {
       fullPath: ''
       preLoaderRoute: typeof ProtectedRouteRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/_public/': {
-      id: '/_public/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof PublicIndexRouteImport
-      parentRoute: typeof PublicRouteRoute
     }
     '/_protected/trending': {
       id: '/_protected/trending'
@@ -258,12 +270,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedFavoritesRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
+    '/_public/_main': {
+      id: '/_public/_main'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof PublicMainRouteRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
     '/_public/_auth': {
       id: '/_public/_auth'
       path: ''
       fullPath: ''
       preLoaderRoute: typeof PublicAuthRouteRouteImport
       parentRoute: typeof PublicRouteRoute
+    }
+    '/_public/_main/': {
+      id: '/_public/_main/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof PublicMainIndexRouteImport
+      parentRoute: typeof PublicMainRouteRoute
+    }
+    '/_public/_main/about': {
+      id: '/_public/_main/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof PublicMainAboutRouteImport
+      parentRoute: typeof PublicMainRouteRoute
     }
     '/_public/_auth/register': {
       id: '/_public/_auth/register'
@@ -329,14 +362,28 @@ const PublicAuthRouteRouteWithChildren = PublicAuthRouteRoute._addFileChildren(
   PublicAuthRouteRouteChildren,
 )
 
+interface PublicMainRouteRouteChildren {
+  PublicMainAboutRoute: typeof PublicMainAboutRoute
+  PublicMainIndexRoute: typeof PublicMainIndexRoute
+}
+
+const PublicMainRouteRouteChildren: PublicMainRouteRouteChildren = {
+  PublicMainAboutRoute: PublicMainAboutRoute,
+  PublicMainIndexRoute: PublicMainIndexRoute,
+}
+
+const PublicMainRouteRouteWithChildren = PublicMainRouteRoute._addFileChildren(
+  PublicMainRouteRouteChildren,
+)
+
 interface PublicRouteRouteChildren {
   PublicAuthRouteRoute: typeof PublicAuthRouteRouteWithChildren
-  PublicIndexRoute: typeof PublicIndexRoute
+  PublicMainRouteRoute: typeof PublicMainRouteRouteWithChildren
 }
 
 const PublicRouteRouteChildren: PublicRouteRouteChildren = {
   PublicAuthRouteRoute: PublicAuthRouteRouteWithChildren,
-  PublicIndexRoute: PublicIndexRoute,
+  PublicMainRouteRoute: PublicMainRouteRouteWithChildren,
 }
 
 const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(

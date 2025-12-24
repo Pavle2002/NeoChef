@@ -28,7 +28,7 @@ function RouteComponent() {
     extendedRecipe;
 
   return (
-    <div className="container mx-auto space-y-8 max-w-6xl ">
+    <div className="mx-auto space-y-8 max-w-6xl ">
       <HeaderSection
         recipe={recipe}
         diets={diets}

@@ -16,6 +16,16 @@ import { UserDataSchema, type UserData } from "@neochef/common";
 
 export const Route = createFileRoute("/_public/_auth/register")({
   component: RouteComponent,
+  head: () => ({
+    meta: [
+      { title: "NeoChef - Create Your Account" },
+      {
+        name: "description",
+        description:
+          "Create a free NeoChef account to access personalized features.",
+      },
+    ],
+  }),
 });
 
 function RouteComponent() {

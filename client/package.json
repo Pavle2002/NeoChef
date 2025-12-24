@@ -10,8 +10,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@neochef/common": "file:../common",
     "@hookform/resolvers": "^5.1.1",
+    "@neochef/common": "file:../common",
     "@radix-ui/react-avatar": "^1.1.10",
     "@radix-ui/react-checkbox": "^1.3.2",
     "@radix-ui/react-dialog": "^1.1.14",
@@ -25,9 +25,9 @@
     "@tailwindcss/vite": "^4.0.6",
     "@tanstack/react-query": "^5.80.6",
     "@tanstack/react-query-devtools": "^5.80.6",
-    "@tanstack/react-router": "^1.114.3",
-    "@tanstack/react-router-devtools": "^1.114.3",
-    "@tanstack/router-plugin": "^1.114.3",
+    "@tanstack/react-router": "^1.143.3",
+    "@tanstack/react-router-devtools": "^1.143.3",
+    "@tanstack/router-plugin": "^1.143.3",
     "@tanstack/zod-adapter": "^1.129.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
