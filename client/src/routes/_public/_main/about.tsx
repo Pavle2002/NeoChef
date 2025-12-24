@@ -94,10 +94,7 @@ function RouteComponent() {
 
             <ul className="grid lg:grid-cols-2 gap-4 text-muted-foreground">
               {USERS.map((user, index) => (
-                <li
-                  key={index}
-                  className="flex gap-2 text-nowrap text-base sm:text-lg"
-                >
+                <li key={index} className="flex gap-2 text-base sm:text-lg">
                   <Check color="green" />
                   {user}
                 </li>
