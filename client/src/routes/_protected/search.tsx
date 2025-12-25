@@ -22,8 +22,12 @@ import {
 } from "@neochef/common";
 import { SortOptionsPopover } from "@/components/ui/sort-popover";
 import { Suspense } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Search } from "lucide-react";
 
 const RecipeSearchSchema = RecipeFiltersSchema.extend({
+  search: z.string().trim().optional(),
   page: fallback(z.number().int().positive(), 1).default(1),
   size: fallback(z.number().int().positive(), DEFAULT_PAGE_SIZE).default(
     DEFAULT_PAGE_SIZE
@@ -45,6 +49,7 @@ export const Route = createFileRoute("/_protected/search")({
     cuisines: search.cuisines,
     diets: search.diets,
     dishTypes: search.dishTypes,
+    search: search.search,
     sortBy: search.sortBy,
     sortOrder: search.sortOrder,
   }),
@@ -60,7 +65,13 @@ export const Route = createFileRoute("/_protected/search")({
       sortOrder: deps.sortOrder,
     };
     queryClient.ensureQueryData(
-      getRecipesQueryOptions(offset, deps.size, filters, sortOptions)
+      getRecipesQueryOptions(
+        offset,
+        deps.size,
+        filters,
+        sortOptions,
+        deps.search
+      )
     );
     queryClient.ensureQueryData(getDietsQueryOptions());
     queryClient.ensureQueryData(getCuisinesQueryOptions());
@@ -71,10 +82,10 @@ export const Route = createFileRoute("/_protected/search")({
 
 function RouteComponent() {
   const navigate = useNavigate({ from: Route.fullPath });
-  const { size, page, cuisines, diets, dishTypes, sortBy, sortOrder } =
+  const { size, page, cuisines, diets, dishTypes, search, sortBy, sortOrder } =
     Route.useSearch();
 
-  const filters = { cuisines, diets, dishTypes };
+  const filters = { cuisines, diets, dishTypes, search };
   const sortOptions = { sortBy, sortOrder };
 
   function handleApplyFilters(newFilters: RecipeFilters) {
@@ -96,14 +107,44 @@ function RouteComponent() {
     });
   }
 
+  function handleSearch(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const searchValue = formData.get("search")?.toString() || "";
+
+    navigate({
+      search: (prev) => ({
+        ...prev,
+        search: searchValue,
+        page: 1,
+      }),
+    });
+  }
+
   return (
-    <>
-      <div className="mb-5 flex gap-4">
-        <FiltersPopover defaultValues={filters} onApply={handleApplyFilters} />
-        <SortOptionsPopover
-          value={sortOptions}
-          onValueChange={handleSortChange}
-        />
+    <div className="container mx-auto">
+      <div className="mb-8 flex flex-wrap gap-4 justify-between items-center">
+        <form className="flex flex-1 gap-2" onSubmit={handleSearch}>
+          <Input
+            className="min-w-45 max-w-sm bg-accent/70"
+            placeholder="Search"
+            name="search"
+            defaultValue={search || ""}
+          />
+          <Button type="submit" className="md">
+            <Search />
+          </Button>
+        </form>
+        <div className="flex gap-4">
+          <FiltersPopover
+            defaultValues={filters}
+            onApply={handleApplyFilters}
+          />
+          <SortOptionsPopover
+            value={sortOptions}
+            onValueChange={handleSortChange}
+          />
+        </div>
       </div>
       <Suspense fallback={<RecipeListSkeleton length={size} />}>
         <RecipesContainer
@@ -111,9 +152,10 @@ function RouteComponent() {
           size={size}
           filters={filters}
           sortOptions={sortOptions}
+          search={search}
         />
       </Suspense>
-    </>
+    </div>
   );
 }
 
@@ -122,6 +164,7 @@ type RecipesContainerProps = {
   size: number;
   filters: RecipeFilters;
   sortOptions: RecipeSortOptions;
+  search?: string;
 };
 
 function RecipesContainer({
@@ -129,13 +172,14 @@ function RecipesContainer({
   filters,
   sortOptions,
   size,
+  search,
 }: RecipesContainerProps) {
   const offset = (page - 1) * size;
 
   const {
     data: { recipes, totalCount },
   } = useSuspenseQuery(
-    getRecipesQueryOptions(offset, size, filters, sortOptions)
+    getRecipesQueryOptions(offset, size, filters, sortOptions, search)
   );
 
   const totalPageCount = Math.ceil(totalCount / size);

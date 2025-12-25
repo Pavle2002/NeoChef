@@ -16,10 +16,18 @@ export function getRecipesQueryOptions(
   sortOptions: RecipeSortOptions = {
     sortBy: DEFAULT_SORT_BY,
     sortOrder: DEFAULT_SORT_ORDER,
-  }
+  },
+  search?: string
 ) {
   return queryOptions({
-    queryKey: ["recipes", "list", { offset, limit }, filters, sortOptions],
+    queryKey: [
+      "recipes",
+      "list",
+      { offset, limit },
+      filters,
+      sortOptions,
+      { search },
+    ],
     queryFn: () => {
       const params = new URLSearchParams({
         offset: offset.toString(),
@@ -41,6 +49,12 @@ export function getRecipesQueryOptions(
           params.append("dishTypes", dishType)
         );
       }
+
+      if (search && search.length > 0) {
+        params.append("search", search);
+      }
+
+      console.log(params.toString());
 
       return apiClient.get<{ recipes: Recipe[]; totalCount: number }>(
         `/recipes?${params.toString()}`

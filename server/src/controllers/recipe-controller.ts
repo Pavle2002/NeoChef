@@ -13,6 +13,7 @@ async function getById(req: Request, res: Response): Promise<void> {
 async function getAll(req: Request, res: Response): Promise<void> {
   const limit = req.validated?.query?.limit as number;
   const offset = req.validated?.query?.offset as number;
+  const search = req.validated?.query?.search as string | undefined;
 
   const filters = {
     cuisines: req.validated?.query?.cuisines,
@@ -29,7 +30,8 @@ async function getAll(req: Request, res: Response): Promise<void> {
     limit,
     offset,
     filters,
-    sortOptions
+    sortOptions,
+    search
   );
   sendSuccess(res, 200, recipes, "Recipes retrieved successfully");
 }

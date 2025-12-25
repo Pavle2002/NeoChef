@@ -84,9 +84,7 @@ function FiltersPopover({ defaultValues = {}, onApply }: FiltersFormProps) {
           <Suspense
             fallback={<FiltersFormPendingComponent className="h-117.5" />}
           >
-            {/* <ScrollArea className="h-[470px]"> */}
             <FiltersForm defaultValues={defaultValues} onApply={handleApply} />
-            {/* </ScrollArea> */}
           </Suspense>
         </DrawerContent>
       </Drawer>

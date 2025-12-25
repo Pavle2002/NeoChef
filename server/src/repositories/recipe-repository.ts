@@ -138,7 +138,8 @@ export class RecipeRepository implements IRecipeRepository {
     sortOptions: RecipeSortOptions = {
       sortBy: DEFAULT_SORT_BY,
       sortOrder: DEFAULT_SORT_ORDER,
-    }
+    },
+    search?: string
   ): Promise<Recipe[]> {
     const { sortBy } = sortOptions;
     let orderByClause = "";
@@ -150,8 +151,10 @@ export class RecipeRepository implements IRecipeRepository {
       orderByClause = `ORDER BY r.${sortBy} ${sortOrder}`;
     }
 
-    const { matchClauses, whereClauses, params } =
-      this.buildRecipeFilterQuery(filters);
+    const { matchClauses, whereClauses, params } = this.buildRecipeFilterQuery(
+      filters,
+      search
+    );
 
     params.limit = int(limit);
     params.offset = int(offset);
@@ -185,19 +188,19 @@ export class RecipeRepository implements IRecipeRepository {
   async findTrending(): Promise<{ recipe: Recipe; score: number }[]> {
     const result = await this.queryExecutor.run(
       `MATCH (r:Recipe)
-       OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
-       WITH r, 
-            COUNT(l) AS totalLikes, 
-            SUM(CASE WHEN l.likedAt >= datetime() - duration('P7D') THEN 1 ELSE 0 END) AS recentLikes
-
-       OPTIONAL MATCH (r)<-[s:SAVED]-(:User)
-       WHERE s.savedAt >= datetime() - duration('P7D')
-       WITH r, totalLikes, recentLikes, COUNT(s) AS recentSaves
-
-       WITH r, totalLikes, (recentLikes + (recentSaves * 2)) AS score
-       ORDER BY score DESC
-       LIMIT 24
-       RETURN r, totalLikes, score`
+      OPTIONAL MATCH (r)<-[rel]-(u:User)
+      WHERE type(rel) IN ['LIKES', 'SAVED']
+      WITH r,
+          [l IN collect(rel) WHERE type(l) = 'LIKES'] AS likes,
+          [s IN collect(rel) WHERE type(s) = 'SAVED'] AS saves
+      WITH r,
+          size(likes) AS totalLikes,
+          size([l IN likes WHERE l.likedAt >= datetime() - duration('P7D')]) AS recentLikes,
+          size([s IN saves WHERE s.savedAt >= datetime() - duration('P7D')]) AS recentSaves
+      WITH r, totalLikes, (recentLikes + recentSaves * 2) AS score
+      ORDER BY score DESC
+      LIMIT 24
+      RETURN r, totalLikes, score`
     );
 
     const recipes = result.records.map((record) => {
@@ -313,9 +316,14 @@ export class RecipeRepository implements IRecipeRepository {
     }
   }
 
-  async countAll(filters: RecipeFilters = {}): Promise<number> {
-    const { matchClauses, whereClauses, params } =
-      this.buildRecipeFilterQuery(filters);
+  async countAll(
+    filters: RecipeFilters = {},
+    search?: string
+  ): Promise<number> {
+    const { matchClauses, whereClauses, params } = this.buildRecipeFilterQuery(
+      filters,
+      search
+    );
 
     const whereString =
       whereClauses.length > 0 ? `WHERE ${whereClauses.join(" AND ")}` : "";
@@ -332,7 +340,7 @@ export class RecipeRepository implements IRecipeRepository {
     return totalNumber ? totalNumber.get("total") : 0;
   }
 
-  private buildRecipeFilterQuery(filters: RecipeFilters = {}) {
+  private buildRecipeFilterQuery(filters: RecipeFilters = {}, search?: string) {
     const { cuisines, diets, dishTypes } = filters;
     let matchClauses = ["MATCH (r:Recipe)"];
     let whereClauses: string[] = [];
@@ -354,6 +362,11 @@ export class RecipeRepository implements IRecipeRepository {
       matchClauses.push("MATCH (r)-[:IS_OF_TYPE]->(dt:DishType)");
       whereClauses.push("dt.name IN $dishTypes");
       params.dishTypes = dishTypes;
+    }
+
+    if (search && search.length > 0) {
+      whereClauses.push("toLower(r.title) CONTAINS toLower($search)");
+      params.search = search;
     }
 
     return { matchClauses, whereClauses, params };

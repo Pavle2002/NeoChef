@@ -20,7 +20,8 @@ export interface IRecipeRepository {
     limit?: number,
     offset?: number,
     filters?: RecipeFilters,
-    sortOptions?: RecipeSortOptions
+    sortOptions?: RecipeSortOptions,
+    search?: string
   ): Promise<Recipe[]>;
   findTrending(): Promise<{ recipe: Recipe; score: number }[]>;
   addIngredient(
@@ -32,5 +33,5 @@ export interface IRecipeRepository {
   addCuisine(recipeId: string, cuisine: Cuisine): Promise<void>;
   addDiet(recipeId: string, diet: Diet): Promise<void>;
   addDishType(recipeId: string, dishType: DishType): Promise<void>;
-  countAll(filters: RecipeFilters): Promise<number>;
+  countAll(filters: RecipeFilters, search?: string): Promise<number>;
 }

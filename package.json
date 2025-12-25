@@ -9,6 +9,7 @@
   "scripts": {
     "build:all": "npm run build -w common && npm run build -w server && npm run build -w client",
     "dev:client": "npm run dev -w client",
-    "dev:server": "docker compose -f docker-compose.local.yml up --build"
+    "dev:server": "npm run dev -w server",
+    "docker:server": "docker compose -f docker-compose.local.yml up --build"
   }
 }

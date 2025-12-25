@@ -36,6 +36,8 @@ const getAllSchema = z.object({
           .nonnegative({ message: "Offset must be a non-negative integer" })
       )
       .default(DEFAULT_OFFSET),
+
+    search: z.string().trim().optional(),
   }),
 });
 

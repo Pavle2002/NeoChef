@@ -12,7 +12,8 @@ export interface IRecipeService {
     limit?: number,
     offset?: number,
     filters?: RecipeFilters,
-    sortOptions?: RecipeSortOptions
+    sortOptions?: RecipeSortOptions,
+    search?: string
   ): Promise<{ recipes: Recipe[]; totalCount: number }>;
   getTrending(): Promise<Recipe[]>;
 }

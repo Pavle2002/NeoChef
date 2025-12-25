@@ -66,11 +66,18 @@ export class RecipeService implements IRecipeService {
     sortOptions: RecipeSortOptions = {
       sortBy: DEFAULT_SORT_BY,
       sortOrder: DEFAULT_SORT_ORDER,
-    }
+    },
+    search?: string
   ): Promise<{ recipes: Recipe[]; totalCount: number }> {
     const [recipes, totalCount] = await Promise.all([
-      this.recipeRepository.findAll(limit, offset, filters, sortOptions),
-      this.recipeRepository.countAll(filters),
+      this.recipeRepository.findAll(
+        limit,
+        offset,
+        filters,
+        sortOptions,
+        search
+      ),
+      this.recipeRepository.countAll(filters, search),
     ]);
     return { recipes, totalCount };
   }
