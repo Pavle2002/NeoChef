@@ -26,13 +26,13 @@ export function RecipeList({
   return (
     <div
       className={cn(
-        "flex flex-wrap gap-7 justify-center items-center 2xl:gap-8 my-auto",
+        "flex flex-wrap gap-7 justify-center items-center 2xl:gap-8",
         className
       )}
       {...props}
     >
       {recipes.length === 0 ? (
-        <Empty>
+        <Empty className="min-h-[50vh] my-auto">
           <EmptyHeader>
             <EmptyMedia variant="icon" className="shadow-sm">
               <UtensilsCrossed />
