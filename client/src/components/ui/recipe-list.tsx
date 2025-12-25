@@ -26,7 +26,7 @@ export function RecipeList({
   return (
     <div
       className={cn(
-        "flex flex-wrap gap-7 justify-center items-center 2xl:gap-8",
+        "flex flex-wrap gap-7 justify-center items-center 2xl:gap-8 my-auto",
         className
       )}
       {...props}
