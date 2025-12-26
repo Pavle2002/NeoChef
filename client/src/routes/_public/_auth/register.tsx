@@ -24,6 +24,7 @@ export const Route = createFileRoute("/_public/_auth/register")({
         description:
           "Create a free NeoChef account to access personalized features.",
       },
+      { name: "robots", content: "noindex, nofollow" },
     ],
   }),
 });

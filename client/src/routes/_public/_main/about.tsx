@@ -14,6 +14,7 @@ export const Route = createFileRoute("/_public/_main/about")({
           "Learn how NeoChef helps you discover personalized recipes, cook smarter and plan meals tailored to your taste.",
       },
     ],
+    links: [{ rel: "canonical", href: "https://www.neochef.app/about" }],
   }),
   component: RouteComponent,
 });

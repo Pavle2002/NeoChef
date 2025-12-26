@@ -24,6 +24,7 @@ export const Route = createFileRoute("/_public/_auth/login")({
         description:
           "Login to your NeoChef account to access personalized features.",
       },
+      { name: "robots", content: "noindex, nofollow" },
     ],
   }),
 });
