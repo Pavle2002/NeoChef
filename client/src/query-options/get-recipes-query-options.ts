@@ -54,8 +54,6 @@ export function getRecipesQueryOptions(
         params.append("search", search);
       }
 
-      console.log(params.toString());
-
       return apiClient.get<{ recipes: Recipe[]; totalCount: number }>(
         `/recipes?${params.toString()}`
       );

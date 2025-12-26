@@ -59,7 +59,6 @@ function RouteComponent() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit((data) => {
-          console.log(data);
           updatePreferences(data);
         })}
         className="space-y-7 max-w-4xl"
@@ -94,7 +93,7 @@ function RouteComponent() {
             onClick={handleReset}
             variant="outline"
             size="lg"
-            className="shadow-sm"
+            className="shadow-sm flex-1 sm:flex-none"
           >
             Clear Preferences
           </Button>
@@ -102,7 +101,7 @@ function RouteComponent() {
             type="submit"
             size="lg"
             disabled={isPending}
-            className="shadow-sm"
+            className="shadow-sm flex-1 sm:flex-none"
           >
             {isPending ? "Saving..." : "Save Preferences"}
           </Button>

@@ -6,7 +6,13 @@ import { Skeleton } from "./skeleton";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { Button } from "./button";
-import { Drawer, DrawerContent, DrawerTrigger } from "./drawer";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "./drawer";
 
 export type IngredientSelectorProps = {
   value: Ingredient[];
@@ -19,7 +25,6 @@ export function IngredientSelector({
 }: IngredientSelectorProps) {
   const valueSet = new Set(value.map((i) => i.id));
 
-  console.log(valueSet);
   return (
     <LiveSearch
       className="py-3"
@@ -84,6 +89,9 @@ export function IngredientSelectorPopover({
             <Plus strokeWidth={3} />
           </Button>
         </DrawerTrigger>
+        <DrawerHeader>
+          <DrawerTitle className="hidden">Select Ingredients</DrawerTitle>
+        </DrawerHeader>
         <DrawerContent className="px-2">
           <IngredientSelector
             onValueChange={onValueChange}

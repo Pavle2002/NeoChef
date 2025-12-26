@@ -35,6 +35,7 @@ import { getDietsQueryOptions } from "@/query-options/get-diets-query-options";
 import { getDishTypesQueryOptions } from "@/query-options/get-dish-types-query-options";
 import { Spinner } from "./spinner";
 import { cn } from "@/lib/utils";
+import { ScrollArea } from "./scroll-area";
 
 type FiltersFormProps = {
   defaultValues?: RecipeFilters;
@@ -59,7 +60,7 @@ function FiltersPopover({ defaultValues = {}, onApply }: FiltersFormProps) {
             Filters
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-lg px-4">
+        <PopoverContent className="w-lg">
           <Suspense
             fallback={<FiltersFormPendingComponent className="h-92.5" />}
           >
@@ -80,11 +81,16 @@ function FiltersPopover({ defaultValues = {}, onApply }: FiltersFormProps) {
         <DrawerHeader className="hidden">
           <DrawerTitle>Filter Recipes</DrawerTitle>
         </DrawerHeader>
-        <DrawerContent className="mb-2 px-4">
+        <DrawerContent className="mb-2">
           <Suspense
             fallback={<FiltersFormPendingComponent className="h-117.5" />}
           >
-            <FiltersForm defaultValues={defaultValues} onApply={handleApply} />
+            <ScrollArea className="h-100">
+              <FiltersForm
+                defaultValues={defaultValues}
+                onApply={handleApply}
+              />
+            </ScrollArea>
           </Suspense>
         </DrawerContent>
       </Drawer>
@@ -128,43 +134,49 @@ function FiltersForm({ defaultValues = {}, onApply }: FiltersFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onApply)}
-        className="space-y-4 py-3 md:py-0"
+        className="flex flex-col-reverse sm:flex-col gap-4 p-4 md:py-1 md:px-1"
       >
-        <CheckboxGroupField
-          control={form.control}
-          name="cuisines"
-          label="Cuisines"
-          options={cuisines.map((cuisine) => cuisine.name)}
-          description="(Select the cuisines you prefer)"
-        />
+        <div className="space-y-3">
+          <CheckboxGroupField
+            control={form.control}
+            name="cuisines"
+            label="Cuisines"
+            options={cuisines.map((cuisine) => cuisine.name)}
+            description="(Select the cuisines you prefer)"
+          />
 
-        <CheckboxGroupField
-          control={form.control}
-          name="diets"
-          label="Diets"
-          options={diets.map((diet) => diet.name)}
-          description="(Select the diets you follow)"
-        />
+          <CheckboxGroupField
+            control={form.control}
+            name="diets"
+            label="Diets"
+            options={diets.map((diet) => diet.name)}
+            description="(Select the diets you follow)"
+          />
 
-        <CheckboxGroupField
-          control={form.control}
-          name="dishTypes"
-          label="Dish types"
-          options={dishTypes.map((dishType) => dishType.name)}
-          description="(Select the dish types you want to see)"
-        />
+          <CheckboxGroupField
+            control={form.control}
+            name="dishTypes"
+            label="Dish types"
+            options={dishTypes.map((dishType) => dishType.name)}
+            description="(Select the dish types you want to see)"
+          />
+        </div>
 
-        <div className="flex justify-end gap-3 mt-4">
+        <div className="flex justify-center gap-3">
           <Button
             type="button"
             onClick={handleReset}
             variant="outline"
             size="sm"
-            className="font-normal"
+            className="font-normal flex-1 max-w-3xs"
           >
             Clear
           </Button>
-          <Button type="submit" size="sm" className="font-normal">
+          <Button
+            type="submit"
+            size="sm"
+            className="font-normal flex-1 max-w-3xs"
+          >
             Apply
           </Button>
         </div>
