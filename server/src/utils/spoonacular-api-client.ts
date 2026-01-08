@@ -2,16 +2,14 @@ import { SpoonacularQuotaExceededError } from "@errors/spoonacular-quota-exceede
 import Bottleneck from "bottleneck";
 import { extractImageName } from "@utils/extract-file-name.js";
 import type { IApiClient } from "@interfaces/api-client.interface.js";
-import type {
-  Cuisine,
-  Diet,
-  DishType,
-  Equipment,
-  ExtendedIngredientData,
-  ExtendedRecipeData,
-  RecipeData,
+import {
+  ExtendedRecipeDataSchema,
+  type Equipment,
+  type ExtendedRecipeData,
+  type RecipeData,
 } from "@neochef/common";
 import type { RecipeSearchOptions } from "@app-types/import-types.js";
+import { normalizeIngredientName } from "./normalize-ingredient-name.js";
 
 export class SpoonacularApiClient implements IApiClient {
   private apiKey: string;
@@ -69,98 +67,89 @@ export class SpoonacularApiClient implements IApiClient {
       throw new Error("Invalid response format from Spoonacular API");
     }
 
-    return data.results.map((recipe: any): ExtendedRecipeData => {
-      const nutrition = recipe.nutrition ?? {};
-      const caloricBreakdown = nutrition.caloricBreakdown ?? {};
-      const weightPerServing = nutrition.weightPerServing?.amount ?? 0;
-      const caloriesPerServing =
-        nutrition.nutrients?.find((n: any) => n.name === "Calories")?.amount ??
-        0;
+    return ExtendedRecipeDataSchema.array().parse(
+      data.results.map((recipe: any): any => {
+        const nutrition = recipe.nutrition;
+        const caloricBreakdown = nutrition?.caloricBreakdown;
+        const weightPerServing = nutrition?.weightPerServing?.amount;
+        const caloriesPerServing = nutrition?.nutrients?.find(
+          (n: any) => n.name === "Calories"
+        )?.amount;
 
-      const instructions =
-        recipe.analyzedInstructions?.[0]?.steps?.map((s: any) => s.step) ?? [];
+        const instructions = recipe.analyzedInstructions?.[0]?.steps?.map(
+          (s: any) => s.step
+        );
 
-      const recipeData: RecipeData = {
-        sourceId: recipe.id?.toString() ?? "",
-        sourceName: "Spoonacular",
-        title: recipe.title ?? "",
-        imageType: recipe.imageType ?? "",
-        servings: recipe.servings ?? 0,
-        pricePerServing: recipe.pricePerServing ?? 0,
-        weightPerServing,
-        caloriesPerServing,
-        readyInMinutes: recipe.readyInMinutes ?? 0,
-        healthScore: recipe.healthScore ?? 0,
-        spoonacularScore: recipe.spoonacularScore ?? 0,
-        summary: recipe.summary ?? "",
-        instructions,
-        percentCarbs: caloricBreakdown.percentCarbs ?? 0,
-        percentFat: caloricBreakdown.percentFat ?? 0,
-        percentProtein: caloricBreakdown.percentProtein ?? 0,
-      };
+        const recipeData: RecipeData = {
+          sourceId: recipe.id?.toString(),
+          sourceName: "Spoonacular",
+          title: recipe.title,
+          imageType: recipe.imageType,
+          servings: recipe.servings,
+          pricePerServing: recipe.pricePerServing,
+          weightPerServing,
+          caloriesPerServing,
+          readyInMinutes: recipe.readyInMinutes,
+          healthScore: recipe.healthScore,
+          summary: recipe.summary,
+          instructions,
+          percentCarbs: caloricBreakdown?.percentCarbs,
+          percentFat: caloricBreakdown?.percentFat,
+          percentProtein: caloricBreakdown?.percentProtein,
+        };
 
-      const cuisines: Cuisine[] = (recipe.cuisines ?? [])
-        .filter((name: string) => name)
-        .map((name: string) => ({ name: name.trim() }));
+        const cuisines = recipe.cuisines
+          ?.filter(Boolean)
+          .map((name: string) => ({ name }));
 
-      const diets: Diet[] = (recipe.diets ?? [])
-        .filter((name: string) => name)
-        .map((name: string) => ({ name: name.trim() }));
+        const diets = recipe.diets
+          ?.filter(Boolean)
+          .map((name: string) => ({ name }));
+        const dishTypes = recipe.dishTypes
+          ?.filter(Boolean)
+          .map((name: string) => ({ name }));
 
-      const dishTypes: DishType[] = (recipe.dishTypes ?? [])
-        .filter((name: string) => name)
-        .map((name: string) => ({ name: name.trim() }));
-
-      const equipmentMap = new Map<string, Equipment>();
-      (recipe.analyzedInstructions?.[0]?.steps ?? [])
-        .flatMap((step: any) => step.equipment ?? [])
-        .filter((e: any) => e?.id && e?.name)
-        .forEach((e: any) => {
-          equipmentMap.set(e.id.toString(), {
-            sourceId: e.id.toString(),
-            sourceName: "Spoonacular",
-            name: e.name.trim(),
-            image: extractImageName(e.image ?? ""),
-          });
-        });
-      const equipment = Array.from(equipmentMap.values());
-
-      const extendedIngredients: ExtendedIngredientData[] = (
-        recipe.missedIngredients ?? []
-      )
-        .filter((i: any) => i?.id && i?.name)
-        .map(
-          (i: any): ExtendedIngredientData => ({
-            ingredientData: {
-              sourceId: i.id.toString(),
+        const equipmentMap = new Map<string, Equipment>();
+        (recipe.analyzedInstructions?.[0]?.steps ?? [])
+          .flatMap((step: any) => step.equipment ?? [])
+          .filter((e: any) => e?.id && e?.name)
+          .forEach((e: any) => {
+            equipmentMap.set(e.id.toString(), {
+              sourceId: e.id.toString(),
               sourceName: "Spoonacular",
-              name: i.name
-                .split(". ")[0]
-                .split(" to ")[0]
-                .split(" but ")[0]
-                .split(" or ")[0]
-                .split(" if ")[0]
-                .trim()
-                .toLowerCase(),
-              aisle: i.aisle ?? "",
+              name: e.name,
+              image: extractImageName(e.image ?? ""),
+            });
+          });
+        const equipment = Array.from(equipmentMap.values());
+
+        const extendedIngredients = recipe.missedIngredients.map(
+          (i: any): any => ({
+            ingredientData: {
+              sourceId: i.id?.toString(),
+              sourceName: "Spoonacular",
+              name: i.name,
+              normalizedName: normalizeIngredientName(i.name),
+              aisle: i.aisle,
               image: extractImageName(i.image ?? ""),
             },
             usage: {
-              amount: i.amount ?? 0,
-              unit: i.unit ?? "",
-              original: i.original ?? "",
+              amount: i.amount,
+              unit: i.unit,
+              original: i.original,
             },
           })
         );
 
-      return {
-        recipeData,
-        cuisines,
-        diets,
-        dishTypes,
-        equipment,
-        extendedIngredients,
-      };
-    });
+        return {
+          recipeData,
+          cuisines,
+          diets,
+          dishTypes,
+          equipment,
+          extendedIngredients,
+        };
+      })
+    );
   }
 }

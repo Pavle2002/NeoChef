@@ -4,9 +4,9 @@
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
-    "build": "tsc && tsc-alias",
+    "build": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
     "start": "node dist/index.js",
-    "dev": "tsx watch src/index.ts",
+    "dev": "tsx watch --conditions development src/index.ts",
     "import-recipes": "node dist/scripts/import-recipes.js",
     "clean": "rm -rf dist"
   },
@@ -30,6 +30,7 @@
     "neo4j-driver": "^5.28.1",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
+    "pluralize": "^8.0.0",
     "redis": "^4.7.0",
     "winston": "^3.17.0",
     "zod": "^3.23.8"
@@ -43,6 +44,7 @@
     "@types/node": "^22.14.0",
     "@types/passport": "^1.0.17",
     "@types/passport-local": "^1.0.38",
+    "@types/pluralize": "^0.0.33",
     "tsc-alias": "^1.8.13",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2"

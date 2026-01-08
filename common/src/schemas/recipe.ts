@@ -22,20 +22,19 @@ export const RecipeSchema = z.object({
   id: z.string().uuid(),
   sourceId: z.string(),
   sourceName: z.string(),
-  title: z.string(),
+  title: z.string().trim(),
   imageType: z.string(),
-  spoonacularScore: z.number().optional(),
-  healthScore: z.number().optional(),
   servings: z.number(),
-  weightPerServing: z.number(),
-  pricePerServing: z.number(),
-  caloriesPerServing: z.number().optional(),
-  readyInMinutes: z.number(),
-  instructions: z.array(z.string()),
-  summary: z.string(),
-  percentProtein: z.number().optional(),
-  percentFat: z.number().optional(),
-  percentCarbs: z.number().optional(),
+  instructions: z.array(z.string().trim()).optional().default([]),
+  summary: z.string().trim().nullish().default(null),
+  readyInMinutes: z.number().nullish().default(null),
+  weightPerServing: z.number().nullish().default(null),
+  caloriesPerServing: z.number().nullish().default(null),
+  pricePerServing: z.number().nullish().default(null),
+  percentProtein: z.number().nullish().default(null),
+  percentFat: z.number().nullish().default(null),
+  percentCarbs: z.number().nullish().default(null),
+  healthScore: z.number().nullish().default(null),
   createdAt: z.date(),
   likeCount: z.number(),
 });
@@ -43,10 +42,10 @@ export const RecipeSchema = z.object({
 export const ExtendedRecipeSchema = z.object({
   recipe: RecipeSchema.extend({ isLiked: z.boolean(), isSaved: z.boolean() }),
   extendedIngredients: z.array(ExtendedIngredientSchema),
-  diets: z.array(DietSchema),
-  cuisines: z.array(CuisineSchema),
-  equipment: z.array(EquipmentSchema),
-  dishTypes: z.array(DishTypeSchema),
+  diets: z.array(DietSchema).optional().default([]),
+  cuisines: z.array(CuisineSchema).optional().default([]),
+  equipment: z.array(EquipmentSchema).optional().default([]),
+  dishTypes: z.array(DishTypeSchema).optional().default([]),
 });
 
 export const RecipeDataSchema = RecipeSchema.omit({
@@ -58,10 +57,10 @@ export const RecipeDataSchema = RecipeSchema.omit({
 export const ExtendedRecipeDataSchema = z.object({
   recipeData: RecipeDataSchema,
   extendedIngredients: z.array(ExtendedIngredientDataSchema),
-  diets: z.array(DietSchema),
-  cuisines: z.array(CuisineSchema),
-  equipment: z.array(EquipmentSchema),
-  dishTypes: z.array(DishTypeSchema),
+  diets: z.array(DietSchema).optional().default([]),
+  cuisines: z.array(CuisineSchema).optional().default([]),
+  equipment: z.array(EquipmentSchema).optional().default([]),
+  dishTypes: z.array(DishTypeSchema).optional().default([]),
 });
 
 export const RecipeFiltersSchema = z.object({

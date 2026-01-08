@@ -6,19 +6,18 @@ import type { Ingredient, IngredientData } from "@neochef/common";
 export class IngredientRepository implements IIngredientRepository {
   constructor(private readonly queryExecutor: IQueryExecutor) {}
 
-  async createOrUpdate(ingrediant: IngredientData): Promise<Ingredient> {
-    const { name, ...upsertIngredient } = ingrediant;
+  async create(ingrediant: IngredientData): Promise<Ingredient> {
+    const { sourceName, sourceId, ...properties } = ingrediant;
     const result = await this.queryExecutor.run(
-      `MERGE (i:Ingredient {name: $name})
-            ON CREATE SET i.id = apoc.create.uuid(), i += $upsertIngredient
-            ON MATCH SET i += $upsertIngredient
-            RETURN i`,
-      { name, upsertIngredient }
+      `MERGE (i:Ingredient {sourceName: $sourceName, sourceId: $sourceId})
+       ON CREATE SET i.id = apoc.create.uuid(), i += $properties
+       RETURN i`,
+      { sourceName, sourceId, properties }
     );
 
     const record = result.records[0];
     if (!record) {
-      throw new InternalServerError("Failed to create or update ingredient");
+      throw new InternalServerError("Failed to create ingredient");
     }
     return record.get("i").properties as Ingredient;
   }

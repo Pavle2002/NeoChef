@@ -12,7 +12,10 @@
   },
   "exports": {
     ".": {
-      "import": "./dist/index.js",
+      "import": {
+        "development": "./src/index.ts",
+        "default": "./dist/index.js"
+      },
       "types": "./dist/index.d.ts"
     }
   },

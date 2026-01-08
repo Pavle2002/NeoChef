@@ -1,7 +1,7 @@
 import z from "zod";
 
 export const DishTypeSchema = z.object({
-  name: z.string(),
+  name: z.string().trim(),
 });
 
 export type DishType = z.infer<typeof DishTypeSchema>;

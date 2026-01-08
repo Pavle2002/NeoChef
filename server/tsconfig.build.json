@@ -1,11 +1,7 @@
-// This one is used by the development environment
-// and includes paths to the common package source files.
-// This allows hot reloading and easier debugging.
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "paths": {
-      "@neochef/common": ["../common/src/index.ts"],
       "@config/*": ["src/config/*"],
       "@models/*": ["src/models/*"],
       "@interfaces/*": ["src/interfaces/*"],

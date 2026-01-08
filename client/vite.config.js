@@ -18,7 +18,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@": resolve(__dirname, "./src"),
+      "@": resolve(import.meta.dirname, "./src"),
+      "@neochef/common": resolve(import.meta.dirname, "../common/src/index.ts"),
     },
   },
 });

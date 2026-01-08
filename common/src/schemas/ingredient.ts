@@ -1,18 +1,24 @@
 import { z } from "zod";
 
+export const CanonicalIngredientSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string(),
+});
+
 export const IngredientSchema = z.object({
   id: z.string().uuid(),
   sourceId: z.string(),
   sourceName: z.string(),
-  name: z.string(),
-  image: z.string(),
-  aisle: z.string(),
+  name: z.string().trim(),
+  normalizedName: z.string().trim(),
+  image: z.string().nullish().default(null),
+  aisle: z.string().nullish().default(null),
 });
 
 export const IngredientUsageSchema = z.object({
   amount: z.number(),
-  unit: z.string(),
-  original: z.string(),
+  unit: z.string().nullish().default(null),
+  original: z.string().nullish().default(null),
 });
 
 export const ExtendedIngredientSchema = z.object({

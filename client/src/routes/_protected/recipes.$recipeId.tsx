@@ -114,7 +114,7 @@ function HeaderSection({
           <div>
             <p className="text-sm text-muted-foreground">⏰ Ready in</p>
             <p className="text-primary font-semibold">
-              {recipe.readyInMinutes} minutes
+              {recipe.readyInMinutes ?? "N/A"} minutes
             </p>
           </div>
           <div>
@@ -128,7 +128,7 @@ function HeaderSection({
               ⚖️ Weight per serving
             </p>
             <p className="text-primary font-semibold">
-              {recipe.weightPerServing} g
+              {recipe.weightPerServing ?? "N/A"} g
             </p>
           </div>
           <div>
@@ -136,7 +136,10 @@ function HeaderSection({
               💵 Price per serving
             </p>
             <p className="text-primary font-semibold">
-              ${(recipe.pricePerServing / 100).toFixed(2)}
+              $
+              {recipe.pricePerServing
+                ? (recipe.pricePerServing / 100).toFixed(2)
+                : "N/A"}
             </p>
           </div>
         </div>
@@ -157,7 +160,9 @@ function ActionButtons({ recipe }: Pick<ExtendedRecipe, "recipe">) {
         </h3>
         <div
           className="prose prose-md max-h-44 text-secondary-foreground overflow-y-scroll"
-          dangerouslySetInnerHTML={{ __html: recipe.summary }}
+          dangerouslySetInnerHTML={{
+            __html: recipe.summary ?? "No description available.",
+          }}
         />
       </div>
       <div className="flex flex-row lg:flex-col gap-3 shrink-0 w-full lg:w-auto">
@@ -211,18 +216,10 @@ function IngredientsList({
             className="flex items-start gap-2 text-md"
           >
             <span className="font-medium text-primary">
-              {Number.parseFloat(ing.usage.amount.toFixed(2))} {ing.usage.unit}
+              {Number.parseFloat(ing.usage.amount.toFixed(2))}{" "}
+              {ing.usage.unit ?? ""}
             </span>
-            <span className="text-muted-foreground">
-              {
-                ing.ingredient.name
-                  .split(". ")[0]
-                  .split(" to ")[0]
-                  .split(" but ")[0]
-                  .split(" or ")[0]
-                  .split(" if ")[0]
-              }
-            </span>
+            <span className="text-muted-foreground">{ing.ingredient.name}</span>
           </li>
         ))}
       </ul>
@@ -238,31 +235,31 @@ function NutritionInfo({ recipe }: Pick<ExtendedRecipe, "recipe">) {
         <div className="flex justify-between items-center">
           <span className="text-muted-foreground">Calories</span>
           <span className="font-semibold text-primary">
-            {recipe.caloriesPerServing || "N/A"} kcal
+            {recipe.caloriesPerServing ?? "N/A"} kcal
           </span>
         </div>
         <div className="flex justify-between items-center">
           <span className="text-muted-foreground">Protein</span>
           <span className="font-semibold text-primary">
-            {recipe.percentProtein || "N/A"}%
+            {recipe.percentProtein ?? "N/A"}%
           </span>
         </div>
         <div className="flex justify-between items-center">
           <span className="text-muted-foreground">Fat</span>
           <span className="font-semibold text-primary">
-            {recipe.percentFat || "N/A"}%
+            {recipe.percentFat ?? "N/A"}%
           </span>
         </div>
         <div className="flex justify-between items-center">
           <span className="text-muted-foreground">Carbs</span>
           <span className="font-semibold text-primary">
-            {recipe.percentCarbs || "N/A"}%
+            {recipe.percentCarbs ?? "N/A"}%
           </span>
         </div>
         <div className="flex justify-between items-center">
           <span className="text-muted-foreground">Health Score</span>
           <span className="font-semibold text-primary">
-            {recipe.healthScore || "N/A"} / 100
+            {recipe.healthScore ?? "N/A"} / 100
           </span>
         </div>
       </div>

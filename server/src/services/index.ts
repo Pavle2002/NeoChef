@@ -60,7 +60,7 @@ export const recommendationService = new RecommendationService(
 );
 export const rateLimitService = new RedisRateLimitService(redisClient);
 
-const spoonacularApiClient = new SpoonacularApiClient(
+export const spoonacularApiClient = new SpoonacularApiClient(
   config.spoonacular.apiKey,
   config.spoonacular.baseUrl
 );

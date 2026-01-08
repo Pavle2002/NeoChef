@@ -26,7 +26,7 @@ export class SpoonacularImportService implements IImportService {
         const recipe = await uow.recipes.createOrUpdate(result.recipeData);
 
         for (const extendedIngredient of result.extendedIngredients) {
-          const ingredient = await uow.ingredients.createOrUpdate(
+          const ingredient = await uow.ingredients.create(
             extendedIngredient.ingredientData
           );
           await uow.recipes.addIngredient(
