@@ -4,7 +4,7 @@ import config from "@config/config.js";
 const { env, clientOrigin } = config;
 
 const corsConfig = cors({
-  origin: env === "production" ? clientOrigin : "http://localhost:5173",
+  origin: clientOrigin,
   credentials: true,
   exposedHeaders: [
     "X-RateLimit-Limit",

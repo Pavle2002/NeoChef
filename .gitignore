@@ -5,7 +5,7 @@ node_modules/
 
 #server
 /server/.env
-/server/.env.local
+/server/.env.dev
 /server/logs
 
 #client

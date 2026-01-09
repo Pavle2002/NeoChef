@@ -22,4 +22,11 @@ export default defineConfig({
       "@neochef/common": resolve(import.meta.dirname, "../common/src/index.ts"),
     },
   },
+  server: {
+    host: true, // Needed for Docker
+    port: 5173,
+    watch: {
+      usePolling: true, // Needed for hot reload in Docker (sometimes)
+    },
+  },
 });

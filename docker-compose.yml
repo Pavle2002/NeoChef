@@ -1,3 +1,4 @@
+name: neochef
 services:
   server:
     image: ghcr.io/pavle2002/neochef:latest
@@ -12,11 +13,11 @@ services:
     command: ["sh", "server/import-cron.sh"]
     env_file:
       - .env
-    depends_on:
-      - redis
-    restart: unless-stopped
     volumes:
       - import_progress:/app/data
+    restart: unless-stopped
+    depends_on:
+      - redis
 
   redis:
     image: redis:alpine
@@ -29,13 +30,13 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    depends_on:
-      - server
-    restart: unless-stopped
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
+    restart: unless-stopped
+    depends_on:
+      - server
 
 volumes:
   redis_data:

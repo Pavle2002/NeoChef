@@ -1,0 +1,9 @@
+http://localhost {
+    encode gzip
+
+    handle_path /api/* {
+        reverse_proxy server:3000
+    }
+
+    reverse_proxy client:5173
+}

@@ -24,7 +24,7 @@ COPY server ./server
 EXPOSE 3000
 
 # Run the dev command
-CMD ["npm", "run", "dev:server"]
+CMD ["npm", "run", "-w", "server", "dev"]
 
 # Stage 3: Builder (Build for production)
 FROM base AS builder

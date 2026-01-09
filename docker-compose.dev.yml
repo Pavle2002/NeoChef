@@ -1,0 +1,56 @@
+name: neochef-dev
+services:
+  server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+      target: development
+    env_file:
+      - ./server/.env.dev
+    volumes:
+      - ./server:/app/server
+      - ./common:/app/common
+    restart: unless-stopped
+    depends_on:
+      - redis
+
+  client:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+      target: development
+    env_file:
+      - ./client/.env
+    volumes:
+      - ./client:/app/client
+      - ./common:/app/common
+      - /app/client/node_modules
+    restart: unless-stopped
+    depends_on:
+      - server
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./Caddyfile.dev:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    restart: unless-stopped
+    depends_on:
+      - server
+      - client
+
+volumes:
+  redis_data:
+  caddy_data:
+  caddy_config:
