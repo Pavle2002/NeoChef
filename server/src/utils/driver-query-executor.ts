@@ -1,5 +1,5 @@
 import type { IQueryExecutor } from "@interfaces/query-executor.interface.js";
-import type { Driver, EagerResult, Result } from "neo4j-driver";
+import type { Driver, Result } from "neo4j-driver";
 
 export class DriverQueryExecutor implements IQueryExecutor {
   constructor(private driver: Driver) {}
