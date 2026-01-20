@@ -15,12 +15,12 @@ const strategy = new Strategy(
     const { email, password } = req.validated?.body as UserCredentials;
 
     const [error, user] = await safeAwait(
-      authService.authenticateUser(email, password)
+      authService.authenticateUser(email, password),
     );
     if (error) return done(error, false, { message: "Authentication failed" });
     if (!user) return done(null, false, { message: "Invalid credentials" });
     return done(null, user, { message: "Authentication successful" });
-  }
+  },
 );
 
 passport.use(strategy);
@@ -36,4 +36,4 @@ passport.deserializeUser(async (id, done) => {
   return done(null, user);
 });
 
-export default passport;
+export { passport };

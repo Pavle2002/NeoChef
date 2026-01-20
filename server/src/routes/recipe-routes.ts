@@ -5,7 +5,7 @@ import { recipeSchemas } from "@validation/recipe-schemas.js";
 import { isAuthenticated } from "@middlewares/auth-middleware.js";
 import { recommendationController } from "@controllers/recommendation-controller.js";
 import { rateLimiter } from "@middlewares/rate-limiter.js";
-import { config } from "@config/index.js";
+import { config } from "@config/config.js";
 
 const { getById, getAll, getTrending, like, unlike, save, unsave } =
   recipeController;

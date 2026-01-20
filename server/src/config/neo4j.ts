@@ -1,13 +1,17 @@
 import neo4j from "neo4j-driver";
 import { safeAwait } from "@utils/safe-await.js";
-import config from "@config/config.js";
-import logger from "@config/logger.js";
+import { config } from "./config.js";
+import { logger } from "./logger.js";
 
 const { url, username, password } = config.neo4j;
 
-const neo4jClient = neo4j.driver(url, neo4j.auth.basic(username, password), {
-  disableLosslessIntegers: true,
-});
+export const neo4jClient = neo4j.driver(
+  url,
+  neo4j.auth.basic(username, password),
+  {
+    disableLosslessIntegers: true,
+  },
+);
 
 const [error, serverInfo] = await safeAwait(neo4jClient.getServerInfo());
 
@@ -18,5 +22,3 @@ if (error) {
 }
 
 logger.info("Connected to Neo4j database", { ...serverInfo });
-
-export default neo4jClient;

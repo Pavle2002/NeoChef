@@ -7,8 +7,5 @@ export interface IUnitOfWork {
   recipes: IRecipeRepository;
   ingredients: IIngredientRepository;
 
-  // begin(): Promise<void>;
-  // commit(): Promise<void>;
-  // rollback(): Promise<void>;
   execute<T>(work: (uow: IUnitOfWork) => Promise<T>): Promise<T>;
 }

@@ -1,14 +1,14 @@
 import { spoonacularImportService } from "@services/index.js";
-import { logger } from "@config/index.js";
 import { SpoonacularQuotaExceededError } from "@errors/spoonacular-quota-exceeded-error.js";
 import { safeAwait } from "@utils/safe-await.js";
+import { logger } from "@config/logger.js";
 
 const batchSize = process.argv[2] ? parseInt(process.argv[2]) : 20;
 
 logger.info("Starting recipe import process", { batchSize });
 
 const [error] = await safeAwait(
-  spoonacularImportService.importRecipesInBatches(batchSize)
+  spoonacularImportService.importRecipesInBatches(batchSize),
 );
 
 if (error) {

@@ -1,14 +1,14 @@
 import session from "express-session";
-import config from "@config/config.js";
 import { RedisStore } from "connect-redis";
-import redisClient from "@config/redis.js";
+import { redisClient } from "./redis.js";
+import { config } from "./config.js";
 
 const redisStore = new RedisStore({
   client: redisClient,
   prefix: "sess:",
 });
 
-const sessionConfig = session({
+export const sessionConfig = session({
   name: "neochef.sid",
   secret: config.sessionSecret,
   resave: false,
@@ -22,5 +22,3 @@ const sessionConfig = session({
   },
   store: redisStore,
 });
-
-export default sessionConfig;

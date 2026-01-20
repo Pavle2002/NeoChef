@@ -1,9 +1,9 @@
 import { createClient } from "redis";
 import { safeAwait } from "@utils/safe-await.js";
-import config from "@config/config.js";
-import logger from "@config/logger.js";
+import { logger } from "./logger.js";
+import { config } from "./config.js";
 
-const redisClient = createClient({
+export const redisClient = createClient({
   url: config.redis.url,
 });
 
@@ -19,4 +19,3 @@ if (error) {
 }
 
 logger.info("Connected to Redis database", { address: config.redis.url });
-export default redisClient;

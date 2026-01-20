@@ -1,4 +1,4 @@
-import logger from "@config/logger.js";
+import { logger } from "@config/logger.js";
 import type { RateLimitResult } from "@interfaces/rate-limit-service.interface.js";
 import { CacheKeys } from "@utils/cache-keys.js";
 import { safeAwait } from "@utils/safe-await.js";
@@ -36,7 +36,7 @@ export class RedisRateLimitService {
     identifier: string,
     endpoint: string,
     limit: number,
-    windowMs: number
+    windowMs: number,
   ): Promise<RateLimitResult> {
     const key = `${CacheKeys.RATE_LIMIT}${identifier}:${endpoint}`;
     const now = Date.now();
@@ -55,7 +55,7 @@ export class RedisRateLimitService {
           ttlSeconds.toString(),
           uniqueValue,
         ],
-      })
+      }),
     );
 
     if (error || !result) {
@@ -77,7 +77,7 @@ export class RedisRateLimitService {
   private checkLimitFallback(
     key: string,
     limit: number,
-    windowMs: number
+    windowMs: number,
   ): RateLimitResult {
     const now = Date.now();
     let record = this.fallbackCache.get(key);

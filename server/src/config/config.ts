@@ -18,7 +18,7 @@ requiredEnvVars.forEach((key) => {
   }
 });
 
-const config = {
+export const config = {
   env: process.env.NODE_ENV || "development",
   port: parseInt(process.env.PORT || "3000", 10),
   clientOrigin: process.env.CLIENT_ORIGIN!.split(","),
@@ -40,7 +40,7 @@ const config = {
     trendingRecipes: parseInt(process.env.TRENDING_RECIPES_TTL || "3600", 10), // 15 minutes
     recommendedRecipes: parseInt(
       process.env.RECOMMENDED_RECIPES_TTL || "900",
-      10
+      10,
     ), // 15 minutes
     filterOptions: parseInt(process.env.FILTER_OPTIONS_TTL || "86400", 10), // 24 hours
   },
@@ -64,5 +64,3 @@ const config = {
     },
   },
 };
-
-export default config;

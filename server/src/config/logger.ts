@@ -1,5 +1,5 @@
 import winston from "winston";
-import config from "./config.js";
+import { config } from "./config.js";
 
 const { combine, timestamp, json, printf, colorize, errors } = winston.format;
 const { Console, File } = winston.transports;
@@ -27,13 +27,13 @@ const customLevels = {
 
 winston.addColors(customLevels.colors);
 
-const logger = winston.createLogger({
+export const logger = winston.createLogger({
   levels: customLevels.levels,
   level: config.logLevel,
   format: combine(
     timestamp(),
     errors({ stack: config.env === "development" }),
-    json()
+    json(),
   ),
   transports: [
     new Console({
@@ -58,5 +58,3 @@ const logger = winston.createLogger({
 //     })
 //   );
 // }
-
-export default logger;

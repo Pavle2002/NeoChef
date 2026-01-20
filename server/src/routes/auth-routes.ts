@@ -4,7 +4,7 @@ import { isAuthenticated } from "@middlewares/auth-middleware.js";
 import { validate } from "@middlewares/validation-middleware.js";
 import { authSchemas } from "@validation/auth-schemas.js";
 import { rateLimiter } from "@middlewares/rate-limiter.js";
-import { config } from "@config/index.js";
+import { config } from "@config/config.js";
 
 const { login, register, logout } = authController;
 const { loginSchema, registerSchema } = authSchemas;
@@ -16,12 +16,12 @@ const { login: loginLimit, register: registerLimit } = config.rateLimit;
 const loginLimiter = rateLimiter(
   loginLimit.maxRequests,
   loginLimit.windowMs,
-  "login"
+  "login",
 );
 const registerLimiter = rateLimiter(
   registerLimit.maxRequests,
   registerLimit.windowMs,
-  "register"
+  "register",
 );
 
 router.post("/login", loginLimiter, validate(loginSchema), login);

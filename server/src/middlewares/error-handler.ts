@@ -4,13 +4,13 @@ import { sendError } from "@utils/response-handler.js";
 import { AppError } from "@errors/index.js";
 import { ErrorCodes, type ErrorCode } from "@neochef/common";
 import { mapZodIssueToErrorCode } from "@utils/map-ZodIssue-to-ErrorCode.js";
-import { logger } from "@config/index.js";
+import { logger } from "@config/logger.js";
 
 export function errorHandler(
   err: Error,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): void {
   logger.error(err);
 
@@ -32,6 +32,6 @@ export function errorHandler(
     res,
     500,
     "Internal Server Error",
-    ErrorCodes.SYS_INTERNAL_ERROR
+    ErrorCodes.SYS_INTERNAL_ERROR,
   );
 }

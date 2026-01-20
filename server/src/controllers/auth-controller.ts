@@ -22,7 +22,7 @@ function login(req: Request, res: Response, next: NextFunction): void {
         }
         return sendSuccess(res, 200, user, info.message);
       });
-    }
+    },
   )(req, res, next);
 }
 
@@ -34,7 +34,7 @@ async function register(req: Request, res: Response): Promise<void> {
 async function logout(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> {
   req.logout((err: Error | null) => {
     if (err) {

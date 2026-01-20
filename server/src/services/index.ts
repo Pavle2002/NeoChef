@@ -1,5 +1,5 @@
-import { config } from "@config/index.js";
-import neo4jClient from "@config/neo4j.js";
+import { config } from "@config/config.js";
+import { neo4jClient } from "@config/neo4j.js";
 import { AuthService } from "@services/auth-service.js";
 import { UserRepository } from "@repositories/user-repository.js";
 import { RecipeRepository } from "@repositories/recipe-repository.js";
@@ -21,7 +21,7 @@ import { DishTypeService } from "./dish-type-service.js";
 import { RecommendationRepository } from "@repositories/recommendation-repository.js";
 import { RecommendationService } from "./recommendation-service.js";
 import { RedisService } from "./redis-service.js";
-import redisClient from "@config/redis.js";
+import { redisClient } from "@config/redis.js";
 import { RedisRateLimitService } from "./redis-rate-limit-service.js";
 
 const queryExecutor = new DriverQueryExecutor(neo4jClient);
@@ -40,37 +40,37 @@ export const authService = new AuthService(userRepository);
 export const userService = new UserService(
   userRepository,
   unitOfWorkFactory,
-  cacheService
+  cacheService,
 );
 export const recipeService = new RecipeService(recipeRepository, cacheService);
 export const ingredientService = new IngredientService(ingredientRepository);
 export const cuisineService = new CuisineService(
   cuisineRepository,
-  cacheService
+  cacheService,
 );
 export const dietService = new DietService(dietRepository, cacheService);
 export const dishTypeService = new DishTypeService(
   dishTypeRepository,
-  cacheService
+  cacheService,
 );
 export const recommendationService = new RecommendationService(
   recommendationRepository,
   recipeService,
-  cacheService
+  cacheService,
 );
 export const rateLimitService = new RedisRateLimitService(redisClient);
 
 export const spoonacularApiClient = new SpoonacularApiClient(
   config.spoonacular.apiKey,
-  config.spoonacular.baseUrl
+  config.spoonacular.baseUrl,
 );
 const fileImportProgressManager = new FileImportProgressManager(
-  config.spoonacular.importProgressFilePath
+  config.spoonacular.importProgressFilePath,
 );
 
 export const spoonacularImportService = new SpoonacularImportService(
   spoonacularApiClient,
   unitOfWorkFactory,
   fileImportProgressManager,
-  cacheService
+  cacheService,
 );

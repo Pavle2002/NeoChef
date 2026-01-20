@@ -1,11 +1,4 @@
 import express, { type Request, type Response } from "express";
-import {
-  config,
-  sessionConfig,
-  corsConfig,
-  passport,
-  logger,
-} from "@config/index.js";
 import { authRoutes } from "@routes/auth-routes.js";
 import { sendSuccess } from "@utils/response-handler.js";
 import { errorHandler } from "@middlewares/error-handler.js";
@@ -17,6 +10,11 @@ import { cuisineRoutes } from "@routes/cuisine-routes.js";
 import { dietRoutes } from "@routes/diet-routes.js";
 import { dishTypeRoutes } from "@routes/dish-type-routes.js";
 import { rateLimiter } from "@middlewares/rate-limiter.js";
+import { config } from "@config/config.js";
+import { corsConfig } from "@config/cors.js";
+import { sessionConfig } from "@config/session.js";
+import { logger } from "@config/logger.js";
+import { passport } from "@config/passport.js";
 
 const app = express();
 app.set("trust proxy", 1);

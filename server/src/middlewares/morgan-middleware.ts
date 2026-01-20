@@ -1,6 +1,5 @@
 import morgan from "morgan";
-import { logger } from "@config/index.js";
-import { config } from "@config/index.js";
+import { logger } from "@config/logger.js";
 
 // const format = config.env === "production" ? "combined" : "dev";
 const format = "dev";

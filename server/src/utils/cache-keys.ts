@@ -1,4 +1,4 @@
-import { config } from "@config/index.js";
+import { config } from "@config/config.js";
 
 export const CacheKeys = {
   CUISINES_ALL: "ref:cuisines:all",

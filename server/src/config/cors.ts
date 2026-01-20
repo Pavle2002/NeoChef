@@ -1,9 +1,9 @@
 import cors from "cors";
-import config from "@config/config.js";
+import { config } from "./config.js";
 
-const { env, clientOrigin } = config;
+const { clientOrigin } = config;
 
-const corsConfig = cors({
+export const corsConfig = cors({
   origin: clientOrigin,
   credentials: true,
   exposedHeaders: [
@@ -12,5 +12,3 @@ const corsConfig = cors({
     "X-RateLimit-Reset",
   ],
 });
-
-export default corsConfig;
