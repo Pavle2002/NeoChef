@@ -17,7 +17,7 @@ import { safeAwait } from "@utils/safe-await.js";
 export class RecipeService implements IRecipeService {
   constructor(
     private readonly recipeRepository: IRecipeRepository,
-    private readonly cacheService: ICacheService
+    private readonly cacheService: ICacheService,
   ) {}
 
   async getById(id: string): Promise<Recipe> {
@@ -38,7 +38,7 @@ export class RecipeService implements IRecipeService {
     const cacheKey = CacheKeys.recipes.trending;
 
     const [error, cached] = await safeAwait(
-      this.cacheService.zRange(cacheKey, 0, DEFAULT_PAGE_SIZE - 1)
+      this.cacheService.zRange(cacheKey, 0, DEFAULT_PAGE_SIZE - 1),
     );
     if (!error && cached && cached.length > 0) {
       return this.recipeRepository.findByIds(cached);
@@ -50,9 +50,9 @@ export class RecipeService implements IRecipeService {
     await safeAwait(
       Promise.all(
         result.map(({ recipe, score }) =>
-          this.cacheService.zAdd(cacheKey, score, recipe.id)
-        )
-      )
+          this.cacheService.zAdd(cacheKey, score, recipe.id),
+        ),
+      ),
     );
     await safeAwait(this.cacheService.expire(cacheKey, CacheKeys.recipes.TTL));
 
@@ -67,7 +67,7 @@ export class RecipeService implements IRecipeService {
       sortBy: DEFAULT_SORT_BY,
       sortOrder: DEFAULT_SORT_ORDER,
     },
-    search?: string
+    search?: string,
   ): Promise<{ recipes: Recipe[]; totalCount: number }> {
     const [recipes, totalCount] = await Promise.all([
       this.recipeRepository.findAll(
@@ -75,7 +75,7 @@ export class RecipeService implements IRecipeService {
         offset,
         filters,
         sortOptions,
-        search
+        search,
       ),
       this.recipeRepository.countAll(filters, search),
     ]);

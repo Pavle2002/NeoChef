@@ -26,7 +26,7 @@ export class SpoonacularApiClient implements IApiClient {
   }
 
   async searchRecipes(
-    options: RecipeSearchOptions
+    options: RecipeSearchOptions,
   ): Promise<ExtendedRecipeData[]> {
     const { cuisine, diet, type, number, offset } = options;
 
@@ -42,12 +42,12 @@ export class SpoonacularApiClient implements IApiClient {
       addRecipeInformation: "true",
       addRecipeNutrition: "true",
       addRecipeInstructions: "true",
-      sort: "meta-score",
+      sort: "popularity",
       sortDirection: "desc",
     };
 
     const url = `${this.baseUrl}/recipes/complexSearch?${new URLSearchParams(
-      searchParams
+      searchParams,
     )}`;
 
     const response = await this.rateLimiter.schedule(() => fetch(url));
@@ -57,7 +57,7 @@ export class SpoonacularApiClient implements IApiClient {
     }
     if (!response.ok) {
       throw new Error(
-        `Spoonacular API error: ${response.status} - ${response.statusText}`
+        `Spoonacular API error: ${response.status} - ${response.statusText}`,
       );
     }
 
@@ -73,11 +73,11 @@ export class SpoonacularApiClient implements IApiClient {
         const caloricBreakdown = nutrition?.caloricBreakdown;
         const weightPerServing = nutrition?.weightPerServing?.amount;
         const caloriesPerServing = nutrition?.nutrients?.find(
-          (n: any) => n.name === "Calories"
+          (n: any) => n.name === "Calories",
         )?.amount;
 
         const instructions = recipe.analyzedInstructions?.[0]?.steps?.map(
-          (s: any) => s.step
+          (s: any) => s.step,
         );
 
         const recipeData: RecipeData = {
@@ -138,7 +138,7 @@ export class SpoonacularApiClient implements IApiClient {
               unit: i.unit,
               original: i.original,
             },
-          })
+          }),
         );
 
         return {
@@ -149,7 +149,7 @@ export class SpoonacularApiClient implements IApiClient {
           equipment,
           extendedIngredients,
         };
-      })
+      }),
     );
   }
 }

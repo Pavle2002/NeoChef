@@ -9,15 +9,6 @@
     "build": "tsc",
     "clean": "rm -rf dist"
   },
-  "exports": {
-    ".": {
-      "import": {
-        "development": "./src/index.ts",
-        "default": "./dist/index.js"
-      },
-      "types": "./dist/index.d.ts"
-    }
-  },
   "author": "Pavle Velickovic",
   "license": "ISC",
   "dependencies": {

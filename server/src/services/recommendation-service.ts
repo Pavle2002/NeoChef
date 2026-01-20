@@ -28,7 +28,7 @@ export class RecommendationService implements IRecommendationService {
       recipes = trending.slice(0, 10);
     }
 
-    const TTL = await safeAwait(
+    await safeAwait(
       this.cacheService.setEx(
         cacheKey,
         CacheKeys.recommendations.TTL,

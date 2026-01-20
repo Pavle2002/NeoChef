@@ -21,7 +21,7 @@ export const Route = createFileRoute("/_protected/recipes/$recipeId")({
 function RouteComponent() {
   const { recipeId } = Route.useParams();
   const { data: extendedRecipe } = useSuspenseQuery(
-    getRecipeQueryOptions(recipeId)
+    getRecipeQueryOptions(recipeId),
   );
 
   const { recipe, cuisines, diets, dishTypes, equipment, extendedIngredients } =
