@@ -14,11 +14,12 @@
     "type": "git",
     "url": "git+https://github.com/Pavle2002/Neo-Chef.git"
   },
-  "author": "",
+  "author": "Pavle Velickovic",
   "license": "ISC",
   "description": "",
   "dependencies": {
     "@neochef/common": "*",
+    "@neochef/core": "*",
     "bcrypt": "^5.1.1",
     "bottleneck": "^2.19.5",
     "connect-redis": "^8.0.2",
@@ -27,13 +28,11 @@
     "express": "^5.1.0",
     "express-session": "^1.18.1",
     "morgan": "^1.10.0",
-    "neo4j-driver": "^5.28.1",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
-    "pluralize": "^8.0.0",
     "redis": "^4.7.0",
-    "winston": "^3.17.0",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "pluralize": "^8.0.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

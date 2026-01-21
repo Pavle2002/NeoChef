@@ -6,6 +6,7 @@ WORKDIR /app
 # Copy workspace package files to install dependencies
 COPY package.json package-lock.json ./
 COPY common/package.json ./common/package.json
+COPY core/package.json ./core/package.json
 COPY server/package.json ./server/package.json
 COPY client/package.json ./client/package.json
 
@@ -18,6 +19,7 @@ ENV NODE_ENV=development
 
 # Copy source code
 COPY common ./common
+COPY core ./core
 COPY server ./server
 
 # Expose port
@@ -30,10 +32,12 @@ CMD ["npm", "run", "-w", "server", "dev"]
 FROM base AS builder
 
 COPY common ./common
+COPY core ./core
 COPY server ./server
 
 # Build common first, then server
 RUN npm run build -w common
+RUN npm run build -w core
 RUN npm run build -w server
 
 # Prune dev dependencies to reduce image size for production
@@ -51,6 +55,8 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/common/package.json ./common/package.json
 COPY --from=builder /app/common/dist ./common/dist
+COPY --from=builder /app/core/package.json ./core/package.json
+COPY --from=builder /app/core/dist ./core/dist
 COPY --from=builder /app/server/package.json ./server/package.json
 COPY --from=builder /app/server/dist ./server/dist
 COPY --from=builder /app/server/import-progress.json ./data/import-progress.json

@@ -1,5 +1,5 @@
-import type { IDietRepository } from "@interfaces/diet-repository.interface.js";
-import type { IQueryExecutor } from "@interfaces/query-executor.interface.js";
+import type { IDietRepository } from "../interfaces/diet-repository.interface.js";
+import type { IQueryExecutor } from "../interfaces/query-executor.interface.js";
 import type { Diet } from "@neochef/common";
 
 export class DietRepository implements IDietRepository {

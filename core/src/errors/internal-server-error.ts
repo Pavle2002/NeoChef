@@ -1,10 +1,10 @@
 import { ErrorCodes, type ErrorCode } from "@neochef/common";
-import { AppError } from "@errors/app-error.js";
+import { AppError } from "./app-error.js";
 
 export class InternalServerError extends AppError {
   constructor(
     message: string,
-    errorCode: ErrorCode = ErrorCodes.SYS_INTERNAL_ERROR
+    errorCode: ErrorCode = ErrorCodes.SYS_INTERNAL_ERROR,
   ) {
     super(message, 500, errorCode);
     Object.setPrototypeOf(this, InternalServerError.prototype);

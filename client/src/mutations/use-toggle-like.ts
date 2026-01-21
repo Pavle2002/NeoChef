@@ -47,7 +47,7 @@ export function useToggleLike() {
       if (context) {
         queryClient.setQueryData(
           context.recipeQueryKey,
-          context.previousRecipe
+          context.previousRecipe,
         );
       }
     },

@@ -1,60 +1,6 @@
-import winston from "winston";
+import { createLogger } from "@neochef/core";
 import { config } from "./config.js";
 
-const { combine, timestamp, json, printf, colorize, errors } = winston.format;
-const { Console, File } = winston.transports;
+const { env, logLevel } = config;
 
-const myFormat = printf(({ level, message, stack }) => {
-  return `[${level}] - ${message} ${stack ? "\n" + stack : ""}`;
-});
-
-const customLevels = {
-  levels: {
-    debug: 4,
-    http: 3,
-    info: 2,
-    warn: 1,
-    error: 0,
-  },
-  colors: {
-    debug: "blue",
-    http: "magenta",
-    info: "green",
-    warn: "yellow",
-    error: "red",
-  },
-};
-
-winston.addColors(customLevels.colors);
-
-export const logger = winston.createLogger({
-  levels: customLevels.levels,
-  level: config.logLevel,
-  format: combine(
-    timestamp(),
-    errors({ stack: config.env === "development" }),
-    json(),
-  ),
-  transports: [
-    new Console({
-      format: combine(colorize(), myFormat),
-    }),
-  ],
-});
-
-// ------ Log files are not recommended in Docker containers ------ //
-
-// if (config.env === "production") {
-//   logger.add(
-//     new File({
-//       filename: "logs/combined.log",
-//       level: "info",
-//     })
-//   );
-//   logger.add(
-//     new File({
-//       filename: "logs/error.log",
-//       level: "error",
-//     })
-//   );
-// }
+export const logger = createLogger(logLevel, env);

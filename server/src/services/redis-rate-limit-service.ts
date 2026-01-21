@@ -1,7 +1,7 @@
 import { logger } from "@config/logger.js";
 import type { RateLimitResult } from "@interfaces/rate-limit-service.interface.js";
+import { safeAwait } from "@neochef/core";
 import { CacheKeys } from "@utils/cache-keys.js";
-import { safeAwait } from "@utils/safe-await.js";
 import type { RedisClientType } from "redis";
 
 const RATE_LIMIT_SCRIPT = `

@@ -1,7 +1,7 @@
 import { spoonacularImportService } from "@services/index.js";
 import { SpoonacularQuotaExceededError } from "@errors/spoonacular-quota-exceeded-error.js";
-import { safeAwait } from "@utils/safe-await.js";
 import { logger } from "@config/logger.js";
+import { safeAwait } from "@neochef/core";
 
 const batchSize = process.argv[2] ? parseInt(process.argv[2]) : 20;
 

@@ -1,4 +1,4 @@
-import type { IUnitOfWork } from "@interfaces/unit-of-work.interface.js";
+import type { IUnitOfWork } from "./unit-of-work.interface.js";
 
 export interface IUnitOfWorkFactory {
   create(): IUnitOfWork;

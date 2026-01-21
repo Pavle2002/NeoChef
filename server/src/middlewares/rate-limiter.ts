@@ -1,13 +1,13 @@
 import type { User } from "@neochef/common";
 import { RateLimitError } from "@errors/rate-limit-error.js";
 import { rateLimitService } from "@services/index.js";
-import { safeAwait } from "@utils/safe-await.js";
 import type { Request, Response, NextFunction } from "express";
+import { safeAwait } from "@neochef/core";
 
 export const rateLimiter = (
   limit: number,
   windowMs: number,
-  actionKey?: string
+  actionKey?: string,
 ) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     const identifier = (req.user as User)?.id || req.ip || "unknown";
@@ -15,7 +15,7 @@ export const rateLimiter = (
     const endpoint = actionKey || req.baseUrl || "global";
 
     const [error, result] = await safeAwait(
-      rateLimitService.checkLimit(identifier, endpoint, limit, windowMs)
+      rateLimitService.checkLimit(identifier, endpoint, limit, windowMs),
     );
 
     if (error) return next();

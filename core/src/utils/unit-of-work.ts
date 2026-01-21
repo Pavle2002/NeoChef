@@ -1,12 +1,12 @@
 import { Driver, ManagedTransaction, Session } from "neo4j-driver";
-import type { IUnitOfWork } from "@interfaces/unit-of-work.interface.js";
-import type { IUserRepository } from "@interfaces/user-repository.interface.js";
-import type { IRecipeRepository } from "@interfaces/recipe-repository.interface.js";
-import type { IIngredientRepository } from "@interfaces/ingredient-repository.interface.js";
-import { UserRepository } from "@repositories/user-repository.js";
-import { RecipeRepository } from "@repositories/recipe-repository.js";
-import { IngredientRepository } from "@repositories/ingredient-repository.js";
 import { TransactionQueryExecutor } from "./transaction-query-executor.js";
+import type { IUnitOfWork } from "../interfaces/unit-of-work.interface.js";
+import type { IUserRepository } from "../interfaces/user-repository.interface.js";
+import type { IRecipeRepository } from "../interfaces/recipe-repository.interface.js";
+import type { IIngredientRepository } from "../interfaces/ingredient-repository.interface.js";
+import { UserRepository } from "../repositories/user-repository.js";
+import { RecipeRepository } from "../repositories/recipe-repository.js";
+import { IngredientRepository } from "../repositories/ingredient-repository.js";
 
 export class UnitOfWork implements IUnitOfWork {
   private session: Session;
@@ -46,35 +46,4 @@ export class UnitOfWork implements IUnitOfWork {
       await this.session.close();
     }
   }
-
-  // async begin(): Promise<void> {
-  //   this.transaction = this.session.beginTransaction();
-  //   this.queryExecutor = new TransactionQueryExecutor(this.transaction);
-  // }
-
-  // async commit(): Promise<void> {
-  //   if (this.transaction) {
-  //     await this.transaction.commit();
-  //   }
-  //   await this.session.close();
-  // }
-
-  // async rollback(): Promise<void> {
-  //   if (this.transaction) {
-  //     await this.transaction.rollback();
-  //   }
-  //   await this.session.close();
-  // }
-
-  // async execute<T>(work: (uow: IUnitOfWork) => Promise<T>): Promise<T> {
-  //   await this.begin();
-  //   try {
-  //     const result = await work(this);
-  //     await this.commit();
-  //     return result;
-  //   } catch (error) {
-  //     await this.rollback();
-  //     throw error;
-  //   }
-  // }
 }

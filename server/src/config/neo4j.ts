@@ -1,17 +1,12 @@
-import neo4j from "neo4j-driver";
-import { safeAwait } from "@utils/safe-await.js";
+import { createDriver, safeAwait } from "@neochef/core";
 import { config } from "./config.js";
 import { logger } from "./logger.js";
 
-const { url, username, password } = config.neo4j;
+const {
+  neo4j: { url, username, password },
+} = config;
 
-export const neo4jClient = neo4j.driver(
-  url,
-  neo4j.auth.basic(username, password),
-  {
-    disableLosslessIntegers: true,
-  },
-);
+export const neo4jClient = createDriver(url, username, password);
 
 const [error, serverInfo] = await safeAwait(neo4jClient.getServerInfo());
 

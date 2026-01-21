@@ -4,10 +4,11 @@
   "workspaces": [
     "client",
     "server",
-    "common"
+    "common",
+    "core"
   ],
   "scripts": {
-    "build": "npm run build -w common && npm run build -w server && npm run build -w client",
+    "build": "npm run build -w common && npm run build -w core && npm run build -w server && npm run build -w client",
     "dev": "docker compose -f docker-compose.dev.yml up",
     "dev:build": "docker compose -f docker-compose.dev.yml up --build",
     "down": "docker compose -f docker-compose.dev.yml down",

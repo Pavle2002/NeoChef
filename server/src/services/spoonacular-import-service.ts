@@ -2,19 +2,18 @@ import type { IImportService } from "@interfaces/import-service.interface.js";
 import type { IApiClient } from "@interfaces/api-client.interface.js";
 import type { Recipe } from "@neochef/common";
 import type { IImportProgressManager } from "@interfaces/import-progress-manager.interface.js";
-import { safeAwait } from "@utils/safe-await.js";
 import { CUISINES, DIETS, DISH_TYPES } from "@utils/spoonacular-constants.js";
-import type { IUnitOfWorkFactory } from "@interfaces/unit-of-work-factory.interface.js";
 import type { RecipeSearchOptions } from "@app-types/import-types.js";
 import type { ICacheService } from "@interfaces/cache-service.interface.js";
 import { CacheKeys } from "@utils/cache-keys.js";
+import { safeAwait, type IUnitOfWorkFactory } from "@neochef/core";
 
 export class SpoonacularImportService implements IImportService {
   constructor(
     private readonly spoonacularApiClient: IApiClient,
     private readonly uowFactory: IUnitOfWorkFactory,
     private readonly importProgressManager: IImportProgressManager,
-    private readonly cacheService: ICacheService
+    private readonly cacheService: ICacheService,
   ) {}
 
   async importRecipes(options: RecipeSearchOptions): Promise<Recipe[]> {
@@ -27,12 +26,12 @@ export class SpoonacularImportService implements IImportService {
 
         for (const extendedIngredient of result.extendedIngredients) {
           const ingredient = await uow.ingredients.create(
-            extendedIngredient.ingredientData
+            extendedIngredient.ingredientData,
           );
           await uow.recipes.addIngredient(
             recipe.id,
             ingredient.id,
-            extendedIngredient.usage
+            extendedIngredient.usage,
           );
         }
         for (const cuisine of result.cuisines) {
@@ -81,7 +80,7 @@ export class SpoonacularImportService implements IImportService {
             offset: combinationProgress.offset,
           };
           const [error, recipes] = await safeAwait(
-            this.importRecipes(searchOptions)
+            this.importRecipes(searchOptions),
           );
 
           if (error) {

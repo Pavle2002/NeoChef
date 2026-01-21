@@ -1,7 +1,7 @@
-import type { IQueryExecutor } from "@interfaces/query-executor.interface.js";
-import type { IRecommendationRepository } from "@interfaces/recommendation-repository.interface.js";
 import type { Recipe } from "@neochef/common";
-import { neo4jDateTimeConverter } from "@utils/neo4j-datetime-converter.js";
+import type { IRecommendationRepository } from "../interfaces/recommendation-repository.interface.js";
+import type { IQueryExecutor } from "../interfaces/query-executor.interface.js";
+import { neo4jDateTimeConverter } from "../utils/neo4j-datetime-converter.js";
 
 export class RecommendationRepository implements IRecommendationRepository {
   constructor(private readonly queryExecutor: IQueryExecutor) {}
@@ -81,7 +81,7 @@ export class RecommendationRepository implements IRecommendationRepository {
     return result.records.map((record) => {
       const recipe = record.get("r").properties;
       recipe.createdAt = neo4jDateTimeConverter.toStandardDate(
-        recipe.createdAt
+        recipe.createdAt,
       );
       recipe.likeCount = record.get("likeCount");
       return recipe as Recipe;
@@ -120,7 +120,7 @@ export class RecommendationRepository implements IRecommendationRepository {
     return result.records.map((record) => {
       const recipe = record.get("r").properties;
       recipe.createdAt = neo4jDateTimeConverter.toStandardDate(
-        recipe.createdAt
+        recipe.createdAt,
       );
       recipe.likeCount = record.get("likeCount");
       return recipe as Recipe;
@@ -128,7 +128,7 @@ export class RecommendationRepository implements IRecommendationRepository {
   }
 
   async findSimilarToLastLiked(
-    userId: string
+    userId: string,
   ): Promise<{ basedOn: string; recipes: Recipe[] } | null> {
     const query = `
       MATCH (u:User {id: $userId})-[l:LIKES]->(last:Recipe)
@@ -169,7 +169,7 @@ export class RecommendationRepository implements IRecommendationRepository {
     const recipes = result.records.map((record) => {
       const recipe = record.get("r").properties;
       recipe.createdAt = neo4jDateTimeConverter.toStandardDate(
-        recipe.createdAt
+        recipe.createdAt,
       );
       recipe.likeCount = record.get("likeCount");
       return recipe as Recipe;

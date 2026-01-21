@@ -1,7 +1,7 @@
 import { createClient } from "redis";
-import { safeAwait } from "@utils/safe-await.js";
-import { logger } from "./logger.js";
 import { config } from "./config.js";
+import { safeAwait } from "@neochef/core";
+import { logger } from "./logger.js";
 
 export const redisClient = createClient({
   url: config.redis.url,

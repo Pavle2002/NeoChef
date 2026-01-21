@@ -1,28 +1,30 @@
 import { config } from "@config/config.js";
 import { neo4jClient } from "@config/neo4j.js";
 import { AuthService } from "@services/auth-service.js";
-import { UserRepository } from "@repositories/user-repository.js";
-import { RecipeRepository } from "@repositories/recipe-repository.js";
-import { IngredientRepository } from "@repositories/ingredient-repository.js";
 import { SpoonacularImportService } from "@services/spoonacular-import-service.js";
 import { SpoonacularApiClient } from "@utils/spoonacular-api-client.js";
 import { FileImportProgressManager } from "./file-import-progress-manager.js";
-import { DriverQueryExecutor } from "@utils/driver-query-executor.js";
-import { UnitOfWorkFactory } from "@utils/unit-of-work-factory.js";
 import { UserService } from "./user-service.js";
 import { RecipeService } from "./recipe-service.js";
 import { IngredientService } from "./ingredient-service.js";
-import { DietRepository } from "@repositories/diet-repository.js";
-import { CuisineRepository } from "@repositories/cuisine-repository.js";
 import { DietService } from "./diet-service.js";
 import { CuisineService } from "./cuisine-service.js";
-import { DishTypeRepository } from "@repositories/dish-type-repository.js";
 import { DishTypeService } from "./dish-type-service.js";
-import { RecommendationRepository } from "@repositories/recommendation-repository.js";
 import { RecommendationService } from "./recommendation-service.js";
 import { RedisService } from "./redis-service.js";
 import { redisClient } from "@config/redis.js";
 import { RedisRateLimitService } from "./redis-rate-limit-service.js";
+import {
+  CuisineRepository,
+  DietRepository,
+  DishTypeRepository,
+  DriverQueryExecutor,
+  IngredientRepository,
+  RecipeRepository,
+  RecommendationRepository,
+  UnitOfWorkFactory,
+  UserRepository,
+} from "@neochef/core";
 
 const queryExecutor = new DriverQueryExecutor(neo4jClient);
 const unitOfWorkFactory = new UnitOfWorkFactory(neo4jClient);

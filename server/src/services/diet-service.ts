@@ -1,14 +1,13 @@
 import type { Diet } from "@neochef/common";
 import type { ICacheService } from "@interfaces/cache-service.interface.js";
-import type { IDietRepository } from "@interfaces/diet-repository.interface.js";
 import type { IDietService } from "@interfaces/diet-service.interface.js";
 import { CacheKeys } from "@utils/cache-keys.js";
-import { safeAwait } from "@utils/safe-await.js";
+import { safeAwait, type IDietRepository } from "@neochef/core";
 
 export class DietService implements IDietService {
   constructor(
     private readonly dietRepository: IDietRepository,
-    private readonly cacheService: ICacheService
+    private readonly cacheService: ICacheService,
   ) {}
 
   async getAll(): Promise<Diet[]> {
@@ -23,8 +22,8 @@ export class DietService implements IDietService {
       this.cacheService.setEx(
         cacheKey,
         CacheKeys.TTL_REF,
-        JSON.stringify(diets)
-      )
+        JSON.stringify(diets),
+      ),
     );
 
     return diets;

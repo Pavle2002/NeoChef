@@ -1,8 +1,4 @@
 import { Neo4jError } from "neo4j-driver";
-import { type IUserRepository } from "@interfaces/user-repository.interface.js";
-import { ConflictError, InternalServerError } from "@errors/index.js";
-import type { IQueryExecutor } from "@interfaces/query-executor.interface.js";
-import { neo4jDateTimeConverter } from "@utils/neo4j-datetime-converter.js";
 import {
   ErrorCodes,
   type Cuisine,
@@ -12,6 +8,11 @@ import {
   type User,
   type UserData,
 } from "@neochef/common";
+import type { IUserRepository } from "../interfaces/user-repository.interface.js";
+import type { IQueryExecutor } from "../interfaces/query-executor.interface.js";
+import { neo4jDateTimeConverter } from "../utils/neo4j-datetime-converter.js";
+import { InternalServerError } from "../errors/internal-server-error.js";
+import { ConflictError } from "../errors/conflict-error.js";
 
 export class UserRepository implements IUserRepository {
   constructor(private readonly queryExecutor: IQueryExecutor) {}
@@ -19,7 +20,7 @@ export class UserRepository implements IUserRepository {
   async findById(id: string): Promise<User | null> {
     const result = await this.queryExecutor.run(
       "MATCH (u:User {id: $id}) RETURN u",
-      { id }
+      { id },
     );
     const record = result.records[0];
     if (!record) {
@@ -33,7 +34,7 @@ export class UserRepository implements IUserRepository {
   async findByEmail(email: string): Promise<User | null> {
     const result = await this.queryExecutor.run(
       "MATCH (u:User {email: $email}) RETURN u",
-      { email }
+      { email },
     );
     const record = result.records[0];
     if (!record) {
@@ -60,7 +61,7 @@ export class UserRepository implements IUserRepository {
         `CREATE (u:User {id: apoc.create.uuid(), createdAt: datetime()})
         SET u += $user
         RETURN u`,
-        { user }
+        { user },
       );
 
       const record = result.records[0];
@@ -70,7 +71,7 @@ export class UserRepository implements IUserRepository {
 
       const newUser = record.get("u").properties;
       newUser.createdAt = neo4jDateTimeConverter.toStandardDate(
-        newUser.createdAt
+        newUser.createdAt,
       );
       return newUser as User;
     } catch (error) {
@@ -81,13 +82,13 @@ export class UserRepository implements IUserRepository {
         if (error.message.includes("email")) {
           throw new ConflictError(
             "User with the same email already exists",
-            ErrorCodes.RES_CONFLICT_EMAIL
+            ErrorCodes.RES_CONFLICT_EMAIL,
           );
         }
         if (error.message.includes("username"))
           throw new ConflictError(
             "User with the same username already exists",
-            ErrorCodes.RES_CONFLICT_USERNAME
+            ErrorCodes.RES_CONFLICT_USERNAME,
           );
       }
       throw error;
@@ -99,7 +100,7 @@ export class UserRepository implements IUserRepository {
       `MATCH (u:User {id: $id})
       SET u += $updates
       RETURN u`,
-      { id, updates: user }
+      { id, updates: user },
     );
 
     const record = result.records[0];
@@ -108,7 +109,7 @@ export class UserRepository implements IUserRepository {
     }
     const updatedUser = record.get("u").properties;
     updatedUser.createdAt = neo4jDateTimeConverter.toStandardDate(
-      updatedUser.createdAt
+      updatedUser.createdAt,
     );
     return updatedUser as User;
   }
@@ -118,7 +119,7 @@ export class UserRepository implements IUserRepository {
       `MATCH (u:User {id: $id})
       DELETE u
       RETURN COUNT(u) AS count`,
-      { id }
+      { id },
     );
 
     const record = result.records[0];
@@ -132,7 +133,7 @@ export class UserRepository implements IUserRepository {
        MERGE (u)-[rel:LIKES]->(r)
        ON CREATE SET rel.likedAt = datetime()
        RETURN u, r, rel`,
-      { userId, recipeId }
+      { userId, recipeId },
     );
 
     if (!result.records[0]) {
@@ -147,7 +148,7 @@ export class UserRepository implements IUserRepository {
        MERGE (u)-[rel:SAVED]->(r)
        ON CREATE SET rel.savedAt = datetime()
        RETURN u, r, rel`,
-      { userId, recipeId }
+      { userId, recipeId },
     );
 
     if (!result.records[0]) {
@@ -161,31 +162,31 @@ export class UserRepository implements IUserRepository {
        MATCH (i:Ingredient {id: $ingredientId})
        MERGE (u)-[:HAS]->(i)
        RETURN u, i`,
-      { userId, ingredientId }
+      { userId, ingredientId },
     );
 
     if (!result.records[0]) {
       throw new InternalServerError(
-        "Failed to add ingredient to user's pantry"
+        "Failed to add ingredient to user's pantry",
       );
     }
   }
 
   async addDislikesIngredient(
     userId: string,
-    ingredientId: string
+    ingredientId: string,
   ): Promise<void> {
     const result = await this.queryExecutor.run(
       `MATCH (u:User {id: $userId})
        MATCH (i:Ingredient {id: $ingredientId})
        MERGE (u)-[:DISLIKES]->(i)
        RETURN u, i`,
-      { userId, ingredientId }
+      { userId, ingredientId },
     );
 
     if (!result.records[0]) {
       throw new InternalServerError(
-        "Failed to add disliked ingredient for user"
+        "Failed to add disliked ingredient for user",
       );
     }
   }
@@ -196,7 +197,7 @@ export class UserRepository implements IUserRepository {
        MATCH (c:Cuisine {name: $cuisineName})
        MERGE (u)-[:PREFERS]->(c)
        RETURN u, c`,
-      { userId, cuisineName }
+      { userId, cuisineName },
     );
 
     if (!result.records[0]) {
@@ -210,7 +211,7 @@ export class UserRepository implements IUserRepository {
        MATCH (d:Diet {name: $dietName})
        MERGE (u)-[:FOLLOWS]->(d)
        RETURN u, d`,
-      { userId, dietName }
+      { userId, dietName },
     );
 
     if (!result.records[0]) {
@@ -223,7 +224,7 @@ export class UserRepository implements IUserRepository {
       `MATCH (u:User {id: $userId})-[rel:LIKES]->(r:Recipe {id: $recipeId})
        DELETE rel
        RETURN COUNT(rel) AS count`,
-      { userId, recipeId }
+      { userId, recipeId },
     );
 
     const record = result.records[0];
@@ -235,7 +236,7 @@ export class UserRepository implements IUserRepository {
       `MATCH (u:User {id: $userId})-[rel:SAVED]->(r:Recipe {id: $recipeId})
        DELETE rel
        RETURN COUNT(rel) AS count`,
-      { userId, recipeId }
+      { userId, recipeId },
     );
 
     const record = result.records[0];
@@ -244,13 +245,13 @@ export class UserRepository implements IUserRepository {
 
   async removeDislikesIngredient(
     userId: string,
-    ingredientId: string
+    ingredientId: string,
   ): Promise<boolean> {
     const result = await this.queryExecutor.run(
       `MATCH (u:User {id: $userId})-[rel:DISLIKES]->(i:Ingredient {id: $ingredientId})
        DELETE rel
        RETURN COUNT(rel) AS count`,
-      { userId, ingredientId }
+      { userId, ingredientId },
     );
 
     const record = result.records[0];
@@ -259,13 +260,13 @@ export class UserRepository implements IUserRepository {
 
   async removePrefersCuisine(
     userId: string,
-    cuisineName: string
+    cuisineName: string,
   ): Promise<boolean> {
     const result = await this.queryExecutor.run(
       `MATCH (u:User {id: $userId})-[rel:PREFERS]->(c:Cuisine {name: $cuisineName})
        DELETE rel
        RETURN COUNT(rel) AS count`,
-      { userId, cuisineName }
+      { userId, cuisineName },
     );
 
     const record = result.records[0];
@@ -277,7 +278,7 @@ export class UserRepository implements IUserRepository {
       `MATCH (u:User {id: $userId})-[rel:FOLLOWS]->(d:Diet {name: $dietName})
        DELETE rel
        RETURN COUNT(rel) AS count`,
-      { userId, dietName }
+      { userId, dietName },
     );
 
     const record = result.records[0];
@@ -286,13 +287,13 @@ export class UserRepository implements IUserRepository {
 
   async removeHasIngredient(
     userId: string,
-    ingredientId: string
+    ingredientId: string,
   ): Promise<boolean> {
     const result = await this.queryExecutor.run(
       `MATCH (u:User {id: $userId})-[rel:HAS]->(i:Ingredient {id: $ingredientId})
        DELETE rel
        RETURN COUNT(rel) AS count`,
-      { userId, ingredientId }
+      { userId, ingredientId },
     );
 
     const record = result.records[0];
@@ -303,7 +304,7 @@ export class UserRepository implements IUserRepository {
     const result = await this.queryExecutor.run(
       `MATCH (u:User {id: $userId})-[:FOLLOWS]->(d:Diet)
        RETURN d`,
-      { userId }
+      { userId },
     );
 
     return result.records.map((record) => record.get("d").properties as Diet);
@@ -313,11 +314,11 @@ export class UserRepository implements IUserRepository {
     const result = await this.queryExecutor.run(
       `MATCH (u:User {id: $userId})-[:PREFERS]->(c:Cuisine)
        RETURN c`,
-      { userId }
+      { userId },
     );
 
     return result.records.map(
-      (record) => record.get("c").properties as Cuisine
+      (record) => record.get("c").properties as Cuisine,
     );
   }
 
@@ -325,11 +326,11 @@ export class UserRepository implements IUserRepository {
     const result = await this.queryExecutor.run(
       `MATCH (u:User {id: $userId})-[:DISLIKES]->(i:Ingredient)
        RETURN i`,
-      { userId }
+      { userId },
     );
 
     return result.records.map(
-      (record) => record.get("i").properties as Ingredient
+      (record) => record.get("i").properties as Ingredient,
     );
   }
 
@@ -337,11 +338,11 @@ export class UserRepository implements IUserRepository {
     const result = await this.queryExecutor.run(
       `MATCH (u:User {id: $userId})-[:HAS]->(i:Ingredient)
        RETURN i`,
-      { userId }
+      { userId },
     );
 
     return result.records.map(
-      (record) => record.get("i").properties as Ingredient
+      (record) => record.get("i").properties as Ingredient,
     );
   }
 
@@ -351,13 +352,13 @@ export class UserRepository implements IUserRepository {
        OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
        ORDER BY s.savedAt DESC
        RETURN r, COUNT(l) AS likeCount`,
-      { userId }
+      { userId },
     );
 
     const recipes = result.records.map((record) => {
       const recipe = record.get("r").properties;
       recipe.createdAt = neo4jDateTimeConverter.toStandardDate(
-        recipe.createdAt
+        recipe.createdAt,
       );
       recipe.likeCount = record.get("likeCount");
       return recipe as Recipe;

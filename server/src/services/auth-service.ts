@@ -1,14 +1,14 @@
 import bcrypt from "bcrypt";
 import type { IAuthService } from "@interfaces/auth-service.interface.js";
-import type { IUserRepository } from "@interfaces/user-repository.interface.js";
 import type { UserData, SafeUser } from "@neochef/common";
+import type { IUserRepository } from "@neochef/core";
 
 export class AuthService implements IAuthService {
   constructor(private readonly userRepository: IUserRepository) {}
 
   async authenticateUser(
     email: string,
-    password: string
+    password: string,
   ): Promise<SafeUser | null> {
     const user = await this.userRepository.findByEmail(email);
     if (!user) return null;

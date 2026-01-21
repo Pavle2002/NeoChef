@@ -1,5 +1,5 @@
 import { ErrorCodes, type ErrorCode } from "@neochef/common";
-import { AppError } from "@errors/app-error.js";
+import { AppError } from "@neochef/core";
 
 export class UnauthorizedError extends AppError {
   constructor(message: string, erroCode: ErrorCode = ErrorCodes.AUTH_INVALID) {

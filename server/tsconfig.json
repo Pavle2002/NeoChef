@@ -6,17 +6,15 @@
   "compilerOptions": {
     "paths": {
       "@neochef/common": ["../common/src/index.ts"],
+      "@neochef/core": ["../core/src/index.ts"],
       "@config/*": ["src/config/*"],
-      "@models/*": ["src/models/*"],
       "@interfaces/*": ["src/interfaces/*"],
-      "@repositories/*": ["src/repositories/*"],
       "@services/*": ["src/services/*"],
       "@middlewares/*": ["src/middlewares/*"],
       "@routes/*": ["src/routes/*"],
       "@controllers/*": ["src/controllers/*"],
       "@utils/*": ["src/utils/*"],
       "@app-types/*": ["src/types/*"],
-      "@clients/*": ["src/clients/*"],
       "@errors/*": ["src/errors/*"],
       "@validation/*": ["src/validation/*"]
     }

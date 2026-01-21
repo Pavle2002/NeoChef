@@ -1,5 +1,5 @@
 import { ErrorCodes, type ErrorCode } from "@neochef/common";
-import { AppError } from "@errors/app-error.js";
+import { AppError } from "@neochef/core";
 
 export class RateLimitError extends AppError {
   constructor(message: string, errorCode: ErrorCode = ErrorCodes.RL_EXCEEDED) {

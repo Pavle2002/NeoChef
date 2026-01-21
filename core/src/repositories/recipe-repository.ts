@@ -1,4 +1,3 @@
-import { type IRecipeRepository } from "@interfaces/recipe-repository.interface.js";
 import {
   DEFAULT_PAGE_SIZE,
   DEFAULT_SORT_BY,
@@ -15,10 +14,11 @@ import {
   type RecipeFilters,
   type RecipeSortOptions,
 } from "@neochef/common";
-import { InternalServerError } from "@errors/index.js";
-import type { IQueryExecutor } from "@interfaces/query-executor.interface.js";
-import { neo4jDateTimeConverter } from "@utils/neo4j-datetime-converter.js";
 import { int } from "neo4j-driver";
+import type { IRecipeRepository } from "../interfaces/recipe-repository.interface.js";
+import type { IQueryExecutor } from "../interfaces/query-executor.interface.js";
+import { neo4jDateTimeConverter } from "../utils/neo4j-datetime-converter.js";
+import { InternalServerError } from "../errors/internal-server-error.js";
 
 export class RecipeRepository implements IRecipeRepository {
   constructor(private readonly queryExecutor: IQueryExecutor) {}
@@ -28,7 +28,7 @@ export class RecipeRepository implements IRecipeRepository {
       `MATCH (r:Recipe {id: $id})
        OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
        RETURN r, COUNT(l) AS likeCount`,
-      { id }
+      { id },
     );
 
     const record = result.records[0];
@@ -52,14 +52,14 @@ export class RecipeRepository implements IRecipeRepository {
        WHERE r.id IN $ids
        OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
        RETURN r, COUNT(l) AS likeCount`,
-      { ids }
+      { ids },
     );
 
     const recipeMap = new Map<string, Recipe>();
     result.records.forEach((record) => {
       const recipe = record.get("r").properties;
       recipe.createdAt = neo4jDateTimeConverter.toStandardDate(
-        recipe.createdAt
+        recipe.createdAt,
       );
       recipe.likeCount = record.get("likeCount");
       recipeMap.set(recipe.id, recipe as Recipe);
@@ -70,7 +70,7 @@ export class RecipeRepository implements IRecipeRepository {
 
   async findByIdExtended(
     id: string,
-    userId: string
+    userId: string,
   ): Promise<ExtendedRecipe | null> {
     const result = await this.queryExecutor.run(
       `MATCH (r:Recipe {id: $id})
@@ -92,7 +92,7 @@ export class RecipeRepository implements IRecipeRepository {
         collect(DISTINCT e) AS equipment,
         collect(DISTINCT { ingredient: properties(i), usage: properties(u) }) AS ingredientUsages
       RETURN r, isLiked, isSaved, likeCount, cuisines, diets, dishTypes, equipment, ingredientUsages`,
-      { id, userId }
+      { id, userId },
     );
 
     const record = result.records[0];
@@ -139,7 +139,7 @@ export class RecipeRepository implements IRecipeRepository {
       sortBy: DEFAULT_SORT_BY,
       sortOrder: DEFAULT_SORT_ORDER,
     },
-    search?: string
+    search?: string,
   ): Promise<Recipe[]> {
     const { sortBy } = sortOptions;
     let orderByClause = "";
@@ -153,7 +153,7 @@ export class RecipeRepository implements IRecipeRepository {
 
     const { matchClauses, whereClauses, params } = this.buildRecipeFilterQuery(
       filters,
-      search
+      search,
     );
 
     params.limit = int(limit);
@@ -177,7 +177,7 @@ export class RecipeRepository implements IRecipeRepository {
     const recipes = result.records.map((record) => {
       const recipe = record.get("r").properties;
       recipe.createdAt = neo4jDateTimeConverter.toStandardDate(
-        recipe.createdAt
+        recipe.createdAt,
       );
       recipe.likeCount = record.get("likeCount");
       return recipe as Recipe;
@@ -200,13 +200,13 @@ export class RecipeRepository implements IRecipeRepository {
       WITH r, totalLikes, (recentLikes + recentSaves * 2) AS score
       ORDER BY score DESC
       LIMIT 24
-      RETURN r, totalLikes, score`
+      RETURN r, totalLikes, score`,
     );
 
     const recipes = result.records.map((record) => {
       const recipe = record.get("r").properties;
       recipe.createdAt = neo4jDateTimeConverter.toStandardDate(
-        recipe.createdAt
+        recipe.createdAt,
       );
       recipe.likeCount = record.get("totalLikes");
       const score = record.get("score");
@@ -224,7 +224,7 @@ export class RecipeRepository implements IRecipeRepository {
       WITH r
       OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
       RETURN r, COUNT(l) AS likeCount`,
-      { sourceId, sourceName, upsertRecipe }
+      { sourceId, sourceName, upsertRecipe },
     );
 
     const record = result.records[0];
@@ -234,7 +234,7 @@ export class RecipeRepository implements IRecipeRepository {
 
     const newRecipe = record.get("r").properties;
     newRecipe.createdAt = neo4jDateTimeConverter.toStandardDate(
-      newRecipe.createdAt
+      newRecipe.createdAt,
     );
     newRecipe.likeCount = record.get("likeCount");
 
@@ -247,7 +247,7 @@ export class RecipeRepository implements IRecipeRepository {
       MERGE (c:Cuisine {name: $cuisine.name})
       MERGE (r)-[:BELONGS_TO]->(c)
       RETURN r`,
-      { recipeId, cuisine }
+      { recipeId, cuisine },
     );
     if (!result.records[0]) {
       throw new InternalServerError("Failed to add cuisine to recipe");
@@ -260,7 +260,7 @@ export class RecipeRepository implements IRecipeRepository {
       MERGE (d:Diet {name: $diet.name})
       MERGE (r)-[:SUITABLE_FOR]->(d)
       RETURN r`,
-      { recipeId, diet }
+      { recipeId, diet },
     );
     if (!result.records[0]) {
       throw new InternalServerError("Failed to add diet to recipe");
@@ -273,7 +273,7 @@ export class RecipeRepository implements IRecipeRepository {
       MERGE (m:DishType {name: $dishType.name})
       MERGE (r)-[:IS_OF_TYPE]->(m)
       RETURN r`,
-      { recipeId, dishType }
+      { recipeId, dishType },
     );
     if (!result.records[0]) {
       throw new InternalServerError("Failed to add dish type to recipe");
@@ -287,7 +287,7 @@ export class RecipeRepository implements IRecipeRepository {
       SET e += $equipment
       MERGE (r)-[:REQUIRES]->(e)
       RETURN r`,
-      { recipeId, equipment }
+      { recipeId, equipment },
     );
     if (!result.records[0]) {
       throw new InternalServerError("Failed to add equipment to recipe");
@@ -297,7 +297,7 @@ export class RecipeRepository implements IRecipeRepository {
   async addIngredient(
     recipeId: string,
     ingredientId: string,
-    usage: IngredientUsage
+    usage: IngredientUsage,
   ): Promise<void> {
     const result = await this.queryExecutor.run(
       `MATCH (r:Recipe {id: $recipeId})
@@ -309,7 +309,7 @@ export class RecipeRepository implements IRecipeRepository {
         recipeId,
         ingredientId,
         usage,
-      }
+      },
     );
     if (!result.records[0]) {
       throw new InternalServerError("Failed to add ingredient to recipe");
@@ -318,11 +318,11 @@ export class RecipeRepository implements IRecipeRepository {
 
   async countAll(
     filters: RecipeFilters = {},
-    search?: string
+    search?: string,
   ): Promise<number> {
     const { matchClauses, whereClauses, params } = this.buildRecipeFilterQuery(
       filters,
-      search
+      search,
     );
 
     const whereString =

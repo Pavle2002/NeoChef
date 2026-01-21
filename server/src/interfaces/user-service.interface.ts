@@ -4,7 +4,7 @@ import type {
   Recipe,
   SafeUser,
 } from "@neochef/common";
-import type { IUserRepository } from "./user-repository.interface.js";
+import type { IUserRepository } from "@neochef/core";
 
 export interface IUserService {
   getById(id: string): Promise<SafeUser>;
@@ -12,35 +12,35 @@ export interface IUserService {
 
   getPreferences(
     userId: string,
-    userRepository?: IUserRepository
+    userRepository?: IUserRepository,
   ): Promise<Preferences>;
 
   getFridge(
     userId: string,
-    userRepository?: IUserRepository
+    userRepository?: IUserRepository,
   ): Promise<Ingredient[]>;
 
   getSavedRecipes(userId: string): Promise<Recipe[]>;
 
   updatePreferences(
     userId: string,
-    newPreferences: Preferences
+    newPreferences: Preferences,
   ): Promise<Preferences>;
 
   updateFridge(
     userId: string,
-    newIngredients: Ingredient[]
+    newIngredients: Ingredient[],
   ): Promise<Ingredient[]>;
 
   toggleLikesRecipe(
     userId: string,
     recipeId: string,
-    likes: boolean
+    likes: boolean,
   ): Promise<void>;
 
   toggleSavedRecipe(
     userId: string,
     recipeId: string,
-    save: boolean
+    save: boolean,
   ): Promise<void>;
 }

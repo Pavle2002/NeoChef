@@ -1,16 +1,15 @@
 import type { Recipe } from "@neochef/common";
 import type { ICacheService } from "@interfaces/cache-service.interface.js";
 import type { IRecipeService } from "@interfaces/recipe-service.interface.js";
-import type { IRecommendationRepository } from "@interfaces/recommendation-repository.interface.js";
 import type { IRecommendationService } from "@interfaces/recommendation-service.interface.js";
 import { CacheKeys } from "@utils/cache-keys.js";
-import { safeAwait } from "@utils/safe-await.js";
+import { safeAwait, type IRecommendationRepository } from "@neochef/core";
 
 export class RecommendationService implements IRecommendationService {
   constructor(
     private readonly recommendationRepository: IRecommendationRepository,
     private readonly recipeService: IRecipeService,
-    private readonly cacheService: ICacheService
+    private readonly cacheService: ICacheService,
   ) {}
 
   async getTopPicks(userId: string): Promise<Recipe[]> {
@@ -32,8 +31,8 @@ export class RecommendationService implements IRecommendationService {
       this.cacheService.setEx(
         cacheKey,
         CacheKeys.recommendations.TTL,
-        JSON.stringify(recipes)
-      )
+        JSON.stringify(recipes),
+      ),
     );
 
     return recipes;
@@ -54,15 +53,15 @@ export class RecommendationService implements IRecommendationService {
       this.cacheService.setEx(
         cacheKey,
         CacheKeys.recommendations.TTL,
-        JSON.stringify(recipes)
-      )
+        JSON.stringify(recipes),
+      ),
     );
 
     return recipes;
   }
 
   async getSimilarToLastLiked(
-    userId: string
+    userId: string,
   ): Promise<{ basedOn: string; recipes: Recipe[] } | null> {
     const cacheKey = CacheKeys.recommendations.similar(userId);
 
@@ -79,8 +78,8 @@ export class RecommendationService implements IRecommendationService {
       this.cacheService.setEx(
         cacheKey,
         CacheKeys.recommendations.TTL,
-        JSON.stringify(result)
-      )
+        JSON.stringify(result),
+      ),
     );
 
     return result;

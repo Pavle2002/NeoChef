@@ -1,5 +1,3 @@
-import { NotFoundError } from "@errors/not-found-error.js";
-import type { IRecipeRepository } from "@interfaces/recipe-repository.interface.js";
 import type { IRecipeService } from "@interfaces/recipe-service.interface.js";
 import {
   DEFAULT_PAGE_SIZE,
@@ -12,7 +10,11 @@ import {
 } from "@neochef/common";
 import type { ICacheService } from "@interfaces/cache-service.interface.js";
 import { CacheKeys } from "@utils/cache-keys.js";
-import { safeAwait } from "@utils/safe-await.js";
+import {
+  NotFoundError,
+  safeAwait,
+  type IRecipeRepository,
+} from "@neochef/core";
 
 export class RecipeService implements IRecipeService {
   constructor(

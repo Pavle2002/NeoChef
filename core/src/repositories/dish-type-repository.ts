@@ -1,6 +1,6 @@
-import type { IQueryExecutor } from "@interfaces/query-executor.interface.js";
 import type { DishType } from "@neochef/common";
-import type { IDishTypeRepository } from "@interfaces/dish-type-repositoy.interface.js";
+import type { IDishTypeRepository } from "../interfaces/dish-type-repository.interface.js";
+import type { IQueryExecutor } from "../interfaces/query-executor.interface.js";
 
 export class DishTypeRepository implements IDishTypeRepository {
   constructor(private readonly queryExecutor: IQueryExecutor) {}

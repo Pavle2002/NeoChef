@@ -105,6 +105,7 @@ const ProtectedRecipesRecipeIdRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof PublicMainIndexRoute
   '/favorites': typeof ProtectedFavoritesRoute
   '/fridge': typeof ProtectedFridgeRoute
   '/home': typeof ProtectedHomeRoute
@@ -116,9 +117,9 @@ export interface FileRoutesByFullPath {
   '/login': typeof PublicAuthLoginRoute
   '/register': typeof PublicAuthRegisterRoute
   '/about': typeof PublicMainAboutRoute
-  '/': typeof PublicMainIndexRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof PublicMainIndexRoute
   '/favorites': typeof ProtectedFavoritesRoute
   '/fridge': typeof ProtectedFridgeRoute
   '/home': typeof ProtectedHomeRoute
@@ -130,7 +131,6 @@ export interface FileRoutesByTo {
   '/login': typeof PublicAuthLoginRoute
   '/register': typeof PublicAuthRegisterRoute
   '/about': typeof PublicMainAboutRoute
-  '/': typeof PublicMainIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -154,6 +154,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/favorites'
     | '/fridge'
     | '/home'
@@ -165,9 +166,9 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/about'
-    | '/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/'
     | '/favorites'
     | '/fridge'
     | '/home'
@@ -179,7 +180,6 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/about'
-    | '/'
   id:
     | '__root__'
     | '/_protected'
@@ -210,14 +210,14 @@ declare module '@tanstack/react-router' {
     '/_public': {
       id: '/_public'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof PublicRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_protected': {
       id: '/_protected'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof ProtectedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -273,14 +273,14 @@ declare module '@tanstack/react-router' {
     '/_public/_main': {
       id: '/_public/_main'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof PublicMainRouteRouteImport
       parentRoute: typeof PublicRouteRoute
     }
     '/_public/_auth': {
       id: '/_public/_auth'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof PublicAuthRouteRouteImport
       parentRoute: typeof PublicRouteRoute
     }

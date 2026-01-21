@@ -1,14 +1,13 @@
 import type { Cuisine } from "@neochef/common";
 import type { ICacheService } from "@interfaces/cache-service.interface.js";
-import type { ICuisineRepository } from "@interfaces/cuisine-repository.interface.js";
 import type { ICuisineService } from "@interfaces/cuisine-service.interface.js";
 import { CacheKeys } from "@utils/cache-keys.js";
-import { safeAwait } from "@utils/safe-await.js";
+import { safeAwait, type ICuisineRepository } from "@neochef/core";
 
 export class CuisineService implements ICuisineService {
   constructor(
     private readonly cuisineRepository: ICuisineRepository,
-    private readonly cacheService: ICacheService
+    private readonly cacheService: ICacheService,
   ) {}
 
   async getAll(): Promise<Cuisine[]> {
@@ -23,8 +22,8 @@ export class CuisineService implements ICuisineService {
       this.cacheService.setEx(
         cacheKey,
         CacheKeys.TTL_REF,
-        JSON.stringify(cuisines)
-      )
+        JSON.stringify(cuisines),
+      ),
     );
 
     return cuisines;

@@ -4,7 +4,7 @@ import type { IVerifyOptions } from "passport-local";
 import { authService } from "@services/index.js";
 import type { User, UserData } from "@neochef/common";
 import { sendSuccess } from "@utils/response-handler.js";
-import { UnauthorizedError } from "@errors/index.js";
+import { UnauthorizedError } from "@errors/unauthorized-error.js";
 
 function login(req: Request, res: Response, next: NextFunction): void {
   passport.authenticate(

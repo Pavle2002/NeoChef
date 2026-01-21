@@ -1,6 +1,3 @@
-import { NotFoundError } from "@errors/index.js";
-import type { IUnitOfWorkFactory } from "@interfaces/unit-of-work-factory.interface.js";
-import type { IUserRepository } from "@interfaces/user-repository.interface.js";
 import type { IUserService } from "@interfaces/user-service.interface.js";
 import type {
   Ingredient,
@@ -9,14 +6,19 @@ import type {
   SafeUser,
 } from "@neochef/common";
 import type { ICacheService } from "@interfaces/cache-service.interface.js";
-import { safeAwait } from "@utils/safe-await.js";
 import { CacheKeys } from "@utils/cache-keys.js";
+import {
+  NotFoundError,
+  safeAwait,
+  type IUnitOfWorkFactory,
+  type IUserRepository,
+} from "@neochef/core";
 
 export class UserService implements IUserService {
   constructor(
     private readonly userRepository: IUserRepository,
     private readonly uowFactory: IUnitOfWorkFactory,
-    private readonly cacheService: ICacheService
+    private readonly cacheService: ICacheService,
   ) {}
 
   async getById(id: string): Promise<SafeUser> {
@@ -37,7 +39,7 @@ export class UserService implements IUserService {
 
   async getPreferences(
     userId: string,
-    userRepository = this.userRepository
+    userRepository = this.userRepository,
   ): Promise<Preferences> {
     const user = await userRepository.findById(userId);
     if (!user) throw new NotFoundError(`User with ID ${userId} not found`);
@@ -58,7 +60,7 @@ export class UserService implements IUserService {
 
   async getFridge(
     userId: string,
-    userRepository = this.userRepository
+    userRepository = this.userRepository,
   ): Promise<Ingredient[]> {
     const user = await userRepository.findById(userId);
     if (!user) throw new NotFoundError(`User with ID ${userId} not found`);
@@ -78,7 +80,7 @@ export class UserService implements IUserService {
     next: T[],
     getKey: (item: T) => string,
     add: (key: string) => Promise<void>,
-    remove: (key: string) => Promise<boolean>
+    remove: (key: string) => Promise<boolean>,
   ): Promise<void> {
     const currentSet = new Set(current.map(getKey));
     const nextSet = new Set(next.map(getKey));
@@ -96,7 +98,7 @@ export class UserService implements IUserService {
 
   async updatePreferences(
     userId: string,
-    newPreferences: Preferences
+    newPreferences: Preferences,
   ): Promise<Preferences> {
     const updatedPreferences = await this.uowFactory.execute(async (uow) => {
       const current = await this.getPreferences(userId, uow.users);
@@ -105,7 +107,7 @@ export class UserService implements IUserService {
         newPreferences.dislikesIngredients,
         (i) => i.id,
         (id) => uow.users.addDislikesIngredient(userId, id),
-        (id) => uow.users.removeDislikesIngredient(userId, id)
+        (id) => uow.users.removeDislikesIngredient(userId, id),
       );
 
       await this.updateSet(
@@ -113,7 +115,7 @@ export class UserService implements IUserService {
         newPreferences.prefersCuisines,
         (c) => c.name,
         (name) => uow.users.addPrefersCuisine(userId, name),
-        (name) => uow.users.removePrefersCuisine(userId, name)
+        (name) => uow.users.removePrefersCuisine(userId, name),
       );
 
       await this.updateSet(
@@ -121,21 +123,21 @@ export class UserService implements IUserService {
         newPreferences.followsDiets,
         (d) => d.name,
         (name) => uow.users.addFollowsDiet(userId, name),
-        (name) => uow.users.removeFollowsDiet(userId, name)
+        (name) => uow.users.removeFollowsDiet(userId, name),
       );
 
       return this.getPreferences(userId, uow.users);
     });
 
     await safeAwait(
-      this.cacheService.del(CacheKeys.recommendations.topPicks(userId))
+      this.cacheService.del(CacheKeys.recommendations.topPicks(userId)),
     );
     return updatedPreferences;
   }
 
   async updateFridge(
     userId: string,
-    newIngredients: Ingredient[]
+    newIngredients: Ingredient[],
   ): Promise<Ingredient[]> {
     const fridge = await this.uowFactory.execute(async (uow) => {
       const current = await this.getFridge(userId, uow.users);
@@ -144,14 +146,14 @@ export class UserService implements IUserService {
         newIngredients,
         (i) => i.id,
         (id) => uow.users.addHasIngredient(userId, id),
-        (id) => uow.users.removeHasIngredient(userId, id)
+        (id) => uow.users.removeHasIngredient(userId, id),
       );
 
       return this.getFridge(userId, uow.users);
     });
 
     await safeAwait(
-      this.cacheService.del(CacheKeys.recommendations.fridge(userId))
+      this.cacheService.del(CacheKeys.recommendations.fridge(userId)),
     );
     return fridge;
   }
@@ -159,7 +161,7 @@ export class UserService implements IUserService {
   async toggleLikesRecipe(
     userId: string,
     recipeId: string,
-    likes: boolean
+    likes: boolean,
   ): Promise<void> {
     if (likes) {
       await this.userRepository.addLikesRecipe(userId, recipeId);
@@ -173,16 +175,16 @@ export class UserService implements IUserService {
         this.cacheService.zIncrBy(
           CacheKeys.recipes.trending,
           likes ? 1 : -1,
-          recipeId
+          recipeId,
         ),
-      ])
+      ]),
     );
   }
 
   async toggleSavedRecipe(
     userId: string,
     recipeId: string,
-    save: boolean
+    save: boolean,
   ): Promise<void> {
     if (save) {
       await this.userRepository.addSavedRecipe(userId, recipeId);
@@ -193,8 +195,8 @@ export class UserService implements IUserService {
       this.cacheService.zIncrBy(
         CacheKeys.recipes.trending,
         save ? 2 : -2,
-        recipeId
-      )
+        recipeId,
+      ),
     );
   }
 }
