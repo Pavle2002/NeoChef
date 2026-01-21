@@ -1,4 +1,4 @@
-import { createDriver, safeAwait } from "@neochef/core";
+import { createNeo4jClient, safeAwait } from "@neochef/core";
 import { config } from "./config.js";
 import { logger } from "./logger.js";
 
@@ -6,7 +6,7 @@ const {
   neo4j: { url, username, password },
 } = config;
 
-export const neo4jClient = createDriver(url, username, password);
+export const neo4jClient = createNeo4jClient(url, username, password);
 
 const [error, serverInfo] = await safeAwait(neo4jClient.getServerInfo());
 

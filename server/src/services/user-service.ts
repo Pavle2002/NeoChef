@@ -5,7 +5,6 @@ import type {
   Recipe,
   SafeUser,
 } from "@neochef/common";
-import type { ICacheService } from "@interfaces/cache-service.interface.js";
 import { CacheKeys } from "@utils/cache-keys.js";
 import {
   NotFoundError,
@@ -13,12 +12,13 @@ import {
   type IUnitOfWorkFactory,
   type IUserRepository,
 } from "@neochef/core";
+import type { RedisClientType } from "redis";
 
 export class UserService implements IUserService {
   constructor(
     private readonly userRepository: IUserRepository,
     private readonly uowFactory: IUnitOfWorkFactory,
-    private readonly cacheService: ICacheService,
+    private readonly redisClient: RedisClientType<any, any, any>,
   ) {}
 
   async getById(id: string): Promise<SafeUser> {
@@ -130,7 +130,7 @@ export class UserService implements IUserService {
     });
 
     await safeAwait(
-      this.cacheService.del(CacheKeys.recommendations.topPicks(userId)),
+      this.redisClient.del(CacheKeys.recommendations.topPicks(userId)),
     );
     return updatedPreferences;
   }
@@ -153,7 +153,7 @@ export class UserService implements IUserService {
     });
 
     await safeAwait(
-      this.cacheService.del(CacheKeys.recommendations.fridge(userId)),
+      this.redisClient.del(CacheKeys.recommendations.fridge(userId)),
     );
     return fridge;
   }
@@ -171,8 +171,8 @@ export class UserService implements IUserService {
 
     await safeAwait(
       Promise.all([
-        this.cacheService.del(CacheKeys.recommendations.similar(userId)),
-        this.cacheService.zIncrBy(
+        this.redisClient.del(CacheKeys.recommendations.similar(userId)),
+        this.redisClient.zIncrBy(
           CacheKeys.recipes.trending,
           likes ? 1 : -1,
           recipeId,
@@ -192,7 +192,7 @@ export class UserService implements IUserService {
       await this.userRepository.removeSavedRecipe(userId, recipeId);
     }
     await safeAwait(
-      this.cacheService.zIncrBy(
+      this.redisClient.zIncrBy(
         CacheKeys.recipes.trending,
         save ? 2 : -2,
         recipeId,

@@ -11,7 +11,6 @@ import { DietService } from "./diet-service.js";
 import { CuisineService } from "./cuisine-service.js";
 import { DishTypeService } from "./dish-type-service.js";
 import { RecommendationService } from "./recommendation-service.js";
-import { RedisService } from "./redis-service.js";
 import { redisClient } from "@config/redis.js";
 import { RedisRateLimitService } from "./redis-rate-limit-service.js";
 import {
@@ -28,7 +27,6 @@ import {
 
 const queryExecutor = new DriverQueryExecutor(neo4jClient);
 const unitOfWorkFactory = new UnitOfWorkFactory(neo4jClient);
-const cacheService = new RedisService(redisClient);
 
 const userRepository = new UserRepository(queryExecutor);
 const ingredientRepository = new IngredientRepository(queryExecutor);
@@ -42,23 +40,23 @@ export const authService = new AuthService(userRepository);
 export const userService = new UserService(
   userRepository,
   unitOfWorkFactory,
-  cacheService,
+  redisClient,
 );
-export const recipeService = new RecipeService(recipeRepository, cacheService);
+export const recipeService = new RecipeService(recipeRepository, redisClient);
 export const ingredientService = new IngredientService(ingredientRepository);
 export const cuisineService = new CuisineService(
   cuisineRepository,
-  cacheService,
+  redisClient,
 );
-export const dietService = new DietService(dietRepository, cacheService);
+export const dietService = new DietService(dietRepository, redisClient);
 export const dishTypeService = new DishTypeService(
   dishTypeRepository,
-  cacheService,
+  redisClient,
 );
 export const recommendationService = new RecommendationService(
   recommendationRepository,
   recipeService,
-  cacheService,
+  redisClient,
 );
 export const rateLimitService = new RedisRateLimitService(redisClient);
 
@@ -74,5 +72,5 @@ export const spoonacularImportService = new SpoonacularImportService(
   spoonacularApiClient,
   unitOfWorkFactory,
   fileImportProgressManager,
-  cacheService,
+  redisClient,
 );

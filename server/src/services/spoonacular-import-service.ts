@@ -4,16 +4,16 @@ import type { Recipe } from "@neochef/common";
 import type { IImportProgressManager } from "@interfaces/import-progress-manager.interface.js";
 import { CUISINES, DIETS, DISH_TYPES } from "@utils/spoonacular-constants.js";
 import type { RecipeSearchOptions } from "@app-types/import-types.js";
-import type { ICacheService } from "@interfaces/cache-service.interface.js";
 import { CacheKeys } from "@utils/cache-keys.js";
 import { safeAwait, type IUnitOfWorkFactory } from "@neochef/core";
+import type { RedisClientType } from "redis";
 
 export class SpoonacularImportService implements IImportService {
   constructor(
     private readonly spoonacularApiClient: IApiClient,
     private readonly uowFactory: IUnitOfWorkFactory,
     private readonly importProgressManager: IImportProgressManager,
-    private readonly cacheService: ICacheService,
+    private readonly redisClient: RedisClientType<any, any, any>,
   ) {}
 
   async importRecipes(options: RecipeSearchOptions): Promise<Recipe[]> {
@@ -108,9 +108,9 @@ export class SpoonacularImportService implements IImportService {
 
   private async invalidateCache() {
     await Promise.all([
-      safeAwait(this.cacheService.del(CacheKeys.CUISINES_ALL)),
-      safeAwait(this.cacheService.del(CacheKeys.DIETS_ALL)),
-      safeAwait(this.cacheService.del(CacheKeys.DISH_TYPES_ALL)),
+      safeAwait(this.redisClient.del(CacheKeys.CUISINES_ALL)),
+      safeAwait(this.redisClient.del(CacheKeys.DIETS_ALL)),
+      safeAwait(this.redisClient.del(CacheKeys.DISH_TYPES_ALL)),
     ]);
   }
 }

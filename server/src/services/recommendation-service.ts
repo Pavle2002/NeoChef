@@ -1,21 +1,21 @@
 import type { Recipe } from "@neochef/common";
-import type { ICacheService } from "@interfaces/cache-service.interface.js";
 import type { IRecipeService } from "@interfaces/recipe-service.interface.js";
 import type { IRecommendationService } from "@interfaces/recommendation-service.interface.js";
 import { CacheKeys } from "@utils/cache-keys.js";
 import { safeAwait, type IRecommendationRepository } from "@neochef/core";
+import type { RedisClientType } from "redis";
 
 export class RecommendationService implements IRecommendationService {
   constructor(
     private readonly recommendationRepository: IRecommendationRepository,
     private readonly recipeService: IRecipeService,
-    private readonly cacheService: ICacheService,
+    private readonly redisClient: RedisClientType<any, any, any>,
   ) {}
 
   async getTopPicks(userId: string): Promise<Recipe[]> {
     const cacheKey = CacheKeys.recommendations.topPicks(userId);
 
-    const [error, cached] = await safeAwait(this.cacheService.get(cacheKey));
+    const [error, cached] = await safeAwait(this.redisClient.get(cacheKey));
     if (!error && cached) {
       return JSON.parse(cached) as Recipe[];
     }
@@ -28,7 +28,7 @@ export class RecommendationService implements IRecommendationService {
     }
 
     await safeAwait(
-      this.cacheService.setEx(
+      this.redisClient.setEx(
         cacheKey,
         CacheKeys.recommendations.TTL,
         JSON.stringify(recipes),
@@ -41,7 +41,7 @@ export class RecommendationService implements IRecommendationService {
   async getFridgeBased(userId: string): Promise<Recipe[]> {
     const cacheKey = CacheKeys.recommendations.fridge(userId);
 
-    const [error, cached] = await safeAwait(this.cacheService.get(cacheKey));
+    const [error, cached] = await safeAwait(this.redisClient.get(cacheKey));
 
     if (!error && cached) {
       return JSON.parse(cached) as Recipe[];
@@ -50,7 +50,7 @@ export class RecommendationService implements IRecommendationService {
     const recipes = await this.recommendationRepository.findFridgeBased(userId);
 
     await safeAwait(
-      this.cacheService.setEx(
+      this.redisClient.setEx(
         cacheKey,
         CacheKeys.recommendations.TTL,
         JSON.stringify(recipes),
@@ -65,7 +65,7 @@ export class RecommendationService implements IRecommendationService {
   ): Promise<{ basedOn: string; recipes: Recipe[] } | null> {
     const cacheKey = CacheKeys.recommendations.similar(userId);
 
-    const [error, cached] = await safeAwait(this.cacheService.get(cacheKey));
+    const [error, cached] = await safeAwait(this.redisClient.get(cacheKey));
 
     if (!error && cached) {
       return JSON.parse(cached) as { basedOn: string; recipes: Recipe[] };
@@ -75,7 +75,7 @@ export class RecommendationService implements IRecommendationService {
       await this.recommendationRepository.findSimilarToLastLiked(userId);
 
     await safeAwait(
-      this.cacheService.setEx(
+      this.redisClient.setEx(
         cacheKey,
         CacheKeys.recommendations.TTL,
         JSON.stringify(result),

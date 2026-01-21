@@ -8,18 +8,18 @@ import {
   type RecipeFilters,
   type RecipeSortOptions,
 } from "@neochef/common";
-import type { ICacheService } from "@interfaces/cache-service.interface.js";
 import { CacheKeys } from "@utils/cache-keys.js";
 import {
   NotFoundError,
   safeAwait,
   type IRecipeRepository,
 } from "@neochef/core";
+import type { RedisClientType } from "redis";
 
 export class RecipeService implements IRecipeService {
   constructor(
     private readonly recipeRepository: IRecipeRepository,
-    private readonly cacheService: ICacheService,
+    private readonly redisClient: RedisClientType<any, any, any>,
   ) {}
 
   async getById(id: string): Promise<Recipe> {
@@ -40,7 +40,9 @@ export class RecipeService implements IRecipeService {
     const cacheKey = CacheKeys.recipes.trending;
 
     const [error, cached] = await safeAwait(
-      this.cacheService.zRange(cacheKey, 0, DEFAULT_PAGE_SIZE - 1),
+      this.redisClient.zRange(cacheKey, 0, DEFAULT_PAGE_SIZE - 1, {
+        REV: true,
+      }),
     );
     if (!error && cached && cached.length > 0) {
       return this.recipeRepository.findByIds(cached);
@@ -48,16 +50,15 @@ export class RecipeService implements IRecipeService {
 
     const result = await this.recipeRepository.findTrending();
 
-    await safeAwait(this.cacheService.del(cacheKey));
+    await safeAwait(this.redisClient.del(cacheKey));
     await safeAwait(
       Promise.all(
         result.map(({ recipe, score }) =>
-          this.cacheService.zAdd(cacheKey, score, recipe.id),
+          this.redisClient.zAdd(cacheKey, { score, value: recipe.id }),
         ),
       ),
     );
-    await safeAwait(this.cacheService.expire(cacheKey, CacheKeys.recipes.TTL));
-
+    await safeAwait(this.redisClient.expire(cacheKey, CacheKeys.recipes.TTL));
     return result.map((r) => r.recipe);
   }
 
