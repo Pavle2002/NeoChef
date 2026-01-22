@@ -1,5 +1,7 @@
 {
-  "name": "client",
+  "name": "@neochef/client",
+  "description": "Frontend for NeoChef application",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {

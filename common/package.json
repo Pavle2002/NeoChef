@@ -1,16 +1,14 @@
 {
   "name": "@neochef/common",
+  "description": "Shared types, schemas and utils for NeoChef application",
   "version": "1.0.0",
   "type": "module",
-  "description": "Shared types, schemas and utils",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf dist"
   },
-  "author": "Pavle Velickovic",
-  "license": "ISC",
   "dependencies": {
     "zod": "^3.23.8"
   },

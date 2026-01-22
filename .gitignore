@@ -4,14 +4,12 @@ node_modules/
 .vscode/
 
 #server
-/server/.env
-/server/.env.dev
-/server/logs
+/*/.env
+/*/.env.dev
 
 #client
 /client/.DS_Store
 /client/dist-ssr
 /client/*.local
-/client/.env
 
 food/

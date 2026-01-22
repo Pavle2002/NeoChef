@@ -1,16 +1,14 @@
 {
   "name": "@neochef/core",
+  "description": "Shared core backend logic for NeoChef application",
   "version": "1.0.0",
   "type": "module",
-  "description": "Shared database logic and logger config",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "clean": "rm -rf dist"
   },
-  "author": "Pavle Velickovic",
-  "license": "ISC",
   "dependencies": {
     "@neochef/common": "*",
     "winston": "^3.17.0",
