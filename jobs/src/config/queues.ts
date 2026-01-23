@@ -1,10 +1,10 @@
 import { Queue } from "bullmq";
-import type { FetchJob, NormalizeJob, UpsertJob } from "../types/job-types.js";
+import type { FetchJob, TransformJob, UpsertJob } from "../types/job-types.js";
 import { config } from "./config.js";
 
 export const QUEUES = {
   FETCH: "fetch-queue",
-  NORMALIZE: "normalize-queue",
+  TRANSFORM: "normalize-queue",
   UPSERT: "upsert-queue",
 } as const;
 
@@ -19,7 +19,7 @@ export const fetchQueue = new Queue<FetchJob>(QUEUES.FETCH, {
   },
 });
 
-export const normalizeQueue = new Queue<NormalizeJob>(QUEUES.NORMALIZE, {
+export const transformQueue = new Queue<TransformJob>(QUEUES.TRANSFORM, {
   connection,
 });
 

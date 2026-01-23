@@ -14,7 +14,6 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "moduleDetection": "force",
-    "baseUrl": ".",
     "paths": {
       "@neochef/common": ["../common/src/index.ts"],
       "@neochef/core": ["../core/src/index.ts"]

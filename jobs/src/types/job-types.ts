@@ -5,8 +5,8 @@ export type FetchJob = {
   pageSize: number;
 };
 
-export type NormalizeJob = {
-  recipeId: string;
+export type TransformJob = {
+  rawData: any;
 };
 
 export type UpsertJob = {
