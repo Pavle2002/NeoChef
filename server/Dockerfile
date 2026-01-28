@@ -59,13 +59,6 @@ COPY --from=builder /app/core/package.json ./core/package.json
 COPY --from=builder /app/core/dist ./core/dist
 COPY --from=builder /app/server/package.json ./server/package.json
 COPY --from=builder /app/server/dist ./server/dist
-COPY --from=builder /app/server/import-progress.json ./data/import-progress.json
-COPY --from=builder /app/server/import-cron.sh ./server/import-cron.sh
-
-# Set permissions for import progress file and cron script
-RUN chmod +x /app/server/import-cron.sh
-RUN chown node:node /app/data/import-progress.json
-RUN chown node:node /app/server/import-cron.sh
 
 # Switch to non-root user for security
 USER node

@@ -1,9 +1,5 @@
-import { config } from "@config/config.js";
 import { neo4jClient } from "@config/neo4j.js";
 import { AuthService } from "@services/auth-service.js";
-import { SpoonacularImportService } from "@services/spoonacular-import-service.js";
-import { SpoonacularApiClient } from "@utils/spoonacular-api-client.js";
-import { FileImportProgressManager } from "./file-import-progress-manager.js";
 import { UserService } from "./user-service.js";
 import { RecipeService } from "./recipe-service.js";
 import { IngredientService } from "./ingredient-service.js";
@@ -59,18 +55,3 @@ export const recommendationService = new RecommendationService(
   redisClient,
 );
 export const rateLimitService = new RedisRateLimitService(redisClient);
-
-export const spoonacularApiClient = new SpoonacularApiClient(
-  config.spoonacular.apiKey,
-  config.spoonacular.baseUrl,
-);
-const fileImportProgressManager = new FileImportProgressManager(
-  config.spoonacular.importProgressFilePath,
-);
-
-export const spoonacularImportService = new SpoonacularImportService(
-  spoonacularApiClient,
-  unitOfWorkFactory,
-  fileImportProgressManager,
-  redisClient,
-);

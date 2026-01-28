@@ -2,6 +2,7 @@ node_modules/
 /*/node_modules
 /*/dist
 .vscode/
+.DS_Store
 
 #server
 /*/.env
@@ -9,7 +10,6 @@ node_modules/
 
 #client
 /client/.DS_Store
-/client/dist-ssr
 /client/*.local
 
 food/

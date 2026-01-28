@@ -1,5 +1,5 @@
 import { Worker } from "bullmq";
-import { QUEUES } from "../config/queues.js";
+import { QUEUES, upsertQueue } from "../config/queues.js";
 import { connection } from "../config/queues.js";
 import {
   ExtendedRecipeDataSchema,
@@ -18,7 +18,7 @@ export const transformWorker = new Worker<TransformJob, ExtendedRecipeData[]>(
       throw new Error("Invalid response format from Spoonacular API");
     }
 
-    return ExtendedRecipeDataSchema.array().parse(
+    const results = ExtendedRecipeDataSchema.array().parse(
       rawData.results.map((recipe: any): any => {
         const nutrition = recipe.nutrition;
         const caloricBreakdown = nutrition?.caloricBreakdown;
@@ -102,6 +102,9 @@ export const transformWorker = new Worker<TransformJob, ExtendedRecipeData[]>(
         };
       }),
     );
+
+    upsertQueue.add("upsert-recipes", { recipes: results });
+    return results;
   },
   { connection },
 );

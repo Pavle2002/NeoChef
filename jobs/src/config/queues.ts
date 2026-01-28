@@ -4,7 +4,7 @@ import { config } from "./config.js";
 
 export const QUEUES = {
   FETCH: "fetch-queue",
-  TRANSFORM: "normalize-queue",
+  TRANSFORM: "transform-queue",
   UPSERT: "upsert-queue",
 } as const;
 
@@ -21,6 +21,10 @@ export const fetchQueue = new Queue<FetchJob>(QUEUES.FETCH, {
 
 export const transformQueue = new Queue<TransformJob>(QUEUES.TRANSFORM, {
   connection,
+  defaultJobOptions: {
+    removeOnComplete: true,
+    removeOnFail: false,
+  },
 });
 
 export const upsertQueue = new Queue<UpsertJob>(QUEUES.UPSERT, { connection });

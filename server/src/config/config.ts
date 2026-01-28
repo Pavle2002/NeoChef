@@ -8,8 +8,6 @@ const requiredEnvVars = [
   "NEO4J_PASSWORD",
   "REDIS_URL",
   "CLIENT_ORIGIN",
-  "SPOONACULAR_API_KEY",
-  "IMPORT_PROGRESS_FILE_PATH",
 ];
 
 requiredEnvVars.forEach((key) => {
@@ -29,11 +27,6 @@ export const config = {
     url: process.env.NEO4J_URL as string,
     username: process.env.NEO4J_USERNAME as string,
     password: process.env.NEO4J_PASSWORD as string,
-  },
-  spoonacular: {
-    baseUrl: process.env.SPOONACULAR_BASE_URL || "https://api.spoonacular.com",
-    apiKey: process.env.SPOONACULAR_API_KEY as string,
-    importProgressFilePath: process.env.IMPORT_PROGRESS_FILE_PATH as string,
   },
   caching_ttls: {
     userSession: parseInt(process.env.USER_SESSION_TTL || "3600", 10), // 1 hour

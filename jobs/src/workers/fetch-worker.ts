@@ -1,5 +1,5 @@
 import { Worker } from "bullmq";
-import { QUEUES } from "../config/queues.js";
+import { QUEUES, transformQueue } from "../config/queues.js";
 import type { FetchJob } from "../types/job-types.js";
 import { connection } from "../config/queues.js";
 import { config } from "../config/config.js";
@@ -45,7 +45,7 @@ export const fetchWorker = new Worker<FetchJob>(
     }
 
     const rawData = await response.json();
-    return rawData;
+    transformQueue.add("transform-job", { rawData });
   },
   { connection },
 );

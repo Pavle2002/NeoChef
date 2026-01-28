@@ -3,6 +3,7 @@ import { logger } from "./config/logger.js";
 import { fetchQueue } from "./config/queues.js";
 import { fetchWorker } from "./workers/fetch-worker.js";
 import { transformWorker } from "./workers/transform-worker.js";
+import { upsertWorker } from "./workers/upsert-worker.js";
 
 logger.info("Starting recipe ingestion workers...");
 
@@ -18,12 +19,20 @@ transformWorker.on("completed", (job, result: ExtendedRecipeData[]) => {
   logger.info(`Transform job with id: ${job.id} has been completed.`);
 
   result.forEach((recipe) => {
-    console.dir(recipe);
+    logger.info(`Transformed recipe with id: ${recipe.recipeData.sourceId}`);
   });
 });
 
 transformWorker.on("failed", (job, err) => {
   logger.error(`Transform job ${job?.id} failed: ${err.message}`);
+});
+
+upsertWorker.on("completed", (job, result: string[]) => {
+  logger.info(`Upsert job with id: ${job.id} has been completed.`);
+
+  result.forEach((recipeId) => {
+    logger.info(`Upserted recipe with id: ${recipeId}`);
+  });
 });
 
 fetchQueue.add("test", { page: 0, pageSize: 1 });
