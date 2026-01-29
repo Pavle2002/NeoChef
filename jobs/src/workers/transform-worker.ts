@@ -8,6 +8,7 @@ import {
   type RecipeData,
 } from "@neochef/common";
 import type { TransformJob } from "../types/job-types.js";
+import pluralize from "pluralize";
 
 export const transformWorker = new Worker<TransformJob, ExtendedRecipeData[]>(
   QUEUES.TRANSFORM,
@@ -80,7 +81,7 @@ export const transformWorker = new Worker<TransformJob, ExtendedRecipeData[]>(
               sourceId: i.id?.toString(),
               sourceName: "Spoonacular",
               name: i.name,
-              normalizedName: i.name,
+              normalizedName: normalizeIngredientName(i.name),
               aisle: i.aisle,
               image: extractImageName(i.image ?? ""),
             },
@@ -111,4 +112,26 @@ export const transformWorker = new Worker<TransformJob, ExtendedRecipeData[]>(
 
 function extractImageName(url: string): string {
   return url.split("/").pop() || "";
+}
+
+export function normalizeIngredientName(input: string): string {
+  let name = input.toLowerCase().trim();
+
+  // Remove parentheses content
+  name = name.replace(/\([^)]*\)/g, " ");
+
+  // Remove punctuation and numbers, preserving only Unicode letters and spaces
+  name = name.replace(/[^\p{L}\s]/gu, " ");
+
+  // Normalize whitespace
+  name = name.replace(/\s+/g, " ").trim();
+
+  // Singularize each word
+  name = name
+    .split(" ")
+    .filter(Boolean)
+    .map((word) => pluralize.singular(word))
+    .join(" ");
+
+  return name;
 }

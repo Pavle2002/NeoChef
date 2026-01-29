@@ -2,7 +2,6 @@ import { Worker } from "bullmq";
 import { QUEUES, connection } from "../config/queues.js";
 import { UnitOfWorkFactory } from "@neochef/core";
 import { neo4jClient } from "../config/neo4j.js";
-import type { ExtendedRecipeData } from "@neochef/common";
 import type { UpsertJob } from "../types/job-types.js";
 
 const uowFactory = new UnitOfWorkFactory(neo4jClient);
