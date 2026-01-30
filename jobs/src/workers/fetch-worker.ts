@@ -7,11 +7,15 @@ import { limiter } from "../config/limiter.js";
 import { QuotaExceededError } from "../errors/quota-exceeded-error.js";
 import { AppError } from "@neochef/core";
 import { ErrorCodes } from "@neochef/common";
+import type { SpoonacularResponse } from "../types/spoonacular-response.js";
+import { storageService } from "../services/storage.js";
+
+const pageSize = 2;
 
 export const fetchWorker = new Worker<FetchJob>(
   QUEUES.FETCH,
   async (job) => {
-    const { page, pageSize } = job.data;
+    const { page } = job.data;
 
     const searchParams = {
       apiKey: config.spoonacular.apiKey,
@@ -44,8 +48,11 @@ export const fetchWorker = new Worker<FetchJob>(
       );
     }
 
-    const rawData = await response.json();
-    transformQueue.add("transform-job", { rawData });
+    const rawData = (await response.json()) as SpoonacularResponse;
+
+    await storageService.uploadPage(page, rawData);
+
+    transformQueue.add("transform-job", { page });
   },
   { connection },
 );

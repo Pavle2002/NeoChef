@@ -1,0 +1,53 @@
+import {
+  GetObjectCommand,
+  PutObjectCommand,
+  type S3Client,
+} from "@aws-sdk/client-s3";
+import { R2_BUCKET, r2Client } from "../config/r2.js";
+import type { SpoonacularResponse } from "../types/spoonacular-response.js";
+import { NotFoundError } from "@neochef/core";
+
+export interface IStorageService {
+  uploadPage(page: number, data: SpoonacularResponse): Promise<void>;
+  getPage(page: number): Promise<SpoonacularResponse>;
+}
+
+export class S3StorageService implements IStorageService {
+  constructor(
+    private readonly client: S3Client,
+    private readonly bucket: string,
+  ) {}
+
+  private getPageKey(page: number): string {
+    return `pages/page-${page.toString().padStart(4, "0")}.json`;
+  }
+
+  async uploadPage(page: number, data: SpoonacularResponse): Promise<void> {
+    await this.client.send(
+      new PutObjectCommand({
+        Bucket: this.bucket,
+        Key: this.getPageKey(page),
+        Body: JSON.stringify(data),
+        ContentType: "application/json",
+      }),
+    );
+  }
+
+  async getPage(page: number): Promise<SpoonacularResponse> {
+    const response = await this.client.send(
+      new GetObjectCommand({
+        Bucket: this.bucket,
+        Key: this.getPageKey(page),
+      }),
+    );
+
+    const content = await response.Body?.transformToString();
+    if (!content) {
+      throw new NotFoundError(`Page ${page} not found in storage`);
+    }
+
+    return JSON.parse(content) as SpoonacularResponse;
+  }
+}
+
+export const storageService = new S3StorageService(r2Client, R2_BUCKET);

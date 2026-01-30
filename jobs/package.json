@@ -11,6 +11,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.978.0",
     "@neochef/common": "*",
     "@neochef/core": "*",
     "bottleneck": "^2.19.5",

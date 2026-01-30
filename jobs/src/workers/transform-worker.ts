@@ -9,11 +9,14 @@ import {
 } from "@neochef/common";
 import type { TransformJob } from "../types/job-types.js";
 import pluralize from "pluralize";
+import { storageService } from "../services/storage.js";
 
 export const transformWorker = new Worker<TransformJob, ExtendedRecipeData[]>(
   QUEUES.TRANSFORM,
   async (job) => {
-    const { rawData } = job.data;
+    const { page } = job.data;
+
+    const rawData = await storageService.getPage(page);
 
     if (!Array.isArray(rawData.results)) {
       throw new Error("Invalid response format from Spoonacular API");

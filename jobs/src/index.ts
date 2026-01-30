@@ -35,4 +35,8 @@ upsertWorker.on("completed", (job, result: string[]) => {
   });
 });
 
-fetchQueue.add("test", { page: 0, pageSize: 1 });
+upsertWorker.on("failed", (job, err) => {
+  logger.error(`Upsert job ${job?.id} failed: ${err.message}`);
+});
+
+fetchQueue.add("test", { page: 0 });
