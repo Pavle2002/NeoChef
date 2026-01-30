@@ -30,6 +30,21 @@ services:
     depends_on:
       - server
 
+  jobs:
+    build:
+      context: .
+      dockerfile: jobs/Dockerfile
+      target: development
+    env_file:
+      - ./jobs/.env
+    volumes:
+      - ./jobs:/app/jobs
+      - ./common:/app/common
+      - ./core:/app/core
+    restart: unless-stopped
+    depends_on:
+      - redis
+
   redis:
     image: redis:alpine
     ports:
