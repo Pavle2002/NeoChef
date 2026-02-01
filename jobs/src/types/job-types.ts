@@ -9,5 +9,5 @@ export type TransformJob = {
 };
 
 export type UpsertJob = {
-  recipes: ExtendedRecipeData[];
+  extendedRecipeData: ExtendedRecipeData;
 };

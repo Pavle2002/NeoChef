@@ -27,12 +27,10 @@ transformWorker.on("failed", (job, err) => {
   logger.error(`Transform job ${job?.id} failed: ${err.message}`);
 });
 
-upsertWorker.on("completed", (job, result: string[]) => {
+upsertWorker.on("completed", (job, result: string) => {
   logger.info(`Upsert job with id: ${job.id} has been completed.`);
 
-  result.forEach((recipeId) => {
-    logger.info(`Upserted recipe with id: ${recipeId}`);
-  });
+  logger.info(`Upserted recipe with id: ${result}`);
 });
 
 upsertWorker.on("failed", (job, err) => {

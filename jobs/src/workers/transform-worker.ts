@@ -107,7 +107,12 @@ export const transformWorker = new Worker<TransformJob, ExtendedRecipeData[]>(
       }),
     );
 
-    upsertQueue.add("upsert-recipes", { recipes: results });
+    const jobs = results.map((extendedRecipeData) => ({
+      name: "upsert-recipes",
+      data: { extendedRecipeData },
+    }));
+
+    upsertQueue.addBulk(jobs);
     return results;
   },
   { connection },

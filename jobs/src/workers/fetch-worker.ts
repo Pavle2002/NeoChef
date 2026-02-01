@@ -10,7 +10,7 @@ import { ErrorCodes } from "@neochef/common";
 import type { SpoonacularResponse } from "../types/spoonacular-response.js";
 import { storageService } from "../services/storage.js";
 
-const pageSize = 2;
+const pageSize = 10;
 
 export const fetchWorker = new Worker<FetchJob>(
   QUEUES.FETCH,
