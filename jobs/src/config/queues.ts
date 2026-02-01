@@ -30,7 +30,7 @@ export const transformQueue = new Queue<TransformJob>(QUEUES.TRANSFORM, {
 export const upsertQueue = new Queue<UpsertJob>(QUEUES.UPSERT, {
   connection,
   defaultJobOptions: {
-    attempts: 2,
+    attempts: 5,
     removeOnComplete: true,
     removeOnFail: false,
   },

@@ -1,11 +1,19 @@
 import type { ExtendedRecipeData } from "@neochef/common";
+import { ensureConstraints } from "@neochef/core";
 import { logger } from "./config/logger.js";
-import { fetchQueue } from "./config/queues.js";
-import { fetchWorker } from "./workers/fetch-worker.js";
-import { transformWorker } from "./workers/transform-worker.js";
-import { upsertWorker } from "./workers/upsert-worker.js";
+import { neo4jClient } from "./config/neo4j.js";
+import { fetchQueue, transformQueue } from "./config/queues.js";
+
+logger.info("Ensuring database constraints...");
+
+await ensureConstraints(neo4jClient);
 
 logger.info("Starting recipe ingestion workers...");
+
+// Import workers AFTER constraints are created
+const { fetchWorker } = await import("./workers/fetch-worker.js");
+const { transformWorker } = await import("./workers/transform-worker.js");
+const { upsertWorker } = await import("./workers/upsert-worker.js");
 
 fetchWorker.on("completed", (job) => {
   logger.info(`Fetch job with id: ${job.id} has been completed.`);
@@ -37,4 +45,4 @@ upsertWorker.on("failed", (job, err) => {
   logger.error(`Upsert job ${job?.id} failed: ${err.message}`);
 });
 
-fetchQueue.add("test", { page: 0 });
+transformQueue.add("test", { page: 0 });

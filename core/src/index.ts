@@ -1,5 +1,6 @@
 export * from "./config/logger.js";
 export * from "./config/neo4j.js";
+export * from "./config/constraints.js";
 
 export * from "./errors/app-error.js";
 export * from "./errors/not-found-error.js";
