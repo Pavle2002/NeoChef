@@ -8,17 +8,6 @@ services:
       - redis
     restart: unless-stopped
 
-  import-cron:
-    image: ghcr.io/pavle2002/neochef:latest
-    command: ["sh", "server/import-cron.sh"]
-    env_file:
-      - .env
-    volumes:
-      - import_progress:/app/data
-    restart: unless-stopped
-    depends_on:
-      - redis
-
   redis:
     image: redis:alpine
     restart: unless-stopped
@@ -42,4 +31,3 @@ volumes:
   redis_data:
   caddy_data:
   caddy_config:
-  import_progress:
