@@ -3,4 +3,5 @@ dist
 .git
 .env
 .vscode
+README.md
 

@@ -14,7 +14,7 @@
   - 📈 Trending page implemented with **Redis ZSETs** (leaderboard pattern)
   - 🚦 Custom Redis‑backed **rate limiting** and **session storage**
 - 🔁 **Unit of Work pattern** for sharing transactional context across multiple repositories within a single service operation, ensuring consistency for multi‑step domain operations such as recipe imports
-- ⏱️ **Background import service** with cron scheduling that ingests and normalizes recipes from the **Spoonacular API** (ETL workflow).
+- ⏱️ **Background import service** with cron scheduling that fetches, transforms and upserts recipes from the **Spoonacular API** using Redis as message queue (ETL workflow, BullMQ).
 - 🧱 **Production best practices**: layered architecture (routes → controllers → services → repositories), dependency injection, typed domain errors, global error handling, Zod validation, and full TypeScript coverage.
 
 ### Frontend 🎨 
@@ -26,7 +26,7 @@
 - ✨ **UX optimizations** such as skeleton loaders and smooth state transitions.
 
 ### Infrastructure & Deployment ☁️
-- 📦 **Monorepo setup** with npm workspaces (`client`, `common`, `server`) and shared types/utilities.
+- 📦 **Monorepo setup** with npm workspaces (`common`, `core`, `client`, `server`, `jobs`) shared core busines logic and types/utilities.
 - 🐳 **Backend containerized with Docker & Docker Compose**, running three services:
   - 🖥️ API server
   - ⏱️ Background import‑cron service
@@ -41,7 +41,7 @@
 
 | Layer | Technology |
 |-------|------------|
-| Backend | Node.js, Express, TypeScript |
+| Backend | Node.js, Express, BullMQ, TypeScript |
 | Frontend | React, TanStack Query, TanStack Router, Tailwind CSS, shadcn |
 | DevOps | Docker, Docker Compose, Vercel, VPS deployment |
 | Architecture | Monorepo (npm workspaces), layered architecture, dependency injection, Unit Of Work |
