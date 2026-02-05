@@ -8,7 +8,7 @@ import { QuotaExceededError } from "../errors/quota-exceeded-error.js";
 import { AppError } from "@neochef/core";
 import { ErrorCodes } from "@neochef/common";
 import type { SpoonacularResponse } from "../types/spoonacular-response.js";
-import { storageService } from "../services/storage.js";
+import { storageService } from "../services/index.js";
 
 const pageSize = 100;
 

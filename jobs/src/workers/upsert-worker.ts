@@ -1,10 +1,7 @@
 import { Worker } from "bullmq";
 import { QUEUES, connection } from "../config/queues.js";
-import { UnitOfWorkFactory } from "@neochef/core";
-import { neo4jClient } from "../config/neo4j.js";
 import type { UpsertJob } from "../types/job-types.js";
-
-const uowFactory = new UnitOfWorkFactory(neo4jClient);
+import { uowFactory } from "../services/index.js";
 
 export const upsertWorker = new Worker<UpsertJob, string>(
   QUEUES.UPSERT,

@@ -3,7 +3,6 @@ import {
   PutObjectCommand,
   type S3Client,
 } from "@aws-sdk/client-s3";
-import { R2_BUCKET, r2Client } from "../config/r2.js";
 import type { SpoonacularResponse } from "../types/spoonacular-response.js";
 import { NotFoundError } from "@neochef/core";
 
@@ -49,5 +48,3 @@ export class S3StorageService implements IStorageService {
     return JSON.parse(content) as SpoonacularResponse;
   }
 }
-
-export const storageService = new S3StorageService(r2Client, R2_BUCKET);

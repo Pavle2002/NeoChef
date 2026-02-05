@@ -9,7 +9,7 @@ import {
 } from "@neochef/common";
 import type { TransformJob } from "../types/job-types.js";
 import pluralize from "pluralize";
-import { storageService } from "../services/storage.js";
+import { storageService } from "../services/index.js";
 
 export const transformWorker = new Worker<TransformJob, ExtendedRecipeData[]>(
   QUEUES.TRANSFORM,

@@ -25,7 +25,7 @@ import {
 const queryExecutor = new DriverQueryExecutor(neo4jClient);
 const unitOfWorkFactory = new UnitOfWorkFactory(neo4jClient);
 
-await ensureConstraints(neo4jClient);
+await ensureConstraints(queryExecutor);
 
 const userRepository = new UserRepository(queryExecutor);
 const ingredientRepository = new IngredientRepository(queryExecutor);

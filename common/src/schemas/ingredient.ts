@@ -1,8 +1,10 @@
 import { z } from "zod";
+import { version } from "zod/v4/core";
 
 export const CanonicalIngredientSchema = z.object({
   id: z.string().uuid(),
-  name: z.string(),
+  name: z.string().trim(),
+  category: z.string().trim(),
 });
 
 export const IngredientSchema = z.object({
@@ -30,6 +32,12 @@ export const IngredientDataSchema = IngredientSchema.omit({
   id: true,
 });
 
+export const CanonicalIngredientDataSchema = CanonicalIngredientSchema.omit({
+  id: true,
+}).extend({
+  versions: z.array(z.string()).nullish().default(null),
+});
+
 export const ExtendedIngredientDataSchema = z.object({
   ingredientData: IngredientDataSchema,
   usage: IngredientUsageSchema,
@@ -41,4 +49,8 @@ export type IngredientData = z.infer<typeof IngredientDataSchema>;
 export type IngredientUsage = z.infer<typeof IngredientUsageSchema>;
 export type ExtendedIngredientData = z.infer<
   typeof ExtendedIngredientDataSchema
+>;
+export type CanonicalIngredient = z.infer<typeof CanonicalIngredientSchema>;
+export type CanonicalIngredientData = z.infer<
+  typeof CanonicalIngredientDataSchema
 >;
