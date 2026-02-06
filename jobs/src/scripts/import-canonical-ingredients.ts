@@ -10,7 +10,6 @@ async function importCanonicalIngredients() {
     const fileContent = await readFile(filePath, "utf-8");
     const rawData = JSON.parse(fileContent);
 
-    // Validate and parse each ingredient
     const validIngredients =
       CanonicalIngredientDataSchema.array().parse(rawData);
 

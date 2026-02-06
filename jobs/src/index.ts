@@ -45,4 +45,4 @@ upsertWorker.on("failed", (job, err) => {
   logger.error(`Upsert job ${job?.id} failed: ${err.message}`);
 });
 
-transformQueue.add("test", { page: 0 });
+for (let i = 0; i < 10; i++) transformQueue.add("test", { page: i });

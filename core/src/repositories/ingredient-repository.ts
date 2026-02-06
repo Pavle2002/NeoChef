@@ -63,4 +63,37 @@ export class IngredientRepository implements IIngredientRepository {
       (record) => record.get("parent").properties as CanonicalIngredient,
     );
   }
+
+  async findAllCanonical(): Promise<CanonicalIngredient[]> {
+    const result = await this.queryExecutor.run(
+      `MATCH (i:CanonicalIngredient)
+       RETURN i`,
+      {},
+    );
+
+    const records = result.records;
+    return records.map(
+      (record) => record.get("i").properties as CanonicalIngredient,
+    );
+  }
+
+  async addCanonical(
+    ingredientId: string,
+    canonicalId: string,
+    confidence: number,
+  ): Promise<void> {
+    const result = await this.queryExecutor.run(
+      `MATCH (i:Ingredient {id: $ingredientId})
+      MATCH (c:CanonicalIngredient {id: $canonicalId})
+      MERGE (i)-[r:MAPS_TO{confidence: $confidence}]->(c)
+      RETURN r, i, c`,
+      { ingredientId, canonicalId, confidence },
+    );
+
+    if (!result.records[0]) {
+      throw new InternalServerError(
+        "Failed to add canonical ingredient to ingredient",
+      );
+    }
+  }
 }

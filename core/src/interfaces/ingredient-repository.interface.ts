@@ -7,12 +7,14 @@ import type {
 
 export interface IIngredientRepository {
   findAll(contains?: string): Promise<Ingredient[]>;
+  findAllCanonical(): Promise<CanonicalIngredient[]>;
   create(ingredient: IngredientData): Promise<Ingredient>;
   createManyCanonical(
     ingredients: CanonicalIngredientData[],
   ): Promise<CanonicalIngredient[]>;
-  addCanonicalVersion(
+  addCanonical(
     ingredientId: string,
-    canonicalIngredientId: string,
+    canonicalId: string,
+    confidence: number,
   ): Promise<void>;
 }
