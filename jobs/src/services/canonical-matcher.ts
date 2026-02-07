@@ -1,22 +1,24 @@
 import { ErrorCodes, type CanonicalIngredient } from "@neochef/common";
 import { AppError, type IIngredientRepository } from "@neochef/core";
-import Fuse from "fuse.js";
+import type { IEmbeddingService } from "./embedding-service.js";
 
 type MatchResult = { id: string; confidence: number } | null;
 
 interface ICanonicalMatcher {
-  findCanonicalMatch(name: string): MatchResult;
+  findCanonicalMatch(name: string): Promise<MatchResult>;
   loadCanonical(): Promise<void>;
 }
 
 export class CanonicalMatcher implements ICanonicalMatcher {
   private canonicalIngredients: CanonicalIngredient[] = [];
-  private fuzzyMatcher: Fuse<CanonicalIngredient> | null = null;
 
-  constructor(private readonly ingredientRepository: IIngredientRepository) {}
+  constructor(
+    private readonly ingredientRepository: IIngredientRepository,
+    private readonly embeddingService: IEmbeddingService,
+  ) {}
 
-  findCanonicalMatch(ingredientName: string): MatchResult {
-    if (!this.fuzzyMatcher || this.canonicalIngredients.length === 0)
+  async findCanonicalMatch(ingredientName: string): Promise<MatchResult> {
+    if (this.canonicalIngredients.length === 0)
       throw new AppError(
         "Canonical ingredients not loaded",
         500,
@@ -29,13 +31,9 @@ export class CanonicalMatcher implements ICanonicalMatcher {
     );
     if (match) return { id: match.id, confidence: 1 };
 
-    const result = this.fuzzyMatcher.search(ingredientName);
-
-    if (result.length > 0) {
-      const bestMatch = result.at(0);
-      const score = 1 - bestMatch!.score!;
-      if (score >= 0.8) return { id: bestMatch!.item.id, confidence: score };
-    }
+    const matches = await this.embeddingService.findMatches(ingredientName);
+    const bestMatch = matches.at(0)!;
+    if (bestMatch.confidence > 0.6) return bestMatch;
 
     return null;
   }
@@ -43,10 +41,7 @@ export class CanonicalMatcher implements ICanonicalMatcher {
   async loadCanonical(): Promise<void> {
     this.canonicalIngredients =
       await this.ingredientRepository.findAllCanonical();
-    this.fuzzyMatcher = new Fuse(this.canonicalIngredients, {
-      keys: ["name"],
-      includeScore: true,
-      shouldSort: true,
-    });
+
+    await this.embeddingService.loadCandidates(this.canonicalIngredients);
   }
 }

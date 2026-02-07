@@ -12,6 +12,7 @@ const requiredEnvVars = [
   "R2_ACCESS_KEY_ID",
   "R2_SECRET_ACCESS_KEY",
   "R2_BUCKET_NAME",
+  "EMBEDDING_SERVICE_URL",
 ];
 
 requiredEnvVars.forEach((key) => {
@@ -42,4 +43,5 @@ export const config = {
     secretAccessKey: process.env.R2_SECRET_ACCESS_KEY as string,
     bucketName: process.env.R2_BUCKET_NAME as string,
   },
+  embeddingServiceUrl: process.env.EMBEDDING_SERVICE_URL as string,
 };

@@ -14,8 +14,9 @@ export const ErrorCodes = {
 
   RL_EXCEEDED: "RL_001",
 
-  API_ERROR: "EXT_001",
-  API_QUOTA: "EXT_002",
+  SPN_API_ERROR: "EXT_001",
+  SPN_API_QUOTA: "EXT_002",
+  EMB_SERVICE_ERROR: "EXT_003",
 
   SYS_INTERNAL_ERROR: "SYS_001",
 } as const;

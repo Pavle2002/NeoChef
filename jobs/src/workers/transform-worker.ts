@@ -1,7 +1,8 @@
-import { Worker } from "bullmq";
+import { ErrorCode, Worker } from "bullmq";
 import { QUEUES, upsertQueue } from "../config/queues.js";
 import { connection } from "../config/queues.js";
 import {
+  ErrorCodes,
   ExtendedRecipeDataSchema,
   type Equipment,
   type ExtendedRecipeData,
@@ -10,6 +11,7 @@ import {
 import type { TransformJob } from "../types/job-types.js";
 import pluralize from "pluralize";
 import { storageService } from "../services/index.js";
+import { SpoonacularError } from "../errors/spoonacular-error.js";
 
 export const transformWorker = new Worker<TransformJob, ExtendedRecipeData[]>(
   QUEUES.TRANSFORM,
@@ -19,7 +21,11 @@ export const transformWorker = new Worker<TransformJob, ExtendedRecipeData[]>(
     const rawData = await storageService.getPage(page);
 
     if (!Array.isArray(rawData.results)) {
-      throw new Error("Invalid response format from Spoonacular API");
+      throw new SpoonacularError(
+        "Invalid response format from Spoonacular API",
+        500,
+        ErrorCodes.SPN_API_ERROR,
+      );
     }
 
     const results = ExtendedRecipeDataSchema.array().parse(

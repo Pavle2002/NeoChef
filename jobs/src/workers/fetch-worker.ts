@@ -4,11 +4,10 @@ import type { FetchJob } from "../types/job-types.js";
 import { connection } from "../config/queues.js";
 import { config } from "../config/config.js";
 import { limiter } from "../config/limiter.js";
-import { QuotaExceededError } from "../errors/quota-exceeded-error.js";
-import { AppError } from "@neochef/core";
 import { ErrorCodes } from "@neochef/common";
 import type { SpoonacularResponse } from "../types/spoonacular-response.js";
 import { storageService } from "../services/index.js";
+import { SpoonacularError } from "../errors/spoonacular-error.js";
 
 const pageSize = 100;
 
@@ -36,15 +35,13 @@ export const fetchWorker = new Worker<FetchJob>(
 
     const response = await limiter.schedule(() => fetch(url));
 
-    if (response.status === 402) {
-      throw new QuotaExceededError("Daily Spoonacular quota exceeded");
-    }
-
     if (!response.ok) {
-      throw new AppError(
-        `Spoonacular API error: ${response.status}`,
-        500,
-        ErrorCodes.API_ERROR,
+      throw new SpoonacularError(
+        "Failed to fetch recipes from Spoonacular",
+        response.status,
+        response.status === 402
+          ? ErrorCodes.SPN_API_QUOTA
+          : ErrorCodes.SPN_API_ERROR,
       );
     }
 

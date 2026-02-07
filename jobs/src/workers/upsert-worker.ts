@@ -1,9 +1,9 @@
 import { Worker } from "bullmq";
 import { QUEUES, connection } from "../config/queues.js";
 import type { UpsertJob } from "../types/job-types.js";
-import { canonicalMatcher, uowFactory } from "../services/index.js";
+import { uowFactory } from "../services/index.js";
 
-await canonicalMatcher.loadCanonical();
+// await canonicalMatcher.loadCanonical();
 
 export const upsertWorker = new Worker<UpsertJob, string>(
   QUEUES.UPSERT,
@@ -20,16 +20,16 @@ export const upsertWorker = new Worker<UpsertJob, string>(
           extendedIngredient.ingredientData,
         );
 
-        const matchResult = canonicalMatcher.findCanonicalMatch(
-          ingredient.normalizedName,
-        );
+        // const matchResult = await canonicalMatcher.findCanonicalMatch(
+        //   ingredient.normalizedName,
+        // );
 
-        if (matchResult)
-          await uow.ingredients.addCanonical(
-            ingredient.id,
-            matchResult.id,
-            matchResult.confidence,
-          );
+        // if (matchResult)
+        //   await uow.ingredients.addCanonical(
+        //     ingredient.id,
+        //     matchResult.id,
+        //     matchResult.confidence,
+        //   );
 
         await uow.recipes.addIngredient(
           recipe.id,

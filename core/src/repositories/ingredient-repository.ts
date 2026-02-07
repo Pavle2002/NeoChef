@@ -48,10 +48,10 @@ export class IngredientRepository implements IIngredientRepository {
     const results = await this.queryExecutor.run(
       `UNWIND $ingredients AS ingredient
        MERGE (parent:CanonicalIngredient {name: ingredient.name})
-       ON CREATE SET parent.id = apoc.create.uuid(), parent.category = ingredient.category
+       ON CREATE SET parent.id = apoc.create.uuid(), parent.category = ingredient.category, parent.embedding = ingredient.embedding
        WITH parent, ingredient
-       UNWIND coalesce(ingredient.versions, []) AS versionName
-       MERGE (child:CanonicalIngredient {name: versionName})
+       UNWIND coalesce(ingredient.versions, []) AS version
+       MERGE (child:CanonicalIngredient {name: version.name})
        ON CREATE SET child.id = apoc.create.uuid(), child.category = ingredient.category
        MERGE (child)-[:IS_A]->(parent)
        RETURN parent, collect(child) AS children`,

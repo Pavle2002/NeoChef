@@ -2,7 +2,7 @@ import type { ExtendedRecipeData } from "@neochef/common";
 import { ensureConstraints } from "@neochef/core";
 import { logger } from "./config/logger.js";
 import { fetchQueue, transformQueue } from "./config/queues.js";
-import { ingredientRepository, queryExecutor } from "./services/index.js";
+import { queryExecutor } from "./services/index.js";
 
 logger.info("Ensuring database constraints...");
 
@@ -45,4 +45,4 @@ upsertWorker.on("failed", (job, err) => {
   logger.error(`Upsert job ${job?.id} failed: ${err.message}`);
 });
 
-for (let i = 0; i < 10; i++) transformQueue.add("test", { page: i });
+transformQueue.add("test", { page: 0 });

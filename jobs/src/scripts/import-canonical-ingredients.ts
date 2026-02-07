@@ -1,7 +1,8 @@
 import { readFile } from "fs/promises";
 import path from "path";
 import { CanonicalIngredientDataSchema } from "@neochef/common";
-import { ingredientRepository } from "../services/index.js";
+import { embeddingService, ingredientRepository } from "../services/index.js";
+import { logger } from "../config/logger.js";
 
 async function importCanonicalIngredients() {
   try {
@@ -13,22 +14,22 @@ async function importCanonicalIngredients() {
     const validIngredients =
       CanonicalIngredientDataSchema.array().parse(rawData);
 
-    const total = validIngredients.reduce(
-      (acc, item) => acc + 1 + (item.versions ? item.versions.length : 0),
-      0,
-    );
-    console.log(
-      `Total canonical ingredients to import (including versions): ${total}`,
+    const embeddings = await embeddingService.generateEmbeddings(
+      validIngredients.map((ing) => ing.name),
     );
 
+    validIngredients.forEach((ingredient, index) => {
+      ingredient.embedding = embeddings[index]!;
+    });
+
     if (!validIngredients.length) {
-      console.error("No valid canonical ingredients to import.");
+      logger.error("No valid canonical ingredients to import.");
       return;
     }
 
     await ingredientRepository.createManyCanonical(validIngredients);
   } catch (err) {
-    console.error("Failed to import canonical ingredients:", err);
+    logger.error("Failed to import canonical ingredients:", err);
   }
 }
 
