@@ -1,11 +1,10 @@
 import { ErrorCodes, type CanonicalIngredient } from "@neochef/common";
 import { AppError, type IIngredientRepository } from "@neochef/core";
 import type { IEmbeddingService } from "./embedding-service.js";
-
-type MatchResult = { id: string; confidence: number } | null;
+import type { MatchResult } from "../types/match-result.js";
 
 interface ICanonicalMatcher {
-  findCanonicalMatch(name: string): Promise<MatchResult>;
+  findCanonicalMatch(name: string): Promise<MatchResult | null>;
   loadCanonical(): Promise<void>;
 }
 
@@ -17,7 +16,9 @@ export class CanonicalMatcher implements ICanonicalMatcher {
     private readonly embeddingService: IEmbeddingService,
   ) {}
 
-  async findCanonicalMatch(ingredientName: string): Promise<MatchResult> {
+  async findCanonicalMatch(
+    ingredientName: string,
+  ): Promise<MatchResult | null> {
     if (this.canonicalIngredients.length === 0)
       throw new AppError(
         "Canonical ingredients not loaded",

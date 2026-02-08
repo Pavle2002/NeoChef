@@ -26,7 +26,7 @@ router.get("/me/preferences", getCurrentUserPreferences);
 router.put(
   "/me/preferences",
   validate(updatePreferencesSchema),
-  updateCurrentUserPreferences
+  updateCurrentUserPreferences,
 );
 router.get("/me/fridge", getCurrentUserFridge);
 router.put("/me/fridge", validate(updateFridgeSchema), updateCurrentUserFridge);

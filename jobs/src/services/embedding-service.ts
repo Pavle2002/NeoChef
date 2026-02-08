@@ -1,20 +1,16 @@
 import { config } from "../config/config.js";
 import { EmbeddingServiceError } from "../errors/embedding-service-error.js";
+import type { MatchResult } from "../types/match-result.js";
 
 export interface IEmbeddingService {
   generateEmbeddings(input: string[]): Promise<number[][]>;
   loadCandidates(candidates: Candidate[]): Promise<void>;
-  findMatches(input: string): Promise<Match[]>;
+  findMatches(input: string): Promise<MatchResult[]>;
 }
 
 export type Candidate = {
   id: string;
   embedding: number[];
-};
-
-export type Match = {
-  id: string;
-  confidence: number;
 };
 
 export class EmbeddingService implements IEmbeddingService {
@@ -56,7 +52,7 @@ export class EmbeddingService implements IEmbeddingService {
     }
   }
 
-  async findMatches(input: string): Promise<Match[]> {
+  async findMatches(input: string): Promise<MatchResult[]> {
     const response = await fetch(`${this.embeddingServiceUrl}/match`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -70,7 +66,7 @@ export class EmbeddingService implements IEmbeddingService {
       );
     }
 
-    const { matches } = (await response.json()) as { matches: Match[] };
+    const { matches } = (await response.json()) as { matches: MatchResult[] };
     return matches;
   }
 }

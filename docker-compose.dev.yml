@@ -44,6 +44,14 @@ services:
     restart: unless-stopped
     depends_on:
       - redis
+      - embedding-service
+
+  embedding-service:
+    build:
+      context: ./embedding-service
+    volumes:
+      - ./embedding-service:/app
+    restart: unless-stopped
 
   redis:
     image: redis:alpine
