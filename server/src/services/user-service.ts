@@ -1,6 +1,6 @@
 import type { IUserService } from "@interfaces/user-service.interface.js";
 import type {
-  Ingredient,
+  CanonicalIngredient,
   Preferences,
   Recipe,
   SafeUser,
@@ -61,7 +61,7 @@ export class UserService implements IUserService {
   async getFridge(
     userId: string,
     userRepository = this.userRepository,
-  ): Promise<Ingredient[]> {
+  ): Promise<CanonicalIngredient[]> {
     const user = await userRepository.findById(userId);
     if (!user) throw new NotFoundError(`User with ID ${userId} not found`);
 
@@ -137,8 +137,8 @@ export class UserService implements IUserService {
 
   async updateFridge(
     userId: string,
-    newIngredients: Ingredient[],
-  ): Promise<Ingredient[]> {
+    newIngredients: CanonicalIngredient[],
+  ): Promise<CanonicalIngredient[]> {
     const fridge = await this.uowFactory.execute(async (uow) => {
       const current = await this.getFridge(userId, uow.users);
       await this.updateSet(

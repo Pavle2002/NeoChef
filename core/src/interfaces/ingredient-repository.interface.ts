@@ -6,8 +6,8 @@ import type {
 } from "@neochef/common";
 
 export interface IIngredientRepository {
-  findAll(contains?: string): Promise<Ingredient[]>;
-  findAllCanonical(): Promise<CanonicalIngredient[]>;
+  findAll(queryString?: string): Promise<Ingredient[]>;
+  findAllCanonical(queryString?: string): Promise<CanonicalIngredient[]>;
   create(ingredient: IngredientData): Promise<Ingredient>;
   createManyCanonical(
     ingredients: CanonicalIngredientData[],

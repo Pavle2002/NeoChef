@@ -1,4 +1,4 @@
-import type { User, Ingredient, Preferences } from "@neochef/common";
+import type { User, Preferences, CanonicalIngredient } from "@neochef/common";
 import { userService } from "@services/index.js";
 import { sendSuccess } from "@utils/response-handler.js";
 import type { Request, Response } from "express";
@@ -20,7 +20,7 @@ async function getById(req: Request, res: Response): Promise<void> {
 
 async function getCurrentUserPreferences(
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> {
   const user = req.user as User;
   const preferences = await userService.getPreferences(user.id);
@@ -30,7 +30,7 @@ async function getCurrentUserPreferences(
 
 async function getCurrentUserFridge(
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> {
   const user = req.user as User;
   const fridge = await userService.getFridge(user.id);
@@ -40,7 +40,7 @@ async function getCurrentUserFridge(
 
 async function getCurrentUserSavedRecipes(
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> {
   const user = req.user as User;
   const recipes = await userService.getSavedRecipes(user.id);
@@ -50,30 +50,30 @@ async function getCurrentUserSavedRecipes(
 
 async function updateCurrentUserPreferences(
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> {
   const user = req.user as User;
   const newPreferences = req.validated?.body as Preferences;
 
   const updatedPreferences = await userService.updatePreferences(
     user.id,
-    newPreferences
+    newPreferences,
   );
 
   sendSuccess(
     res,
     200,
     updatedPreferences,
-    "User preferences updated successfully"
+    "User preferences updated successfully",
   );
 }
 
 async function updateCurrentUserFridge(
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> {
   const user = req.user as User;
-  const newIngredients = req.validated?.body as Ingredient[];
+  const newIngredients = req.validated?.body as CanonicalIngredient[];
 
   const updatedFridge = await userService.updateFridge(user.id, newIngredients);
 

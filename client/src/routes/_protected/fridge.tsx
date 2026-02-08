@@ -11,7 +11,6 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { useUpdateFridge } from "@/mutations/use-update-fridge";
 import { getCurrentUserFridgeQueryOptions } from "@/query-options/get-current-user-fridge-query-options";
-import type { Ingredient } from "@neochef/common";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import {
@@ -20,6 +19,7 @@ import {
   type FieldValues,
   type Path,
 } from "react-hook-form";
+import type { CanonicalIngredient } from "@neochef/common";
 
 export const Route = createFileRoute("/_protected/fridge")({
   loader: async ({ context: { queryClient } }) => {
@@ -111,7 +111,7 @@ function IngredientSearchField<T extends FieldValues>({
               )}
               <CheckboxGroup
                 className="flex flex-wrap gap-3"
-                options={field.value as Ingredient[]}
+                options={field.value as CanonicalIngredient[]}
                 getKey={(ingredient) => ingredient.id}
                 getLabel={(ingredient) => ingredient.name}
                 value={field.value}

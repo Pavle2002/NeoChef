@@ -1,4 +1,4 @@
-import type { Ingredient } from "@neochef/common";
+import type { CanonicalIngredient } from "@neochef/common";
 import { LiveSearch } from "./live-search";
 import { getIngredientsQueryOptions } from "@/query-options/get-ingredients-query-options";
 import { Check, Plus } from "lucide-react";
@@ -15,8 +15,8 @@ import {
 } from "./drawer";
 
 export type IngredientSelectorProps = {
-  value: Ingredient[];
-  onValueChange: (value: Ingredient[]) => void;
+  value: CanonicalIngredient[];
+  onValueChange: (value: CanonicalIngredient[]) => void;
 };
 
 export function IngredientSelector({

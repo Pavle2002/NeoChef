@@ -1,7 +1,7 @@
 import type {
   Cuisine,
   Diet,
-  Ingredient,
+  CanonicalIngredient,
   Recipe,
   User,
   UserData,
@@ -18,8 +18,8 @@ export interface IUserRepository {
 
   getFollowedDiets(userId: string): Promise<Diet[]>;
   getPreferredCuisines(userId: string): Promise<Cuisine[]>;
-  getDislikedIngredients(userId: string): Promise<Ingredient[]>;
-  getHasIngredients(userId: string): Promise<Ingredient[]>;
+  getDislikedIngredients(userId: string): Promise<CanonicalIngredient[]>;
+  getHasIngredients(userId: string): Promise<CanonicalIngredient[]>;
   getSavedRecipes(userId: string): Promise<Recipe[]>;
 
   addLikesRecipe(userId: string, recipeId: string): Promise<void>;
@@ -34,7 +34,7 @@ export interface IUserRepository {
   removeHasIngredient(userId: string, ingredientId: string): Promise<boolean>;
   removeDislikesIngredient(
     userId: string,
-    ingredientId: string
+    ingredientId: string,
   ): Promise<boolean>;
   removePrefersCuisine(userId: string, cuisineName: string): Promise<boolean>;
   removeFollowsDiet(userId: string, dietName: string): Promise<boolean>;

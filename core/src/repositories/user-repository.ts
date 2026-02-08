@@ -3,7 +3,7 @@ import {
   ErrorCodes,
   type Cuisine,
   type Diet,
-  type Ingredient,
+  type CanonicalIngredient,
   type Recipe,
   type User,
   type UserData,
@@ -159,7 +159,7 @@ export class UserRepository implements IUserRepository {
   async addHasIngredient(userId: string, ingredientId: string): Promise<void> {
     const result = await this.queryExecutor.run(
       `MATCH (u:User {id: $userId})
-       MATCH (i:Ingredient {id: $ingredientId})
+       MATCH (i:CanonicalIngredient {id: $ingredientId})
        MERGE (u)-[:HAS]->(i)
        RETURN u, i`,
       { userId, ingredientId },
@@ -178,7 +178,7 @@ export class UserRepository implements IUserRepository {
   ): Promise<void> {
     const result = await this.queryExecutor.run(
       `MATCH (u:User {id: $userId})
-       MATCH (i:Ingredient {id: $ingredientId})
+       MATCH (i:CanonicalIngredient {id: $ingredientId})
        MERGE (u)-[:DISLIKES]->(i)
        RETURN u, i`,
       { userId, ingredientId },
@@ -248,7 +248,7 @@ export class UserRepository implements IUserRepository {
     ingredientId: string,
   ): Promise<boolean> {
     const result = await this.queryExecutor.run(
-      `MATCH (u:User {id: $userId})-[rel:DISLIKES]->(i:Ingredient {id: $ingredientId})
+      `MATCH (u:User {id: $userId})-[rel:DISLIKES]->(i:CanonicalIngredient {id: $ingredientId})
        DELETE rel
        RETURN COUNT(rel) AS count`,
       { userId, ingredientId },
@@ -290,7 +290,7 @@ export class UserRepository implements IUserRepository {
     ingredientId: string,
   ): Promise<boolean> {
     const result = await this.queryExecutor.run(
-      `MATCH (u:User {id: $userId})-[rel:HAS]->(i:Ingredient {id: $ingredientId})
+      `MATCH (u:User {id: $userId})-[rel:HAS]->(i:CanonicalIngredient {id: $ingredientId})
        DELETE rel
        RETURN COUNT(rel) AS count`,
       { userId, ingredientId },
@@ -322,27 +322,27 @@ export class UserRepository implements IUserRepository {
     );
   }
 
-  async getDislikedIngredients(userId: string): Promise<Ingredient[]> {
+  async getDislikedIngredients(userId: string): Promise<CanonicalIngredient[]> {
     const result = await this.queryExecutor.run(
-      `MATCH (u:User {id: $userId})-[:DISLIKES]->(i:Ingredient)
+      `MATCH (u:User {id: $userId})-[:DISLIKES]->(i:CanonicalIngredient)
        RETURN i`,
       { userId },
     );
 
     return result.records.map(
-      (record) => record.get("i").properties as Ingredient,
+      (record) => record.get("i").properties as CanonicalIngredient,
     );
   }
 
-  async getHasIngredients(userId: string): Promise<Ingredient[]> {
+  async getHasIngredients(userId: string): Promise<CanonicalIngredient[]> {
     const result = await this.queryExecutor.run(
-      `MATCH (u:User {id: $userId})-[:HAS]->(i:Ingredient)
+      `MATCH (u:User {id: $userId})-[:HAS]->(i:CanonicalIngredient)
        RETURN i`,
       { userId },
     );
 
     return result.records.map(
-      (record) => record.get("i").properties as Ingredient,
+      (record) => record.get("i").properties as CanonicalIngredient,
     );
   }
 

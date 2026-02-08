@@ -1,5 +1,5 @@
-import type { Ingredient } from "@neochef/common";
+import type { CanonicalIngredient } from "@neochef/common";
 
 export interface IIngredientService {
-  getAll(queryString?: string): Promise<Ingredient[]>;
+  getAll(queryString?: string): Promise<CanonicalIngredient[]>;
 }

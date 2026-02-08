@@ -1,5 +1,5 @@
 import type {
-  Ingredient,
+  CanonicalIngredient,
   Preferences,
   Recipe,
   SafeUser,
@@ -18,7 +18,7 @@ export interface IUserService {
   getFridge(
     userId: string,
     userRepository?: IUserRepository,
-  ): Promise<Ingredient[]>;
+  ): Promise<CanonicalIngredient[]>;
 
   getSavedRecipes(userId: string): Promise<Recipe[]>;
 
@@ -29,8 +29,8 @@ export interface IUserService {
 
   updateFridge(
     userId: string,
-    newIngredients: Ingredient[],
-  ): Promise<Ingredient[]>;
+    newIngredients: CanonicalIngredient[],
+  ): Promise<CanonicalIngredient[]>;
 
   toggleLikesRecipe(
     userId: string,

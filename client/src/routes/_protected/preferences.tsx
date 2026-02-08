@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
 import { useUpdatePreferences } from "@/mutations/use-update-preferences";
-import type { Cuisine, Diet, Ingredient } from "@neochef/common";
+import type { CanonicalIngredient, Cuisine, Diet } from "@neochef/common";
 import { getCuisinesQueryOptions } from "@/query-options/get-cuisines-query-options";
 import { getDietsQueryOptions } from "@/query-options/get-diets-query-options";
 
@@ -187,7 +187,7 @@ function IngredientSearchField<T extends FieldValues>({
               )}
               <CheckboxGroup
                 className="flex flex-wrap gap-3"
-                options={field.value as Ingredient[]}
+                options={field.value as CanonicalIngredient[]}
                 getKey={(ingredient) => ingredient.id}
                 getLabel={(ingredient) => ingredient.name}
                 value={field.value}

@@ -64,11 +64,12 @@ export class IngredientRepository implements IIngredientRepository {
     );
   }
 
-  async findAllCanonical(): Promise<CanonicalIngredient[]> {
+  async findAllCanonical(queryString = ""): Promise<CanonicalIngredient[]> {
     const result = await this.queryExecutor.run(
       `MATCH (i:CanonicalIngredient)
+       WHERE toLower(i.name) CONTAINS toLower($queryString)
        RETURN i`,
-      {},
+      { queryString },
     );
 
     const records = result.records;

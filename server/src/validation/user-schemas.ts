@@ -1,4 +1,4 @@
-import { IngredientSchema } from "@neochef/common";
+import { CanonicalIngredientSchema } from "@neochef/common";
 import { PreferencesSchema } from "@neochef/common";
 import { z } from "zod";
 
@@ -18,7 +18,7 @@ const updatePreferencesSchema = z.object({
 });
 
 const updateFridgeSchema = z.object({
-  body: z.array(IngredientSchema),
+  body: z.array(CanonicalIngredientSchema),
 });
 
 export const userSchemas = {
