@@ -30,6 +30,27 @@ services:
     depends_on:
       - server
 
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./Caddyfile.dev:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    restart: unless-stopped
+    depends_on:
+      - server
+      - client
+
   jobs:
     build:
       context: .
@@ -60,27 +81,6 @@ services:
       timeout: 2s
       retries: 3
       start_period: 10s
-
-  redis:
-    image: redis:alpine
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-    restart: unless-stopped
-
-  caddy:
-    image: caddy:alpine
-    ports:
-      - "80:80"
-    volumes:
-      - ./Caddyfile.dev:/etc/caddy/Caddyfile
-      - caddy_data:/data
-      - caddy_config:/config
-    restart: unless-stopped
-    depends_on:
-      - server
-      - client
 
 volumes:
   redis_data:

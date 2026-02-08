@@ -40,7 +40,11 @@ export class RecommendationRepository implements IRecommendationRepository {
       // 2. Filter Candidates
       WHERE r IS NOT NULL
         AND NOT (u)-[:LIKES|SAVED]->(r)
-        AND NOT (u)-[:DISLIKES]->(:Ingredient)<-[:CONTAINS]-(r)
+        AND NOT EXISTS {
+          MATCH (u)-[:DISLIKES]->(disliked:CanonicalIngredient)
+          MATCH (r)-[:CONTAINS]->(i:Ingredient)-[:MAPS_TO]->(ci:CanonicalIngredient)
+          WHERE ci = disliked OR (ci)-[:IS_A*]->(disliked)
+        }
       
       ORDER BY preScore DESC
       LIMIT 500
@@ -91,19 +95,21 @@ export class RecommendationRepository implements IRecommendationRepository {
   async findFridgeBased(userId: string): Promise<Recipe[]> {
     const query = `
       MATCH (u:User {id: $userId})
-      MATCH (u)-[:HAS]->(i:Ingredient)<-[:CONTAINS]-(r:Recipe)
+      MATCH (u)-[:HAS]->(userCi:CanonicalIngredient)
+      MATCH (r:Recipe)-[:CONTAINS]->(i:Ingredient)-[:MAPS_TO]->(matchedCi:CanonicalIngredient)
+      WHERE matchedCi = userCi OR (matchedCi)-[:IS_A*]->(userCi) OR (userCi)-[:IS_A*]->(matchedCi)
       
-      WITH r, count(DISTINCT i) as matchCount
+      WITH r, count(DISTINCT matchedCi) as matchCount
       
-      // Find total ingredients for these candidate recipes to calculate coverage
-      MATCH (r)-[:CONTAINS]->(all:Ingredient)
-      WITH r, matchCount, count(DISTINCT all) as totalIngredients
+      // Find total canonical ingredients for these candidate recipes
+      MATCH (r)-[:CONTAINS]->(Ingredient)-[:MAPS_TO]->(allCi:CanonicalIngredient)
+      WITH r, matchCount, count(DISTINCT allCi) as totalCanonicalIngredients
       
       // Calculate score:
-      // 1. Coverage (How much of the recipe can I make?)
-      // 2. Usage (How many of my ingredients does it use?)
-      WITH r, matchCount, totalIngredients, 
-           (toFloat(matchCount) / totalIngredients) as coverage
+      // 1. Coverage (How much of the recipe can I make? - based on canonical ingredients)
+      // 2. Usage (How many of my canonical ingredients does it use?)
+      WITH r, matchCount, totalCanonicalIngredients, 
+           (toFloat(matchCount) / totalCanonicalIngredients) as coverage
       
       // Filter out recipes with very low coverage (e.g., < 20%) to avoid irrelevant suggestions
       WHERE coverage >= 0.15
@@ -136,20 +142,34 @@ export class RecommendationRepository implements IRecommendationRepository {
       ORDER BY l.likedAt DESC
       LIMIT 1
       
-      // Optimization: Only find recipes that share at least one attribute
-      // (Cuisine, DishType, or Ingredient) to avoid scanning the whole DB.
-      MATCH (last)-[:BELONGS_TO|IS_OF_TYPE|CONTAINS]->(common)<-[:BELONGS_TO|IS_OF_TYPE|CONTAINS]-(r:Recipe)
-      WHERE r.id <> last.id 
-        AND NOT (u)-[:LIKES|SAVED]->(r)
+      // Find candidate recipes that share Cuisine or DishType (pre-filter for performance)
+      MATCH (last)-[:BELONGS_TO|IS_OF_TYPE]->(attr)<-[:BELONGS_TO|IS_OF_TYPE]-(r:Recipe)
+      WHERE r.id <> last.id AND NOT (u)-[:LIKES|SAVED]->(r)
+      WITH DISTINCT last, r, u
       
-      // Calculate score based on the type of shared attribute
-      WITH last, r, 
+      // Count shared Cuisines
+      OPTIONAL MATCH (last)-[:BELONGS_TO]->(c:Cuisine)<-[:BELONGS_TO]-(r)
+      WITH u, last, r, count(DISTINCT c) as cuisineMatches
+      
+      // Count shared DishTypes
+      OPTIONAL MATCH (last)-[:IS_OF_TYPE]->(dt:DishType)<-[:IS_OF_TYPE]-(r)
+      WITH u, last, r, cuisineMatches, count(DISTINCT dt) as dishTypeMatches
+      
+      // Count shared CanonicalIngredients 
+      OPTIONAL MATCH (last)-[:CONTAINS]->(:Ingredient)-[:MAPS_TO]->(lastCi:CanonicalIngredient)
+      OPTIONAL MATCH (r)-[:CONTAINS]->(:Ingredient)-[:MAPS_TO]->(recCi:CanonicalIngredient)
+      WITH last, r, cuisineMatches, dishTypeMatches,
            sum(CASE 
-             WHEN 'Cuisine' IN labels(common) THEN 10 
-             WHEN 'DishType' IN labels(common) THEN 5 
-             WHEN 'Ingredient' IN labels(common) THEN 2 
+             WHEN lastCi = recCi THEN 3  // Exact match
+             WHEN (lastCi)-[:IS_A*]->(recCi) OR (recCi)-[:IS_A*]->(lastCi) THEN 1  // Parent-child relationship
              ELSE 0 
-           END) as totalScore
+           END) as ingredientScore
+      
+      // Calculate total score
+      WITH last, r,
+           (cuisineMatches * 10) + (dishTypeMatches * 5) + ingredientScore as totalScore
+      
+      WHERE totalScore > 0
       
       ORDER BY totalScore DESC
       LIMIT 10
