@@ -52,7 +52,7 @@ export class IngredientRepository implements IIngredientRepository {
        WITH parent, ingredient
        UNWIND coalesce(ingredient.versions, []) AS version
        MERGE (child:CanonicalIngredient {name: version.name})
-       ON CREATE SET child.id = apoc.create.uuid(), child.category = ingredient.category
+       ON CREATE SET child.id = apoc.create.uuid(), child.category = ingredient.category, child.embedding = version.embedding
        MERGE (child)-[:IS_A]->(parent)
        RETURN parent, collect(child) AS children`,
       { ingredients },

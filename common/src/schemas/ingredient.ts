@@ -39,11 +39,10 @@ export const CanonicalIngredientDataSchema = CanonicalIngredientSchema.omit({
     .array(
       z.object({
         name: z.string().trim(),
-        embedding: z.array(z.number()).nullish().default(null),
+        embedding: z.array(z.number()),
       }),
     )
-    .nullish()
-    .default([]),
+    .optional(),
 });
 
 export const ExtendedIngredientDataSchema = z.object({

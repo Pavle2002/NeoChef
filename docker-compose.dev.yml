@@ -43,8 +43,10 @@ services:
       - ./core:/app/core
     restart: unless-stopped
     depends_on:
-      - redis
-      - embedding-service
+      redis:
+        condition: service_started
+      embedding-service:
+        condition: service_healthy
 
   embedding-service:
     build:
@@ -52,6 +54,12 @@ services:
     volumes:
       - ./embedding-service:/app
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://embedding-service:5000/health')"]
+      interval: 10s
+      timeout: 2s
+      retries: 3
+      start_period: 10s
 
   redis:
     image: redis:alpine
