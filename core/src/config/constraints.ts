@@ -50,4 +50,9 @@ export async function ensureConstraints(
     FOR (u:User)
     REQUIRE u.email IS UNIQUE
   `);
+
+  await queryExecutor.run(
+    `CREATE FULLTEXT INDEX recipeFullTextIndex IF NOT EXISTS 
+    FOR (r:Recipe) ON EACH [r.title, r.description]`,
+  );
 }

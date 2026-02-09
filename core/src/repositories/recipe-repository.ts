@@ -342,9 +342,19 @@ export class RecipeRepository implements IRecipeRepository {
 
   private buildRecipeFilterQuery(filters: RecipeFilters = {}, search?: string) {
     const { cuisines, diets, dishTypes } = filters;
-    let matchClauses = ["MATCH (r:Recipe)"];
+    let matchClauses = [];
     let whereClauses: string[] = [];
     let params: Record<string, any> = {};
+
+    if (search && search.length > 0) {
+      const parsedSearch = this.parseSearchQuery(search);
+      matchClauses.push(
+        `CALL db.index.fulltext.queryNodes("recipeFullTextIndex", $search) YIELD node AS r`,
+      );
+      params.search = parsedSearch;
+    } else {
+      matchClauses.push(`MATCH (r:Recipe)`);
+    }
 
     if (cuisines && cuisines.length > 0) {
       matchClauses.push("MATCH (r)-[:BELONGS_TO]->(c:Cuisine)");
@@ -364,11 +374,14 @@ export class RecipeRepository implements IRecipeRepository {
       params.dishTypes = dishTypes;
     }
 
-    if (search && search.length > 0) {
-      whereClauses.push("toLower(r.title) CONTAINS toLower($search)");
-      params.search = search;
-    }
-
     return { matchClauses, whereClauses, params };
+  }
+
+  private parseSearchQuery(query: string) {
+    const sanitized = query.replace(/[^a-zA-Z0-9\s]/g, "");
+    return sanitized
+      .split(/\s+/)
+      .map((word) => word.trim() + "~1")
+      .join(" ");
   }
 }
