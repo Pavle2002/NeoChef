@@ -12,7 +12,8 @@
   "dependencies": {
     "@neochef/common": "*",
     "winston": "^3.17.0",
-    "neo4j-driver": "^5.28.1"
+    "neo4j-driver": "^5.28.1",
+    "bullmq": "^5.66.5"
   },
   "devDependencies": {
     "typescript": "^5.8.2"

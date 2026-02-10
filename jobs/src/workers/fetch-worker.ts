@@ -1,13 +1,13 @@
 import { Worker } from "bullmq";
-import { QUEUES, transformQueue } from "../config/queues.js";
 import type { FetchJob } from "../types/job-types.js";
-import { connection } from "../config/queues.js";
+import { connection, transformQueue } from "../services/index.js";
 import { config } from "../config/config.js";
 import { limiter } from "../config/limiter.js";
 import { ErrorCodes } from "@neochef/common";
 import type { SpoonacularResponse } from "../types/spoonacular-response.js";
 import { storageService } from "../services/index.js";
 import { SpoonacularError } from "../errors/spoonacular-error.js";
+import { QUEUES } from "@neochef/core";
 
 const pageSize = 100;
 

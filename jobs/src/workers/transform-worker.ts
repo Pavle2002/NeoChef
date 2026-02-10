@@ -1,19 +1,18 @@
-import { ErrorCode, Worker } from "bullmq";
-import { QUEUES, upsertQueue } from "../config/queues.js";
-import { connection } from "../config/queues.js";
+import { Worker } from "bullmq";
 import {
   ErrorCodes,
   ExtendedRecipeDataSchema,
   type Equipment,
-  type ExtendedRecipeData,
   type RecipeData,
 } from "@neochef/common";
 import type { TransformJob } from "../types/job-types.js";
 import pluralize from "pluralize";
 import { storageService } from "../services/index.js";
 import { SpoonacularError } from "../errors/spoonacular-error.js";
+import { QUEUES } from "@neochef/core";
+import { connection, upsertQueue } from "../services/index.js";
 
-export const transformWorker = new Worker<TransformJob, ExtendedRecipeData[]>(
+export const transformWorker = new Worker<TransformJob>(
   QUEUES.TRANSFORM,
   async (job) => {
     const { page } = job.data;
@@ -119,7 +118,6 @@ export const transformWorker = new Worker<TransformJob, ExtendedRecipeData[]>(
     }));
 
     upsertQueue.addBulk(jobs);
-    return results;
   },
   { connection },
 );

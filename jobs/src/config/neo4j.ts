@@ -6,7 +6,7 @@ const {
   neo4j: { url, username, password },
 } = config;
 
-export const neo4jClient = createNeo4jClient(url, username, password);
+export const neo4jClient = await createNeo4jClient(url, username, password);
 
 const [error, serverInfo] = await safeAwait(neo4jClient.getServerInfo());
 

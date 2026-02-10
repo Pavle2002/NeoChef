@@ -1,7 +1,8 @@
 import { Worker } from "bullmq";
-import { QUEUES, connection } from "../config/queues.js";
 import type { UpsertJob } from "../types/job-types.js";
 import { canonicalMatcher, uowFactory } from "../services/index.js";
+import { QUEUES } from "@neochef/core";
+import { connection } from "../services/index.js";
 
 await canonicalMatcher.loadCanonical();
 

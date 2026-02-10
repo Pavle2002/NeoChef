@@ -14,7 +14,6 @@ import {
   DietRepository,
   DishTypeRepository,
   DriverQueryExecutor,
-  ensureConstraints,
   IngredientRepository,
   RecipeRepository,
   RecommendationRepository,
@@ -24,8 +23,6 @@ import {
 
 const queryExecutor = new DriverQueryExecutor(neo4jClient);
 const unitOfWorkFactory = new UnitOfWorkFactory(neo4jClient);
-
-await ensureConstraints(queryExecutor);
 
 const userRepository = new UserRepository(queryExecutor);
 const ingredientRepository = new IngredientRepository(queryExecutor);

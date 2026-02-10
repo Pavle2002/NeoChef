@@ -1,7 +1,7 @@
 import winston from "winston";
 
 const { combine, timestamp, json, printf, colorize, errors } = winston.format;
-const { Console, File } = winston.transports;
+const { Console } = winston.transports;
 
 const myFormat = printf(({ level, message, stack }) => {
   return `[${level}] - ${message} ${stack ? "\n" + stack : ""}`;
