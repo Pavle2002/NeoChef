@@ -6,6 +6,7 @@ export * from "./schemas/equipment.js";
 export * from "./schemas/preferences.js";
 export * from "./schemas/recipe.js";
 export * from "./schemas/user.js";
+export * from "./schemas/job.js";
 
 export * from "./utils/error-codes.js";
 

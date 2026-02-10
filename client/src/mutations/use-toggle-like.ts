@@ -12,8 +12,8 @@ export function useToggleLike() {
 
   return useMutation({
     mutationFn: ({ recipeId, isLiked }: ToggleLikeParams) => {
-      if (isLiked) return apiClient.delete<void>(`/recipes/${recipeId}/like`);
-      else return apiClient.post<void>(`/recipes/${recipeId}/like`);
+      if (isLiked) return apiClient.delete<null>(`/recipes/${recipeId}/like`);
+      else return apiClient.post<null>(`/recipes/${recipeId}/like`);
     },
 
     onMutate: async ({ recipeId, isLiked }) => {

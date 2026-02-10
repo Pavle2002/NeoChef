@@ -14,8 +14,8 @@ export function useToggleSave() {
 
   return useMutation({
     mutationFn: ({ recipeId, isSaved }: ToggleSaveParams) => {
-      if (isSaved) return apiClient.delete<void>(`/recipes/${recipeId}/save`);
-      else return apiClient.post<void>(`/recipes/${recipeId}/save`);
+      if (isSaved) return apiClient.delete<null>(`/recipes/${recipeId}/save`);
+      else return apiClient.post<null>(`/recipes/${recipeId}/save`);
     },
 
     onMutate: async ({ recipeId, isSaved }) => {
@@ -48,7 +48,7 @@ export function useToggleSave() {
           if (!old) return old;
           if (isSaved) return old.filter((recipe) => recipe.id !== recipeId);
           else return old;
-        }
+        },
       );
 
       return {
@@ -63,11 +63,11 @@ export function useToggleSave() {
       if (context) {
         queryClient.setQueryData(
           context.recipeQueryKey,
-          context.previousRecipe
+          context.previousRecipe,
         );
         queryClient.setQueryData(
           context.savedRecipesQueryKey,
-          context.previousSavedRecipes
+          context.previousSavedRecipes,
         );
       }
     },

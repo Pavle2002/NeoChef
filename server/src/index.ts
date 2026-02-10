@@ -15,6 +15,7 @@ import { corsConfig } from "@config/cors.js";
 import { sessionConfig } from "@config/session.js";
 import { logger } from "@config/logger.js";
 import { passport } from "@config/passport.js";
+import { jobRoutes } from "@routes/job-routes.js";
 
 const app = express();
 app.set("trust proxy", 1);
@@ -38,6 +39,7 @@ app.use("/ingredients", ingredientRoutes);
 app.use("/cuisines", cuisineRoutes);
 app.use("/diets", dietRoutes);
 app.use("/dish-types", dishTypeRoutes);
+app.use("/jobs", jobRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   sendSuccess(res, 200, null, "Hello World!");

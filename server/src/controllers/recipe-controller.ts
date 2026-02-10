@@ -31,7 +31,7 @@ async function getAll(req: Request, res: Response): Promise<void> {
     offset,
     filters,
     sortOptions,
-    search
+    search,
   );
   sendSuccess(res, 200, recipes, "Recipes retrieved successfully");
 }

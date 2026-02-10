@@ -9,7 +9,7 @@ export function useRegister() {
   const navigate = useNavigate();
   return useMutation({
     mutationFn: (credentials: UserData) =>
-      apiClient.post("/auth/register", credentials),
+      apiClient.post<null>("/auth/register", credentials),
 
     onSuccess: () => {
       toast.success("Your account has been created successfully! 🎉", {

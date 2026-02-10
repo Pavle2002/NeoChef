@@ -16,7 +16,7 @@ export function useUpdatePreferences() {
     onSuccess: async (preferences) => {
       queryClient.setQueryData(
         getCurrentUserPreferencesQueryOptions().queryKey,
-        preferences
+        preferences,
       );
 
       toast.success("Preferences updated successfully 🎉", {

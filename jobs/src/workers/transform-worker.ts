@@ -4,8 +4,8 @@ import {
   ExtendedRecipeDataSchema,
   type Equipment,
   type RecipeData,
+  type TransformJob,
 } from "@neochef/common";
-import type { TransformJob } from "../types/job-types.js";
 import pluralize from "pluralize";
 import { storageService } from "../services/index.js";
 import { SpoonacularError } from "../errors/spoonacular-error.js";

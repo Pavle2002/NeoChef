@@ -1,3 +1,5 @@
+import { Button } from '@/components/ui/button'
+import { useStartFetchJob } from '@/mutations/use-start-fetch-job'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_protected/dashboard')({
@@ -6,5 +8,10 @@ export const Route = createFileRoute('/_protected/dashboard')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/_protected/dashboard"!</div>
+
+  const {mutate} = useStartFetchJob()
+
+  return (
+    <Button onClick={() => mutate(0)}>Start FetchJob</Button>
+  )
 }

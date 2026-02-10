@@ -1,17 +1,5 @@
+import type { FetchJob, TransformJob, UpsertJob } from "@neochef/common";
 import { Queue } from "bullmq";
-import type { ExtendedRecipeData } from "@neochef/common";
-
-export type FetchJob = {
-  page: number;
-};
-
-export type TransformJob = {
-  page: number;
-};
-
-export type UpsertJob = {
-  extendedRecipeData: ExtendedRecipeData;
-};
 
 export const QUEUES = {
   FETCH: "fetch-queue",

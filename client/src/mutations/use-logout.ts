@@ -9,7 +9,7 @@ export function useLogout() {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: () => apiClient.post("/auth/logout"),
+    mutationFn: () => apiClient.post<null>("/auth/logout"),
 
     onSuccess: async () => {
       queryClient.clear();
