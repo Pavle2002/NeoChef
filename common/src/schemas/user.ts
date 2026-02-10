@@ -8,7 +8,7 @@ const usernameSchema = z
   .trim()
   .regex(
     /^[a-zA-Z0-9_]+$/,
-    "Username can only contain letters, numbers, and underscores"
+    "Username can only contain letters, numbers, and underscores",
   )
   .min(3, "Username must be at least 3 characters long")
   .max(20, "Username must be at most 20 characters long");
@@ -25,7 +25,7 @@ const passwordSchema = z
   .regex(/[0-9]/, "Password must contain at least one number")
   .regex(
     /[^a-zA-Z0-9]/,
-    "Password must contain at least one special character"
+    "Password must contain at least one special character",
   );
 
 const emailSchema = z
@@ -41,6 +41,7 @@ export const UserSchema = z
     username: usernameSchema,
     password: passwordSchema,
     email: emailSchema,
+    isAdmin: z.boolean().default(false),
     createdAt: z.date(),
   })
   .strict("Invalid format");
@@ -54,10 +55,9 @@ export const UserDataSchema = UserSchema.omit({
   createdAt: true,
 });
 
-export const UserCredentialsSchema = UserSchema.omit({
-  username: true,
-  id: true,
-  createdAt: true,
+export const UserCredentialsSchema = UserSchema.pick({
+  email: true,
+  password: true,
 });
 
 export type User = z.infer<typeof UserSchema>;

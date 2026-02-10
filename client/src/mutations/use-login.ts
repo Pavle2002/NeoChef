@@ -21,7 +21,8 @@ export function useLogin() {
         description: getFormatedDate() + " 📆",
       });
 
-      navigate({ to: "/home", replace: true });
+      if (user.isAdmin) navigate({ to: "/dashboard", replace: true });
+      else navigate({ to: "/home", replace: true });
     },
   });
 }

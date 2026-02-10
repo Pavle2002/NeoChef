@@ -5,9 +5,15 @@ import {
   TrendingUp,
   User,
   Search,
+  Crown,
 } from "lucide-react";
 
 export const PAGES = [
+  {
+    title: "Dashboard",
+    url: "/dashboard",
+    icon: Crown,
+  },
   {
     title: "Home",
     url: "/home",

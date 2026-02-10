@@ -18,6 +18,7 @@ import { Route as ProtectedPreferencesRouteImport } from './routes/_protected/pr
 import { Route as ProtectedHomeRouteImport } from './routes/_protected/home'
 import { Route as ProtectedFridgeRouteImport } from './routes/_protected/fridge'
 import { Route as ProtectedFavoritesRouteImport } from './routes/_protected/favorites'
+import { Route as ProtectedDashboardRouteImport } from './routes/_protected/dashboard'
 import { Route as PublicMainRouteRouteImport } from './routes/_public/_main/route'
 import { Route as PublicAuthRouteRouteImport } from './routes/_public/_auth/route'
 import { Route as PublicMainIndexRouteImport } from './routes/_public/_main/index'
@@ -69,6 +70,11 @@ const ProtectedFavoritesRoute = ProtectedFavoritesRouteImport.update({
   path: '/favorites',
   getParentRoute: () => ProtectedRouteRoute,
 } as any)
+const ProtectedDashboardRoute = ProtectedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => ProtectedRouteRoute,
+} as any)
 const PublicMainRouteRoute = PublicMainRouteRouteImport.update({
   id: '/_main',
   getParentRoute: () => PublicRouteRoute,
@@ -106,6 +112,7 @@ const ProtectedRecipesRecipeIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof PublicMainIndexRoute
+  '/dashboard': typeof ProtectedDashboardRoute
   '/favorites': typeof ProtectedFavoritesRoute
   '/fridge': typeof ProtectedFridgeRoute
   '/home': typeof ProtectedHomeRoute
@@ -120,6 +127,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof PublicMainIndexRoute
+  '/dashboard': typeof ProtectedDashboardRoute
   '/favorites': typeof ProtectedFavoritesRoute
   '/fridge': typeof ProtectedFridgeRoute
   '/home': typeof ProtectedHomeRoute
@@ -138,6 +146,7 @@ export interface FileRoutesById {
   '/_public': typeof PublicRouteRouteWithChildren
   '/_public/_auth': typeof PublicAuthRouteRouteWithChildren
   '/_public/_main': typeof PublicMainRouteRouteWithChildren
+  '/_protected/dashboard': typeof ProtectedDashboardRoute
   '/_protected/favorites': typeof ProtectedFavoritesRoute
   '/_protected/fridge': typeof ProtectedFridgeRoute
   '/_protected/home': typeof ProtectedHomeRoute
@@ -155,6 +164,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/dashboard'
     | '/favorites'
     | '/fridge'
     | '/home'
@@ -169,6 +179,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/dashboard'
     | '/favorites'
     | '/fridge'
     | '/home'
@@ -186,6 +197,7 @@ export interface FileRouteTypes {
     | '/_public'
     | '/_public/_auth'
     | '/_public/_main'
+    | '/_protected/dashboard'
     | '/_protected/favorites'
     | '/_protected/fridge'
     | '/_protected/home'
@@ -270,6 +282,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedFavoritesRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
+    '/_protected/dashboard': {
+      id: '/_protected/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof ProtectedDashboardRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
     '/_public/_main': {
       id: '/_public/_main'
       path: ''
@@ -323,6 +342,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface ProtectedRouteRouteChildren {
+  ProtectedDashboardRoute: typeof ProtectedDashboardRoute
   ProtectedFavoritesRoute: typeof ProtectedFavoritesRoute
   ProtectedFridgeRoute: typeof ProtectedFridgeRoute
   ProtectedHomeRoute: typeof ProtectedHomeRoute
@@ -334,6 +354,7 @@ interface ProtectedRouteRouteChildren {
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
+  ProtectedDashboardRoute: ProtectedDashboardRoute,
   ProtectedFavoritesRoute: ProtectedFavoritesRoute,
   ProtectedFridgeRoute: ProtectedFridgeRoute,
   ProtectedHomeRoute: ProtectedHomeRoute,

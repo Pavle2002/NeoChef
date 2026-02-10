@@ -28,8 +28,8 @@ passport.serializeUser((user, done) => {
   done(null, (user as User).id);
 });
 
-passport.deserializeUser(async (id, done) => {
-  const [error, user] = await safeAwait(userService.getById(id as string));
+passport.deserializeUser(async (id: string, done) => {
+  const [error, user] = await safeAwait(userService.getById(id));
   if (error instanceof NotFoundError) return done(null, false);
   if (error) return done(error);
   return done(null, user);

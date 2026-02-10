@@ -32,7 +32,7 @@ class ApiClient {
           resBody.message,
           res.status,
           resBody.errorCode,
-          retryAfter
+          retryAfter,
         );
       }
 

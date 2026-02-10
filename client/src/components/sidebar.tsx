@@ -44,13 +44,19 @@ export function Sidebar() {
 
 function SidebarMain() {
   const { setOpenMobile } = useSidebar();
+  const { user } = useRouteContext({ from: "/_protected" });
+  let pages = [...PAGES];
+
+  if (!user.isAdmin) {
+    pages = pages.filter((page) => page.title !== "Dashboard");
+  }
 
   return (
     <SidebarContent>
       <SidebarGroup>
         <SidebarGroupContent>
           <SidebarMenu>
-            {PAGES.map((page) => (
+            {pages.map((page) => (
               <SidebarMenuItem key={page.title}>
                 <SidebarMenuButton asChild>
                   <Link
@@ -75,6 +81,7 @@ function SidebarMain() {
 
 function SidebarLogo() {
   const { setOpenMobile } = useSidebar();
+
   return (
     <SidebarHeader>
       <SidebarMenu>
