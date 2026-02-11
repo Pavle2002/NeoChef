@@ -13,7 +13,7 @@ const pageSize = 100;
 export const fetchWorker = new Worker<FetchJob>(
   QUEUES.FETCH,
   async (job) => {
-    const { page } = job.data;
+    const { page, corelationId } = job.data;
 
     const searchParams = {
       apiKey: config.spoonacular.apiKey,
@@ -48,7 +48,7 @@ export const fetchWorker = new Worker<FetchJob>(
 
     await storageService.uploadPage(page, rawData);
 
-    transformQueue.add("transform-job", { page });
+    transformQueue.add("transform-job", { corelationId, page });
   },
   { connection },
 );

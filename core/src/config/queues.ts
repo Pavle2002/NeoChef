@@ -13,7 +13,7 @@ export type QueueConnection = {
 };
 
 export function getFetchQueue(connection: QueueConnection) {
-  return new Queue<FetchJob>(QUEUES.FETCH, {
+  return new Queue<FetchJob, number>(QUEUES.FETCH, {
     connection,
     defaultJobOptions: {
       attempts: 3,

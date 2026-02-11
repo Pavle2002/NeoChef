@@ -15,7 +15,7 @@ import { connection, upsertQueue } from "../services/index.js";
 export const transformWorker = new Worker<TransformJob>(
   QUEUES.TRANSFORM,
   async (job) => {
-    const { page } = job.data;
+    const { page, corelationId } = job.data;
 
     const rawData = await storageService.getPage(page);
 
@@ -113,8 +113,8 @@ export const transformWorker = new Worker<TransformJob>(
     );
 
     const jobs = results.map((extendedRecipeData) => ({
-      name: "upsert-recipes",
-      data: { extendedRecipeData },
+      name: "upsert-recipe",
+      data: { corelationId, extendedRecipeData },
     }));
 
     upsertQueue.addBulk(jobs);

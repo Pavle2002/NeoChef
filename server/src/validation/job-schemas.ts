@@ -1,8 +1,12 @@
-import { FetchJobSchema } from "@neochef/common";
+import { FetchJobSchema, TransformJobSchema } from "@neochef/common";
 import z from "zod";
 
 const startFetchJobSchema = z.object({
-  body: FetchJobSchema,
+  body: FetchJobSchema.omit({ corelationId: true }),
 });
 
-export const jobSchemas = { startFetchJobSchema };
+const startTransformJobSchema = z.object({
+  body: TransformJobSchema.omit({ corelationId: true }),
+});
+
+export const jobSchemas = { startFetchJobSchema, startTransformJobSchema };

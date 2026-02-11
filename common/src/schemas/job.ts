@@ -2,14 +2,17 @@ import z from "zod";
 import { ExtendedRecipeDataSchema } from "./recipe.js";
 
 export const FetchJobSchema = z.object({
+  corelationId: z.string(),
   page: z.number(),
 });
 
 export const TransformJobSchema = z.object({
+  corelationId: z.string(),
   page: z.number(),
 });
 
 export const UpsertJobSchema = z.object({
+  corelationId: z.string(),
   extendedRecipeData: ExtendedRecipeDataSchema,
 });
 
