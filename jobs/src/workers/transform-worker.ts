@@ -7,7 +7,7 @@ import {
   type TransformJob,
 } from "@neochef/common";
 import pluralize from "pluralize";
-import { storageService } from "../services/index.js";
+import { embeddingService, storageService } from "../services/index.js";
 import { SpoonacularError } from "../errors/spoonacular-error.js";
 import { QUEUES } from "@neochef/core";
 import { connection, upsertQueue } from "../services/index.js";
@@ -27,8 +27,8 @@ export const transformWorker = new Worker<TransformJob>(
       );
     }
 
-    const results = ExtendedRecipeDataSchema.array().parse(
-      rawData.results.map((recipe: any): any => {
+    const mapedData = await Promise.all(
+      rawData.results.map(async (recipe: any): Promise<any> => {
         const nutrition = recipe.nutrition;
         const caloricBreakdown = nutrition?.caloricBreakdown;
         const weightPerServing = nutrition?.weightPerServing?.amount;
@@ -83,24 +83,28 @@ export const transformWorker = new Worker<TransformJob>(
           });
         const equipment = Array.from(equipmentMap.values());
 
-        const extendedIngredients = recipe.missedIngredients.map(
-          (i: any): any => ({
-            ingredientData: {
-              sourceId: i.id?.toString(),
-              sourceName: "Spoonacular",
-              name: i.name,
-              normalizedName: normalizeIngredientName(i.name),
-              aisle: i.aisle,
-              image: extractImageName(i.image ?? ""),
-            },
-            usage: {
-              amount: i.amount,
-              unit: i.unit,
-              original: i.original,
-            },
-          }),
+        const extendedIngredients = await Promise.all(
+          recipe.missedIngredients.map(
+            async (i: any): Promise<any> => ({
+              ingredientData: {
+                sourceId: i.id?.toString(),
+                sourceName: "Spoonacular",
+                name: i.name,
+                normalizedName: normalizeIngredientName(i.name),
+                embedding: await embeddingService.generateEmbedding(
+                  normalizeIngredientName(i.name),
+                ),
+                aisle: i.aisle,
+                image: extractImageName(i.image ?? ""),
+              },
+              usage: {
+                amount: i.amount,
+                unit: i.unit,
+                original: i.original,
+              },
+            }),
+          ),
         );
-
         return {
           recipeData,
           cuisines,
@@ -112,7 +116,9 @@ export const transformWorker = new Worker<TransformJob>(
       }),
     );
 
-    const jobs = results.map((extendedRecipeData) => ({
+    const recipes = ExtendedRecipeDataSchema.array().parse(mapedData);
+
+    const jobs = recipes.map((extendedRecipeData) => ({
       name: "upsert-recipe",
       data: { corelationId, extendedRecipeData },
     }));

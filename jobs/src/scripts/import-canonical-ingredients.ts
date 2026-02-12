@@ -22,28 +22,33 @@ async function importCanonicalIngredients() {
       return;
     }
 
-    const rootEmbeddings = await embeddingService.generateEmbeddings(
-      canonicalIngredients.map((ing) => ing.name),
-    );
+    let enrichedIngredients: CanonicalIngredientData[] = [];
 
-    const enrichedIngredients: CanonicalIngredientData[] =
-      canonicalIngredients.map((ingredient, index) => ({
+    for (const ingredient of canonicalIngredients) {
+      const embedding = await embeddingService.generateEmbedding(
+        ingredient.name,
+      );
+
+      let versionEmbeddings: { name: string; embedding: number[] }[] = [];
+
+      if (ingredient.versions) {
+        for (const version of ingredient.versions) {
+          const versionEmbedding =
+            await embeddingService.generateEmbedding(version);
+
+          versionEmbeddings.push({
+            name: version,
+            embedding: versionEmbedding,
+          });
+        }
+      }
+
+      enrichedIngredients.push({
         name: ingredient.name,
         category: ingredient.category,
-        embedding: rootEmbeddings[index]!,
-      }));
-
-    for (let i = 0; i < canonicalIngredients.length; i++) {
-      const versions = canonicalIngredients[i]!.versions;
-      if (versions) {
-        const versionEmbeddings =
-          await embeddingService.generateEmbeddings(versions);
-
-        enrichedIngredients[i]!.versions = versions.map((v, ind) => ({
-          name: v,
-          embedding: versionEmbeddings[ind]!,
-        }));
-      }
+        embedding,
+        versions: versionEmbeddings.length > 0 ? versionEmbeddings : undefined,
+      });
     }
 
     await ingredientRepository.createManyCanonical(enrichedIngredients);

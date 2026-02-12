@@ -1,5 +1,4 @@
 import { logger } from "./config/logger.js";
-import { transformQueue } from "./services/index.js";
 import { fetchWorker } from "./workers/fetch-worker.js";
 import { transformWorker } from "./workers/transform-worker.js";
 import { upsertWorker } from "./workers/upsert-worker.js";
@@ -31,5 +30,3 @@ upsertWorker.on("completed", (job, result: string) => {
 upsertWorker.on("failed", (job, err) => {
   logger.error(`Upsert job ${job?.id} failed: ${err.message}`);
 });
-
-// transformQueue.add("test", { page: 1 });

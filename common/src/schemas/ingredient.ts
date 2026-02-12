@@ -15,6 +15,7 @@ export const IngredientSchema = z.object({
   normalizedName: z.string().trim(),
   image: z.string().nullish().default(null),
   aisle: z.string().nullish().default(null),
+  embedding: z.array(z.number()),
 });
 
 export const IngredientUsageSchema = z.object({

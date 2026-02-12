@@ -27,19 +27,6 @@ export class IngredientRepository implements IIngredientRepository {
     return record.get("i").properties as Ingredient;
   }
 
-  async findAll(queryString = ""): Promise<Ingredient[]> {
-    const result = await this.queryExecutor.run(
-      `MATCH (i:Ingredient)
-       WHERE toLower(i.name) CONTAINS toLower($queryString)
-         AND size(split(i.name, ' ')) <= 4
-       RETURN i`,
-      { queryString },
-    );
-
-    const records = result.records;
-    return records.map((record) => record.get("i").properties as Ingredient);
-  }
-
   async createManyCanonical(
     ingredients: CanonicalIngredientData[],
   ): Promise<CanonicalIngredient[]> {
@@ -78,6 +65,24 @@ export class IngredientRepository implements IIngredientRepository {
     );
   }
 
+  async findSimilarCanonical(
+    embedding: number[],
+    limit = 5,
+  ): Promise<{ id: string; confidence: number }[]> {
+    const result = await this.queryExecutor.run(
+      `CALL db.index.vector.queryNodes('canonical_embedding_index', $limit, $embedding)
+      YIELD node AS c, score
+      RETURN c.id AS id, score
+      ORDER BY score DESC`,
+      { embedding, limit },
+    );
+
+    return result.records.map((record) => ({
+      id: record.get("id"),
+      confidence: record.get("score"),
+    }));
+  }
+
   async addCanonical(
     ingredientId: string,
     canonicalId: string,
@@ -86,7 +91,8 @@ export class IngredientRepository implements IIngredientRepository {
     const result = await this.queryExecutor.run(
       `MATCH (i:Ingredient {id: $ingredientId})
       MATCH (c:CanonicalIngredient {id: $canonicalId})
-      MERGE (i)-[r:MAPS_TO{confidence: $confidence}]->(c)
+      MERGE (i)-[r:MAPS_TO]->(c)
+      SET r.confidence = $confidence
       RETURN r, i, c`,
       { ingredientId, canonicalId, confidence },
     );

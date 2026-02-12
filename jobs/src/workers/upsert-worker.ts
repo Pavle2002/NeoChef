@@ -1,10 +1,8 @@
 import { Worker } from "bullmq";
-import { canonicalMatcher, uowFactory } from "../services/index.js";
+import { uowFactory } from "../services/index.js";
 import { QUEUES } from "@neochef/core";
 import { connection } from "../services/index.js";
 import type { UpsertJob } from "@neochef/common";
-
-await canonicalMatcher.loadCanonical();
 
 export const upsertWorker = new Worker<UpsertJob, string>(
   QUEUES.UPSERT,
@@ -21,16 +19,17 @@ export const upsertWorker = new Worker<UpsertJob, string>(
           extendedIngredient.ingredientData,
         );
 
-        const matchResult = await canonicalMatcher.findCanonicalMatch(
-          ingredient.normalizedName,
-        );
+        const bestMatch = (
+          await uow.ingredients.findSimilarCanonical(ingredient.embedding)
+        )[0];
 
-        if (matchResult)
+        if (bestMatch && bestMatch.confidence > 0.8) {
           await uow.ingredients.addCanonical(
             ingredient.id,
-            matchResult.id,
-            matchResult.confidence,
+            bestMatch.id,
+            bestMatch.confidence,
           );
+        }
 
         await uow.recipes.addIngredient(
           recipe.id,

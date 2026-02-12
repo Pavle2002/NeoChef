@@ -1,12 +1,33 @@
 name: neochef
 services:
   server:
-    image: ghcr.io/pavle2002/neochef:latest
+    image: ghcr.io/pavle2002/neochef-server:latest
     env_file:
-      - .env
+      - .env.server
     depends_on:
       - redis
     restart: unless-stopped
+
+  workers:
+    image: ghcr.io/pavle2002/neochef-workers:latest
+    env_file:
+      - .env.workers
+    restart: unless-stopped
+    depends_on:
+      redis:
+        condition: service_started
+      embedding-service:
+        condition: service_healthy
+
+  embedding-service:
+    image: ghcr.io/pavle2002/neochef-embedding-service:latest
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:4000/health', res => process.exit(res.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"]
+      interval: 10s
+      timeout: 2s
+      retries: 3
+      start_period: 10s
 
   redis:
     image: redis:alpine
