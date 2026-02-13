@@ -15,6 +15,7 @@ type SortOptionsPopoverProps = {
 };
 
 const SORT_OPTIONS: ({ label: string } & RecipeSortOptions)[] = [
+  { label: "Most Relevant", sortBy: "score", sortOrder: "desc" },
   { label: "Newest", sortBy: "createdAt", sortOrder: "desc" },
   { label: "Most Liked", sortBy: "likeCount", sortOrder: "desc" },
   { label: "Healthiest", sortBy: "healthScore", sortOrder: "desc" },

@@ -32,3 +32,6 @@ export * from "./interfaces/cuisine-repository.interface.js";
 export * from "./interfaces/diet-repository.interface.js";
 export * from "./interfaces/dish-type-repository.interface.js";
 export * from "./interfaces/recommendation-repository.interface.js";
+export * from "./interfaces/embedding-service.interface.js";
+
+export * from "./services/embedding-service.js";

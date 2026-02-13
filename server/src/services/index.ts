@@ -14,12 +14,14 @@ import {
   DietRepository,
   DishTypeRepository,
   DriverQueryExecutor,
+  EmbeddingService,
   IngredientRepository,
   RecipeRepository,
   RecommendationRepository,
   UnitOfWorkFactory,
   UserRepository,
 } from "@neochef/core";
+import { config } from "@config/config.js";
 
 const queryExecutor = new DriverQueryExecutor(neo4jClient);
 const unitOfWorkFactory = new UnitOfWorkFactory(neo4jClient);
@@ -38,7 +40,12 @@ export const userService = new UserService(
   unitOfWorkFactory,
   redisClient,
 );
-export const recipeService = new RecipeService(recipeRepository, redisClient);
+export const embeddingService = new EmbeddingService(config.embedderUrl);
+export const recipeService = new RecipeService(
+  recipeRepository,
+  redisClient,
+  embeddingService,
+);
 export const ingredientService = new IngredientService(ingredientRepository);
 export const cuisineService = new CuisineService(
   cuisineRepository,

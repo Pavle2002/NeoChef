@@ -139,21 +139,26 @@ export class RecipeRepository implements IRecipeRepository {
       sortBy: DEFAULT_SORT_BY,
       sortOrder: DEFAULT_SORT_ORDER,
     },
-    search?: string,
+    searchEmbedding?: number[],
   ): Promise<Recipe[]> {
-    const { sortBy } = sortOptions;
+    let { sortBy } = sortOptions;
+    if (sortBy === "score" && !searchEmbedding) {
+      sortBy = "createdAt";
+    }
     let orderByClause = "";
     const sortOrder = sortOptions.sortOrder === "asc" ? "ASC" : "DESC";
 
     if (sortBy === "likeCount") {
       orderByClause = `ORDER BY likeCount ${sortOrder}`;
+    } else if (sortBy === "score") {
+      orderByClause = `ORDER BY score ${sortOrder}`;
     } else {
       orderByClause = `ORDER BY r.${sortBy} ${sortOrder}`;
     }
 
     const { matchClauses, whereClauses, params } = this.buildRecipeFilterQuery(
       filters,
-      search,
+      searchEmbedding,
     );
 
     params.limit = int(limit);
@@ -166,7 +171,7 @@ export class RecipeRepository implements IRecipeRepository {
     ${matchClauses.join("\n")}
     ${whereString}
     OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
-    WITH r, COUNT(l) AS likeCount
+    WITH r, COUNT(l) AS likeCount, ${searchEmbedding ? "score" : "0"} AS score
     ${orderByClause}
     SKIP $offset LIMIT $limit
     RETURN r, likeCount
@@ -216,15 +221,15 @@ export class RecipeRepository implements IRecipeRepository {
   }
 
   async createOrUpdate(recipe: RecipeData): Promise<Recipe> {
-    const { sourceId, sourceName, ...upsertRecipe } = recipe;
+    const { sourceId, sourceName, ...properties } = recipe;
     const result = await this.queryExecutor.run(
       `MERGE (r:Recipe {sourceName: $sourceName, sourceId: $sourceId})
-      ON CREATE SET r.id = apoc.create.uuid(), r.createdAt = datetime(), r += $upsertRecipe
-      ON MATCH SET r += $upsertRecipe
+      ON CREATE SET r.id = apoc.create.uuid(), r.createdAt = datetime(), r += $properties
+      ON MATCH SET r += $properties
       WITH r
       OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
       RETURN r, COUNT(l) AS likeCount`,
-      { sourceId, sourceName, upsertRecipe },
+      { sourceId, sourceName, properties },
     );
 
     const record = result.records[0];
@@ -318,11 +323,11 @@ export class RecipeRepository implements IRecipeRepository {
 
   async countAll(
     filters: RecipeFilters = {},
-    search?: string,
+    searchEmbedding?: number[],
   ): Promise<number> {
     const { matchClauses, whereClauses, params } = this.buildRecipeFilterQuery(
       filters,
-      search,
+      searchEmbedding,
     );
 
     const whereString =
@@ -340,18 +345,21 @@ export class RecipeRepository implements IRecipeRepository {
     return totalNumber ? totalNumber.get("total") : 0;
   }
 
-  private buildRecipeFilterQuery(filters: RecipeFilters = {}, search?: string) {
+  private buildRecipeFilterQuery(
+    filters: RecipeFilters = {},
+    searchEmbadding?: number[],
+  ) {
     const { cuisines, diets, dishTypes } = filters;
     let matchClauses = [];
     let whereClauses: string[] = [];
     let params: Record<string, any> = {};
 
-    if (search && search.length > 0) {
-      const parsedSearch = this.parseSearchQuery(search);
+    if (searchEmbadding) {
       matchClauses.push(
-        `CALL db.index.fulltext.queryNodes("recipeFullTextIndex", $search) YIELD node AS r`,
+        `CALL db.index.vector.queryNodes('recipe_embedding_index', 42, $searchEmbadding) 
+        YIELD node AS r, score`,
       );
-      params.search = parsedSearch;
+      params.searchEmbadding = searchEmbadding;
     } else {
       matchClauses.push(`MATCH (r:Recipe)`);
     }

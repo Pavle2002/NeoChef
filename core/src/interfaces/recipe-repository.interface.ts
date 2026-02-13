@@ -21,17 +21,17 @@ export interface IRecipeRepository {
     offset?: number,
     filters?: RecipeFilters,
     sortOptions?: RecipeSortOptions,
-    search?: string
+    searchEmbedding?: number[],
   ): Promise<Recipe[]>;
   findTrending(): Promise<{ recipe: Recipe; score: number }[]>;
   addIngredient(
     recipeId: string,
     ingredientId: string,
-    usage: IngredientUsage
+    usage: IngredientUsage,
   ): Promise<void>;
   addEquipment(recipeId: string, equipment: Equipment): Promise<void>;
   addCuisine(recipeId: string, cuisine: Cuisine): Promise<void>;
   addDiet(recipeId: string, diet: Diet): Promise<void>;
   addDishType(recipeId: string, dishType: DishType): Promise<void>;
-  countAll(filters: RecipeFilters, search?: string): Promise<number>;
+  countAll(filters: RecipeFilters, searchEmbedding?: number[]): Promise<number>;
 }

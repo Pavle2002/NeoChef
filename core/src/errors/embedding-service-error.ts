@@ -1,5 +1,5 @@
 import { ErrorCodes, type ErrorCode } from "@neochef/common";
-import { AppError } from "@neochef/core";
+import { AppError } from "./app-error.js";
 
 export class EmbeddingServiceError extends AppError {
   constructor(

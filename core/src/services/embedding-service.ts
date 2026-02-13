@@ -1,9 +1,5 @@
-import { config } from "../config/config.js";
+import type { IEmbeddingService } from "../interfaces/embedding-service.interface.js";
 import { EmbeddingServiceError } from "../errors/embedding-service-error.js";
-
-export interface IEmbeddingService {
-  generateEmbedding(input: string): Promise<number[]>;
-}
 
 export type Candidate = {
   id: string;
@@ -11,10 +7,10 @@ export type Candidate = {
 };
 
 export class EmbeddingService implements IEmbeddingService {
-  private embeddingServiceUrl = config.embeddingServiceUrl;
+  constructor(private embedderUrl: string) {}
 
   async generateEmbedding(input: string): Promise<number[]> {
-    const response = await fetch(`${this.embeddingServiceUrl}/embed`, {
+    const response = await fetch(`${this.embedderUrl}/embed`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

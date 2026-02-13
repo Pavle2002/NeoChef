@@ -30,13 +30,13 @@ const RecipeSearchSchema = RecipeFiltersSchema.extend({
   search: z.string().trim().optional(),
   page: fallback(z.number().int().positive(), 1).default(1),
   size: fallback(z.number().int().positive(), DEFAULT_PAGE_SIZE).default(
-    DEFAULT_PAGE_SIZE
+    DEFAULT_PAGE_SIZE,
   ),
   sortBy: fallback(z.enum(SORT_BY_OPTIONS), DEFAULT_SORT_BY).default(
-    DEFAULT_SORT_BY
+    DEFAULT_SORT_BY,
   ),
   sortOrder: fallback(z.enum(SORT_ORDER_OPTIONS), DEFAULT_SORT_ORDER).default(
-    DEFAULT_SORT_ORDER
+    DEFAULT_SORT_ORDER,
   ),
 });
 
@@ -70,8 +70,8 @@ export const Route = createFileRoute("/_protected/search")({
         deps.size,
         filters,
         sortOptions,
-        deps.search
-      )
+        deps.search,
+      ),
     );
     queryClient.ensureQueryData(getDietsQueryOptions());
     queryClient.ensureQueryData(getCuisinesQueryOptions());
@@ -107,7 +107,7 @@ function RouteComponent() {
     });
   }
 
-  function handleSearch(e: React.FormEvent<HTMLFormElement>) {
+  function handleSearch(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const searchValue = formData.get("search")?.toString() || "";
@@ -179,7 +179,7 @@ function RecipesContainer({
   const {
     data: { recipes, totalCount },
   } = useSuspenseQuery(
-    getRecipesQueryOptions(offset, size, filters, sortOptions, search)
+    getRecipesQueryOptions(offset, size, filters, sortOptions, search),
   );
 
   const totalPageCount = Math.ceil(totalCount / size);

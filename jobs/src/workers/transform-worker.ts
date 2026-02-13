@@ -44,6 +44,7 @@ export const transformWorker = new Worker<TransformJob>(
           sourceId: recipe.id?.toString(),
           sourceName: "Spoonacular",
           title: recipe.title,
+          embedding: await embeddingService.generateEmbedding(recipe.title),
           imageType: recipe.imageType,
           servings: recipe.servings,
           pricePerServing: recipe.pricePerServing,

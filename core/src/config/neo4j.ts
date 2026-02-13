@@ -76,7 +76,18 @@ async function createIndexes(client: Driver): Promise<void> {
     }`,
   );
   await client.executeQuery(
-    `CREATE FULLTEXT INDEX recipeFullTextIndex IF NOT EXISTS 
-    FOR (r:Recipe) ON EACH [r.title, r.description]`,
+    `CREATE VECTOR INDEX recipe_embedding_index IF NOT EXISTS
+    FOR (r:Recipe)
+    ON (r.embedding)
+    OPTIONS {
+      indexConfig: {
+        \`vector.dimensions\`: 384,
+        \`vector.similarity_function\`: 'cosine'
+      }
+    }`,
   );
+  // await client.executeQuery(
+  //   `CREATE FULLTEXT INDEX recipeFullTextIndex IF NOT EXISTS
+  //   FOR (r:Recipe) ON EACH [r.title, r.description]`,
+  // );
 }

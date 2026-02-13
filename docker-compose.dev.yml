@@ -64,18 +64,18 @@ services:
     depends_on:
       redis:
         condition: service_started
-      embedding-service:
+      embedder:
         condition: service_healthy
 
-  embedding-service:
+  embedder:
     build:
       context: .
-      dockerfile: embedding-service/Dockerfile 
+      dockerfile: embedder/Dockerfile 
       target: development
     ports: 
       - "4000:4000"
     volumes:
-      - ./embedding-service:/app/embedding-service
+      - ./embedder:/app/embedder
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "node", "-e", "require('http').get('http://localhost:4000/health', res => process.exit(res.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"]

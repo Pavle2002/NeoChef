@@ -1,5 +1,5 @@
 {
-  "name": "@neochef/embedding-service",
+  "name": "@neochef/embedder",
   "description": "Embedding service for NeoChef application",
   "version": "1.0.0",
   "type": "module",

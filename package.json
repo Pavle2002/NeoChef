@@ -13,12 +13,12 @@
     "common",
     "core",
     "jobs",
-    "embedding-service"
+    "embedder"
   ],
   "scripts": {
     "build:server": "docker buildx build --platform linux/amd64 --target production -t ghcr.io/pavle2002/neochef-server:latest -f server/Dockerfile . --push",
     "build:workers": "docker buildx build --platform linux/amd64 --target production -t ghcr.io/pavle2002/neochef-workers:latest -f jobs/Dockerfile . --push",
-    "build:embedding-service": "docker buildx build --platform linux/amd64 --target production -t ghcr.io/pavle2002/neochef-embedding-service:latest -f embedding-service/Dockerfile . --push",
+    "build:embedder": "docker buildx build --platform linux/amd64 --target production -t ghcr.io/pavle2002/neochef-embedder:latest -f embedder/Dockerfile . --push",
     "dev": "docker compose -f docker-compose.dev.yml up",
     "dev:build": "docker compose -f docker-compose.dev.yml up --build",
     "down": "docker compose -f docker-compose.dev.yml down",

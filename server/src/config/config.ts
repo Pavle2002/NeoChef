@@ -8,6 +8,7 @@ const requiredEnvVars = [
   "NEO4J_PASSWORD",
   "REDIS_URL",
   "CLIENT_ORIGIN",
+  "EMBEDDER_URL",
 ];
 
 requiredEnvVars.forEach((key) => {
@@ -56,4 +57,5 @@ export const config = {
       maxRequests: parseInt(process.env.RATE_LIMIT_STRICT_MAX || "50", 10),
     },
   },
+  embedderUrl: process.env.EMBEDDER_URL as string,
 };

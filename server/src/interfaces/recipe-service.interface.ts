@@ -13,7 +13,7 @@ export interface IRecipeService {
     offset?: number,
     filters?: RecipeFilters,
     sortOptions?: RecipeSortOptions,
-    search?: string
+    searchQuery?: string,
   ): Promise<{ recipes: Recipe[]; totalCount: number }>;
   getTrending(): Promise<Recipe[]>;
 }

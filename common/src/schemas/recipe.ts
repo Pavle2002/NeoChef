@@ -7,9 +7,10 @@ import { EquipmentSchema } from "./equipment.js";
 import { DishTypeSchema } from "./dish-type.js";
 
 export const DEFAULT_PAGE_SIZE = 24;
-export const DEFAULT_SORT_BY = "createdAt";
+export const DEFAULT_SORT_BY = "score";
 export const DEFAULT_SORT_ORDER = "desc";
 export const SORT_BY_OPTIONS = [
+  "score",
   "createdAt",
   "likeCount",
   "healthScore",
@@ -25,6 +26,7 @@ export const RecipeSchema = z.object({
   title: z.string().trim(),
   imageType: z.string(),
   servings: z.number(),
+  embedding: z.array(z.number()),
   instructions: z.array(z.string().trim()).optional().default([]),
   summary: z.string().trim().nullish().default(null),
   readyInMinutes: z.number().nullish().default(null),

@@ -5,7 +5,7 @@ WORKDIR /app
 
 # Copy workspace package files to install dependencies
 COPY package.json package-lock.json ./
-COPY embedding-service/package.json ./embedding-service/package.json
+COPY embedder/package.json ./embedder/package.json
 
 # Install all dependencies (including devDependencies)
 RUN npm ci
@@ -15,21 +15,21 @@ FROM base AS development
 ENV NODE_ENV=development
 
 # Copy source code
-COPY embedding-service ./embedding-service
+COPY embedder ./embedder
 
 # Expose port
 EXPOSE 4000
 
 # Run the dev command
-CMD ["npm", "run", "-w", "embedding-service", "dev"]
+CMD ["npm", "run", "-w", "embedder", "dev"]
 
 # Stage 3: Builder (Build for production)
 FROM base AS builder
 
-COPY embedding-service ./embedding-service
+COPY embedder ./embedder
 
 # Build embedding
-RUN npm run build -w embedding-service
+RUN npm run build -w embedder
 
 # Prune dev dependencies to reduce image size for production
 RUN npm ci --only=production
@@ -50,8 +50,8 @@ RUN mkdir -p /home/node/.cache && chown -R node:node /home/node/.cache
 # Copy necessary files from builder with correct ownership
 COPY --from=builder --chown=node:node /app/node_modules ./node_modules
 COPY --from=builder --chown=node:node /app/package.json ./package.json
-COPY --from=builder --chown=node:node /app/embedding-service/package.json ./embedding-service/package.json
-COPY --from=builder --chown=node:node /app/embedding-service/dist ./embedding-service/dist
+COPY --from=builder --chown=node:node /app/embedder/package.json ./embedder/package.json
+COPY --from=builder --chown=node:node /app/embedder/dist ./embedder/dist
 
 # Switch to non-root user for security
 USER node
@@ -60,4 +60,4 @@ USER node
 EXPOSE 4000
 
 # Start the server
-CMD ["node", "embedding-service/dist/index.js"]
+CMD ["node", "embedder/dist/index.js"]

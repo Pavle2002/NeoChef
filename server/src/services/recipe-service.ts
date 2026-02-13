@@ -12,6 +12,7 @@ import { CacheKeys } from "@utils/cache-keys.js";
 import {
   NotFoundError,
   safeAwait,
+  type IEmbeddingService,
   type IRecipeRepository,
 } from "@neochef/core";
 import type { RedisClientType } from "redis";
@@ -20,6 +21,7 @@ export class RecipeService implements IRecipeService {
   constructor(
     private readonly recipeRepository: IRecipeRepository,
     private readonly redisClient: RedisClientType<any, any, any>,
+    private readonly embeddingService: IEmbeddingService,
   ) {}
 
   async getById(id: string): Promise<Recipe> {
@@ -70,17 +72,24 @@ export class RecipeService implements IRecipeService {
       sortBy: DEFAULT_SORT_BY,
       sortOrder: DEFAULT_SORT_ORDER,
     },
-    search?: string,
+    searchQuery?: string,
   ): Promise<{ recipes: Recipe[]; totalCount: number }> {
+    let searchEmbedding: number[] | undefined = undefined;
+
+    if (searchQuery) {
+      searchEmbedding =
+        await this.embeddingService.generateEmbedding(searchQuery);
+    }
+
     const [recipes, totalCount] = await Promise.all([
       this.recipeRepository.findAll(
         limit,
         offset,
         filters,
         sortOptions,
-        search,
+        searchEmbedding,
       ),
-      this.recipeRepository.countAll(filters, search),
+      this.recipeRepository.countAll(filters, searchEmbedding),
     ]);
     return { recipes, totalCount };
   }
