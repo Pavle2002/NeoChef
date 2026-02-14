@@ -20,13 +20,13 @@ export const upsertWorker = new Worker<UpsertJob, string>(
         );
 
         const bestMatch = (
-          await uow.ingredients.findSimilarCanonical(ingredient.embedding)
+          await uow.ingredients.findSimilarCanonical(ingredient.embedding, 1)
         )[0];
 
         if (bestMatch && bestMatch.confidence > 0.8) {
           await uow.ingredients.addCanonical(
             ingredient.id,
-            bestMatch.id,
+            bestMatch.match.id,
             bestMatch.confidence,
           );
         }

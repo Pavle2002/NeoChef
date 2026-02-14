@@ -24,7 +24,7 @@ const getAllSchema = z.object({
         z
           .number({ message: "Limit must be a number" })
           .int({ message: "Limit must be an integer" })
-          .positive({ message: "Limit must be a positive integer" })
+          .positive({ message: "Limit must be a positive integer" }),
       )
       .default(DEFAULT_PAGE_SIZE),
     offset: z
@@ -33,7 +33,7 @@ const getAllSchema = z.object({
         z
           .number({ message: "Offset must be a number" })
           .int({ message: "Offset must be an integer" })
-          .nonnegative({ message: "Offset must be a non-negative integer" })
+          .nonnegative({ message: "Offset must be a non-negative integer" }),
       )
       .default(DEFAULT_OFFSET),
 

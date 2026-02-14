@@ -1,5 +1,6 @@
-import type { CanonicalIngredient } from "@neochef/common";
+import type { CanonicalIngredient, Ingredient } from "@neochef/common";
 
 export interface IIngredientService {
-  getAll(queryString?: string): Promise<CanonicalIngredient[]>;
+  getAllCanonical(queryString?: string): Promise<CanonicalIngredient[]>;
+  getAllUnmapped(): Promise<Ingredient[]>;
 }

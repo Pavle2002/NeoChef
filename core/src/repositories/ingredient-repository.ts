@@ -54,8 +54,8 @@ export class IngredientRepository implements IIngredientRepository {
   async findAllCanonical(queryString = ""): Promise<CanonicalIngredient[]> {
     const result = await this.queryExecutor.run(
       `MATCH (i:CanonicalIngredient)
-       WHERE toLower(i.name) CONTAINS toLower($queryString)
-       RETURN i`,
+      WHERE toLower(i.name) CONTAINS toLower($queryString)
+      RETURN i`,
       { queryString },
     );
 
@@ -65,20 +65,31 @@ export class IngredientRepository implements IIngredientRepository {
     );
   }
 
+  async findAllUnmapped(): Promise<Ingredient[]> {
+    const result = await this.queryExecutor.run(
+      `MATCH (i:Ingredient)
+       WHERE NOT (i)-[:MAPS_TO]->(:CanonicalIngredient)
+       RETURN i`,
+    );
+
+    const records = result.records;
+    return records.map((record) => record.get("i").properties as Ingredient);
+  }
+
   async findSimilarCanonical(
     embedding: number[],
     limit = 5,
-  ): Promise<{ id: string; confidence: number }[]> {
+  ): Promise<{ match: CanonicalIngredient; confidence: number }[]> {
     const result = await this.queryExecutor.run(
       `CALL db.index.vector.queryNodes('canonical_embedding_index', $limit, $embedding)
       YIELD node AS c, score
-      RETURN c.id AS id, score
+      RETURN c, score
       ORDER BY score DESC`,
       { embedding, limit },
     );
 
     return result.records.map((record) => ({
-      id: record.get("id"),
+      match: record.get("c").properties as CanonicalIngredient,
       confidence: record.get("score"),
     }));
   }
