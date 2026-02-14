@@ -77,8 +77,9 @@ export class RecipeService implements IRecipeService {
     let searchEmbedding: number[] | undefined = undefined;
 
     if (searchQuery) {
-      searchEmbedding =
-        await this.embeddingService.generateEmbedding(searchQuery);
+      searchEmbedding = await this.embeddingService.generateEmbedding(
+        searchQuery.toLowerCase(),
+      );
     }
 
     const [recipes, totalCount] = await Promise.all([

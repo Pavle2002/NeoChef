@@ -12,4 +12,11 @@ export class IngredientService implements IIngredientService {
   async getAllUnmapped(): Promise<Ingredient[]> {
     return this.ingredientRepository.findAllUnmapped();
   }
+
+  async getSimilarCanonical(
+    ingredientId: string,
+    limit = 5,
+  ): Promise<{ match: CanonicalIngredient; confidence: number }[]> {
+    return this.ingredientRepository.findSimilarCanonical(ingredientId, limit);
+  }
 }

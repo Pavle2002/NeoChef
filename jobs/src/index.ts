@@ -1,4 +1,5 @@
 import { logger } from "./config/logger.js";
+import { transformQueue } from "./services/index.js";
 import { fetchWorker } from "./workers/fetch-worker.js";
 import { transformWorker } from "./workers/transform-worker.js";
 import { upsertWorker } from "./workers/upsert-worker.js";
@@ -30,3 +31,14 @@ upsertWorker.on("completed", (job, result: string) => {
 upsertWorker.on("failed", (job, err) => {
   logger.error(`Upsert job ${job?.id} failed: ${err.message}`);
 });
+
+// transformQueue.add("test", { page: 0, corelationId: "test-corelation-id" });
+// transformQueue.add("test", { page: 1, corelationId: "test-corelation-id" });
+// transformQueue.add("test", { page: 2, corelationId: "test-corelation-id" });
+// transformQueue.add("test", { page: 3, corelationId: "test-corelation-id" });
+// transformQueue.add("test", { page: 4, corelationId: "test-corelation-id" });
+// transformQueue.add("test", { page: 5, corelationId: "test-corelation-id" });
+// transformQueue.add("test", { page: 6, corelationId: "test-corelation-id" });
+// transformQueue.add("test", { page: 7, corelationId: "test-corelation-id" });
+// transformQueue.add("test", { page: 8, corelationId: "test-corelation-id" });
+// transformQueue.add("test", { page: 9, corelationId: "test-corelation-id" });

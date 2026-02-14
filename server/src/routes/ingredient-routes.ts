@@ -6,10 +6,21 @@ import { Router } from "express";
 
 const router = Router();
 
-const { getAllCanonical, getAllUnmapped } = ingredientController;
-const { getAllSchema } = ingredientSchemas;
+const { getAllCanonical, getAllUnmapped, getSimilarCanonical } =
+  ingredientController;
+const { getAllCanonicalSchema, getSimilarCanonicalSchema } = ingredientSchemas;
 
-router.get("/", isAuthenticated, validate(getAllSchema), getAllCanonical);
+router.get(
+  "/",
+  isAuthenticated,
+  validate(getAllCanonicalSchema),
+  getAllCanonical,
+);
 router.get("/unmapped", isAdmin, getAllUnmapped);
-
+router.get(
+  "/similar/:id",
+  isAdmin,
+  validate(getSimilarCanonicalSchema),
+  getSimilarCanonical,
+);
 export { router as ingredientRoutes };

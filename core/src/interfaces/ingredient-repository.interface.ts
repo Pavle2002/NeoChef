@@ -6,8 +6,15 @@ import type {
 } from "@neochef/common";
 
 export interface IIngredientRepository {
-  findAllUnmapped(): Promise<Ingredient[]>;
   findAllCanonical(queryString?: string): Promise<CanonicalIngredient[]>;
+  findAllUnmapped(): Promise<Ingredient[]>;
+  findSimilarCanonical(
+    ingredientId: string,
+    limit?: number,
+  ): Promise<{ match: CanonicalIngredient; confidence: number }[]>;
+  // createCanonical(
+  //   ingredient: CanonicalIngredientData,
+  // ): Promise<CanonicalIngredient>;
   create(ingredient: IngredientData): Promise<Ingredient>;
   createManyCanonical(
     ingredients: CanonicalIngredientData[],
@@ -17,8 +24,4 @@ export interface IIngredientRepository {
     canonicalId: string,
     confidence: number,
   ): Promise<void>;
-  findSimilarCanonical(
-    embedding: number[],
-    limit?: number,
-  ): Promise<{ match: CanonicalIngredient; confidence: number }[]>;
 }

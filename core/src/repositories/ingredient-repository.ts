@@ -7,6 +7,7 @@ import type {
 import type { IIngredientRepository } from "../interfaces/ingredient-repository.interface.js";
 import type { IQueryExecutor } from "../interfaces/query-executor.interface.js";
 import { InternalServerError } from "../errors/internal-server-error.js";
+import { int } from "neo4j-driver";
 
 export class IngredientRepository implements IIngredientRepository {
   constructor(private readonly queryExecutor: IQueryExecutor) {}
@@ -77,15 +78,17 @@ export class IngredientRepository implements IIngredientRepository {
   }
 
   async findSimilarCanonical(
-    embedding: number[],
+    ingredientId: string,
     limit = 5,
   ): Promise<{ match: CanonicalIngredient; confidence: number }[]> {
     const result = await this.queryExecutor.run(
-      `CALL db.index.vector.queryNodes('canonical_embedding_index', $limit, $embedding)
+      `Match (i:Ingredient {id: $ingredientId})
+      CALL db.index.vector.queryNodes('canonical_embedding_index', 50, i.embedding)
       YIELD node AS c, score
       RETURN c, score
-      ORDER BY score DESC`,
-      { embedding, limit },
+      ORDER BY score DESC
+      LIMIT $limit`,
+      { ingredientId, limit: int(limit) },
     );
 
     return result.records.map((record) => ({

@@ -18,7 +18,24 @@ async function getAllUnmapped(req: Request, res: Response): Promise<void> {
   );
 }
 
+async function getSimilarCanonical(req: Request, res: Response): Promise<void> {
+  const limit = req.validated?.body?.limit as number;
+  const ingredientId = req.validated?.params?.id as string;
+
+  const similarIngredients = await ingredientService.getSimilarCanonical(
+    ingredientId,
+    limit,
+  );
+  sendSuccess(
+    res,
+    200,
+    similarIngredients,
+    "Similar canonical ingredients retrieved successfully",
+  );
+}
+
 export const ingredientController = {
   getAllCanonical,
   getAllUnmapped,
+  getSimilarCanonical,
 };

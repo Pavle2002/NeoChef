@@ -17,7 +17,7 @@ const checkboxVariants = cva(
     defaultVariants: {
       size: "sm",
     },
-  }
+  },
 );
 
 type CheckboxProps = {

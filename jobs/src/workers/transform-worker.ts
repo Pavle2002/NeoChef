@@ -44,7 +44,9 @@ export const transformWorker = new Worker<TransformJob>(
           sourceId: recipe.id?.toString(),
           sourceName: "Spoonacular",
           title: recipe.title,
-          embedding: await embeddingService.generateEmbedding(recipe.title),
+          embedding: await embeddingService.generateEmbedding(
+            recipe.title.toLowerCase(),
+          ),
           imageType: recipe.imageType,
           servings: recipe.servings,
           pricePerServing: recipe.pricePerServing,
@@ -149,7 +151,7 @@ export function normalizeIngredientName(input: string): string {
   name = name
     .split(" ")
     .filter(Boolean)
-    .map((word) => pluralize.singular(word))
+    .map((word) => pluralize.singular(word).trim())
     .join(" ");
 
   return name;
