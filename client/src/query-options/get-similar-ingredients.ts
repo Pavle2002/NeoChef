@@ -7,12 +7,13 @@ type MatchResult = {
   confidence: number;
 };
 
-export function getSimilarIngredientsQueryOptions(id: string, limit: number) {
+export function getSimilarIngredientsQueryOptions(id: string) {
+  const limit = 10;
   return queryOptions({
-    queryKey: ["ingredients", "similar", { id, limit }],
+    queryKey: ["ingredients", "similar", { id }],
     queryFn: () =>
       apiClient.get<MatchResult[]>(
-        `/ingredients/similar/${id}?limit=${limit.toString()}`,
+        `/ingredients/${id}/similar?limit=${limit.toString()}`,
       ),
   });
 }

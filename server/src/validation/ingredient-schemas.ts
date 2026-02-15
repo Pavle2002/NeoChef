@@ -27,7 +27,21 @@ const getSimilarCanonicalSchema = z.object({
   }),
 });
 
+const addCanonicalSchema = z.object({
+  params: z.object({
+    id: z.string().uuid({ message: "Invalid ingredient ID format" }),
+  }),
+  body: z.object({
+    canonicalId: z.string().uuid({ message: "Invalid canonical ID format" }),
+    confidence: z
+      .number()
+      .min(0, { message: "Confidence must be at least 0" })
+      .max(1, { message: "Confidence cannot exceed 1" }),
+  }),
+});
+
 export const ingredientSchemas = {
   getAllCanonicalSchema,
   getSimilarCanonicalSchema,
+  addCanonicalSchema,
 };

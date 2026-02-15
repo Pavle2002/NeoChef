@@ -17,7 +17,7 @@ export function IngredientList({
       {ingredients.map((ingredient) => (
         <div
           key={ingredient.id}
-          className="flex justify-center items-center gap-2 px-4 py-2 font-medium border border-border shadow-md rounded-md bg-secondary text-primary cursor-pointer"
+          className="flex justify-center items-center gap-2 px-4 py-2 font-medium border border-border shadow-md rounded-sm bg-secondary text-primary cursor-pointer hover:border-primary"
           onClick={() => onClick?.(ingredient)}
         >
           <Image

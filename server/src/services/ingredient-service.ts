@@ -19,4 +19,16 @@ export class IngredientService implements IIngredientService {
   ): Promise<{ match: CanonicalIngredient; confidence: number }[]> {
     return this.ingredientRepository.findSimilarCanonical(ingredientId, limit);
   }
+
+  async addCanonical(
+    ingredientId: string,
+    canonicalId: string,
+    confidence: number,
+  ): Promise<void> {
+    await this.ingredientRepository.addCanonical(
+      ingredientId,
+      canonicalId,
+      confidence,
+    );
+  }
 }

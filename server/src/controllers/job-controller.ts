@@ -15,18 +15,18 @@ const upsertEvents = new QueueEvents(QUEUES.UPSERT, { connection });
 
 async function startFetchJob(req: Request, res: Response): Promise<void> {
   const { page } = req.validated!.body as FetchJob;
-  const corelationId = randomUUID();
+  const correlationId = randomUUID();
 
-  await fetchQueue.add("fetch-job", { corelationId, page });
-  sendSuccess(res, 200, corelationId, "Fetch job started successfully");
+  await fetchQueue.add("fetch-job", { correlationId, page });
+  sendSuccess(res, 200, correlationId, "Fetch job started successfully");
 }
 
 async function startTransformJob(req: Request, res: Response): Promise<void> {
   const { page } = req.validated!.body as TransformJob;
-  const corelationId = randomUUID();
+  const correlationId = randomUUID();
 
-  await transformQueue.add("transform-job", { corelationId, page });
-  sendSuccess(res, 200, corelationId, "Transform job started successfully");
+  await transformQueue.add("transform-job", { correlationId, page });
+  sendSuccess(res, 200, correlationId, "Transform job started successfully");
 }
 
 async function streamEvents(req: Request, res: Response): Promise<void> {

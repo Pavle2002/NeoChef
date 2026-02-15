@@ -6,9 +6,10 @@ import { Router } from "express";
 
 const router = Router();
 
-const { getAllCanonical, getAllUnmapped, getSimilarCanonical } =
+const { getAllCanonical, getAllUnmapped, getSimilarCanonical, addCanonical } =
   ingredientController;
-const { getAllCanonicalSchema, getSimilarCanonicalSchema } = ingredientSchemas;
+const { getAllCanonicalSchema, getSimilarCanonicalSchema, addCanonicalSchema } =
+  ingredientSchemas;
 
 router.get(
   "/",
@@ -18,9 +19,16 @@ router.get(
 );
 router.get("/unmapped", isAdmin, getAllUnmapped);
 router.get(
-  "/similar/:id",
+  "/:id/similar",
   isAdmin,
   validate(getSimilarCanonicalSchema),
   getSimilarCanonical,
 );
+router.post(
+  "/:id/mapping",
+  isAdmin,
+  validate(addCanonicalSchema),
+  addCanonical,
+);
+
 export { router as ingredientRoutes };

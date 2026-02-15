@@ -7,4 +7,9 @@ export interface IIngredientService {
     ingredientId: string,
     limit?: number,
   ): Promise<{ match: CanonicalIngredient; confidence: number }[]>;
+  addCanonical(
+    ingredientId: string,
+    canonicalId: string,
+    confidence: number,
+  ): Promise<void>;
 }
