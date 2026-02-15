@@ -52,11 +52,12 @@ function RouteComponent() {
     const eventSource = new EventSource(`${config.apiUrl}/jobs/events`);
 
     eventSource.onmessage = (event) => {
-      const { type, jobId } = JSON.parse(event.data) as {
+      const { type, job } = JSON.parse(event.data) as {
         type: string;
-        jobId: string;
+        job: any;
       };
-      setLogs((prevLogs) => [...prevLogs, `Job ${jobId} ${type}`]);
+      console.log(job);
+      setLogs((prevLogs) => [...prevLogs, `${job.name} ${type}`]);
     };
 
     return () => {

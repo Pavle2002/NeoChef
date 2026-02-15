@@ -1,5 +1,10 @@
 import type { FetchJob, TransformJob } from "@neochef/common";
-import { getFetchQueue, getTransformQueue, QUEUES } from "@neochef/core";
+import {
+  getFetchQueue,
+  getTransformQueue,
+  getUpsertQueue,
+  QUEUES,
+} from "@neochef/core";
 import { sendSuccess } from "@utils/response-handler.js";
 import { QueueEvents } from "bullmq";
 import type { Response, Request } from "express";
@@ -8,6 +13,7 @@ import { randomUUID } from "node:crypto";
 const connection = { host: "redis", port: 6379 };
 const fetchQueue = getFetchQueue(connection);
 const transformQueue = getTransformQueue(connection);
+const upsertQueue = getUpsertQueue(connection);
 
 const fetchEvents = new QueueEvents(QUEUES.FETCH, { connection });
 const transformEvents = new QueueEvents(QUEUES.TRANSFORM, { connection });
@@ -34,29 +40,69 @@ async function streamEvents(req: Request, res: Response): Promise<void> {
   res.setHeader("Cache-Control", "no-cache");
   res.setHeader("Connection", "keep-alive");
 
-  const completedHandler = ({ jobId }: { jobId: string }) => {
-    res.write(`data: ${JSON.stringify({ type: "completed", jobId })}\n\n`);
-  };
-  const failedHandler = ({ jobId }: { jobId: string }) => {
-    res.write(`data: ${JSON.stringify({ type: "failed", jobId })}\n\n`);
-  };
-
-  fetchEvents.on("completed", completedHandler);
-  fetchEvents.on("failed", failedHandler);
-  transformEvents.on("completed", completedHandler);
-  transformEvents.on("failed", failedHandler);
-  upsertEvents.on("completed", completedHandler);
-  upsertEvents.on("failed", failedHandler);
+  const fetchCompletedHandler = addListener(QUEUES.FETCH, "completed", res);
+  const fetchFailedHandler = addListener(QUEUES.FETCH, "failed", res);
+  const transformCompletedHandler = addListener(
+    QUEUES.TRANSFORM,
+    "completed",
+    res,
+  );
+  const transformFailedHandler = addListener(QUEUES.TRANSFORM, "failed", res);
+  const upsertCompletedHandler = addListener(QUEUES.UPSERT, "completed", res);
+  const upsertFailedHandler = addListener(QUEUES.UPSERT, "failed", res);
 
   req.on("close", () => {
-    fetchEvents.off("completed", completedHandler);
-    fetchEvents.off("failed", failedHandler);
-    transformEvents.off("completed", completedHandler);
-    transformEvents.off("failed", failedHandler);
-    upsertEvents.off("completed", completedHandler);
-    upsertEvents.off("failed", failedHandler);
+    fetchEvents.off("completed", fetchCompletedHandler);
+    fetchEvents.off("failed", fetchFailedHandler);
+    transformEvents.off("completed", transformCompletedHandler);
+    transformEvents.off("failed", transformFailedHandler);
+    upsertEvents.off("completed", upsertCompletedHandler);
+    upsertEvents.off("failed", upsertFailedHandler);
     res.end();
   });
+}
+
+function addListener(
+  queueName: (typeof QUEUES)[keyof typeof QUEUES],
+  type: "completed" | "failed",
+  res: Response,
+) {
+  const queue = getQueueByName(queueName);
+  const events = getQueueEventsByName(queueName);
+
+  const handler = async ({ jobId }: { jobId: string }) => {
+    const job = await queue.getJob(jobId);
+    res.write(`data: ${JSON.stringify({ type, job })}\n\n`);
+    if (type === "completed") await queue.remove(jobId);
+  };
+  events.on(type, handler);
+  return handler;
+}
+
+function getQueueByName(queueName: (typeof QUEUES)[keyof typeof QUEUES]) {
+  switch (queueName) {
+    case QUEUES.FETCH:
+      return fetchQueue;
+    case QUEUES.TRANSFORM:
+      return transformQueue;
+    case QUEUES.UPSERT:
+      return upsertQueue;
+    default:
+      throw new Error("Invalid queue name");
+  }
+}
+
+function getQueueEventsByName(queueName: (typeof QUEUES)[keyof typeof QUEUES]) {
+  switch (queueName) {
+    case QUEUES.FETCH:
+      return fetchEvents;
+    case QUEUES.TRANSFORM:
+      return transformEvents;
+    case QUEUES.UPSERT:
+      return upsertEvents;
+    default:
+      throw new Error("Invalid queue name");
+  }
 }
 
 export const jobController = {

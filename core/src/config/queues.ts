@@ -17,7 +17,7 @@ export function getFetchQueue(connection: QueueConnection) {
     connection,
     defaultJobOptions: {
       attempts: 3,
-      removeOnComplete: true,
+      removeOnComplete: false,
       removeOnFail: false,
     },
   });
@@ -27,7 +27,7 @@ export function getTransformQueue(connection: QueueConnection) {
   return new Queue<TransformJob>(QUEUES.TRANSFORM, {
     connection,
     defaultJobOptions: {
-      removeOnComplete: true,
+      removeOnComplete: false,
       removeOnFail: false,
     },
   });
@@ -38,7 +38,7 @@ export function getUpsertQueue(connection: QueueConnection) {
     connection,
     defaultJobOptions: {
       attempts: 5,
-      removeOnComplete: true,
+      removeOnComplete: false,
       removeOnFail: false,
     },
   });
