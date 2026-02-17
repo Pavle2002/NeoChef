@@ -13,11 +13,11 @@ export type QueueConnection = {
 };
 
 export function getFetchQueue(connection: QueueConnection) {
-  return new Queue<FetchJob, number>(QUEUES.FETCH, {
+  return new Queue<FetchJob, FetchJob>(QUEUES.FETCH, {
     connection,
     defaultJobOptions: {
       attempts: 3,
-      removeOnComplete: false,
+      removeOnComplete: { age: 60 },
       removeOnFail: false,
     },
   });
@@ -27,18 +27,18 @@ export function getTransformQueue(connection: QueueConnection) {
   return new Queue<TransformJob>(QUEUES.TRANSFORM, {
     connection,
     defaultJobOptions: {
-      removeOnComplete: false,
+      removeOnComplete: { age: 60 },
       removeOnFail: false,
     },
   });
 }
 
 export function getUpsertQueue(connection: QueueConnection) {
-  return new Queue<UpsertJob>(QUEUES.UPSERT, {
+  return new Queue<UpsertJob, FetchJob>(QUEUES.UPSERT, {
     connection,
     defaultJobOptions: {
       attempts: 5,
-      removeOnComplete: false,
+      removeOnComplete: { age: 60 },
       removeOnFail: false,
     },
   });

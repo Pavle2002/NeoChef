@@ -6,13 +6,7 @@ import { Skeleton } from "./skeleton";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { Button } from "./button";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "./drawer";
+import { Drawer, DrawerContent, DrawerTrigger } from "./drawer";
 
 export type IngredientSelectorProps = {
   value: CanonicalIngredient[];
@@ -89,9 +83,6 @@ export function IngredientSelectorPopover({
             <Plus strokeWidth={3} />
           </Button>
         </DrawerTrigger>
-        <DrawerHeader>
-          <DrawerTitle className="hidden">Select Ingredients</DrawerTitle>
-        </DrawerHeader>
         <DrawerContent className="px-2">
           <IngredientSelector
             onValueChange={onValueChange}

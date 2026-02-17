@@ -14,7 +14,7 @@ import { UtensilsCrossed } from "lucide-react";
 
 export type LiveSearchProps<T> = {
   getQueryOptions: (
-    query: string
+    query: string,
   ) => ReturnType<
     typeof queryOptions<T[], Error, T[], (string | { query: string })[]>
   >;

@@ -48,7 +48,11 @@ export const fetchWorker = new Worker<FetchJob>(
 
     await storageService.uploadPage(page, rawData);
 
-    transformQueue.add("transform-job", { correlationId, page });
+    await transformQueue.add("transform-job", {
+      correlationId,
+      page,
+      type: "Transform",
+    });
   },
   { connection },
 );

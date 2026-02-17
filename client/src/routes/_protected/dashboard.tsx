@@ -18,12 +18,25 @@ import {
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { Suspense, useEffect, useRef, useState } from "react";
-import type { Ingredient } from "@neochef/common";
+import type {
+  FetchJob,
+  Ingredient,
+  TransformJob,
+  UpsertJob,
+} from "@neochef/common";
 import { getSimilarIngredientsQueryOptions } from "@/query-options/get-similar-ingredients";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { useAddIngredientMapping } from "@/mutations/use-add-ingredient-mapping";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export const Route = createFileRoute("/_protected/dashboard")({
   component: RouteComponent,
@@ -38,26 +51,49 @@ export const Route = createFileRoute("/_protected/dashboard")({
 });
 
 function RouteComponent() {
-  const [logs, setLogs] = useState<string[]>([]);
-  const [open, setOpen] = useState(false);
-  const [currentIngredient, setCurrentIngredient] = useState<Ingredient | null>(
-    null,
-  );
   const { mutate } = useStartTransformJob();
-  const { data: unmappedIngredients } = useSuspenseQuery(
-    getUnmappedIngredientsQueryOptions(),
+
+  return (
+    <>
+      <h2 className="text-3xl text-primary font-bold">Background Jobs</h2>
+      <p className="text-muted-foreground mb-4"></p>
+      <BackgroundJobsTable />
+      <Button onClick={() => mutate(0)}>Start Transform Job</Button>
+      <h2 className="text-3xl text-primary font-bold mt-5">
+        Unmapped Ingredients
+      </h2>
+      <p className="text-muted-foreground mb-4">
+        Click on the button to manually resolve the mapping
+      </p>
+      <UnmappedIngredientsList />
+    </>
   );
+}
+
+type EventData = {
+  type: string;
+  job: {
+    id: string;
+    data: FetchJob | TransformJob | UpsertJob;
+    returnValue: unknown | null;
+    failedReason?: string;
+    stackTrace: string[];
+    timestamp: number;
+    processedOn?: number;
+    finishedOn?: number;
+  };
+};
+
+function BackgroundJobsTable() {
+  const [events, setEvents] = useState<EventData[]>([]);
 
   useEffect(() => {
     const eventSource = new EventSource(`${config.apiUrl}/jobs/events`);
 
     eventSource.onmessage = (event) => {
-      const { type, job } = JSON.parse(event.data) as {
-        type: string;
-        job: any;
-      };
-      console.log(job);
-      setLogs((prevLogs) => [...prevLogs, `${job.name} ${type}`]);
+      const data = JSON.parse(event.data) as EventData;
+      console.log(data);
+      setEvents((prevLogs) => [data, ...prevLogs]);
     };
 
     return () => {
@@ -66,11 +102,44 @@ function RouteComponent() {
   }, []);
 
   return (
+    <Table className="text-center">
+      <TableHeader className="bg-background sticky top-0 outline outline-border">
+        <TableRow>
+          <TableHead className="text-center">Type</TableHead>
+          <TableHead className="text-center">Correlation ID</TableHead>
+          <TableHead className="text-center">Message</TableHead>
+          <TableHead className="text-center">Status</TableHead>
+          <TableHead className="text-center">Duration</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {events.map((event, index) => (
+          <TableRow key={index}>
+            <TableCell>{event.job.data.type}</TableCell>
+            <TableCell>{event.job.data.correlationId}</TableCell>
+            <TableCell>{getMessageForJob(event.job.data)}</TableCell>
+            <TableCell>{event.type} </TableCell>
+            <TableCell>
+              {formatJobDuration(event.job.processedOn, event.job.finishedOn)}
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+}
+
+function UnmappedIngredientsList() {
+  const [open, setOpen] = useState(false);
+  const [currentIngredient, setCurrentIngredient] = useState<Ingredient | null>(
+    null,
+  );
+  const { data: unmappedIngredients } = useSuspenseQuery(
+    getUnmappedIngredientsQueryOptions(),
+  );
+
+  return (
     <>
-      <h2 className="text-3xl text-primary font-bold">Unmapped Ingredients</h2>
-      <p className="text-muted-foreground mb-4">
-        Click on the button to manually resolve the mapping
-      </p>
       <ScrollArea className="h-96 mb-4 rounded-md inset-shadow-lg/15">
         <IngredientList
           onClick={(ingredient) => {
@@ -88,12 +157,6 @@ function RouteComponent() {
           ingredient={currentIngredient}
         />
       )}
-      <Button onClick={() => mutate(0)}>Start Transform Job</Button>
-      <div>
-        {logs.map((log, index) => (
-          <div key={index}>{log}</div>
-        ))}
-      </div>
     </>
   );
 }
@@ -189,4 +252,27 @@ function SimilarIngredientsSkeleton() {
       ))}
     </div>
   );
+}
+
+function formatJobDuration(start?: number, end?: number) {
+  if (!end || !start) return "In progress";
+  const duration = end - start;
+  if (duration < 1000) {
+    return `${duration} ms`;
+  } else if (duration < 60 * 1000) {
+    return `${(duration / 1000).toFixed(2)} s`;
+  } else {
+    return `${(duration / (60 * 1000)).toFixed(2)} min`;
+  }
+}
+
+function getMessageForJob(job: FetchJob | TransformJob | UpsertJob) {
+  switch (job.type) {
+    case "Fetch":
+      return `Fetching page ${job.page}`;
+    case "Transform":
+      return `Transforming page ${job.page}`;
+    case "Upsert":
+      return `Upserting recipe with source Id ${job.extendedRecipeData.recipeData.sourceId}`;
+  }
 }

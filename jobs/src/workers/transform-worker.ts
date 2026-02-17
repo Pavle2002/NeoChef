@@ -123,10 +123,10 @@ export const transformWorker = new Worker<TransformJob>(
 
     const jobs = recipes.map((extendedRecipeData) => ({
       name: "upsert-recipe",
-      data: { correlationId, extendedRecipeData },
+      data: { correlationId, extendedRecipeData, type: "Upsert" as const },
     }));
 
-    upsertQueue.addBulk(jobs);
+    await upsertQueue.addBulk(jobs);
   },
   { connection },
 );

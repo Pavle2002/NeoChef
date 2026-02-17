@@ -20,18 +20,26 @@ const transformEvents = new QueueEvents(QUEUES.TRANSFORM, { connection });
 const upsertEvents = new QueueEvents(QUEUES.UPSERT, { connection });
 
 async function startFetchJob(req: Request, res: Response): Promise<void> {
-  const { page } = req.validated!.body as FetchJob;
+  const { page } = req.validated!.body as { page: number };
   const correlationId = randomUUID();
 
-  await fetchQueue.add("fetch-job", { correlationId, page });
+  await fetchQueue.add("fetch-job", {
+    correlationId,
+    page,
+    type: "Fetch",
+  });
   sendSuccess(res, 200, correlationId, "Fetch job started successfully");
 }
 
 async function startTransformJob(req: Request, res: Response): Promise<void> {
-  const { page } = req.validated!.body as TransformJob;
+  const { page } = req.validated!.body as { page: number };
   const correlationId = randomUUID();
 
-  await transformQueue.add("transform-job", { correlationId, page });
+  await transformQueue.add("transform-job", {
+    correlationId,
+    page,
+    type: "Transform",
+  });
   sendSuccess(res, 200, correlationId, "Transform job started successfully");
 }
 
@@ -58,6 +66,7 @@ async function streamEvents(req: Request, res: Response): Promise<void> {
     transformEvents.off("failed", transformFailedHandler);
     upsertEvents.off("completed", upsertCompletedHandler);
     upsertEvents.off("failed", upsertFailedHandler);
+    console.log("Client disconnected, stopped streaming events");
     res.end();
   });
 }
@@ -67,13 +76,17 @@ function addListener(
   type: "completed" | "failed",
   res: Response,
 ) {
-  const queue = getQueueByName(queueName);
   const events = getQueueEventsByName(queueName);
+  const queue = getQueueByName(queueName);
 
   const handler = async ({ jobId }: { jobId: string }) => {
     const job = await queue.getJob(jobId);
-    res.write(`data: ${JSON.stringify({ type, job })}\n\n`);
-    if (type === "completed") await queue.remove(jobId);
+    res.write(
+      `data: ${JSON.stringify({
+        type,
+        job: job?.toJSON(),
+      })}\n\n`,
+    );
   };
   events.on(type, handler);
   return handler;

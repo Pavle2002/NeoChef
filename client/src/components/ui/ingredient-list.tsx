@@ -13,7 +13,7 @@ export function IngredientList({
   onClick,
 }: IngredientListProps) {
   return (
-    <div className={cn("flex flex-wrap gap-5", className)}>
+    <div className={cn("flex flex-col sm:flex-row flex-wrap gap-5", className)}>
       {ingredients.map((ingredient) => (
         <div
           key={ingredient.id}

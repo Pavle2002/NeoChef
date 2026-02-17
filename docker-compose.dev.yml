@@ -72,8 +72,6 @@ services:
       context: .
       dockerfile: embedder/Dockerfile 
       target: development
-    ports: 
-      - "4000:4000"
     volumes:
       - ./embedder:/app/embedder
     restart: unless-stopped
