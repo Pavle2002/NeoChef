@@ -13,7 +13,7 @@ export type QueueConnection = {
 };
 
 export function getFetchQueue(connection: QueueConnection) {
-  return new Queue<FetchJob, FetchJob>(QUEUES.FETCH, {
+  return new Queue<FetchJob>(QUEUES.FETCH, {
     connection,
     defaultJobOptions: {
       attempts: 3,
@@ -34,7 +34,7 @@ export function getTransformQueue(connection: QueueConnection) {
 }
 
 export function getUpsertQueue(connection: QueueConnection) {
-  return new Queue<UpsertJob, FetchJob>(QUEUES.UPSERT, {
+  return new Queue<UpsertJob>(QUEUES.UPSERT, {
     connection,
     defaultJobOptions: {
       attempts: 5,

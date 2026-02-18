@@ -38,6 +38,20 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+type EventData = {
+  type: string;
+  job: {
+    id: string;
+    data: FetchJob | TransformJob | UpsertJob;
+    returnValue: unknown | null;
+    failedReason?: string;
+    stackTrace: string[];
+    timestamp: number;
+    processedOn?: number;
+    finishedOn?: number;
+  };
+};
+
 export const Route = createFileRoute("/_protected/dashboard")({
   component: RouteComponent,
   beforeLoad: async ({ context: { user } }) => {
@@ -69,20 +83,6 @@ function RouteComponent() {
     </>
   );
 }
-
-type EventData = {
-  type: string;
-  job: {
-    id: string;
-    data: FetchJob | TransformJob | UpsertJob;
-    returnValue: unknown | null;
-    failedReason?: string;
-    stackTrace: string[];
-    timestamp: number;
-    processedOn?: number;
-    finishedOn?: number;
-  };
-};
 
 function BackgroundJobsTable() {
   const [events, setEvents] = useState<EventData[]>([]);

@@ -12,7 +12,6 @@
     "import:canonical": "tsx src/scripts/import-canonical-ingredients.ts"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.978.0",
     "@neochef/common": "*",
     "@neochef/core": "*",
     "bottleneck": "^2.19.5",

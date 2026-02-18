@@ -1,6 +1,7 @@
 import {
   GetObjectCommand,
   PutObjectCommand,
+  ListObjectsV2Command,
   type S3Client,
 } from "@aws-sdk/client-s3";
 import type { SpoonacularResponse } from "../types/spoonacular-response.js";
@@ -9,6 +10,7 @@ import { NotFoundError } from "@neochef/core";
 export interface IStorageService {
   uploadPage(page: number, data: SpoonacularResponse): Promise<void>;
   getPage(page: number): Promise<SpoonacularResponse>;
+  getListOfPages(): Promise<number[]>;
 }
 
 export class S3StorageService implements IStorageService {
@@ -19,6 +21,14 @@ export class S3StorageService implements IStorageService {
 
   private getPageKey(page: number): string {
     return `pages/page-${page.toString().padStart(4, "0")}.json`;
+  }
+
+  private getPageFromKey(key: string): number {
+    const match = key.match(/pages\/page-(\d{4})\.json$/);
+    if (!match || !match[1]) {
+      throw new Error(`Invalid key format: ${key}`);
+    }
+    return parseInt(match[1], 10);
   }
 
   async uploadPage(page: number, data: SpoonacularResponse): Promise<void> {
@@ -46,5 +56,16 @@ export class S3StorageService implements IStorageService {
     }
 
     return JSON.parse(content) as SpoonacularResponse;
+  }
+
+  async getListOfPages(): Promise<number[]> {
+    const response = await this.client.send(
+      new ListObjectsV2Command({
+        Bucket: this.bucket,
+      }),
+    );
+    const keys =
+      response.Contents?.map((item) => item.Key!).filter(Boolean) || [];
+    return keys.map((key) => this.getPageFromKey(key));
   }
 }
