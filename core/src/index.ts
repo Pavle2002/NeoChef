@@ -14,6 +14,7 @@ export * from "./utils/unit-of-work.js";
 export * from "./utils/transaction-query-executor.js";
 export * from "./utils/neo4j-datetime-converter.js";
 export * from "./utils/driver-query-executor.js";
+export * from "./utils/spoonacular-response.js";
 
 export * from "./repositories/user-repository.js";
 export * from "./repositories/recipe-repository.js";
@@ -36,3 +37,4 @@ export * from "./interfaces/recommendation-repository.interface.js";
 export * from "./interfaces/embedding-service.interface.js";
 
 export * from "./services/embedding-service.js";
+export * from "./services/storage.js";

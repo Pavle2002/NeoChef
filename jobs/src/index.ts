@@ -1,5 +1,5 @@
 import { logger } from "./config/logger.js";
-import { transformQueue } from "./services/index.js";
+import { transformQueue } from "./services.js";
 import { fetchWorker } from "./workers/fetch-worker.js";
 import { transformWorker } from "./workers/transform-worker.js";
 import { upsertWorker } from "./workers/upsert-worker.js";

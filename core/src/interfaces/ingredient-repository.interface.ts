@@ -3,6 +3,7 @@ import type {
   CanonicalIngredientData,
   Ingredient,
   IngredientData,
+  MatchResult,
 } from "@neochef/common";
 
 export interface IIngredientRepository {
@@ -11,7 +12,7 @@ export interface IIngredientRepository {
   findSimilarCanonical(
     ingredientId: string,
     limit?: number,
-  ): Promise<{ match: CanonicalIngredient; confidence: number }[]>;
+  ): Promise<MatchResult[]>;
   // createCanonical(
   //   ingredient: CanonicalIngredientData,
   // ): Promise<CanonicalIngredient>;

@@ -1,4 +1,8 @@
-import type { CanonicalIngredient, Ingredient } from "@neochef/common";
+import type {
+  CanonicalIngredient,
+  Ingredient,
+  MatchResult,
+} from "@neochef/common";
 
 export interface IIngredientService {
   getAllCanonical(queryString?: string): Promise<CanonicalIngredient[]>;
@@ -6,7 +10,7 @@ export interface IIngredientService {
   getSimilarCanonical(
     ingredientId: string,
     limit?: number,
-  ): Promise<{ match: CanonicalIngredient; confidence: number }[]>;
+  ): Promise<MatchResult[]>;
   addCanonical(
     ingredientId: string,
     canonicalId: string,

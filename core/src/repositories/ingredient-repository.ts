@@ -3,6 +3,7 @@ import type {
   CanonicalIngredientData,
   Ingredient,
   IngredientData,
+  MatchResult,
 } from "@neochef/common";
 import type { IIngredientRepository } from "../interfaces/ingredient-repository.interface.js";
 import type { IQueryExecutor } from "../interfaces/query-executor.interface.js";
@@ -80,7 +81,7 @@ export class IngredientRepository implements IIngredientRepository {
   async findSimilarCanonical(
     ingredientId: string,
     limit = 5,
-  ): Promise<{ match: CanonicalIngredient; confidence: number }[]> {
+  ): Promise<MatchResult[]> {
     const result = await this.queryExecutor.run(
       `Match (i:Ingredient {id: $ingredientId})
       CALL db.index.vector.queryNodes('canonical_embedding_index', 50, i.embedding)

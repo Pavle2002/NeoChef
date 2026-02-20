@@ -6,7 +6,8 @@ import { Router } from "express";
 
 const router = Router();
 
-const { startFetchJob, startTransformJob, streamEvents } = jobController;
+const { startFetchJob, startTransformJob, streamEvents, listSavedPages } =
+  jobController;
 const { startFetchJobSchema, startTransformJobSchema } = jobSchemas;
 
 router.post("/fetch", isAdmin, validate(startFetchJobSchema), startFetchJob);
@@ -17,5 +18,6 @@ router.post(
   startTransformJob,
 );
 router.get("/events", streamEvents);
+router.get("/pages", listSavedPages);
 
 export { router as jobRoutes };

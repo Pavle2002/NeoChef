@@ -1,11 +1,6 @@
 import { apiClient } from "@/lib/api-client";
-import type { CanonicalIngredient } from "@neochef/common";
+import type { MatchResult } from "@neochef/common";
 import { queryOptions } from "@tanstack/react-query";
-
-type MatchResult = {
-  match: CanonicalIngredient;
-  confidence: number;
-};
 
 export function getSimilarIngredientsQueryOptions(id: string) {
   const limit = 10;

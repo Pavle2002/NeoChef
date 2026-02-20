@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PublicRouteRouteImport } from './routes/_public/route'
 import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
+import { Route as ProtectedUnmappedRouteImport } from './routes/_protected/unmapped'
 import { Route as ProtectedTrendingRouteImport } from './routes/_protected/trending'
 import { Route as ProtectedSearchRouteImport } from './routes/_protected/search'
 import { Route as ProtectedProfileRouteImport } from './routes/_protected/profile'
@@ -34,6 +35,11 @@ const PublicRouteRoute = PublicRouteRouteImport.update({
 const ProtectedRouteRoute = ProtectedRouteRouteImport.update({
   id: '/_protected',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ProtectedUnmappedRoute = ProtectedUnmappedRouteImport.update({
+  id: '/unmapped',
+  path: '/unmapped',
+  getParentRoute: () => ProtectedRouteRoute,
 } as any)
 const ProtectedTrendingRoute = ProtectedTrendingRouteImport.update({
   id: '/trending',
@@ -120,6 +126,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProtectedProfileRoute
   '/search': typeof ProtectedSearchRoute
   '/trending': typeof ProtectedTrendingRoute
+  '/unmapped': typeof ProtectedUnmappedRoute
   '/recipes/$recipeId': typeof ProtectedRecipesRecipeIdRoute
   '/login': typeof PublicAuthLoginRoute
   '/register': typeof PublicAuthRegisterRoute
@@ -135,6 +142,7 @@ export interface FileRoutesByTo {
   '/profile': typeof ProtectedProfileRoute
   '/search': typeof ProtectedSearchRoute
   '/trending': typeof ProtectedTrendingRoute
+  '/unmapped': typeof ProtectedUnmappedRoute
   '/recipes/$recipeId': typeof ProtectedRecipesRecipeIdRoute
   '/login': typeof PublicAuthLoginRoute
   '/register': typeof PublicAuthRegisterRoute
@@ -154,6 +162,7 @@ export interface FileRoutesById {
   '/_protected/profile': typeof ProtectedProfileRoute
   '/_protected/search': typeof ProtectedSearchRoute
   '/_protected/trending': typeof ProtectedTrendingRoute
+  '/_protected/unmapped': typeof ProtectedUnmappedRoute
   '/_protected/recipes/$recipeId': typeof ProtectedRecipesRecipeIdRoute
   '/_public/_auth/login': typeof PublicAuthLoginRoute
   '/_public/_auth/register': typeof PublicAuthRegisterRoute
@@ -172,6 +181,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/search'
     | '/trending'
+    | '/unmapped'
     | '/recipes/$recipeId'
     | '/login'
     | '/register'
@@ -187,6 +197,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/search'
     | '/trending'
+    | '/unmapped'
     | '/recipes/$recipeId'
     | '/login'
     | '/register'
@@ -205,6 +216,7 @@ export interface FileRouteTypes {
     | '/_protected/profile'
     | '/_protected/search'
     | '/_protected/trending'
+    | '/_protected/unmapped'
     | '/_protected/recipes/$recipeId'
     | '/_public/_auth/login'
     | '/_public/_auth/register'
@@ -232,6 +244,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof ProtectedRouteRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_protected/unmapped': {
+      id: '/_protected/unmapped'
+      path: '/unmapped'
+      fullPath: '/unmapped'
+      preLoaderRoute: typeof ProtectedUnmappedRouteImport
+      parentRoute: typeof ProtectedRouteRoute
     }
     '/_protected/trending': {
       id: '/_protected/trending'
@@ -350,6 +369,7 @@ interface ProtectedRouteRouteChildren {
   ProtectedProfileRoute: typeof ProtectedProfileRoute
   ProtectedSearchRoute: typeof ProtectedSearchRoute
   ProtectedTrendingRoute: typeof ProtectedTrendingRoute
+  ProtectedUnmappedRoute: typeof ProtectedUnmappedRoute
   ProtectedRecipesRecipeIdRoute: typeof ProtectedRecipesRecipeIdRoute
 }
 
@@ -362,6 +382,7 @@ const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedProfileRoute: ProtectedProfileRoute,
   ProtectedSearchRoute: ProtectedSearchRoute,
   ProtectedTrendingRoute: ProtectedTrendingRoute,
+  ProtectedUnmappedRoute: ProtectedUnmappedRoute,
   ProtectedRecipesRecipeIdRoute: ProtectedRecipesRecipeIdRoute,
 }
 

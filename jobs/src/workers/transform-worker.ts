@@ -7,10 +7,14 @@ import {
   type TransformJob,
 } from "@neochef/common";
 import pluralize from "pluralize";
-import { embeddingService, storageService } from "../services/index.js";
+import {
+  embeddingService,
+  storageService,
+  connection,
+  upsertQueue,
+} from "../services.js";
 import { SpoonacularError } from "../errors/spoonacular-error.js";
 import { QUEUES } from "@neochef/core";
-import { connection, upsertQueue } from "../services/index.js";
 
 export const transformWorker = new Worker<TransformJob>(
   QUEUES.TRANSFORM,

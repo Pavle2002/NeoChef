@@ -6,6 +6,7 @@ import {
   User,
   Search,
   Crown,
+  Link2Icon,
 } from "lucide-react";
 
 export const PAGES = [
@@ -13,6 +14,11 @@ export const PAGES = [
     title: "Dashboard",
     url: "/dashboard",
     icon: Crown,
+  },
+  {
+    title: "Unmapped",
+    url: "/unmapped",
+    icon: Link2Icon,
   },
   {
     title: "Home",

@@ -48,7 +48,9 @@ function SidebarMain() {
   let pages = [...PAGES];
 
   if (!user.isAdmin) {
-    pages = pages.filter((page) => page.title !== "Dashboard");
+    pages = pages.filter(
+      (page) => page.title !== "Dashboard" && page.title !== "Unmapped",
+    );
   }
 
   return (

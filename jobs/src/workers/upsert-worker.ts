@@ -1,7 +1,6 @@
 import { Worker } from "bullmq";
-import { uowFactory } from "../services/index.js";
 import { QUEUES } from "@neochef/core";
-import { connection } from "../services/index.js";
+import { connection, uowFactory } from "../services.js";
 import type { UpsertJob } from "@neochef/common";
 
 export const upsertWorker = new Worker<UpsertJob, string>(

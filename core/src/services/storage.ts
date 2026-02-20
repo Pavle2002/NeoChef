@@ -4,13 +4,13 @@ import {
   ListObjectsV2Command,
   type S3Client,
 } from "@aws-sdk/client-s3";
-import type { SpoonacularResponse } from "../types/spoonacular-response.js";
-import { NotFoundError } from "@neochef/core";
+import type { SpoonacularResponse } from "../utils/spoonacular-response.js";
+import { NotFoundError } from "../errors/not-found-error.js";
 
 export interface IStorageService {
   uploadPage(page: number, data: SpoonacularResponse): Promise<void>;
   getPage(page: number): Promise<SpoonacularResponse>;
-  getListOfPages(): Promise<number[]>;
+  listPages(): Promise<number[]>;
 }
 
 export class S3StorageService implements IStorageService {
@@ -58,7 +58,7 @@ export class S3StorageService implements IStorageService {
     return JSON.parse(content) as SpoonacularResponse;
   }
 
-  async getListOfPages(): Promise<number[]> {
+  async listPages(): Promise<number[]> {
     const response = await this.client.send(
       new ListObjectsV2Command({
         Bucket: this.bucket,

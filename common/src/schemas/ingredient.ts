@@ -62,3 +62,8 @@ export type CanonicalIngredient = z.infer<typeof CanonicalIngredientSchema>;
 export type CanonicalIngredientData = z.infer<
   typeof CanonicalIngredientDataSchema
 >;
+
+export type MatchResult = {
+  match: CanonicalIngredient;
+  confidence: number;
+};

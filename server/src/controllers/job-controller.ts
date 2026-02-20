@@ -1,22 +1,16 @@
+import { QUEUES } from "@neochef/core";
 import {
-  getFetchQueue,
-  getTransformQueue,
-  getUpsertQueue,
-  QUEUES,
-} from "@neochef/core";
+  fetchEvents,
+  fetchQueue,
+  storageService,
+  transformEvents,
+  transformQueue,
+  upsertEvents,
+  upsertQueue,
+} from "@services/index.js";
 import { sendSuccess } from "@utils/response-handler.js";
-import { QueueEvents } from "bullmq";
 import type { Response, Request } from "express";
 import { randomUUID } from "node:crypto";
-
-const connection = { host: "redis", port: 6379 };
-const fetchQueue = getFetchQueue(connection);
-const transformQueue = getTransformQueue(connection);
-const upsertQueue = getUpsertQueue(connection);
-
-const fetchEvents = new QueueEvents(QUEUES.FETCH, { connection });
-const transformEvents = new QueueEvents(QUEUES.TRANSFORM, { connection });
-const upsertEvents = new QueueEvents(QUEUES.UPSERT, { connection });
 
 async function startFetchJob(req: Request, res: Response): Promise<void> {
   const { page } = req.validated!.body as { page: number };
@@ -70,6 +64,11 @@ async function streamEvents(req: Request, res: Response): Promise<void> {
   });
 }
 
+async function listSavedPages(req: Request, res: Response): Promise<void> {
+  const pages = await storageService.listPages();
+  sendSuccess(res, 200, pages, "Pages retrieved successfully");
+}
+
 function addListener(
   queueName: (typeof QUEUES)[keyof typeof QUEUES],
   type: "completed" | "failed",
@@ -121,4 +120,5 @@ export const jobController = {
   startFetchJob,
   startTransformJob,
   streamEvents,
+  listSavedPages,
 };

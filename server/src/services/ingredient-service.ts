@@ -1,5 +1,9 @@
 import type { IIngredientService } from "@interfaces/ingredient-service.interface.js";
-import type { CanonicalIngredient, Ingredient } from "@neochef/common";
+import type {
+  CanonicalIngredient,
+  Ingredient,
+  MatchResult,
+} from "@neochef/common";
 import type { IIngredientRepository } from "@neochef/core";
 
 export class IngredientService implements IIngredientService {
@@ -16,7 +20,7 @@ export class IngredientService implements IIngredientService {
   async getSimilarCanonical(
     ingredientId: string,
     limit = 5,
-  ): Promise<{ match: CanonicalIngredient; confidence: number }[]> {
+  ): Promise<MatchResult[]> {
     return this.ingredientRepository.findSimilarCanonical(ingredientId, limit);
   }
 
