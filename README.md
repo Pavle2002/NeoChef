@@ -5,6 +5,18 @@
 
 ---
 
+## System architecture 🏛️
+
+![System Architecture](docs/architecture.png)
+
+---
+
+## Database Schema 🗄️
+
+![System Architecture](docs/db-schema.png)
+
+---
+
 ## Features 🚀
 
 ### Backend ⚙️
