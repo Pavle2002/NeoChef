@@ -31,12 +31,14 @@ function Header() {
           <span className="mt-0.5">NeoChef</span>
         </Link>
         <div className="flex items-center gap-10">
-          <Link
-            to="/"
+          <a
+            href="https://github.com/Pavle2002/NeoChef"
+            target="_blank"
+            rel="noopener noreferrer"
             className="hidden sm:block text-primary font-semibold border-b-2 border-transparent hover:border-primary transition-all duration-300 ease-in-out"
           >
             Features
-          </Link>
+          </a>
           <Link
             to="/about"
             className="hidden sm:block text-primary font-semibold border-b-2 border-transparent hover:border-primary transition-all duration-300 ease-in-out"

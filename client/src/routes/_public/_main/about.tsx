@@ -161,7 +161,13 @@ function RouteComponent() {
             asChild
             variant="outline"
           >
-            <Link to="/about">🔎 Explore Features</Link>
+            <a
+              href="https://github.com/Pavle2002/NeoChef"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              🔎 Explore Features
+            </a>
           </Button>
         </div>
       </footer>
