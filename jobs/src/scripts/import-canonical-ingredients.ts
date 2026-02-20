@@ -1,6 +1,6 @@
 import { readFile } from "fs/promises";
 import path from "path";
-import { embeddingService, ingredientRepository } from "../services/index.js";
+import { embeddingService, ingredientRepository } from "../services.js";
 import { logger } from "../config/logger.js";
 import type { CanonicalIngredientData } from "@neochef/common";
 

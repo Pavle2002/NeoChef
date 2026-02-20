@@ -7,6 +7,7 @@ const requiredEnvVars = [
   "NEO4J_USERNAME",
   "NEO4J_PASSWORD",
   "REDIS_URL",
+  "REDIS_PORT",
   "CLIENT_ORIGIN",
   "R2_ACCOUNT_ID",
   "R2_ACCESS_KEY_ID",
@@ -27,7 +28,10 @@ export const config = {
   clientOrigin: process.env.CLIENT_ORIGIN!.split(","),
   logLevel: process.env.LOG_LEVEL || "info",
   sessionSecret: process.env.SESSION_SECRET as string,
-  redis: { url: process.env.REDIS_URL as string },
+  redis: {
+    url: process.env.REDIS_URL as string,
+    port: parseInt(process.env.REDIS_PORT as string, 10),
+  },
   neo4j: {
     url: process.env.NEO4J_URL as string,
     username: process.env.NEO4J_USERNAME as string,

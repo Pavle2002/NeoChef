@@ -4,7 +4,7 @@ import { safeAwait } from "@neochef/core";
 import { logger } from "./logger.js";
 
 export const redisClient = createClient({
-  url: config.redis.url,
+  url: `redis://${config.redis.url}:${config.redis.port}`,
 });
 
 redisClient.on("error", (err) => {

@@ -1,5 +1,21 @@
 name: neochef-dev
+
 services:
+  client:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+      target: development
+    env_file:
+      - ./client/.env.dev
+    volumes:
+      - ./client:/app/client
+      - ./common:/app/common
+      - /app/client/node_modules
+    restart: unless-stopped
+    depends_on:
+      - server
+
   server:
     build:
       context: .
@@ -15,47 +31,13 @@ services:
     depends_on:
       - redis
 
-  client:
-    build:
-      context: .
-      dockerfile: client/Dockerfile
-      target: development
-    env_file:
-      - ./client/.env
-    volumes:
-      - ./client:/app/client
-      - ./common:/app/common
-      - /app/client/node_modules
-    restart: unless-stopped
-    depends_on:
-      - server
-
-  redis:
-    image: redis:alpine
-    volumes:
-      - redis_data:/data
-    restart: unless-stopped
-
-  caddy:
-    image: caddy:alpine
-    ports:
-      - "80:80"
-    volumes:
-      - ./Caddyfile.dev:/etc/caddy/Caddyfile
-      - caddy_data:/data
-      - caddy_config:/config
-    restart: unless-stopped
-    depends_on:
-      - server
-      - client
-
   workers:
     build:
       context: .
       dockerfile: jobs/Dockerfile
       target: development
     env_file:
-      - ./jobs/.env
+      - ./jobs/.env.dev
     volumes:
       - ./jobs:/app/jobs
       - ./common:/app/common
@@ -81,6 +63,25 @@ services:
       timeout: 2s
       retries: 3
       start_period: 10s
+
+  redis:
+    image: redis:alpine
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./Caddyfile.dev:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    restart: unless-stopped
+    depends_on:
+      - server
+      - client
 
 volumes:
   redis_data:

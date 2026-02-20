@@ -74,7 +74,7 @@ export const storageService = new S3StorageService(
   config.r2.bucketName,
 );
 
-const connection = { host: "redis", port: 6379 };
+const connection = { host: config.redis.url, port: config.redis.port };
 
 export const fetchQueue = getFetchQueue(connection);
 export const transformQueue = getTransformQueue(connection);
