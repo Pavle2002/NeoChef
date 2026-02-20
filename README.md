@@ -8,13 +8,16 @@
 ## Features 🚀
 
 ### Backend ⚙️
-- 🧠 **Personalized recommendation engine** built on a **Neo4j graph data model**, leveraging complex weighted Cypher queries (user similarity, ingredient and categories overlap, interaction weights).
+- 🧠 **Personalized recommendation engine** built on a **Neo4j graph data model**, leveraging complex weighted Cypher queries (user similarity, ingredient and categories overlap, interaction weights) and neo4j built in **vector indexes**.
+- 📬 **Event-driven** ETL pipeline: Recipes are fetched from the Spoonacular API, transformed, embedded, and upserted into Neo4j through a scalable, event-driven workflow powered by Redis message queues and BullMQ background workers.
+- 🤖 **Local Embedding service** powered by tiny quantized in memory "all-MiniLM-L6-v2" model, used for generating embbedings.
+- 📡 **Real-time admin dashboard** powered by Server-Sent Events (SSE) for live background job monitoring and status updates
 - ⚡ **Redis‑backed performance layer for reducing database load and response latency**:
   - 🗄️ Caching of CPU‑intensive recommendation queries and frequently used data
+  - 📬 Redis‑backed **message queues** for background jobs and ETL workflows
   - 📈 Trending page implemented with **Redis ZSETs** (leaderboard pattern)
   - 🚦 Custom Redis‑backed **rate limiting** and **session storage**
 - 🔁 **Unit of Work pattern** for sharing transactional context across multiple repositories within a single service operation, ensuring consistency for multi‑step domain operations such as recipe imports
-- ⏱️ **Background import service** with cron scheduling that fetches, transforms and upserts recipes from the **Spoonacular API** using Redis as message queue (ETL workflow, BullMQ).
 - 🧱 **Production best practices**: layered architecture (routes → controllers → services → repositories), dependency injection, typed domain errors, global error handling, Zod validation, and full TypeScript coverage.
 
 ### Frontend 🎨 
@@ -26,11 +29,12 @@
 - ✨ **UX optimizations** such as skeleton loaders and smooth state transitions.
 
 ### Infrastructure & Deployment ☁️
-- 📦 **Monorepo setup** with npm workspaces (`common`, `core`, `client`, `server`, `jobs`) shared core busines logic and types/utilities.
-- 🐳 **Backend containerized with Docker & Docker Compose**, running three services:
+- 📦 **Monorepo setup** with npm workspaces (`common`, `core`, `client`, `server`, `jobs`, `embedder`) shared core busines logic and types/utilities.
+- 🐳 **Backend containerized with Docker & Docker Compose**, running five services:
   - 🖥️ API server
-  - ⏱️ Background import‑cron service
-  - ⚡Redis
+  - 🤖 Embedding service
+  - 🏗️ 3 Background workers (fetch, transform, upsert)
+  - ⚡ Redis (message queues, caching, rate limiting, session storage, leaderboard)
   - 🧭 Caddy reverse proxy
 - 🌍 **Frontend** deployed to **Vercel** with CDN distribution and automatic deployments.
 - 🏗️ **Backend** deployed on an **Oracle VPS**.
