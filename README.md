@@ -50,6 +50,8 @@
   - 🧭 Caddy reverse proxy
 - 🌍 **Frontend** deployed to **Vercel** with CDN distribution and automatic deployments.
 - 🏗️ **Backend** deployed on an **Oracle VPS**.
+- 🗄️ **Database** Neo4j Aura Managed instance
+- 📦 **Object Storage** Cloudflare R2 Storage
 
 ---
 
@@ -67,7 +69,7 @@
 |-------|------------|
 | Backend | Node.js, Express, BullMQ, TypeScript |
 | Frontend | React, TanStack Query, TanStack Router, Tailwind CSS, shadcn |
-| DevOps | Docker, Docker Compose, Vercel, VPS deployment |
+| DevOps | Docker, Docker Compose, Vercel, Oracle VPS deployment, Claudflare, Neo4j Aura|
 | Architecture | Monorepo (npm workspaces), layered architecture, dependency injection, Unit Of Work |
 
 ---
