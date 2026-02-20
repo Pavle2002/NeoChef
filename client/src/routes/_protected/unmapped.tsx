@@ -25,6 +25,11 @@ import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_protected/unmapped")({
   component: RouteComponent,
+  beforeLoad: async ({ context: { user } }) => {
+    if (!user.isAdmin) {
+      throw new Error("You are not authorized to access this page.");
+    }
+  },
   loader: async ({ context: { queryClient } }) =>
     queryClient.ensureQueryData(getUnmappedIngredientsQueryOptions()),
   staticData: { title: "Unmapped Ingredients" },
@@ -33,9 +38,7 @@ export const Route = createFileRoute("/_protected/unmapped")({
 function RouteComponent() {
   return (
     <>
-      <h2 className="text-3xl text-primary font-bold mt-5">
-        Unmapped Ingredients
-      </h2>
+      <h2 className="text-3xl text-primary font-bold">Unmapped Ingredients</h2>
       <p className="text-muted-foreground mb-4">
         Click on the button to manually resolve the mapping
       </p>
@@ -55,7 +58,7 @@ function UnmappedIngredientsList() {
 
   return (
     <>
-      <ScrollArea className="h-96 mb-4 rounded-md inset-shadow-lg/15">
+      <ScrollArea className="h-130 mb-4 rounded-md inset-shadow-lg/15">
         <IngredientList
           onClick={(ingredient) => {
             setCurrentIngredient(ingredient);

@@ -14,6 +14,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { getSavedPagesQueryOptions } from "@/query-options/get-saved-pages-query-options";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 
 type EventData = {
   type: string;
@@ -46,12 +48,26 @@ function RouteComponent() {
   const { data: savedPages } = useSuspenseQuery(getSavedPagesQueryOptions());
   console.log(savedPages);
 
+  async function handleSubmit(event: React.SubmitEvent) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget as HTMLFormElement);
+    const selectedPage = formData.get("selectedPage");
+    if (!selectedPage) return;
+    mutate(Number(selectedPage));
+  }
+
   return (
     <>
-      <h2 className="text-3xl text-primary font-bold">Background Jobs</h2>
-      <p className="text-muted-foreground mb-4"></p>
+      <h2 className="text-3xl text-primary font-bold">Saved Pages</h2>
+      <p className="text-muted-foreground mb-5">
+        Select the saved page you want to upsert to databse.
+      </p>
+      <form className="flex gap-5" onSubmit={handleSubmit}>
+        <PagesRadioGroup />
+        <Button type="submit">Upsert page</Button>
+      </form>
+      <h2 className="text-3xl text-primary font-bold my-5">Background Jobs</h2>
       <BackgroundJobsTable />
-      <Button onClick={() => mutate(0)}>Start Transform Job</Button>
     </>
   );
 }
@@ -98,6 +114,36 @@ function BackgroundJobsTable() {
         ))}
       </TableBody>
     </Table>
+  );
+}
+
+function PagesRadioGroup() {
+  const { data: savedPages } = useSuspenseQuery(getSavedPagesQueryOptions());
+  const [selectedPage, setSelectedPage] = useState<number | null>(null);
+
+  return (
+    <RadioGroup
+      className="flex"
+      name="selectedPage"
+      value={selectedPage?.toString()}
+      onValueChange={(value) => setSelectedPage(Number(value))}
+    >
+      {savedPages.map((page, index) => (
+        <Label
+          key={index}
+          htmlFor={`page-${index}`}
+          className={`p-3 border rounded-sm bg-accent/50 hover:bg-accent hover:border-primary/50 cursor-pointer
+            ${page === selectedPage ? "bg-accent border-primary/50" : ""}`}
+        >
+          <RadioGroupItem
+            className="sr-only"
+            id={`page-${index}`}
+            value={page.toString()}
+          />
+          {page}
+        </Label>
+      ))}
+    </RadioGroup>
   );
 }
 
