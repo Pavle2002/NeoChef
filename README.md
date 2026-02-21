@@ -60,6 +60,7 @@
 - Install **Docker**
 - Add `.env.dev` files to `/server` and `/jobs` according to `.env.example` files
 - Run `npm run dev` from root directory `/`
+- Admin account - email: admin@gmail.com; password: Admin123! 
 
 ---
 
