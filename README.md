@@ -20,14 +20,14 @@
 ## Features 🚀
 
 ### Backend ⚙️
-- 🧠 **Personalized recommendation engine** built on a `Neo4j` graph data model, leveraging complex `weighted Cypher queries` (user similarity, ingredient and categories overlap, interaction weights) and neo4j built in `vector indexes`.
+- 🧠 **Personalized recommendation engine** built on a `Neo4j` graph data model, leveraging complex weighted `Cypher` queries (user similarity, ingredient and categories overlap, interaction weights) and neo4j built in `vector indexes`.
 - 📬 **Event-driven** ETL pipeline: Recipes are fetched from the Spoonacular API, transformed, embedded, and upserted into Neo4j through a scalable, `event-driven` workflow powered by `Redis` message queues and `BullMQ` background workers.
 - 🤖 **Local Embedding service** powered by tiny quantized in memory `all-MiniLM-L6-v2` model, used for generating `embbedings`.
 - 📡 **Real-time admin dashboard** powered by `Server-Sent Events` (SSE) for live background job monitoring and status updates
 - ⚡ **Redis‑backed performance layer for reducing database load and response latency**:
-  - 🗄️ Caching of `CPU‑intensive` recommendation queries and `frequently used` data
-  - 📬 Redis‑backed `message queues` for background jobs and ETL workflows
-  - 📈 Trending page implemented with `Redis ZSETs` (leaderboard pattern)
+  - 🗄️ Caching of CPU‑intensive recommendation queries and frequently used data
+  - 📬 Redis‑backed message queues for `background jobs` and `ETL workflows`
+  - 📈 Trending page implemented with Redis ZSETs (`leaderboard pattern`)
   - 🚦 Custom Redis‑backed `rate limiting` and `session storage`
 - 🔁 **Unit of Work pattern** for sharing `transactional context` across multiple repositories within a single service operation, ensuring `consistency` for multi‑step domain operations such as recipe imports
 - 🧱 **Production best practices**: layered architecture (`routes` → `controllers` → `services` → `repositories`), dependency injection, typed domain errors, global error handling, `Zod` validation, and full `TypeScript` coverage.
