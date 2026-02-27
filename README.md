@@ -58,10 +58,10 @@
 ## Run Locally (Dev Environment) 🏠 
 
 - Install `Docker`
-- Add `.env.dev` files to `/server` and `/jobs` according to `.env.example` files
+- Add `.env.dev` files to `/server`, `client` and `/jobs` according to `.env.example` files
 - Run `npm run dev` from root directory `/`
 - App is running on `localhost`
-- Admin account - email: `admin@gmail.com` password: `Admin12!`
+- Admin account - email: `admin@gmail.com` password: `Admin123!`
 
 ---
 
