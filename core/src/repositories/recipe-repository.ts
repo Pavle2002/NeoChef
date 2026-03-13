@@ -17,7 +17,6 @@ import {
 import { int } from "neo4j-driver";
 import type { IRecipeRepository } from "../interfaces/recipe-repository.interface.js";
 import type { IQueryExecutor } from "../interfaces/query-executor.interface.js";
-import { neo4jDateTimeConverter } from "../utils/neo4j-datetime-converter.js";
 import { InternalServerError } from "../errors/internal-server-error.js";
 
 export class RecipeRepository implements IRecipeRepository {
@@ -37,7 +36,7 @@ export class RecipeRepository implements IRecipeRepository {
     }
 
     const recipe = record.get("r").properties;
-    recipe.createdAt = neo4jDateTimeConverter.toStandardDate(recipe.createdAt);
+    recipe.createdAt = recipe.createdAt.toString();
     recipe.likeCount = record.get("likeCount");
     return recipe as Recipe;
   }
@@ -58,9 +57,7 @@ export class RecipeRepository implements IRecipeRepository {
     const recipeMap = new Map<string, Recipe>();
     result.records.forEach((record) => {
       const recipe = record.get("r").properties;
-      recipe.createdAt = neo4jDateTimeConverter.toStandardDate(
-        recipe.createdAt,
-      );
+      recipe.createdAt = recipe.createdAt.toString();
       recipe.likeCount = record.get("likeCount");
       recipeMap.set(recipe.id, recipe as Recipe);
     });
@@ -101,7 +98,7 @@ export class RecipeRepository implements IRecipeRepository {
     }
 
     const recipe = record.get("r").properties;
-    recipe.createdAt = neo4jDateTimeConverter.toStandardDate(recipe.createdAt);
+    recipe.createdAt = recipe.createdAt.toString();
     recipe.likeCount = record.get("likeCount");
     recipe.isLiked = record.get("isLiked");
     recipe.isSaved = record.get("isSaved");
@@ -181,9 +178,7 @@ export class RecipeRepository implements IRecipeRepository {
 
     const recipes = result.records.map((record) => {
       const recipe = record.get("r").properties;
-      recipe.createdAt = neo4jDateTimeConverter.toStandardDate(
-        recipe.createdAt,
-      );
+      recipe.createdAt = recipe.createdAt.toString();
       recipe.likeCount = record.get("likeCount");
       return recipe as Recipe;
     });
@@ -210,9 +205,7 @@ export class RecipeRepository implements IRecipeRepository {
 
     const recipes = result.records.map((record) => {
       const recipe = record.get("r").properties;
-      recipe.createdAt = neo4jDateTimeConverter.toStandardDate(
-        recipe.createdAt,
-      );
+      recipe.createdAt = recipe.createdAt.toString();
       recipe.likeCount = record.get("totalLikes");
       const score = record.get("score");
       return { recipe, score } as { recipe: Recipe; score: number };
@@ -220,12 +213,11 @@ export class RecipeRepository implements IRecipeRepository {
     return recipes;
   }
 
-  async createOrUpdate(recipe: RecipeData): Promise<Recipe> {
+  async create(recipe: RecipeData): Promise<Recipe> {
     const { sourceId, sourceName, ...properties } = recipe;
     const result = await this.queryExecutor.run(
       `MERGE (r:Recipe {sourceName: $sourceName, sourceId: $sourceId})
-      ON CREATE SET r.id = apoc.create.uuid(), r.createdAt = datetime(), r += $properties
-      ON MATCH SET r += $properties
+      ON CREATE SET r.id = randomUUID(), r.createdAt = datetime(), r += $properties
       WITH r
       OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
       RETURN r, COUNT(l) AS likeCount`,
@@ -234,13 +226,11 @@ export class RecipeRepository implements IRecipeRepository {
 
     const record = result.records[0];
     if (!record) {
-      throw new InternalServerError("Failed to create or update recipe");
+      throw new InternalServerError("Failed to create recipe");
     }
 
     const newRecipe = record.get("r").properties;
-    newRecipe.createdAt = neo4jDateTimeConverter.toStandardDate(
-      newRecipe.createdAt,
-    );
+    newRecipe.createdAt = newRecipe.createdAt.toString();
     newRecipe.likeCount = record.get("likeCount");
 
     return newRecipe as Recipe;

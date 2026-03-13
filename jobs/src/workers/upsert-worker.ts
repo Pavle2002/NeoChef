@@ -9,9 +9,7 @@ export const upsertWorker = new Worker<UpsertJob, string>(
     const { extendedRecipeData } = job.data;
 
     const recipeId = await uowFactory.execute(async (uow) => {
-      const recipe = await uow.recipes.createOrUpdate(
-        extendedRecipeData.recipeData,
-      );
+      const recipe = await uow.recipes.create(extendedRecipeData.recipeData);
 
       for (const extendedIngredient of extendedRecipeData.extendedIngredients) {
         const ingredient = await uow.ingredients.create(

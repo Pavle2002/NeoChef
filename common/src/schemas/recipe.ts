@@ -37,7 +37,7 @@ export const RecipeSchema = z.object({
   percentFat: z.number().nullish().default(null),
   percentCarbs: z.number().nullish().default(null),
   healthScore: z.number().nullish().default(null),
-  createdAt: z.date(),
+  createdAt: z.string().datetime(),
   likeCount: z.number(),
 });
 

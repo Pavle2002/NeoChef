@@ -42,7 +42,7 @@ export const UserSchema = z
     password: passwordSchema,
     email: emailSchema,
     isAdmin: z.boolean().default(false),
-    createdAt: z.date(),
+    createdAt: z.string().datetime(),
   })
   .strict("Invalid format");
 

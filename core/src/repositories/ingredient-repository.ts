@@ -17,7 +17,7 @@ export class IngredientRepository implements IIngredientRepository {
     const { sourceName, sourceId, ...properties } = ingredient;
     const result = await this.queryExecutor.run(
       `MERGE (i:Ingredient {sourceName: $sourceName, sourceId: $sourceId})
-       ON CREATE SET i.id = apoc.create.uuid(), i += $properties
+       ON CREATE SET i.id = randomUUID(), i += $properties
        RETURN i`,
       { sourceName, sourceId, properties },
     );
@@ -37,11 +37,11 @@ export class IngredientRepository implements IIngredientRepository {
     const results = await this.queryExecutor.run(
       `UNWIND $ingredients AS ingredient
        MERGE (parent:CanonicalIngredient {name: ingredient.name})
-       ON CREATE SET parent.id = apoc.create.uuid(), parent.category = ingredient.category, parent.embedding = ingredient.embedding
+       ON CREATE SET parent.id = randomUUID(), parent.category = ingredient.category, parent.embedding = ingredient.embedding
        WITH parent, ingredient
        UNWIND coalesce(ingredient.versions, []) AS version
        MERGE (child:CanonicalIngredient {name: version.name})
-       ON CREATE SET child.id = apoc.create.uuid(), child.category = ingredient.category, child.embedding = version.embedding
+       ON CREATE SET child.id = randomUUID(), child.category = ingredient.category, child.embedding = version.embedding
        MERGE (child)-[:IS_A]->(parent)
        RETURN parent, collect(child) AS children`,
       { ingredients },

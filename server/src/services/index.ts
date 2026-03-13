@@ -52,6 +52,7 @@ export const recipeService = new RecipeService(
   recipeRepository,
   redisClient,
   embeddingService,
+  unitOfWorkFactory,
 );
 export const ingredientService = new IngredientService(ingredientRepository);
 export const cuisineService = new CuisineService(

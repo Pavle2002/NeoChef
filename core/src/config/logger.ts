@@ -30,6 +30,7 @@ export function createLogger(logLevel: string, env: string) {
   return winston.createLogger({
     levels: customLevels.levels,
     level: logLevel,
+    silent: env === "test",
     format: combine(
       timestamp(),
       errors({ stack: env === "development" }),

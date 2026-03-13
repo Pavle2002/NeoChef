@@ -12,7 +12,7 @@ import type {
 } from "@neochef/common";
 
 export interface IRecipeRepository {
-  createOrUpdate(recipe: RecipeData): Promise<Recipe>;
+  create(recipe: RecipeData): Promise<Recipe>;
   findById(id: string): Promise<Recipe | null>;
   findByIds(ids: string[]): Promise<Recipe[]>;
   findByIdExtended(id: string, userId: string): Promise<ExtendedRecipe | null>;

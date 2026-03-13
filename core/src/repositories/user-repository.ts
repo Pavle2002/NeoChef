@@ -10,7 +10,6 @@ import {
 } from "@neochef/common";
 import type { IUserRepository } from "../interfaces/user-repository.interface.js";
 import type { IQueryExecutor } from "../interfaces/query-executor.interface.js";
-import { neo4jDateTimeConverter } from "../utils/neo4j-datetime-converter.js";
 import { InternalServerError } from "../errors/internal-server-error.js";
 import { ConflictError } from "../errors/conflict-error.js";
 
@@ -27,7 +26,7 @@ export class UserRepository implements IUserRepository {
       return null;
     }
     const user = record.get("u").properties;
-    user.createdAt = neo4jDateTimeConverter.toStandardDate(user.createdAt);
+    user.createdAt = user.createdAt.toString();
     return user as User;
   }
 
@@ -41,7 +40,7 @@ export class UserRepository implements IUserRepository {
       return null;
     }
     const user = record.get("u").properties;
-    user.createdAt = neo4jDateTimeConverter.toStandardDate(user.createdAt);
+    user.createdAt = user.createdAt.toString();
     return user as User;
   }
 
@@ -49,7 +48,7 @@ export class UserRepository implements IUserRepository {
     const result = await this.queryExecutor.run("MATCH (u:User) RETURN u");
     const users = result.records.map((record) => {
       const user = record.get("u").properties;
-      user.createdAt = neo4jDateTimeConverter.toStandardDate(user.createdAt);
+      user.createdAt = user.createdAt.toString();
       return user as User;
     });
     return users;
@@ -58,7 +57,7 @@ export class UserRepository implements IUserRepository {
   async create(user: UserData): Promise<User> {
     try {
       const result = await this.queryExecutor.run(
-        `CREATE (u:User {id: apoc.create.uuid(), createdAt: datetime()})
+        `CREATE (u:User {id: randomUUID(), createdAt: datetime()})
         SET u += $user
         RETURN u`,
         { user },
@@ -70,9 +69,7 @@ export class UserRepository implements IUserRepository {
       }
 
       const newUser = record.get("u").properties;
-      newUser.createdAt = neo4jDateTimeConverter.toStandardDate(
-        newUser.createdAt,
-      );
+      newUser.createdAt = newUser.createdAt.toString();
       return newUser as User;
     } catch (error) {
       if (
@@ -108,9 +105,7 @@ export class UserRepository implements IUserRepository {
       return null;
     }
     const updatedUser = record.get("u").properties;
-    updatedUser.createdAt = neo4jDateTimeConverter.toStandardDate(
-      updatedUser.createdAt,
-    );
+    updatedUser.createdAt = updatedUser.createdAt.toString();
     return updatedUser as User;
   }
 
@@ -357,9 +352,7 @@ export class UserRepository implements IUserRepository {
 
     const recipes = result.records.map((record) => {
       const recipe = record.get("r").properties;
-      recipe.createdAt = neo4jDateTimeConverter.toStandardDate(
-        recipe.createdAt,
-      );
+      recipe.createdAt = recipe.createdAt.toString();
       recipe.likeCount = record.get("likeCount");
       return recipe as Recipe;
     });

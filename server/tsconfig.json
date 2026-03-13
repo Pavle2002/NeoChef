@@ -18,5 +18,7 @@
       "@errors/*": ["src/errors/*"],
       "@validation/*": ["src/validation/*"]
     }
-  }
+  },
+    "include": ["src", "test"],
+
 }
