@@ -1,6 +1,6 @@
 # NeoChef 🍲
 
-**Recipe Recommendation Web App powered by a `Neo4j` graph model enabling `personalized` and `context-aware` recipe suggestions.** The project is designed as a scalable full-stack app demonstrating best real‑world backend, frontend, and DevOps practices.
+**Recipe Recommendation Web App powered by a `Neo4j` graph model and `AI` enabling `personalized` and `context-aware` recipe suggestions.** The project is designed as a scalable full-stack app demonstrating best real‑world backend, frontend, and DevOps practices.
 > 🌐 Live at: **https://neochef.app**
 
 ---
@@ -30,8 +30,8 @@
   - 📈 Trending page implemented with Redis ZSETs (`leaderboard pattern`)
   - 🚦 Custom Redis‑backed `rate limiting` and `session storage`
 - 🔁 **Unit of Work pattern** for sharing `transactional context` across multiple repositories within a single service operation, ensuring `consistency` for multi‑step domain operations such as recipe imports
-- 🧱 **Production best practices**: layered architecture (`routes` → `controllers` → `services` → `repositories`), dependency injection, typed domain errors, global error handling, `Zod` validation, and full `TypeScript` coverage.
  - ✅ **Integration tests**: backend endpoints are covered by `integration tests` using `Testcontainers`, `Supertest`, and `Vitest` to exercise real integrations and catch regressions early.
+- 🧱 **Production best practices**: layered architecture (`routes` → `controllers` → `services` → `repositories`), dependency injection, typed domain errors, global error handling, `Zod` validation, and full `TypeScript` coverage.
 
 
 ### Frontend 🎨 
