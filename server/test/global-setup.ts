@@ -18,7 +18,7 @@ export async function setup(project: TestProject) {
     "embedder/Dockerfile",
   )
     .withTarget("production")
-    .build();
+    .build("embedder:latest", { deleteOnExit: false });
 
   const [neo4j, redis, embedder] = await Promise.all([
     new Neo4jContainer("neo4j:latest")
