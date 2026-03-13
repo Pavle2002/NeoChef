@@ -31,6 +31,8 @@
   - 🚦 Custom Redis‑backed `rate limiting` and `session storage`
 - 🔁 **Unit of Work pattern** for sharing `transactional context` across multiple repositories within a single service operation, ensuring `consistency` for multi‑step domain operations such as recipe imports
 - 🧱 **Production best practices**: layered architecture (`routes` → `controllers` → `services` → `repositories`), dependency injection, typed domain errors, global error handling, `Zod` validation, and full `TypeScript` coverage.
+ - ✅ **Integration tests**: backend endpoints are covered by `integration tests` using `Testcontainers`, `Supertest`, and `Vitest` to exercise real integrations and catch regressions early.
+
 
 ### Frontend 🎨 
 - 🧰 **Modern React architecture** using `TanStack Query` and `TanStack Router` to enable advanced patterns like:
