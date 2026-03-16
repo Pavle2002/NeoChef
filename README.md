@@ -44,14 +44,15 @@
 
 ### Infrastructure & Deployment ☁️
 - 📦 **Monorepo setup** with npm workspaces (`common`, `core`, `client`, `server`, `jobs`, `embedder`) shared core busines logic and types/utilities.
-- 🐳 **Backend containerized with `Docker` & `Docker Compose`, running five services:
+- ⚙️ **CI/CD:** `Github Actions` workflow for backend build, tests, and deployment
+- 🐳 **Backend containerized** with `Docker` & `Docker Compose`, running five services:
   - 🖥️ API server
   - 🤖 Embedding service (`all-MiniLM-L6-v2` model)
   - 🏗️ 3 Background workers (`fetch`, `transform`, `upsert`)
   - ⚡ Redis (`message queues`, `caching`, `rate limiting`, `session storage`, `leaderboard`)
   - 🧭 Caddy `reverse proxy`
 - 🌍 **Frontend** deployed to `Vercel` with CDN distribution and automatic deployments.
-- 🏗️ **Backend** deployed on an `Oracle VPS`.
+- 🏗️ **Backend** deployed on an `Oracle VPS` with automatic deployments powered by `Github Actions`.
 - 🗄️ **Database** `Neo4j Aura` Managed instance
 - 📦 **Object Storage** `Cloudflare R2` Storage
 
@@ -73,7 +74,7 @@
 |-------|------------|
 | Backend | Node.js, Express, BullMQ, TypeScript |
 | Frontend | React, TanStack Query, TanStack Router, Tailwind CSS, shadcn |
-| DevOps | Docker, Docker Compose, Vercel, Oracle VPS deployment, Claudflare, Neo4j Aura|
+| DevOps | Docker, Docker Compose, GitHub Actions, Vercel, Oracle VPS deployment, Claudflare, Neo4j Aura|
 | Architecture | Monorepo (npm workspaces), layered architecture, dependency injection, Unit Of Work |
 
 ---
