@@ -63,22 +63,22 @@ jobs:
       - name: Build & push all images
         run: npm run build:all
 
-  deploy:
-    if: ${{ github.event_name == 'workflow_dispatch' }}
-    name: Deploy (Oracle VPS)
-    runs-on: ubuntu-latest
-    needs: build_and_push
-    steps:
-      - name: SSH and deploy docker compose
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          port: ${{ secrets.VPS_SSH_PORT || 22 }}
-          script: |
-            set -e
-            cd ~/NeoChef
-            docker compose pull
-            docker compose up -d --remove-orphans
-            docker compose ps
+  # deploy:
+  #   if: ${{ github.event_name == 'workflow_dispatch' }}
+  #   name: Deploy (Oracle VPS)
+  #   runs-on: ubuntu-latest
+  #   needs: build_and_push
+  #   steps:
+  #     - name: SSH and deploy docker compose
+  #       uses: appleboy/ssh-action@v1.0.3
+  #       with:
+  #         host: ${{ secrets.VPS_HOST }}
+  #         username: ${{ secrets.VPS_USER }}
+  #         key: ${{ secrets.VPS_SSH_KEY }}
+  #         port: ${{ secrets.VPS_SSH_PORT || 22 }}
+  #         script: |
+  #           set -e
+  #           cd ~/NeoChef
+  #           docker compose pull
+  #           docker compose up -d --remove-orphans
+  #           docker compose ps
