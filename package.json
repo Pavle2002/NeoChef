@@ -5,7 +5,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Pavle2002/Neo-Chef.git"
+    "url": "git+https://github.com/Pavle2002/NeoChef.git"
   },
   "workspaces": [
     "client",
