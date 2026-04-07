@@ -9,7 +9,7 @@ export type Candidate = {
 export class EmbeddingService implements IEmbeddingService {
   constructor(private embedderUrl: string) {}
 
-  async generateEmbedding(input: string): Promise<number[]> {
+  async getEmbedding(input: string): Promise<number[]> {
     const response = await fetch(`${this.embedderUrl}/embed`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

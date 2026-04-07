@@ -48,7 +48,7 @@ export const transformWorker = new Worker<TransformJob>(
           sourceId: recipe.id?.toString(),
           sourceName: "Spoonacular",
           title: recipe.title,
-          embedding: await embeddingService.generateEmbedding(
+          embedding: await embeddingService.getEmbedding(
             recipe.title.toLowerCase(),
           ),
           imageType: recipe.imageType,
@@ -98,7 +98,7 @@ export const transformWorker = new Worker<TransformJob>(
                 sourceName: "Spoonacular",
                 name: i.name,
                 normalizedName: normalizeIngredientName(i.name),
-                embedding: await embeddingService.generateEmbedding(
+                embedding: await embeddingService.getEmbedding(
                   normalizeIngredientName(i.name),
                 ),
                 aisle: i.aisle,

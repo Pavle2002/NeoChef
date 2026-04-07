@@ -1,3 +1,3 @@
 export interface IEmbeddingService {
-  generateEmbedding(input: string): Promise<number[]>;
+  getEmbedding(input: string): Promise<number[]>;
 }

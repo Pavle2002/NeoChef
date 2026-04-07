@@ -25,16 +25,13 @@ async function importCanonicalIngredients() {
     let enrichedIngredients: CanonicalIngredientData[] = [];
 
     for (const ingredient of canonicalIngredients) {
-      const embedding = await embeddingService.generateEmbedding(
-        ingredient.name,
-      );
+      const embedding = await embeddingService.getEmbedding(ingredient.name);
 
       let versionEmbeddings: { name: string; embedding: number[] }[] = [];
 
       if (ingredient.versions) {
         for (const version of ingredient.versions) {
-          const versionEmbedding =
-            await embeddingService.generateEmbedding(version);
+          const versionEmbedding = await embeddingService.getEmbedding(version);
 
           versionEmbeddings.push({
             name: version,

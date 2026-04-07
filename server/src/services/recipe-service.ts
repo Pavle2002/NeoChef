@@ -125,7 +125,7 @@ export class RecipeService implements IRecipeService {
     let searchEmbedding: number[] | undefined = undefined;
 
     if (searchQuery) {
-      searchEmbedding = await this.embeddingService.generateEmbedding(
+      searchEmbedding = await this.embeddingService.getEmbedding(
         searchQuery.toLowerCase(),
       );
     }
