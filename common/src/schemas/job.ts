@@ -19,6 +19,11 @@ export const UpsertJobSchema = z.object({
   extendedRecipeData: ExtendedRecipeDataSchema,
 });
 
+export const FastRPJobSchema = z.object({
+  type: z.enum(["FastRP"]),
+});
+
 export type FetchJob = z.infer<typeof FetchJobSchema>;
 export type TransformJob = z.infer<typeof TransformJobSchema>;
 export type UpsertJob = z.infer<typeof UpsertJobSchema>;
+export type FastRPJob = z.infer<typeof FastRPJobSchema>;

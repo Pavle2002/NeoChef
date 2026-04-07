@@ -1,5 +1,6 @@
 import type { IEmbeddingService } from "../interfaces/embedding-service.interface.js";
 import { EmbeddingServiceError } from "../errors/embedding-service-error.js";
+import type { IQueryExecutor } from "../interfaces/query-executor.interface.js";
 
 export type Candidate = {
   id: string;
@@ -7,7 +8,10 @@ export type Candidate = {
 };
 
 export class EmbeddingService implements IEmbeddingService {
-  constructor(private embedderUrl: string) {}
+  constructor(
+    private readonly embedderUrl: string,
+    private readonly queryExecutor: IQueryExecutor,
+  ) {}
 
   async getEmbedding(input: string): Promise<number[]> {
     const response = await fetch(`${this.embedderUrl}/embed`, {
@@ -27,5 +31,113 @@ export class EmbeddingService implements IEmbeddingService {
       embedding: number[];
     };
     return embedding;
+  }
+
+  async createProjection(): Promise<void> {
+    await this.queryExecutor.run(
+      `
+      CALL {
+        MATCH (u:User)-[r:LIKES|SAVED]->(rec:Recipe)
+        RETURN 
+          u AS source,
+          rec AS target,
+          type(r) AS relType,
+          CASE type(r)
+            WHEN 'SAVED' THEN 3.0
+            ELSE 2.0
+          END AS weight
+
+        UNION ALL
+
+        MATCH (u:User)-[:PREFERS]->(c:Cuisine)
+        RETURN 
+          u AS source,
+          c AS target,
+          'PREFERS' AS relType,
+          1.5 AS weight
+
+        UNION ALL
+
+        MATCH (u:User)-[:FOLLOWS]->(d:Diet)
+        RETURN 
+          u AS source,
+          d AS target,
+          'FOLLOWS' AS relType,
+          1.5 AS weight
+
+        UNION ALL
+
+        MATCH (r:Recipe)-[:BELONGS_TO]->(c:Cuisine)
+        RETURN 
+          r AS source,
+          c AS target,
+          'BELONGS_TO' AS relType,
+          0.7 AS weight
+
+        UNION ALL
+
+        MATCH (r:Recipe)-[:SUITABLE_FOR]->(d:Diet)
+        RETURN 
+          r AS source,
+          d AS target,
+          'SUITABLE_FOR' AS relType,
+          0.7 AS weight
+
+        UNION ALL
+
+        MATCH (r:Recipe)-[:CONTAINS]->(:Ingredient)-[:MAPS_TO]->(ci:CanonicalIngredient)
+        RETURN 
+          r AS source,
+          ci AS target,
+          'HAS_CANONICAL' AS relType,
+          1.5 AS weight
+
+        UNION ALL
+
+        MATCH (ci1:CanonicalIngredient)-[:IS_A]->(ci2:CanonicalIngredient)
+        RETURN
+          ci1 AS source,
+          ci2 AS target,
+          'IS_A' AS relType,
+          1.0 AS weight
+    }
+
+    WITH gds.graph.project(
+      'recommendations',
+      source,
+      target,
+      {
+        sourceNodeLabels: labels(source),
+        targetNodeLabels: labels(target),
+        relationshipType: relType,
+        relationshipProperties: { weight: weight }
+      },
+      {
+        undirectedRelationshipTypes: ['*'],
+        memory: '2GB'
+      }
+    ) AS g
+
+    RETURN 
+      g.graphName AS graph,
+      g.nodeCount AS nodes,
+      g.relationshipCount AS relationships;
+      `,
+    );
+  }
+
+  async runFastRP(): Promise<void> {
+    await this.queryExecutor.run(
+      `CALL gds.fastRP.write('recommendations', {
+        embeddingDimension: 256,
+        iterationWeights: [0.0, 1.0, 0.5],
+        nodeSelfInfluence: 0.0,
+        normalizationStrength: 0.8,
+        relationshipWeightProperty: 'weight',
+        randomSeed: 42,
+        writeProperty: 'embedding'
+      })
+      YIELD nodeCount, nodePropertiesWritten;`,
+    );
   }
 }

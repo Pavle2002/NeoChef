@@ -27,4 +27,7 @@ export const storageService = new S3StorageService(
   r2Client,
   config.r2.bucketName,
 );
-export const embeddingService = new EmbeddingService(config.embedderUrl);
+export const embeddingService = new EmbeddingService(
+  config.embedderUrl,
+  queryExecutor,
+);

@@ -47,7 +47,10 @@ export const userService = new UserService(
   unitOfWorkFactory,
   redisClient,
 );
-export const embeddingService = new EmbeddingService(config.embedderUrl);
+export const embeddingService = new EmbeddingService(
+  config.embedderUrl,
+  queryExecutor,
+);
 export const recipeService = new RecipeService(
   recipeRepository,
   redisClient,

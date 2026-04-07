@@ -5,6 +5,7 @@ export const QUEUES = {
   FETCH: "fetch-queue",
   TRANSFORM: "transform-queue",
   UPSERT: "upsert-queue",
+  FASTRP: "fastrp-queue",
 } as const;
 
 export type QueueConnection = {
@@ -39,6 +40,16 @@ export function getUpsertQueue(connection: QueueConnection) {
     defaultJobOptions: {
       attempts: 5,
       removeOnComplete: { age: 60 },
+      removeOnFail: false,
+    },
+  });
+}
+
+export function getFastRPQueue(connection: QueueConnection) {
+  return new Queue(QUEUES.FASTRP, {
+    connection,
+    defaultJobOptions: {
+      removeOnComplete: true,
       removeOnFail: false,
     },
   });
