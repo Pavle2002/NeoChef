@@ -4,6 +4,7 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
+    "rootDir": "..",
     "paths": {
       "@neochef/common": ["../common/src/index.ts"],
       "@neochef/core": ["../core/src/index.ts"],
