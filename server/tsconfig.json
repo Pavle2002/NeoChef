@@ -8,16 +8,16 @@
     "paths": {
       "@neochef/common": ["../common/src/index.ts"],
       "@neochef/core": ["../core/src/index.ts"],
-      "@config/*": ["src/config/*"],
-      "@interfaces/*": ["src/interfaces/*"],
-      "@services/*": ["src/services/*"],
-      "@middlewares/*": ["src/middlewares/*"],
-      "@routes/*": ["src/routes/*"],
-      "@controllers/*": ["src/controllers/*"],
-      "@utils/*": ["src/utils/*"],
-      "@app-types/*": ["src/types/*"],
-      "@errors/*": ["src/errors/*"],
-      "@validation/*": ["src/validation/*"]
+      "@config/*": ["./src/config/*"],
+      "@interfaces/*": ["./src/interfaces/*"],
+      "@services/*": ["./src/services/*"],
+      "@middlewares/*": ["./src/middlewares/*"],
+      "@routes/*": ["./src/routes/*"],
+      "@controllers/*": ["./src/controllers/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@app-types/*": ["./src/types/*"],
+      "@errors/*": ["./src/errors/*"],
+      "@validation/*": ["./src/validation/*"]
     }
   },
     "include": ["src", "test"],

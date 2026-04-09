@@ -28,7 +28,6 @@
 
     // Module detection
     "moduleDetection": "force",
-    "baseUrl": ".",
     "paths": {
       "@neochef/common": ["../common/src/index.ts"]
     }

@@ -14,7 +14,6 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "moduleDetection": "force",
-    "baseUrl": "."
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]
