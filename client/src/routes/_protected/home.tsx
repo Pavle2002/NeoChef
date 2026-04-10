@@ -12,7 +12,8 @@ import { Suspense } from "react";
 export const Route = createFileRoute("/_protected/home")({
   component: RouteComponent,
   loader: async ({ context: { queryClient } }) => {
-    queryClient.ensureQueryData(getTopPicksRecipesQueryOptions());
+    queryClient.ensureQueryData(getTopPicksRecipesQueryOptions("basic"));
+    queryClient.ensureQueryData(getTopPicksRecipesQueryOptions("advanced"));
     queryClient.ensureQueryData(getFridgeBasedRecipesQueryOptions());
     queryClient.ensureQueryData(getSimilarToLastLikedRecipesQueryOptions());
   },
@@ -57,8 +58,18 @@ function RouteComponent() {
 }
 
 function TopPicksSection() {
-  const { data } = useSuspenseQuery(getTopPicksRecipesQueryOptions());
-  return <RecipeCarousel recipes={data} />;
+  const { data: basic } = useSuspenseQuery(
+    getTopPicksRecipesQueryOptions("basic"),
+  );
+  const { data: advanced } = useSuspenseQuery(
+    getTopPicksRecipesQueryOptions("advanced"),
+  );
+  return (
+    <>
+      <RecipeCarousel recipes={basic} />;
+      <RecipeCarousel recipes={advanced} />;
+    </>
+  );
 }
 
 function FridgeBasedSection() {

@@ -1,4 +1,5 @@
 import { config } from "@config/config.js";
+import type { RecommendationMode } from "@neochef/common";
 
 export const CacheKeys = {
   CUISINES_ALL: "ref:cuisines:all",
@@ -7,7 +8,8 @@ export const CacheKeys = {
   TTL_REF: config.caching_ttls.filterOptions,
 
   recommendations: {
-    topPicks: (userId: string) => `rec:top-picks:${userId}`,
+    topPicks: (userId: string, mode: RecommendationMode) =>
+      `rec:top-picks:${userId}:${mode}`,
     fridge: (userId: string) => `rec:fridge:${userId}`,
     similar: (userId: string) => `rec:similar:${userId}`,
     TTL: config.caching_ttls.recommendedRecipes,

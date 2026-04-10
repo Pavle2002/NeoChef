@@ -16,7 +16,7 @@ export class RecommendationService implements IRecommendationService {
     userId: string,
     mode: RecommendationMode,
   ): Promise<Recipe[]> {
-    const cacheKey = CacheKeys.recommendations.topPicks(userId);
+    const cacheKey = CacheKeys.recommendations.topPicks(userId, mode);
 
     const [error, cached] = await safeAwait(this.redisClient.get(cacheKey));
     if (!error && cached) {
@@ -25,7 +25,7 @@ export class RecommendationService implements IRecommendationService {
 
     let recipes =
       mode === "basic"
-        ? await this.recommendationRepository.findFridgeBased(userId)
+        ? await this.recommendationRepository.findTopPicksBasic(userId)
         : await this.recommendationRepository.findTopPicksAdvanced(userId);
 
     if (recipes.length === 0) {
