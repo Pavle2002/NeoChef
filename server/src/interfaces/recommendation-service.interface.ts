@@ -1,9 +1,9 @@
-import type { Recipe } from "@neochef/common";
+import type { Recipe, RecommendationMode } from "@neochef/common";
 
 export interface IRecommendationService {
-  getTopPicks(userId: string): Promise<Recipe[]>;
+  getTopPicks(userId: string, mode: RecommendationMode): Promise<Recipe[]>;
   getFridgeBased(userId: string): Promise<Recipe[]>;
   getSimilarToLastLiked(
-    userId: string
+    userId: string,
   ): Promise<{ basedOn: string; recipes: Recipe[] } | null>;
 }

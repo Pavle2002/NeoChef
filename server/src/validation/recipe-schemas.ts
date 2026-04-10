@@ -2,6 +2,7 @@ import {
   DEFAULT_PAGE_SIZE,
   RecipeFiltersSchema,
   RecipeSortOptionsSchema,
+  RecommendationModeSchema,
 } from "@neochef/common";
 import { queryParamsParser } from "@utils/query-params-parser.js";
 import { z } from "zod";
@@ -52,7 +53,14 @@ const getByIdSchema = z.object({
   }),
 });
 
+const getRecommendedRecipesSchema = z.object({
+  query: z.object({
+    mode: RecommendationModeSchema,
+  }),
+});
+
 export const recipeSchemas = {
   getAllSchema,
   getByIdSchema,
+  getRecommendedRecipesSchema,
 };

@@ -11,7 +11,8 @@ const { getById, getAll, getTrending, like, unlike, save, unsave } =
   recipeController;
 const { getRecommendedRecipes, getFridgeBasedRecipes, getSimilarToLastLiked } =
   recommendationController;
-const { getByIdSchema, getAllSchema } = recipeSchemas;
+const { getByIdSchema, getAllSchema, getRecommendedRecipesSchema } =
+  recipeSchemas;
 
 const router = Router();
 
@@ -22,7 +23,12 @@ const strictLimiter = rateLimiter(maxRequests, windowMs, "recommended");
 router.use(isAuthenticated);
 router.get("/", validate(getAllSchema), getAll);
 router.get("/trending", getTrending);
-router.get("/recommended", strictLimiter, getRecommendedRecipes);
+router.get(
+  "/recommended",
+  validate(getRecommendedRecipesSchema),
+  strictLimiter,
+  getRecommendedRecipes,
+);
 router.get("/recommended/fridge", strictLimiter, getFridgeBasedRecipes);
 router.get("/recommended/similar", strictLimiter, getSimilarToLastLiked);
 router.get("/:id", validate(getByIdSchema), getById);

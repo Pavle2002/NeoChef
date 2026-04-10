@@ -18,5 +18,6 @@ export const CacheKeys = {
     TTL: config.caching_ttls.trendingRecipes,
   },
 
-  RATE_LIMIT: "rl:",
+  rateLimit: (identifier: string, endpoint: string) =>
+    `rl:${identifier}:${endpoint}`,
 };

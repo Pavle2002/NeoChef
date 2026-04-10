@@ -5,7 +5,8 @@ import { queryOptions } from "@tanstack/react-query";
 export function getTopPicksRecipesQueryOptions() {
   return queryOptions({
     queryKey: ["recipes", "list", "top-picks"],
-    queryFn: () => apiClient.get<Recipe[]>("/recipes/recommended"),
+    queryFn: () =>
+      apiClient.get<Recipe[]>("/recipes/recommended?mode=advanced"),
     staleTime: 1000 * 60 * 15, // 15 minutes
   });
 }

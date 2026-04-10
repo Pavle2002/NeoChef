@@ -1,4 +1,4 @@
-import type { Recipe } from "@neochef/common";
+import type { Recipe, RecommendationMode } from "@neochef/common";
 import type { IRecipeService } from "@interfaces/recipe-service.interface.js";
 import type { IRecommendationService } from "@interfaces/recommendation-service.interface.js";
 import { CacheKeys } from "@utils/cache-keys.js";
@@ -12,7 +12,10 @@ export class RecommendationService implements IRecommendationService {
     private readonly redisClient: RedisClientType<any, any, any>,
   ) {}
 
-  async getTopPicks(userId: string): Promise<Recipe[]> {
+  async getTopPicks(
+    userId: string,
+    mode: RecommendationMode,
+  ): Promise<Recipe[]> {
     const cacheKey = CacheKeys.recommendations.topPicks(userId);
 
     const [error, cached] = await safeAwait(this.redisClient.get(cacheKey));
@@ -20,7 +23,10 @@ export class RecommendationService implements IRecommendationService {
       return JSON.parse(cached) as Recipe[];
     }
 
-    let recipes = await this.recommendationRepository.findTopPicks(userId);
+    let recipes =
+      mode === "basic"
+        ? await this.recommendationRepository.findFridgeBased(userId)
+        : await this.recommendationRepository.findTopPicksAdvanced(userId);
 
     if (recipes.length === 0) {
       const trending = await this.recipeService.getTrending();

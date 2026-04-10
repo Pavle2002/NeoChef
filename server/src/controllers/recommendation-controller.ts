@@ -1,20 +1,22 @@
-import type { User } from "@neochef/common";
+import type { RecommendationMode, User } from "@neochef/common";
 import { recommendationService } from "@services/index.js";
 import { sendSuccess } from "@utils/response-handler.js";
 import type { Request, Response } from "express";
 
 async function getRecommendedRecipes(
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> {
   const user = req.user as User;
-  const recipes = await recommendationService.getTopPicks(user.id);
+  const mode = req.validated?.query?.mode as RecommendationMode;
+  console.log("Recommendation mode:", mode);
+  const recipes = await recommendationService.getTopPicks(user.id, mode);
   sendSuccess(res, 200, recipes, "Recommended recipes retrieved successfully");
 }
 
 async function getFridgeBasedRecipes(
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> {
   const user = req.user as User;
   const recipes = await recommendationService.getFridgeBased(user.id);
@@ -23,7 +25,7 @@ async function getFridgeBasedRecipes(
 
 async function getSimilarToLastLiked(
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> {
   const user = req.user as User;
   const result = await recommendationService.getSimilarToLastLiked(user.id);

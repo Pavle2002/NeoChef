@@ -76,9 +76,14 @@ export const RecipeSortOptionsSchema = z.object({
   sortOrder: z.enum(SORT_ORDER_OPTIONS).default(DEFAULT_SORT_ORDER),
 });
 
+export const RecommendationModeSchema = z
+  .enum(["basic", "advanced"])
+  .default("basic");
+
 export type Recipe = z.infer<typeof RecipeSchema>;
 export type ExtendedRecipe = z.infer<typeof ExtendedRecipeSchema>;
 export type RecipeData = z.infer<typeof RecipeDataSchema>;
 export type ExtendedRecipeData = z.infer<typeof ExtendedRecipeDataSchema>;
 export type RecipeFilters = z.infer<typeof RecipeFiltersSchema>;
 export type RecipeSortOptions = z.infer<typeof RecipeSortOptionsSchema>;
+export type RecommendationMode = z.infer<typeof RecommendationModeSchema>;

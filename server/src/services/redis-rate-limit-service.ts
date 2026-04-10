@@ -38,7 +38,7 @@ export class RedisRateLimitService {
     limit: number,
     windowMs: number,
   ): Promise<RateLimitResult> {
-    const key = `${CacheKeys.RATE_LIMIT}${identifier}:${endpoint}`;
+    const key = CacheKeys.rateLimit(identifier, endpoint);
     const now = Date.now();
     const windowStart = now - windowMs;
 

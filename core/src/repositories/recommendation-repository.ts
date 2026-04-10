@@ -5,7 +5,7 @@ import type { IQueryExecutor } from "../interfaces/query-executor.interface.js";
 export class RecommendationRepository implements IRecommendationRepository {
   constructor(private readonly queryExecutor: IQueryExecutor) {}
 
-  async findTopPicks(userId: string): Promise<Recipe[]> {
+  async findTopPicksBasic(userId: string): Promise<Recipe[]> {
     const query = `
       MATCH (u:User {id: $userId})
 
@@ -189,5 +189,38 @@ export class RecommendationRepository implements IRecommendationRepository {
     });
 
     return { basedOn, recipes };
+  }
+
+  async findTopPicksAdvanced(userId: string): Promise<Recipe[]> {
+    const query = `
+    MATCH (u:User {id: $userId})
+    WHERE u.embedding IS NOT NULL
+
+    MATCH (r:Recipe)
+    WHERE r.embedding IS NOT NULL
+      AND NOT (u)-[:LIKES|SAVED]->(r)
+      AND NOT EXISTS {
+        MATCH (u)-[:DISLIKES]->(disliked:CanonicalIngredient)
+        MATCH (r)-[:CONTAINS]->(:Ingredient)-[:MAPS_TO]->(ci:CanonicalIngredient)
+        WHERE ci = disliked OR (ci)-[:IS_A*]->(disliked)
+      }
+
+    WITH u, r, gds.similarity.cosine(u.embedding, r.embedding) AS similarity
+
+    ORDER BY similarity DESC
+    LIMIT 10
+
+    OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
+    RETURN r, count(l) as likeCount
+    `;
+
+    const result = await this.queryExecutor.run(query, { userId });
+
+    return result.records.map((record) => {
+      const recipe = record.get("r").properties;
+      recipe.createdAt = recipe.createdAt.toString();
+      recipe.likeCount = record.get("likeCount");
+      return recipe as Recipe;
+    });
   }
 }
