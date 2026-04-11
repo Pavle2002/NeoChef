@@ -44,6 +44,6 @@ fastRPWorker.on("failed", (job, err) => {
 
 const fastRPQueue = getFastRPQueue(connection);
 
-fastRPQueue.add("fastrp-job", {
-  type: "FastRP",
-});
+// fastRPQueue.add("fastrp-job", {
+//   type: "FastRP",
+// });

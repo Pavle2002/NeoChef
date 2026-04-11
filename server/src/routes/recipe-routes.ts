@@ -29,8 +29,13 @@ router.get(
   strictLimiter,
   getRecommendedRecipes,
 );
+router.get(
+  "/recommended/similar",
+  validate(getRecommendedRecipesSchema),
+  strictLimiter,
+  getSimilarToLastLiked,
+);
 router.get("/recommended/fridge", strictLimiter, getFridgeBasedRecipes);
-router.get("/recommended/similar", strictLimiter, getSimilarToLastLiked);
 router.get("/:id", validate(getByIdSchema), getById);
 router.post("/:id/like", validate(getByIdSchema), like);
 router.post("/:id/save", validate(getByIdSchema), save);

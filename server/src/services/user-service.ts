@@ -130,7 +130,14 @@ export class UserService implements IUserService {
     });
 
     await safeAwait(
-      this.redisClient.del(CacheKeys.recommendations.topPicks(userId)),
+      Promise.all([
+        this.redisClient.del(
+          CacheKeys.recommendations.topPicks(userId, "basic"),
+        ),
+        this.redisClient.del(
+          CacheKeys.recommendations.topPicks(userId, "advanced"),
+        ),
+      ]),
     );
     return updatedPreferences;
   }
@@ -171,7 +178,12 @@ export class UserService implements IUserService {
 
     await safeAwait(
       Promise.all([
-        this.redisClient.del(CacheKeys.recommendations.similar(userId)),
+        this.redisClient.del(
+          CacheKeys.recommendations.similar(userId, "basic"),
+        ),
+        this.redisClient.del(
+          CacheKeys.recommendations.similar(userId, "advanced"),
+        ),
         this.redisClient.zIncrBy(
           CacheKeys.recipes.trending,
           likes ? 1 : -1,

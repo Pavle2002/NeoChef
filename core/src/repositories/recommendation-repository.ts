@@ -128,7 +128,7 @@ export class RecommendationRepository implements IRecommendationRepository {
     });
   }
 
-  async findSimilarToLastLiked(
+  async findSimilarToLastLikedBasic(
     userId: string,
   ): Promise<{ basedOn: string; recipes: Recipe[] } | null> {
     const query = `
@@ -194,10 +194,10 @@ export class RecommendationRepository implements IRecommendationRepository {
   async findTopPicksAdvanced(userId: string): Promise<Recipe[]> {
     const query = `
     MATCH (u:User {id: $userId})
-    WHERE u.embedding IS NOT NULL
+    WHERE u.recommendationEmbedding IS NOT NULL
 
     MATCH (r:Recipe)
-    WHERE r.embedding IS NOT NULL
+    WHERE r.recommendationEmbedding IS NOT NULL
       AND NOT (u)-[:LIKES|SAVED]->(r)
       AND NOT EXISTS {
         MATCH (u)-[:DISLIKES]->(disliked:CanonicalIngredient)
@@ -205,7 +205,7 @@ export class RecommendationRepository implements IRecommendationRepository {
         WHERE ci = disliked OR (ci)-[:IS_A*]->(disliked)
       }
 
-    WITH u, r, gds.similarity.cosine(u.embedding, r.embedding) AS similarity
+    WITH u, r, gds.similarity.cosine(u.recommendationEmbedding, r.recommendationEmbedding) AS similarity
 
     ORDER BY similarity DESC
     LIMIT 10
@@ -222,5 +222,46 @@ export class RecommendationRepository implements IRecommendationRepository {
       recipe.likeCount = record.get("likeCount");
       return recipe as Recipe;
     });
+  }
+
+  async findSimilarToLastLikedAdvanced(
+    userId: string,
+  ): Promise<{ basedOn: string; recipes: Recipe[] } | null> {
+    const query = `
+      MATCH (u:User {id: $userId})-[l:LIKES]->(last:Recipe)
+      WITH u, last
+      ORDER BY l.likedAt DESC
+      LIMIT 1
+      
+      MATCH (r:Recipe)
+      WHERE r.id <> last.id
+        AND r.similarityEmbedding IS NOT NULL
+        AND NOT (u)-[:LIKES|SAVED]->(r)
+      // Calculate similarity based on FastRP embeddings
+      WITH last, r, gds.similarity.cosine(last.similarityEmbedding, r.similarityEmbedding) as similarity
+            
+      ORDER BY similarity DESC
+      LIMIT 10
+      
+      OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
+      RETURN last.title as basedOn, r, count(l) as likeCount
+    `;
+
+    const result = await this.queryExecutor.run(query, { userId });
+
+    const firstRecord = result.records[0];
+    if (!firstRecord) {
+      return null;
+    }
+
+    const basedOn = firstRecord.get("basedOn");
+    const recipes = result.records.map((record) => {
+      const recipe = record.get("r").properties;
+      recipe.createdAt = recipe.createdAt.toString();
+      recipe.likeCount = record.get("likeCount");
+      return recipe as Recipe;
+    });
+
+    return { basedOn, recipes };
   }
 }

@@ -68,8 +68,9 @@ export class RecommendationService implements IRecommendationService {
 
   async getSimilarToLastLiked(
     userId: string,
+    mode: RecommendationMode,
   ): Promise<{ basedOn: string; recipes: Recipe[] } | null> {
-    const cacheKey = CacheKeys.recommendations.similar(userId);
+    const cacheKey = CacheKeys.recommendations.similar(userId, mode);
 
     const [error, cached] = await safeAwait(this.redisClient.get(cacheKey));
 
@@ -78,7 +79,13 @@ export class RecommendationService implements IRecommendationService {
     }
 
     const result =
-      await this.recommendationRepository.findSimilarToLastLiked(userId);
+      mode === "basic"
+        ? await this.recommendationRepository.findSimilarToLastLikedBasic(
+            userId,
+          )
+        : await this.recommendationRepository.findSimilarToLastLikedAdvanced(
+            userId,
+          );
 
     await safeAwait(
       this.redisClient.setEx(

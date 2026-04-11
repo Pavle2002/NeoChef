@@ -10,8 +10,9 @@ export const CacheKeys = {
   recommendations: {
     topPicks: (userId: string, mode: RecommendationMode) =>
       `rec:top-picks:${userId}:${mode}`,
+    similar: (userId: string, mode: RecommendationMode) =>
+      `rec:similar:${userId}:${mode}`,
     fridge: (userId: string) => `rec:fridge:${userId}`,
-    similar: (userId: string) => `rec:similar:${userId}`,
     TTL: config.caching_ttls.recommendedRecipes,
   },
 

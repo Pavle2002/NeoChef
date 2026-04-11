@@ -15,7 +15,12 @@ export const Route = createFileRoute("/_protected/home")({
     queryClient.ensureQueryData(getTopPicksRecipesQueryOptions("basic"));
     queryClient.ensureQueryData(getTopPicksRecipesQueryOptions("advanced"));
     queryClient.ensureQueryData(getFridgeBasedRecipesQueryOptions());
-    queryClient.ensureQueryData(getSimilarToLastLikedRecipesQueryOptions());
+    queryClient.ensureQueryData(
+      getSimilarToLastLikedRecipesQueryOptions("basic"),
+    );
+    queryClient.ensureQueryData(
+      getSimilarToLastLikedRecipesQueryOptions("advanced"),
+    );
   },
 
   staticData: { title: "Home" },
@@ -66,8 +71,8 @@ function TopPicksSection() {
   );
   return (
     <>
-      <RecipeCarousel recipes={basic} />;
-      <RecipeCarousel recipes={advanced} />;
+      <RecipeCarousel recipes={basic} />
+      <RecipeCarousel recipes={advanced} />
     </>
   );
 }
@@ -100,13 +105,20 @@ function FridgeBasedSection() {
 }
 
 function SimilarToLastLikedSection() {
-  const { data } = useSuspenseQuery(getSimilarToLastLikedRecipesQueryOptions());
-  return data != null ? (
+  const { data: basic } = useSuspenseQuery(
+    getSimilarToLastLikedRecipesQueryOptions("basic"),
+  );
+  const { data: advanced } = useSuspenseQuery(
+    getSimilarToLastLikedRecipesQueryOptions("advanced"),
+  );
+
+  return basic != null && advanced != null ? (
     <>
       <p className="text-base sm:text-lg text-muted-foreground">
-        Explore recipes similar to <i>"{data.basedOn}"</i>.
+        Explore recipes similar to <i>"{basic.basedOn}"</i>.
       </p>
-      <RecipeCarousel recipes={data.recipes} />
+      <RecipeCarousel recipes={basic.recipes} />
+      <RecipeCarousel recipes={advanced.recipes} />
     </>
   ) : (
     <div className="flex flex-col sm:w-[95%] max-w-6xl items-center justify-center space-y-1 bg-accent/30 rounded-xl px-8 py-4 mt-6 border border-accent shadow-md">

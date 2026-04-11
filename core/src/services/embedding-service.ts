@@ -33,10 +33,9 @@ export class EmbeddingService implements IEmbeddingService {
     return embedding;
   }
 
-  async createProjection(): Promise<void> {
+  async createRecommendationsProjection(): Promise<void> {
     await this.queryExecutor.run(
-      `
-      CALL {
+      `CALL {
         MATCH (u:User)-[r:LIKES|SAVED]->(rec:Recipe)
         RETURN 
           u AS source,
@@ -126,18 +125,110 @@ export class EmbeddingService implements IEmbeddingService {
     );
   }
 
-  async runFastRP(): Promise<void> {
+  async runRecommendationsFastRP(): Promise<void> {
     await this.queryExecutor.run(
       `CALL gds.fastRP.write('recommendations', {
         embeddingDimension: 256,
-        iterationWeights: [0.0, 1.0, 0.5],
+        iterationWeights: [0.0, 1.0, 1.0],
         nodeSelfInfluence: 0.0,
         normalizationStrength: 0.8,
         relationshipWeightProperty: 'weight',
         randomSeed: 42,
-        writeProperty: 'embedding'
+        writeProperty: 'recommendationEmbedding'
       })
       YIELD nodeCount, nodePropertiesWritten;`,
+    );
+  }
+
+  async createSimilarRecipesProjection(): Promise<void> {
+    await this.queryExecutor.run(
+      `CALL {
+        MATCH (r:Recipe)-[:CONTAINS]->(:Ingredient)-[:MAPS_TO]->(ci:CanonicalIngredient)
+        RETURN 
+          r AS source,
+          ci AS target,
+          'HAS_CANONICAL' AS relType,
+          1.5 AS weight
+
+        UNION ALL
+
+        MATCH (ci1:CanonicalIngredient)-[:IS_A]->(ci2:CanonicalIngredient)
+        RETURN
+          ci1 AS source,
+          ci2 AS target,
+          'IS_A' AS relType,
+          1.0 AS weight
+
+        UNION ALL
+
+        MATCH (r:Recipe)-[:BELONGS_TO]->(c:Cuisine)
+        RETURN 
+          r AS source,
+          c AS target,
+          'BELONGS_TO' AS relType,
+          3.0 AS weight
+
+        UNION ALL
+
+        MATCH (r:Recipe)-[:SUITABLE_FOR]->(d:Diet)
+        RETURN 
+          r AS source,
+          d AS target,
+          'SUITABLE_FOR' AS relType,
+          1.5 AS weight
+
+        UNION ALL
+
+        MATCH (r:Recipe)-[:IS_OF_TYPE]->(d:DishType)
+        RETURN 
+          r AS source,
+          d AS target,
+          'IS_OF_TYPE' AS relType,
+          1.5 AS weight
+    }
+
+    WITH gds.graph.project(
+      'similarRecipes',
+      source,
+      target,
+      {
+        sourceNodeLabels: labels(source),
+        targetNodeLabels: labels(target),
+        relationshipType: relType,
+        relationshipProperties: { weight: weight }
+      },
+      {
+        undirectedRelationshipTypes: ['*'],
+        memory: '2GB'
+      }
+    ) AS g
+
+    RETURN 
+      g.graphName AS graph,
+      g.nodeCount AS nodes,
+      g.relationshipCount AS relationships;
+      `,
+    );
+  }
+
+  async runSimilarRecipesFastRP(): Promise<void> {
+    await this.queryExecutor.run(
+      `CALL gds.fastRP.write('similarRecipes', {
+        embeddingDimension: 256,
+        iterationWeights: [0.0, 1.0, 1.0],
+        nodeSelfInfluence: 0.1,
+        normalizationStrength: 0.5,
+        relationshipWeightProperty: 'weight',
+        randomSeed: 42,
+        writeProperty: 'similarityEmbedding'
+        })
+        YIELD nodeCount, nodePropertiesWritten;`,
+    );
+  }
+
+  async dropProjection(name: string): Promise<void> {
+    await this.queryExecutor.run(
+      `CALL gds.graph.drop('${name}', false) YIELD graphName;`,
     );
   }
 }
