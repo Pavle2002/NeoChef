@@ -1,15 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { Image } from "@/components/ui/image";
 import { RecipeCarousel } from "@/components/ui/recipe-carousel";
+import { RecipeCarouselSkeleton } from "@/components/ui/recipe-carousel-skeleton";
+import { Spinner } from "@/components/ui/spinner";
 import { formatCompactNumber } from "@/lib/format-number";
 import { useToggleLike } from "@/mutations/use-toggle-like";
 import { useToggleSave } from "@/mutations/use-toggle-save";
 import { getRecipeQueryOptions } from "@/query-options/get-recipe-query-options";
+import { getRecipeSimilarityExplanationQueryOptions } from "@/query-options/get-recipe-similarity-explanation-query-options";
 import { getSimilarRecipesQueryOptions } from "@/query-options/get-similar-recipes-query-options";
 import type { ExtendedRecipe } from "@neochef/common";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { Bookmark, Heart } from "lucide-react";
+import { Suspense } from "react";
 
 export const Route = createFileRoute("/_protected/recipes/$recipeId")({
   component: RouteComponent,
@@ -62,7 +66,14 @@ function RouteComponent() {
         </div>
       </div>
 
-      <SimilarRecipes />
+      <div>
+        <h2 className="text-primary text-3xl font-bold mb-4">
+          🔎 Similar Recipes
+        </h2>
+        <Suspense fallback={<RecipeCarouselSkeleton />}>
+          <SimilarRecipes />
+        </Suspense>
+      </div>
     </div>
   );
 }
@@ -317,11 +328,39 @@ function SimilarRecipes() {
   );
 
   return (
-    <div>
-      <h2 className="text-primary text-3xl font-bold mb-4">
-        🔎 Similar Recipes
-      </h2>
-      <RecipeCarousel recipes={similarRecipes} />
+    <RecipeCarousel
+      recipes={similarRecipes}
+      popoverContent={(recipe) => (
+        <Suspense fallback={<Spinner />}>
+          <SimilarityExplanation recipe1Id={recipeId} recipe2Id={recipe.id} />
+        </Suspense>
+      )}
+    />
+  );
+}
+
+function SimilarityExplanation({
+  recipe1Id,
+  recipe2Id,
+}: {
+  recipe1Id: string;
+  recipe2Id: string;
+}) {
+  const { data: explanation } = useSuspenseQuery(
+    getRecipeSimilarityExplanationQueryOptions(recipe1Id, recipe2Id),
+  );
+
+  return (
+    <div className="max-w-xs">
+      <h3 className="text-sm text-primary mb-2">
+        {explanation.sharedIngredients.length} shared ingredients
+      </h3>
+      <h3 className="text-sm text-primary mb-2">
+        {explanation.sharedCuisines.length} shared cuisines
+      </h3>
+      <h3 className="text-sm text-primary mb-2">
+        {explanation.sharedDishTypes.length} shared dish types
+      </h3>
     </div>
   );
 }

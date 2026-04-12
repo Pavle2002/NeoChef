@@ -7,8 +7,18 @@ import {
 } from "./carousel";
 import type { Recipe } from "@neochef/common";
 import { Image } from "./image";
+import { Info } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 
-export function RecipeCarousel({ recipes }: { recipes: Recipe[] }) {
+export type RecipeCarouselProps = {
+  recipes: Recipe[];
+  popoverContent?: (recipe: Recipe) => React.ReactNode;
+};
+
+export function RecipeCarousel({
+  recipes,
+  popoverContent,
+}: RecipeCarouselProps) {
   return (
     <Carousel
       className="sm:w-[95%] max-w-6xl"
@@ -18,7 +28,7 @@ export function RecipeCarousel({ recipes }: { recipes: Recipe[] }) {
         {recipes.map((recipe) => (
           <CarouselItem
             key={recipe.id}
-            className="basis-1/2 sm:basis-1/3 lg:basis-1/4 2xl:basis-1/5 pl-4 py-4"
+            className="relative basis-1/2 sm:basis-1/3 lg:basis-1/4 2xl:basis-1/5 pl-4 py-4"
           >
             <Link
               to="/recipes/$recipeId"
@@ -41,6 +51,20 @@ export function RecipeCarousel({ recipes }: { recipes: Recipe[] }) {
                 </h3>
               </div>
             </Link>
+            {popoverContent && (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Info
+                    strokeWidth={2.5}
+                    size={20}
+                    className="absolute text-background top-6 left-6.5 rounded-full cursor-pointer"
+                  />
+                </PopoverTrigger>
+                <PopoverContent align="center">
+                  {popoverContent(recipe)}
+                </PopoverContent>
+              </Popover>
+            )}
           </CarouselItem>
         ))}
       </CarouselContent>

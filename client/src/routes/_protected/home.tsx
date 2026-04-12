@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { RecipeCarousel } from "@/components/ui/recipe-carousel";
 import { RecipeCarouselSkeleton } from "@/components/ui/recipe-carousel-skeleton";
 import { getFridgeBasedRecipesQueryOptions } from "@/query-options/get-fridge-based-recipes-query-options";
+import { getRecipeSimilarityExplanationQueryOptions } from "@/query-options/get-recipe-similarity-explanation-query-options";
 import { getSimilarToLastLikedRecipesQueryOptions } from "@/query-options/get-similar-to-last-liked-recipes-query-options";
 import { getTopPicksRecipesQueryOptions } from "@/query-options/get-top-picks-recipes-query-options";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -77,6 +78,40 @@ function TopPicksSection() {
   );
 }
 
+function SimilarToLastLikedSection() {
+  const { data: basic } = useSuspenseQuery(
+    getSimilarToLastLikedRecipesQueryOptions("basic"),
+  );
+  const { data: advanced } = useSuspenseQuery(
+    getSimilarToLastLikedRecipesQueryOptions("advanced"),
+  );
+
+  return basic != null && advanced != null ? (
+    <>
+      <p className="text-base sm:text-lg text-muted-foreground">
+        Explore recipes similar to <i>"{basic.basedOn}"</i>.
+      </p>
+      <RecipeCarousel recipes={basic.recipes} />
+      <RecipeCarousel recipes={advanced.recipes} />
+    </>
+  ) : (
+    <div className="flex flex-col sm:w-[95%] max-w-6xl items-center justify-center space-y-1 bg-accent/30 rounded-xl px-8 py-4 mt-6 border border-accent shadow-md">
+      <div className="bg-accent p-2.5 shadow-sm rounded-lg mb-3">
+        <UtensilsCrossed size={25} />
+      </div>
+      <p className="text-xl font-semibold text-secondary-foreground text-center">
+        No similar recipes found yet
+      </p>
+      <p className="text-base text-muted-foreground mb-4 text-center">
+        Like some recipes to get personalized recommendations!
+      </p>
+      <Button asChild className="px-6">
+        <Link to="/search">Go to Search</Link>
+      </Button>
+    </div>
+  );
+}
+
 function FridgeBasedSection() {
   const { data } = useSuspenseQuery(getFridgeBasedRecipesQueryOptions());
   return data.length > 0 ? (
@@ -104,40 +139,6 @@ function FridgeBasedSection() {
   );
 }
 
-function SimilarToLastLikedSection() {
-  const { data: basic } = useSuspenseQuery(
-    getSimilarToLastLikedRecipesQueryOptions("basic"),
-  );
-  const { data: advanced } = useSuspenseQuery(
-    getSimilarToLastLikedRecipesQueryOptions("advanced"),
-  );
-
-  return basic != null && advanced != null ? (
-    <>
-      <p className="text-base sm:text-lg text-muted-foreground">
-        Explore recipes similar to <i>"{basic.basedOn}"</i>.
-      </p>
-      <RecipeCarousel recipes={basic.recipes} />
-      <RecipeCarousel recipes={advanced.recipes} />
-    </>
-  ) : (
-    <div className="flex flex-col sm:w-[95%] max-w-6xl items-center justify-center space-y-1 bg-accent/30 rounded-xl px-8 py-4 mt-6 border border-accent shadow-md">
-      <div className="bg-accent p-2.5 shadow-sm rounded-lg  mb-3">
-        <UtensilsCrossed size={25} />
-      </div>
-      <p className="text-xl font-semibold text-secondary-foreground text-center">
-        No similar recipes found yet
-      </p>
-      <p className="text-base text-muted-foreground mb-4 text-center">
-        Like some recipes to get personalized recommendations!
-      </p>
-      <Button asChild className="px-6">
-        <Link to="/search">Go to Search</Link>
-      </Button>
-    </div>
-  );
-}
-
 function SimilarToLastLikedSkeleton() {
   return (
     <>
@@ -146,5 +147,31 @@ function SimilarToLastLikedSkeleton() {
       </p>
       <RecipeCarouselSkeleton />
     </>
+  );
+}
+
+function SimilarityExplanation({
+  recipe1Id,
+  recipe2Id,
+}: {
+  recipe1Id: string;
+  recipe2Id: string;
+}) {
+  const { data } = useSuspenseQuery(
+    getRecipeSimilarityExplanationQueryOptions(recipe1Id, recipe2Id),
+  );
+
+  return (
+    <div className="max-w-xs">
+      <h3 className="text-sm font-semibold text-primary mb-2">
+        `${data.sharedIngredients.length}` shared ingredients
+      </h3>
+      <h3 className="text-sm font-semibold text-primary mb-2">
+        `${data.sharedCuisines.length}` shared cuisines
+      </h3>
+      <h3 className="text-sm font-semibold text-primary mb-2">
+        `${data.sharedDishTypes.length}` shared dish types
+      </h3>
+    </div>
   );
 }

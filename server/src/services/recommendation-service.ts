@@ -106,7 +106,7 @@ export class RecommendationService implements IRecommendationService {
     recipe1Id: string,
     recipe2Id: string,
   ): Promise<SimilarityExplanation> {
-    return await this.recommendationRepository.explainRecipeSimilarity(
+    return await this.recommendationRepository.getSimilarityExplanation(
       recipe1Id,
       recipe2Id,
     );
