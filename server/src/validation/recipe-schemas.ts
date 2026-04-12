@@ -42,14 +42,16 @@ const getAllSchema = z.object({
   }),
 });
 
+const idSchema = z
+  .string({
+    required_error: "Id is required",
+    invalid_type_error: "Id must be a string",
+  })
+  .uuid({ message: "Id must be a valid UUID" });
+
 const getByIdSchema = z.object({
   params: z.object({
-    id: z
-      .string({
-        required_error: "Id is required",
-        invalid_type_error: "Id must be a string",
-      })
-      .uuid({ message: "Id must be a valid UUID" }),
+    id: idSchema,
   }),
 });
 
@@ -59,8 +61,16 @@ const getRecommendedRecipesSchema = z.object({
   }),
 });
 
+const getSimilarityExplanationSchema = z.object({
+  params: z.object({
+    id: idSchema,
+    otherId: idSchema,
+  }),
+});
+
 export const recipeSchemas = {
   getAllSchema,
   getByIdSchema,
   getRecommendedRecipesSchema,
+  getSimilarityExplanationSchema,
 };

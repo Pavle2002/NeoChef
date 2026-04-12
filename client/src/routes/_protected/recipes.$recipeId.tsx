@@ -1,9 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Image } from "@/components/ui/image";
+import { RecipeCarousel } from "@/components/ui/recipe-carousel";
 import { formatCompactNumber } from "@/lib/format-number";
 import { useToggleLike } from "@/mutations/use-toggle-like";
 import { useToggleSave } from "@/mutations/use-toggle-save";
 import { getRecipeQueryOptions } from "@/query-options/get-recipe-query-options";
+import { getSimilarRecipesQueryOptions } from "@/query-options/get-similar-recipes-query-options";
 import type { ExtendedRecipe } from "@neochef/common";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
@@ -14,6 +16,7 @@ export const Route = createFileRoute("/_protected/recipes/$recipeId")({
   loader: async ({ params, context: { queryClient } }) => {
     const { recipeId } = params;
     queryClient.ensureQueryData(getRecipeQueryOptions(recipeId));
+    queryClient.ensureQueryData(getSimilarRecipesQueryOptions(recipeId));
   },
   staticData: { title: "Recipe Details" },
 });
@@ -37,7 +40,7 @@ function RouteComponent() {
       />
       <ActionButtons recipe={recipe} />
 
-      <div className="grid lg:grid-cols-12 gap-8">
+      <div className="grid lg:grid-cols-12 gap-8 pb-6 border-b border-accent">
         <div className="lg:col-span-4 space-y-8 ">
           <IngredientsList extendedIngredients={extendedIngredients} />
           <NutritionInfo recipe={recipe} />
@@ -58,6 +61,8 @@ function RouteComponent() {
           </div>
         </div>
       </div>
+
+      <SimilarRecipes />
     </div>
   );
 }
@@ -301,6 +306,22 @@ function Instructions({ instructions }: { instructions: string[] }) {
           </div>
         </div>
       ))}
+    </div>
+  );
+}
+
+function SimilarRecipes() {
+  const { recipeId } = Route.useParams();
+  const { data: similarRecipes } = useSuspenseQuery(
+    getSimilarRecipesQueryOptions(recipeId),
+  );
+
+  return (
+    <div>
+      <h2 className="text-primary text-3xl font-bold mb-4">
+        🔎 Similar Recipes
+      </h2>
+      <RecipeCarousel recipes={similarRecipes} />
     </div>
   );
 }

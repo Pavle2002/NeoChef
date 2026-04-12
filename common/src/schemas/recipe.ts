@@ -1,5 +1,8 @@
 import { z } from "zod";
-import { ExtendedIngredientDataSchema } from "./ingredient.js";
+import {
+  CanonicalIngredientSchema,
+  ExtendedIngredientDataSchema,
+} from "./ingredient.js";
 import { ExtendedIngredientSchema } from "./ingredient.js";
 import { CuisineSchema } from "./cuisine.js";
 import { DietSchema } from "./diet.js";
@@ -80,6 +83,12 @@ export const RecommendationModeSchema = z
   .enum(["basic", "advanced"])
   .default("basic");
 
+export const SimilarityExplanationSchema = z.object({
+  sharedIngredients: CanonicalIngredientSchema.array(),
+  sharedCuisines: CuisineSchema.array(),
+  sharedDishTypes: DishTypeSchema.array(),
+});
+
 export type Recipe = z.infer<typeof RecipeSchema>;
 export type ExtendedRecipe = z.infer<typeof ExtendedRecipeSchema>;
 export type RecipeData = z.infer<typeof RecipeDataSchema>;
@@ -87,3 +96,4 @@ export type ExtendedRecipeData = z.infer<typeof ExtendedRecipeDataSchema>;
 export type RecipeFilters = z.infer<typeof RecipeFiltersSchema>;
 export type RecipeSortOptions = z.infer<typeof RecipeSortOptionsSchema>;
 export type RecommendationMode = z.infer<typeof RecommendationModeSchema>;
+export type SimilarityExplanation = z.infer<typeof SimilarityExplanationSchema>;

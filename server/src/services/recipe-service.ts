@@ -142,4 +142,8 @@ export class RecipeService implements IRecipeService {
     ]);
     return { recipes, totalCount };
   }
+
+  async getSimilarRecipes(id: string, limit: number): Promise<Recipe[]> {
+    return await this.recipeRepository.findSimilarRecipes(id, limit);
+  }
 }

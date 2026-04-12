@@ -6,13 +6,32 @@ import { isAuthenticated } from "@middlewares/auth-middleware.js";
 import { recommendationController } from "@controllers/recommendation-controller.js";
 import { rateLimiter } from "@middlewares/rate-limiter.js";
 import { config } from "@config/config.js";
+import { get } from "http";
 
-const { getById, getAll, getTrending, like, unlike, save, unsave } =
-  recipeController;
-const { getRecommendedRecipes, getFridgeBasedRecipes, getSimilarToLastLiked } =
-  recommendationController;
-const { getByIdSchema, getAllSchema, getRecommendedRecipesSchema } =
-  recipeSchemas;
+const {
+  getById,
+  getAll,
+  getTrending,
+  like,
+  unlike,
+  save,
+  unsave,
+  getSimilarRecipes,
+} = recipeController;
+
+const {
+  getRecommendedRecipes,
+  getFridgeBasedRecipes,
+  getSimilarToLastLiked,
+  getSimilarityExplanation,
+} = recommendationController;
+
+const {
+  getByIdSchema,
+  getAllSchema,
+  getRecommendedRecipesSchema,
+  getSimilarityExplanationSchema,
+} = recipeSchemas;
 
 const router = Router();
 
@@ -37,9 +56,14 @@ router.get(
 );
 router.get("/recommended/fridge", strictLimiter, getFridgeBasedRecipes);
 router.get("/:id", validate(getByIdSchema), getById);
+router.get("/:id/similar", validate(getByIdSchema), getSimilarRecipes);
+router.get(
+  "/:id/similarity/:otherId/explanation",
+  validate(getSimilarityExplanationSchema),
+  getSimilarityExplanation,
+);
 router.post("/:id/like", validate(getByIdSchema), like);
 router.post("/:id/save", validate(getByIdSchema), save);
 router.delete("/:id/like", validate(getByIdSchema), unlike);
 router.delete("/:id/save", validate(getByIdSchema), unsave);
-
 export { router as recipeRoutes };

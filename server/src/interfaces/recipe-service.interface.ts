@@ -18,4 +18,5 @@ export interface IRecipeService {
     searchQuery?: string,
   ): Promise<{ recipes: Recipe[]; totalCount: number }>;
   getTrending(): Promise<Recipe[]>;
+  getSimilarRecipes(id: string, limit: number): Promise<Recipe[]>;
 }

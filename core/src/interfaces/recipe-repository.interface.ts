@@ -34,4 +34,5 @@ export interface IRecipeRepository {
   addDiet(recipeId: string, diet: Diet): Promise<void>;
   addDishType(recipeId: string, dishType: DishType): Promise<void>;
   countAll(filters: RecipeFilters, searchEmbedding?: number[]): Promise<number>;
+  findSimilarRecipes(id: string, limit: number): Promise<Recipe[]>;
 }

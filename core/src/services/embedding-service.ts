@@ -170,15 +170,6 @@ export class EmbeddingService implements IEmbeddingService {
 
         UNION ALL
 
-        MATCH (r:Recipe)-[:SUITABLE_FOR]->(d:Diet)
-        RETURN 
-          r AS source,
-          d AS target,
-          'SUITABLE_FOR' AS relType,
-          1.5 AS weight
-
-        UNION ALL
-
         MATCH (r:Recipe)-[:IS_OF_TYPE]->(d:DishType)
         RETURN 
           r AS source,

@@ -376,11 +376,33 @@ export class RecipeRepository implements IRecipeRepository {
     return { matchClauses, whereClauses, params };
   }
 
-  private parseSearchQuery(query: string) {
-    const sanitized = query.replace(/[^a-zA-Z0-9\s]/g, "");
-    return sanitized
-      .split(/\s+/)
-      .map((word) => word.trim() + "~1")
-      .join(" ");
+  async findSimilarRecipes(id: string, limit: number): Promise<Recipe[]> {
+    const result = await this.queryExecutor.run(
+      `MATCH (r:Recipe {id: $id})
+      WHERE r.similarityEmbedding IS NOT NULL
+      MATCH (similar:Recipe)
+      WHERE similar.id <> $id
+        AND similar.similarityEmbedding IS NOT NULL
+
+      WITH similar, gds.similarity.cosine(r.similarityEmbedding, similar.similarityEmbedding) AS similarity
+      ORDER BY similarity DESC
+      LIMIT $limit
+      
+      OPTIONAL MATCH (similar)<-[l:LIKES]-(:User)
+      WITH similar, similarity, COUNT(DISTINCT l) AS likeCount
+      RETURN similar AS r, likeCount
+      ORDER BY similarity DESC`,
+      { id, limit: int(limit) },
+    );
+
+    const records = result.records;
+    const similarRecipes = records.map((record) => {
+      const recipe = record.get("r").properties;
+      recipe.createdAt = recipe.createdAt.toString();
+      recipe.likeCount = record.get("likeCount");
+      return recipe as Recipe;
+    });
+
+    return similarRecipes;
   }
 }

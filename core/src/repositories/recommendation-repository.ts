@@ -1,4 +1,10 @@
-import type { Recipe } from "@neochef/common";
+import type {
+  CanonicalIngredient,
+  Cuisine,
+  DishType,
+  Recipe,
+  SimilarityExplanation,
+} from "@neochef/common";
 import type { IRecommendationRepository } from "../interfaces/recommendation-repository.interface.js";
 import type { IQueryExecutor } from "../interfaces/query-executor.interface.js";
 
@@ -89,45 +95,6 @@ export class RecommendationRepository implements IRecommendationRepository {
     });
   }
 
-  async findFridgeBased(userId: string): Promise<Recipe[]> {
-    const query = `
-      MATCH (u:User {id: $userId})
-      MATCH (u)-[:HAS]->(userCi:CanonicalIngredient)
-      MATCH (r:Recipe)-[:CONTAINS]->(i:Ingredient)-[:MAPS_TO]->(matchedCi:CanonicalIngredient)
-      WHERE matchedCi = userCi OR (matchedCi)-[:IS_A*]->(userCi) OR (userCi)-[:IS_A*]->(matchedCi)
-      
-      WITH r, count(DISTINCT matchedCi) as matchCount
-      
-      // Find total canonical ingredients for these candidate recipes
-      MATCH (r)-[:CONTAINS]->(Ingredient)-[:MAPS_TO]->(allCi:CanonicalIngredient)
-      WITH r, matchCount, count(DISTINCT allCi) as totalCanonicalIngredients
-      
-      // Calculate score:
-      // 1. Coverage (How much of the recipe can I make? - based on canonical ingredients)
-      // 2. Usage (How many of my canonical ingredients does it use?)
-      WITH r, matchCount, totalCanonicalIngredients, 
-           (toFloat(matchCount) / totalCanonicalIngredients) as coverage
-      
-      // Filter out recipes with very low coverage (e.g., < 20%) to avoid irrelevant suggestions
-      WHERE coverage >= 0.15
-           
-      ORDER BY coverage DESC, matchCount DESC
-      LIMIT 10
-      
-      OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
-      RETURN r, count(l) as likeCount
-    `;
-
-    const result = await this.queryExecutor.run(query, { userId });
-
-    return result.records.map((record) => {
-      const recipe = record.get("r").properties;
-      recipe.createdAt = recipe.createdAt.toString();
-      recipe.likeCount = record.get("likeCount");
-      return recipe as Recipe;
-    });
-  }
-
   async findSimilarToLastLikedBasic(
     userId: string,
   ): Promise<{ basedOn: string; recipes: Recipe[] } | null> {
@@ -191,28 +158,67 @@ export class RecommendationRepository implements IRecommendationRepository {
     return { basedOn, recipes };
   }
 
+  async findFridgeBased(userId: string): Promise<Recipe[]> {
+    const query = `
+      MATCH (u:User {id: $userId})
+      MATCH (u)-[:HAS]->(userCi:CanonicalIngredient)
+      MATCH (r:Recipe)-[:CONTAINS]->(i:Ingredient)-[:MAPS_TO]->(matchedCi:CanonicalIngredient)
+      WHERE matchedCi = userCi OR (matchedCi)-[:IS_A*]->(userCi) OR (userCi)-[:IS_A*]->(matchedCi)
+      
+      WITH r, count(DISTINCT matchedCi) as matchCount
+      
+      // Find total canonical ingredients for these candidate recipes
+      MATCH (r)-[:CONTAINS]->(Ingredient)-[:MAPS_TO]->(allCi:CanonicalIngredient)
+      WITH r, matchCount, count(DISTINCT allCi) as totalCanonicalIngredients
+      
+      // Calculate score:
+      // 1. Coverage (How much of the recipe can I make? - based on canonical ingredients)
+      // 2. Usage (How many of my canonical ingredients does it use?)
+      WITH r, matchCount, totalCanonicalIngredients, 
+           (toFloat(matchCount) / totalCanonicalIngredients) as coverage
+      
+      // Filter out recipes with very low coverage (e.g., < 20%) to avoid irrelevant suggestions
+      WHERE coverage >= 0.15
+           
+      ORDER BY coverage DESC, matchCount DESC
+      LIMIT 10
+      
+      OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
+      RETURN r, count(l) as likeCount
+    `;
+
+    const result = await this.queryExecutor.run(query, { userId });
+
+    return result.records.map((record) => {
+      const recipe = record.get("r").properties;
+      recipe.createdAt = recipe.createdAt.toString();
+      recipe.likeCount = record.get("likeCount");
+      return recipe as Recipe;
+    });
+  }
+
   async findTopPicksAdvanced(userId: string): Promise<Recipe[]> {
     const query = `
-    MATCH (u:User {id: $userId})
-    WHERE u.recommendationEmbedding IS NOT NULL
+      MATCH (u:User {id: $userId})
+      WHERE u.recommendationEmbedding IS NOT NULL
 
-    MATCH (r:Recipe)
-    WHERE r.recommendationEmbedding IS NOT NULL
-      AND NOT (u)-[:LIKES|SAVED]->(r)
-      AND NOT EXISTS {
-        MATCH (u)-[:DISLIKES]->(disliked:CanonicalIngredient)
-        MATCH (r)-[:CONTAINS]->(:Ingredient)-[:MAPS_TO]->(ci:CanonicalIngredient)
-        WHERE ci = disliked OR (ci)-[:IS_A*]->(disliked)
-      }
+      MATCH (r:Recipe)
+      WHERE r.recommendationEmbedding IS NOT NULL
+        AND NOT (u)-[:LIKES|SAVED]->(r)
+        AND NOT EXISTS {
+          MATCH (u)-[:DISLIKES]->(disliked:CanonicalIngredient)
+          MATCH (r)-[:CONTAINS]->(:Ingredient)-[:MAPS_TO]->(ci:CanonicalIngredient)
+          WHERE ci = disliked OR (ci)-[:IS_A*]->(disliked)
+        }
 
-    WITH u, r, gds.similarity.cosine(u.recommendationEmbedding, r.recommendationEmbedding) AS similarity
+      WITH u, r, gds.similarity.cosine(u.recommendationEmbedding, r.recommendationEmbedding) AS similarity
 
-    ORDER BY similarity DESC
-    LIMIT 10
+      ORDER BY similarity DESC
+      LIMIT 10
 
-    OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
-    RETURN r, count(l) as likeCount
-    `;
+      OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
+      RETURN r, count(l) as likeCount
+      `;
 
     const result = await this.queryExecutor.run(query, { userId });
 
@@ -263,5 +269,59 @@ export class RecommendationRepository implements IRecommendationRepository {
     });
 
     return { basedOn, recipes };
+  }
+
+  async getSimilarityExplanation(
+    recipe1Id: string,
+    recipe2Id: string,
+  ): Promise<SimilarityExplanation> {
+    const query = `
+      MATCH (r1:Recipe {id: $recipe1Id})
+      MATCH (r2:Recipe {id: $recipe2Id})
+
+      OPTIONAL MATCH (r1)-[:BELONGS_TO]->(c:Cuisine)<-[:BELONGS_TO]-(r2)
+      WITH r1, r2, collect(DISTINCT c.name) AS sharedCuisines
+
+      OPTIONAL MATCH (r1)-[:IS_OF_TYPE]->(dt:DishType)<-[:IS_OF_TYPE]-(r2)
+      WITH r1, r2, sharedCuisines, collect(DISTINCT dt.name) AS sharedDishTypes
+
+      OPTIONAL MATCH (r1)-[:CONTAINS]->(:Ingredient)-[:MAPS_TO]->(r1Ci:CanonicalIngredient)
+      OPTIONAL MATCH (r2)-[:CONTAINS]->(:Ingredient)-[:MAPS_TO]->(r2Ci:CanonicalIngredient)
+      WHERE r1Ci = r2Ci OR (r1Ci)-[:IS_A*]->(r2Ci) OR (r2Ci)-[:IS_A*]->(r1Ci)
+      WITH r1, r2, sharedCuisines, sharedDishTypes, collect(DISTINCT r1Ci.name) AS sharedIngredients    
+      
+      RETURN sharedCuisines, sharedDishTypes, sharedIngredients
+    `;
+
+    const result = await this.queryExecutor.run(query, {
+      recipe1Id,
+      recipe2Id,
+    });
+    const record = result.records[0];
+    if (!record) {
+      return {
+        sharedCuisines: [],
+        sharedDishTypes: [],
+        sharedIngredients: [],
+      };
+    }
+
+    const sharedCuisines = record
+      .get("sharedCuisines")
+      .map((c: any) => c.properties) as Cuisine[];
+
+    const sharedDishTypes = record
+      .get("sharedDishTypes")
+      .map((dt: any) => dt.properties) as DishType[];
+
+    const sharedIngredients = record
+      .get("sharedIngredients")
+      .map((i: any) => i.properties) as CanonicalIngredient[];
+
+    return {
+      sharedCuisines,
+      sharedDishTypes,
+      sharedIngredients,
+    };
   }
 }

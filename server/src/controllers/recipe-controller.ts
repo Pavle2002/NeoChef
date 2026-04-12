@@ -73,6 +73,13 @@ async function unsave(req: Request, res: Response): Promise<void> {
   sendSuccess(res, 200, null, "Recipe unsaved successfully");
 }
 
+async function getSimilarRecipes(req: Request, res: Response): Promise<void> {
+  const recipeId = req.validated?.params?.id as string;
+
+  const recipes = await recipeService.getSimilarRecipes(recipeId, 10);
+  sendSuccess(res, 200, recipes, "Similar recipes retrieved successfully");
+}
+
 export const recipeController = {
   getById,
   getAll,
@@ -81,4 +88,5 @@ export const recipeController = {
   unlike,
   save,
   unsave,
+  getSimilarRecipes,
 };
