@@ -280,16 +280,14 @@ export class RecommendationRepository implements IRecommendationRepository {
       MATCH (r2:Recipe {id: $recipe2Id})
 
       OPTIONAL MATCH (r1)-[:BELONGS_TO]->(c:Cuisine)<-[:BELONGS_TO]-(r2)
-      WITH r1, r2, collect(DISTINCT c.name) AS sharedCuisines
+      WITH r1, r2, collect(DISTINCT c) AS sharedCuisines
 
       OPTIONAL MATCH (r1)-[:IS_OF_TYPE]->(dt:DishType)<-[:IS_OF_TYPE]-(r2)
-      WITH r1, r2, sharedCuisines, collect(DISTINCT dt.name) AS sharedDishTypes
+      WITH r1, r2, sharedCuisines, collect(DISTINCT dt) AS sharedDishTypes
 
-      OPTIONAL MATCH (r1)-[:CONTAINS]->(:Ingredient)-[:MAPS_TO]->(r1Ci:CanonicalIngredient)
-      OPTIONAL MATCH (r2)-[:CONTAINS]->(:Ingredient)-[:MAPS_TO]->(r2Ci:CanonicalIngredient)
-      WHERE r1Ci = r2Ci OR (r1Ci)-[:IS_A*]->(r2Ci) OR (r2Ci)-[:IS_A*]->(r1Ci)
-      WITH r1, r2, sharedCuisines, sharedDishTypes, collect(DISTINCT r1Ci.name) AS sharedIngredients    
-      
+      OPTIONAL MATCH (r1)-[:CONTAINS]->(:Ingredient)-[:MAPS_TO]->(ci:CanonicalIngredient)<-[:MAPS_TO]-(:Ingredient)<-[:CONTAINS]-(r2)
+      WITH r1, r2, sharedCuisines, sharedDishTypes, collect(DISTINCT ci) AS sharedIngredients
+
       RETURN sharedCuisines, sharedDishTypes, sharedIngredients
     `;
 

@@ -331,7 +331,13 @@ function SimilarRecipes() {
     <RecipeCarousel
       recipes={similarRecipes}
       popoverContent={(recipe) => (
-        <Suspense fallback={<Spinner />}>
+        <Suspense
+          fallback={
+            <div className="flex justify-center items-center">
+              <Spinner />
+            </div>
+          }
+        >
           <SimilarityExplanation recipe1Id={recipeId} recipe2Id={recipe.id} />
         </Suspense>
       )}
@@ -351,16 +357,46 @@ function SimilarityExplanation({
   );
 
   return (
-    <div className="max-w-xs">
-      <h3 className="text-sm text-primary mb-2">
-        {explanation.sharedIngredients.length} shared ingredients
-      </h3>
-      <h3 className="text-sm text-primary mb-2">
-        {explanation.sharedCuisines.length} shared cuisines
-      </h3>
-      <h3 className="text-sm text-primary mb-2">
-        {explanation.sharedDishTypes.length} shared dish types
-      </h3>
+    <div className="max-w-xs space-y-2">
+      <div className="text-sm text-primary">
+        <h4>{explanation.sharedIngredients.length} shared ingredients</h4>
+        <div className="flex flex-wrap gap-2">
+          {explanation.sharedIngredients.map((ing) => (
+            <span
+              key={ing.name}
+              className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold uppercase tracking-wide"
+            >
+              {ing.name}
+            </span>
+          ))}
+        </div>
+      </div>
+      <div className="text-sm text-primary">
+        <h4>{explanation.sharedCuisines.length} shared cuisines</h4>
+        <div className="flex flex-wrap gap-2">
+          {explanation.sharedCuisines.map((cuisine) => (
+            <span
+              key={cuisine.name}
+              className="px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-xs font-semibold uppercase tracking-wide"
+            >
+              {cuisine.name}
+            </span>
+          ))}
+        </div>
+      </div>
+      <div className="text-sm text-primary">
+        <h4>{explanation.sharedDishTypes.length} shared dish types</h4>
+        <div className="flex flex-wrap gap-2">
+          {explanation.sharedDishTypes.map((dt) => (
+            <span
+              key={dt.name}
+              className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold uppercase tracking-wide"
+            >
+              {dt.name}
+            </span>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
