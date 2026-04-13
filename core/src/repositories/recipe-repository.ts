@@ -389,9 +389,7 @@ export class RecipeRepository implements IRecipeRepository {
       LIMIT $limit
       
       OPTIONAL MATCH (similar)<-[l:LIKES]-(:User)
-      WITH similar, similarity, COUNT(DISTINCT l) AS likeCount
-      RETURN similar AS r, likeCount
-      ORDER BY similarity DESC`,
+      RETURN similar AS r, COUNT(DISTINCT l) AS likeCount`,
       { id, limit: int(limit) },
     );
 

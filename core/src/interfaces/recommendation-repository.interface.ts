@@ -5,11 +5,11 @@ export interface IRecommendationRepository {
   findFridgeBased(userId: string): Promise<Recipe[]>;
   findSimilarToLastLikedBasic(
     userId: string,
-  ): Promise<{ basedOn: string; recipes: Recipe[] } | null>;
+  ): Promise<{ lastLiked: Recipe; recipes: Recipe[] } | null>;
   findTopPicksAdvanced(userId: string): Promise<Recipe[]>;
   findSimilarToLastLikedAdvanced(
     userId: string,
-  ): Promise<{ basedOn: string; recipes: Recipe[] } | null>;
+  ): Promise<{ lastLiked: Recipe; recipes: Recipe[] } | null>;
   getSimilarityExplanation(
     recipe1Id: string,
     recipe2Id: string,

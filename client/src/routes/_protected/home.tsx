@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { RecipeCarousel } from "@/components/ui/recipe-carousel";
 import { RecipeCarouselSkeleton } from "@/components/ui/recipe-carousel-skeleton";
+import { SimilarityExplanation } from "@/components/ui/similarity-explanation";
 import { getFridgeBasedRecipesQueryOptions } from "@/query-options/get-fridge-based-recipes-query-options";
-import { getRecipeSimilarityExplanationQueryOptions } from "@/query-options/get-recipe-similarity-explanation-query-options";
 import { getSimilarToLastLikedRecipesQueryOptions } from "@/query-options/get-similar-to-last-liked-recipes-query-options";
 import { getTopPicksRecipesQueryOptions } from "@/query-options/get-top-picks-recipes-query-options";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -72,7 +72,7 @@ function TopPicksSection() {
   );
   return (
     <>
-      <RecipeCarousel recipes={basic} />
+      {/* <RecipeCarousel recipes={basic} /> */}
       <RecipeCarousel recipes={advanced} />
     </>
   );
@@ -89,10 +89,26 @@ function SimilarToLastLikedSection() {
   return basic != null && advanced != null ? (
     <>
       <p className="text-base sm:text-lg text-muted-foreground">
-        Explore recipes similar to <i>"{basic.basedOn}"</i>.
+        Explore recipes similar to <i>"{basic.lastLiked.title}"</i>.
       </p>
-      <RecipeCarousel recipes={basic.recipes} />
-      <RecipeCarousel recipes={advanced.recipes} />
+      {/* <RecipeCarousel
+        recipes={basic.recipes}
+        popoverContent={(recipe) => (
+          <SimilarityExplanation
+            recipe1Id={basic.lastLiked.id}
+            recipe2Id={recipe.id}
+          />
+        )}
+      /> */}
+      <RecipeCarousel
+        recipes={advanced.recipes}
+        popoverContent={(recipe) => (
+          <SimilarityExplanation
+            recipe1Id={advanced.lastLiked.id}
+            recipe2Id={recipe.id}
+          />
+        )}
+      />
     </>
   ) : (
     <div className="flex flex-col sm:w-[95%] max-w-6xl items-center justify-center space-y-1 bg-accent/30 rounded-xl px-8 py-4 mt-6 border border-accent shadow-md">
@@ -147,31 +163,5 @@ function SimilarToLastLikedSkeleton() {
       </p>
       <RecipeCarouselSkeleton />
     </>
-  );
-}
-
-function SimilarityExplanation({
-  recipe1Id,
-  recipe2Id,
-}: {
-  recipe1Id: string;
-  recipe2Id: string;
-}) {
-  const { data } = useSuspenseQuery(
-    getRecipeSimilarityExplanationQueryOptions(recipe1Id, recipe2Id),
-  );
-
-  return (
-    <div className="max-w-xs">
-      <h3 className="text-sm font-semibold text-primary mb-2">
-        `${data.sharedIngredients.length}` shared ingredients
-      </h3>
-      <h3 className="text-sm font-semibold text-primary mb-2">
-        `${data.sharedCuisines.length}` shared cuisines
-      </h3>
-      <h3 className="text-sm font-semibold text-primary mb-2">
-        `${data.sharedDishTypes.length}` shared dish types
-      </h3>
-    </div>
   );
 }

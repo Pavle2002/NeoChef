@@ -1,13 +1,13 @@
+import { BadgeGroup } from "@/components/ui/badge-group";
 import { Button } from "@/components/ui/button";
 import { Image } from "@/components/ui/image";
 import { RecipeCarousel } from "@/components/ui/recipe-carousel";
 import { RecipeCarouselSkeleton } from "@/components/ui/recipe-carousel-skeleton";
-import { Spinner } from "@/components/ui/spinner";
+import { SimilarityExplanation } from "@/components/ui/similarity-explanation";
 import { formatCompactNumber } from "@/lib/format-number";
 import { useToggleLike } from "@/mutations/use-toggle-like";
 import { useToggleSave } from "@/mutations/use-toggle-save";
 import { getRecipeQueryOptions } from "@/query-options/get-recipe-query-options";
-import { getRecipeSimilarityExplanationQueryOptions } from "@/query-options/get-recipe-similarity-explanation-query-options";
 import { getSimilarRecipesQueryOptions } from "@/query-options/get-similar-recipes-query-options";
 import type { ExtendedRecipe } from "@neochef/common";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -99,30 +99,9 @@ function HeaderSection({
             {recipe.title}
           </h1>
           <div className="flex flex-wrap gap-2">
-            {diets.map((diet) => (
-              <span
-                key={diet.name}
-                className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold uppercase tracking-wide"
-              >
-                {diet.name}
-              </span>
-            ))}
-            {cuisines.map((cuisine) => (
-              <span
-                key={cuisine.name}
-                className="px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-xs font-semibold uppercase tracking-wide"
-              >
-                {cuisine.name}
-              </span>
-            ))}
-            {dishTypes.map((type) => (
-              <span
-                key={type.name}
-                className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold uppercase tracking-wide"
-              >
-                {type.name}
-              </span>
-            ))}
+            <BadgeGroup items={cuisines} color="orange" />
+            <BadgeGroup items={diets} color="green" />
+            <BadgeGroup items={dishTypes} color="blue" />
           </div>
         </div>
 
@@ -331,72 +310,8 @@ function SimilarRecipes() {
     <RecipeCarousel
       recipes={similarRecipes}
       popoverContent={(recipe) => (
-        <Suspense
-          fallback={
-            <div className="flex justify-center items-center">
-              <Spinner />
-            </div>
-          }
-        >
-          <SimilarityExplanation recipe1Id={recipeId} recipe2Id={recipe.id} />
-        </Suspense>
+        <SimilarityExplanation recipe1Id={recipeId} recipe2Id={recipe.id} />
       )}
     />
-  );
-}
-
-function SimilarityExplanation({
-  recipe1Id,
-  recipe2Id,
-}: {
-  recipe1Id: string;
-  recipe2Id: string;
-}) {
-  const { data: explanation } = useSuspenseQuery(
-    getRecipeSimilarityExplanationQueryOptions(recipe1Id, recipe2Id),
-  );
-
-  return (
-    <div className="max-w-xs space-y-2">
-      <div className="text-sm text-primary">
-        <h4>{explanation.sharedIngredients.length} shared ingredients</h4>
-        <div className="flex flex-wrap gap-2">
-          {explanation.sharedIngredients.map((ing) => (
-            <span
-              key={ing.name}
-              className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold uppercase tracking-wide"
-            >
-              {ing.name}
-            </span>
-          ))}
-        </div>
-      </div>
-      <div className="text-sm text-primary">
-        <h4>{explanation.sharedCuisines.length} shared cuisines</h4>
-        <div className="flex flex-wrap gap-2">
-          {explanation.sharedCuisines.map((cuisine) => (
-            <span
-              key={cuisine.name}
-              className="px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-xs font-semibold uppercase tracking-wide"
-            >
-              {cuisine.name}
-            </span>
-          ))}
-        </div>
-      </div>
-      <div className="text-sm text-primary">
-        <h4>{explanation.sharedDishTypes.length} shared dish types</h4>
-        <div className="flex flex-wrap gap-2">
-          {explanation.sharedDishTypes.map((dt) => (
-            <span
-              key={dt.name}
-              className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold uppercase tracking-wide"
-            >
-              {dt.name}
-            </span>
-          ))}
-        </div>
-      </div>
-    </div>
   );
 }

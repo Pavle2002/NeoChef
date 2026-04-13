@@ -97,15 +97,14 @@ export class RecommendationRepository implements IRecommendationRepository {
 
   async findSimilarToLastLikedBasic(
     userId: string,
-  ): Promise<{ basedOn: string; recipes: Recipe[] } | null> {
+  ): Promise<{ lastLiked: Recipe; recipes: Recipe[] } | null> {
     const query = `
       MATCH (u:User {id: $userId})-[l:LIKES]->(last:Recipe)
       WITH u, last
       ORDER BY l.likedAt DESC
       LIMIT 1
       
-      // Find candidate recipes that share Cuisine or DishType (pre-filter for performance)
-      MATCH (last)-[:BELONGS_TO|IS_OF_TYPE]->(attr)<-[:BELONGS_TO|IS_OF_TYPE]-(r:Recipe)
+      MATCH (r:Recipe)
       WHERE r.id <> last.id AND NOT (u)-[:LIKES|SAVED]->(r)
       WITH DISTINCT last, r, u
       
@@ -137,7 +136,7 @@ export class RecommendationRepository implements IRecommendationRepository {
       LIMIT 10
       
       OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
-      RETURN last.title as basedOn, r, count(l) as likeCount
+      RETURN last, r, count(l) as likeCount
     `;
 
     const result = await this.queryExecutor.run(query, { userId });
@@ -147,7 +146,7 @@ export class RecommendationRepository implements IRecommendationRepository {
       return null;
     }
 
-    const basedOn = firstRecord.get("basedOn");
+    const lastLiked = firstRecord.get("last").properties as Recipe;
     const recipes = result.records.map((record) => {
       const recipe = record.get("r").properties;
       recipe.createdAt = recipe.createdAt.toString();
@@ -155,7 +154,7 @@ export class RecommendationRepository implements IRecommendationRepository {
       return recipe as Recipe;
     });
 
-    return { basedOn, recipes };
+    return { lastLiked, recipes };
   }
 
   async findFridgeBased(userId: string): Promise<Recipe[]> {
@@ -232,7 +231,7 @@ export class RecommendationRepository implements IRecommendationRepository {
 
   async findSimilarToLastLikedAdvanced(
     userId: string,
-  ): Promise<{ basedOn: string; recipes: Recipe[] } | null> {
+  ): Promise<{ lastLiked: Recipe; recipes: Recipe[] } | null> {
     const query = `
       MATCH (u:User {id: $userId})-[l:LIKES]->(last:Recipe)
       WITH u, last
@@ -243,14 +242,14 @@ export class RecommendationRepository implements IRecommendationRepository {
       WHERE r.id <> last.id
         AND r.similarityEmbedding IS NOT NULL
         AND NOT (u)-[:LIKES|SAVED]->(r)
-      // Calculate similarity based on FastRP embeddings
+        
       WITH last, r, gds.similarity.cosine(last.similarityEmbedding, r.similarityEmbedding) as similarity
             
       ORDER BY similarity DESC
       LIMIT 10
       
       OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
-      RETURN last.title as basedOn, r, count(l) as likeCount
+      RETURN last, r, count(l) as likeCount
     `;
 
     const result = await this.queryExecutor.run(query, { userId });
@@ -260,7 +259,7 @@ export class RecommendationRepository implements IRecommendationRepository {
       return null;
     }
 
-    const basedOn = firstRecord.get("basedOn");
+    const lastLiked = firstRecord.get("last").properties as Recipe;
     const recipes = result.records.map((record) => {
       const recipe = record.get("r").properties;
       recipe.createdAt = recipe.createdAt.toString();
@@ -268,7 +267,7 @@ export class RecommendationRepository implements IRecommendationRepository {
       return recipe as Recipe;
     });
 
-    return { basedOn, recipes };
+    return { lastLiked, recipes };
   }
 
   async getSimilarityExplanation(
@@ -279,14 +278,25 @@ export class RecommendationRepository implements IRecommendationRepository {
       MATCH (r1:Recipe {id: $recipe1Id})
       MATCH (r2:Recipe {id: $recipe2Id})
 
+      OPTIONAL MATCH (r1)-[:CONTAINS]->(:Ingredient)-[:MAPS_TO]->(ci1:CanonicalIngredient)
+      WITH r1, r2, collect(DISTINCT ci1) AS r1Ingredients
+
+      OPTIONAL MATCH (r2)-[:CONTAINS]->(:Ingredient)-[:MAPS_TO]->(ci2:CanonicalIngredient)
+      WITH r1, r2, r1Ingredients, collect(DISTINCT ci2) AS r2Ingredients
+
+      WITH r1, r2, [ci IN r1Ingredients
+            WHERE ANY(other IN r2Ingredients
+              WHERE ci = other
+                OR EXISTS { MATCH (ci)-[:IS_A]->(other) }
+                OR EXISTS { MATCH (other)-[:IS_A]->(ci) }
+            )
+          ] AS sharedIngredients
+
       OPTIONAL MATCH (r1)-[:BELONGS_TO]->(c:Cuisine)<-[:BELONGS_TO]-(r2)
-      WITH r1, r2, collect(DISTINCT c) AS sharedCuisines
+      WITH r1, r2, sharedIngredients, collect(DISTINCT c) AS sharedCuisines
 
       OPTIONAL MATCH (r1)-[:IS_OF_TYPE]->(dt:DishType)<-[:IS_OF_TYPE]-(r2)
-      WITH r1, r2, sharedCuisines, collect(DISTINCT dt) AS sharedDishTypes
-
-      OPTIONAL MATCH (r1)-[:CONTAINS]->(:Ingredient)-[:MAPS_TO]->(ci:CanonicalIngredient)<-[:MAPS_TO]-(:Ingredient)<-[:CONTAINS]-(r2)
-      WITH r1, r2, sharedCuisines, sharedDishTypes, collect(DISTINCT ci) AS sharedIngredients
+      WITH r1, r2, sharedIngredients, sharedCuisines, collect(DISTINCT dt) AS sharedDishTypes
 
       RETURN sharedCuisines, sharedDishTypes, sharedIngredients
     `;

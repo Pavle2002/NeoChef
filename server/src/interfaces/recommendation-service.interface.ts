@@ -9,7 +9,7 @@ export interface IRecommendationService {
   getSimilarToLastLiked(
     userId: string,
     mode: RecommendationMode,
-  ): Promise<{ basedOn: string; recipes: Recipe[] } | null>;
+  ): Promise<{ lastLiked: Recipe; recipes: Recipe[] } | null>;
   getFridgeBased(userId: string): Promise<Recipe[]>;
   getSimilarityExplanation(
     recipe1Id: string,
