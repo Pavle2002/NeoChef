@@ -4,7 +4,7 @@ import { limiter } from "../config/limiter.js";
 import { ErrorCodes, type FetchJob } from "@neochef/common";
 import { SpoonacularError } from "../errors/spoonacular-error.js";
 import { QUEUES, type SpoonacularResponse } from "@neochef/core";
-import { storageService, transformQueue, connection } from "../services.js";
+import { storageService, connection, queues } from "../services.js";
 
 const pageSize = 100;
 
@@ -46,7 +46,7 @@ export const fetchWorker = new Worker<FetchJob>(
 
     await storageService.uploadPage(page, rawData);
 
-    await transformQueue.add("transform-job", {
+    await queues[QUEUES.TRANSFORM].add("transform-job", {
       correlationId,
       page,
       type: "Transform",

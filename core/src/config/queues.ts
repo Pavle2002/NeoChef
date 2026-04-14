@@ -1,5 +1,10 @@
-import type { FetchJob, TransformJob, UpsertJob } from "@neochef/common";
-import { Queue } from "bullmq";
+import type {
+  FastRPJob,
+  FetchJob,
+  TransformJob,
+  UpsertJob,
+} from "@neochef/common";
+import { Queue, QueueEvents } from "bullmq";
 
 export const QUEUES = {
   FETCH: "fetch-queue",
@@ -13,7 +18,25 @@ export type QueueConnection = {
   port: number;
 };
 
-export function getFetchQueue(connection: QueueConnection) {
+export function getQueues(connection: QueueConnection) {
+  return {
+    [QUEUES.FETCH]: getFetchQueue(connection),
+    [QUEUES.TRANSFORM]: getTransformQueue(connection),
+    [QUEUES.UPSERT]: getUpsertQueue(connection),
+    [QUEUES.FASTRP]: getFastRPQueue(connection),
+  } as const;
+}
+
+export function getQueueEvents(connection: QueueConnection) {
+  return {
+    [QUEUES.FETCH]: new QueueEvents(QUEUES.FETCH, { connection }),
+    [QUEUES.TRANSFORM]: new QueueEvents(QUEUES.TRANSFORM, { connection }),
+    [QUEUES.UPSERT]: new QueueEvents(QUEUES.UPSERT, { connection }),
+    [QUEUES.FASTRP]: new QueueEvents(QUEUES.FASTRP, { connection }),
+  } as const;
+}
+
+function getFetchQueue(connection: QueueConnection) {
   return new Queue<FetchJob>(QUEUES.FETCH, {
     connection,
     defaultJobOptions: {
@@ -24,7 +47,7 @@ export function getFetchQueue(connection: QueueConnection) {
   });
 }
 
-export function getTransformQueue(connection: QueueConnection) {
+function getTransformQueue(connection: QueueConnection) {
   return new Queue<TransformJob>(QUEUES.TRANSFORM, {
     connection,
     defaultJobOptions: {
@@ -34,7 +57,7 @@ export function getTransformQueue(connection: QueueConnection) {
   });
 }
 
-export function getUpsertQueue(connection: QueueConnection) {
+function getUpsertQueue(connection: QueueConnection) {
   return new Queue<UpsertJob>(QUEUES.UPSERT, {
     connection,
     defaultJobOptions: {
@@ -45,8 +68,8 @@ export function getUpsertQueue(connection: QueueConnection) {
   });
 }
 
-export function getFastRPQueue(connection: QueueConnection) {
-  return new Queue(QUEUES.FASTRP, {
+function getFastRPQueue(connection: QueueConnection) {
+  return new Queue<FastRPJob>(QUEUES.FASTRP, {
     connection,
     defaultJobOptions: {
       removeOnComplete: true,

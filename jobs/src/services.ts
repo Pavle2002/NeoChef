@@ -1,11 +1,10 @@
 import {
-  getTransformQueue,
-  getUpsertQueue,
   DriverQueryExecutor,
   IngredientRepository,
   UnitOfWorkFactory,
   EmbeddingService,
   S3StorageService,
+  getQueues,
 } from "@neochef/core";
 import { config } from "./config/config.js";
 import { neo4jClient } from "./config/neo4j.js";
@@ -16,8 +15,7 @@ export const connection = {
   port: config.redis.port,
 };
 
-export const transformQueue = getTransformQueue(connection);
-export const upsertQueue = getUpsertQueue(connection);
+export const queues = getQueues(connection);
 
 export const uowFactory = new UnitOfWorkFactory(neo4jClient);
 export const queryExecutor = new DriverQueryExecutor(neo4jClient);

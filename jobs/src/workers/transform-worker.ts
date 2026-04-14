@@ -11,7 +11,7 @@ import {
   embeddingService,
   storageService,
   connection,
-  upsertQueue,
+  queues,
 } from "../services.js";
 import { SpoonacularError } from "../errors/spoonacular-error.js";
 import { QUEUES } from "@neochef/core";
@@ -130,7 +130,7 @@ export const transformWorker = new Worker<TransformJob>(
       data: { correlationId, extendedRecipeData, type: "Upsert" as const },
     }));
 
-    await upsertQueue.addBulk(jobs);
+    await queues[QUEUES.UPSERT].addBulk(jobs);
   },
   { connection },
 );

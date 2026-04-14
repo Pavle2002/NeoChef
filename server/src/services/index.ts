@@ -15,11 +15,9 @@ import {
   DishTypeRepository,
   DriverQueryExecutor,
   EmbeddingService,
-  getFetchQueue,
-  getTransformQueue,
-  getUpsertQueue,
+  getQueueEvents,
+  getQueues,
   IngredientRepository,
-  QUEUES,
   RecipeRepository,
   RecommendationRepository,
   S3StorageService,
@@ -27,7 +25,6 @@ import {
   UserRepository,
 } from "@neochef/core";
 import { config } from "@config/config.js";
-import { QueueEvents } from "bullmq";
 import { r2Client } from "@config/r2.js";
 
 const queryExecutor = new DriverQueryExecutor(neo4jClient);
@@ -83,12 +80,5 @@ export const storageService = new S3StorageService(
 
 const connection = { host: config.redis.url, port: config.redis.port };
 
-export const fetchQueue = getFetchQueue(connection);
-export const transformQueue = getTransformQueue(connection);
-export const upsertQueue = getUpsertQueue(connection);
-
-export const fetchEvents = new QueueEvents(QUEUES.FETCH, { connection });
-export const transformEvents = new QueueEvents(QUEUES.TRANSFORM, {
-  connection,
-});
-export const upsertEvents = new QueueEvents(QUEUES.UPSERT, { connection });
+export const queues = getQueues(connection);
+export const queueEvents = getQueueEvents(connection);

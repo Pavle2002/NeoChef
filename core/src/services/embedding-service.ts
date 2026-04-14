@@ -1,6 +1,7 @@
 import type { IEmbeddingService } from "../interfaces/embedding-service.interface.js";
 import { EmbeddingServiceError } from "../errors/embedding-service-error.js";
 import type { IQueryExecutor } from "../interfaces/query-executor.interface.js";
+import type { ProjectionName } from "@neochef/common";
 
 export type Candidate = {
   id: string;
@@ -217,7 +218,7 @@ export class EmbeddingService implements IEmbeddingService {
     );
   }
 
-  async dropProjection(name: string): Promise<void> {
+  async dropProjection(name: ProjectionName): Promise<void> {
     await this.queryExecutor.run(
       `CALL gds.graph.drop('${name}', false) YIELD graphName;`,
     );
