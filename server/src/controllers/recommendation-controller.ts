@@ -35,27 +35,8 @@ async function getFridgeBasedRecipes(
   sendSuccess(res, 200, recipes, "Fridge-based recipes retrieved successfully");
 }
 
-async function getSimilarityExplanation(
-  req: Request,
-  res: Response,
-): Promise<void> {
-  const recipe1Id = req.validated?.params?.id as string;
-  const recipe2Id = req.validated?.params?.otherId as string;
-  const explanation = await recommendationService.getSimilarityExplanation(
-    recipe2Id,
-    recipe1Id,
-  );
-  sendSuccess(
-    res,
-    200,
-    explanation,
-    "Recipe similarity explanation retrieved successfully",
-  );
-}
-
 export const recommendationController = {
   getRecommendedRecipes,
   getFridgeBasedRecipes,
   getSimilarToLastLiked,
-  getSimilarityExplanation,
 };

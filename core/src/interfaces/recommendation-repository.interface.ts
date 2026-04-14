@@ -1,4 +1,4 @@
-import type { Recipe, SimilarityExplanation } from "@neochef/common";
+import type { Recipe } from "@neochef/common";
 
 export interface IRecommendationRepository {
   findTopPicksBasic(userId: string): Promise<Recipe[]>;
@@ -10,8 +10,4 @@ export interface IRecommendationRepository {
   findSimilarToLastLikedAdvanced(
     userId: string,
   ): Promise<{ lastLiked: Recipe; recipes: Recipe[] } | null>;
-  getSimilarityExplanation(
-    recipe1Id: string,
-    recipe2Id: string,
-  ): Promise<SimilarityExplanation>;
 }

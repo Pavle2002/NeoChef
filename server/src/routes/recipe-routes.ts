@@ -17,14 +17,11 @@ const {
   save,
   unsave,
   getSimilarRecipes,
+  getSimilarityExplanation,
 } = recipeController;
 
-const {
-  getRecommendedRecipes,
-  getFridgeBasedRecipes,
-  getSimilarToLastLiked,
-  getSimilarityExplanation,
-} = recommendationController;
+const { getRecommendedRecipes, getFridgeBasedRecipes, getSimilarToLastLiked } =
+  recommendationController;
 
 const {
   getByIdSchema,

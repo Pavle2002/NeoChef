@@ -4,6 +4,7 @@ import type {
   Recipe,
   RecipeFilters,
   RecipeSortOptions,
+  SimilarityExplanation,
 } from "@neochef/common";
 
 export interface IRecipeService {
@@ -19,4 +20,8 @@ export interface IRecipeService {
   ): Promise<{ recipes: Recipe[]; totalCount: number }>;
   getTrending(): Promise<Recipe[]>;
   getSimilarRecipes(id: string, limit: number): Promise<Recipe[]>;
+  getSimilarityExplanation(
+    id1: string,
+    id2: string,
+  ): Promise<SimilarityExplanation>;
 }

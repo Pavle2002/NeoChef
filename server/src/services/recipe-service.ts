@@ -8,6 +8,7 @@ import {
   type Recipe,
   type RecipeFilters,
   type RecipeSortOptions,
+  type SimilarityExplanation,
 } from "@neochef/common";
 import { CacheKeys } from "@utils/cache-keys.js";
 import {
@@ -145,5 +146,12 @@ export class RecipeService implements IRecipeService {
 
   async getSimilarRecipes(id: string, limit: number): Promise<Recipe[]> {
     return await this.recipeRepository.findSimilarRecipes(id, limit);
+  }
+
+  async getSimilarityExplanation(
+    id1: string,
+    id2: string,
+  ): Promise<SimilarityExplanation> {
+    return await this.recipeRepository.findSimilarityExplanation(id1, id2);
   }
 }

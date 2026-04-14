@@ -1,8 +1,4 @@
-import type {
-  Recipe,
-  RecommendationMode,
-  SimilarityExplanation,
-} from "@neochef/common";
+import type { Recipe, RecommendationMode } from "@neochef/common";
 import type { IRecipeService } from "@interfaces/recipe-service.interface.js";
 import type { IRecommendationService } from "@interfaces/recommendation-service.interface.js";
 import { CacheKeys } from "@utils/cache-keys.js";
@@ -100,15 +96,5 @@ export class RecommendationService implements IRecommendationService {
     );
 
     return result;
-  }
-
-  async getSimilarityExplanation(
-    recipe1Id: string,
-    recipe2Id: string,
-  ): Promise<SimilarityExplanation> {
-    return await this.recommendationRepository.getSimilarityExplanation(
-      recipe1Id,
-      recipe2Id,
-    );
   }
 }

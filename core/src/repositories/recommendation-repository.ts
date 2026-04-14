@@ -1,10 +1,4 @@
-import type {
-  CanonicalIngredient,
-  Cuisine,
-  DishType,
-  Recipe,
-  SimilarityExplanation,
-} from "@neochef/common";
+import type { Recipe } from "@neochef/common";
 import type { IRecommendationRepository } from "../interfaces/recommendation-repository.interface.js";
 import type { IQueryExecutor } from "../interfaces/query-executor.interface.js";
 
@@ -268,68 +262,5 @@ export class RecommendationRepository implements IRecommendationRepository {
     });
 
     return { lastLiked, recipes };
-  }
-
-  async getSimilarityExplanation(
-    recipe1Id: string,
-    recipe2Id: string,
-  ): Promise<SimilarityExplanation> {
-    const query = `
-      MATCH (r1:Recipe {id: $recipe1Id})
-      MATCH (r2:Recipe {id: $recipe2Id})
-
-      OPTIONAL MATCH (r1)-[:CONTAINS]->(:Ingredient)-[:MAPS_TO]->(ci1:CanonicalIngredient)
-      WITH r1, r2, collect(DISTINCT ci1) AS r1Ingredients
-
-      OPTIONAL MATCH (r2)-[:CONTAINS]->(:Ingredient)-[:MAPS_TO]->(ci2:CanonicalIngredient)
-      WITH r1, r2, r1Ingredients, collect(DISTINCT ci2) AS r2Ingredients
-
-      WITH r1, r2, [ci IN r1Ingredients
-            WHERE ANY(other IN r2Ingredients
-              WHERE ci = other
-                OR EXISTS { MATCH (ci)-[:IS_A]->(other) }
-                OR EXISTS { MATCH (other)-[:IS_A]->(ci) }
-            )
-          ] AS sharedIngredients
-
-      OPTIONAL MATCH (r1)-[:BELONGS_TO]->(c:Cuisine)<-[:BELONGS_TO]-(r2)
-      WITH r1, r2, sharedIngredients, collect(DISTINCT c) AS sharedCuisines
-
-      OPTIONAL MATCH (r1)-[:IS_OF_TYPE]->(dt:DishType)<-[:IS_OF_TYPE]-(r2)
-      WITH r1, r2, sharedIngredients, sharedCuisines, collect(DISTINCT dt) AS sharedDishTypes
-
-      RETURN sharedCuisines, sharedDishTypes, sharedIngredients
-    `;
-
-    const result = await this.queryExecutor.run(query, {
-      recipe1Id,
-      recipe2Id,
-    });
-    const record = result.records[0];
-    if (!record) {
-      return {
-        sharedCuisines: [],
-        sharedDishTypes: [],
-        sharedIngredients: [],
-      };
-    }
-
-    const sharedCuisines = record
-      .get("sharedCuisines")
-      .map((c: any) => c.properties) as Cuisine[];
-
-    const sharedDishTypes = record
-      .get("sharedDishTypes")
-      .map((dt: any) => dt.properties) as DishType[];
-
-    const sharedIngredients = record
-      .get("sharedIngredients")
-      .map((i: any) => i.properties) as CanonicalIngredient[];
-
-    return {
-      sharedCuisines,
-      sharedDishTypes,
-      sharedIngredients,
-    };
   }
 }

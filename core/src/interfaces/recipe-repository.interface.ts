@@ -9,6 +9,7 @@ import type {
   RecipeData,
   RecipeFilters,
   RecipeSortOptions,
+  SimilarityExplanation,
 } from "@neochef/common";
 
 export interface IRecipeRepository {
@@ -35,4 +36,8 @@ export interface IRecipeRepository {
   addDishType(recipeId: string, dishType: DishType): Promise<void>;
   countAll(filters: RecipeFilters, searchEmbedding?: number[]): Promise<number>;
   findSimilarRecipes(id: string, limit: number): Promise<Recipe[]>;
+  findSimilarityExplanation(
+    id1: string,
+    id2: string,
+  ): Promise<SimilarityExplanation>;
 }
