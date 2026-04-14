@@ -27,6 +27,12 @@ async function createConstraints(client: Driver): Promise<void> {
   `);
 
   await client.executeQuery(`
+    CREATE CONSTRAINT canonical_ingredient_name_unique IF NOT EXISTS
+    FOR (ci:CanonicalIngredient)
+    REQUIRE ci.name IS UNIQUE
+  `);
+
+  await client.executeQuery(`
     CREATE CONSTRAINT equipment_source_unique IF NOT EXISTS
     FOR (e:Equipment)
     REQUIRE (e.sourceName, e.sourceId) IS UNIQUE
@@ -86,8 +92,4 @@ async function createIndexes(client: Driver): Promise<void> {
       }
     }`,
   );
-  // await client.executeQuery(
-  //   `CREATE FULLTEXT INDEX recipeFullTextIndex IF NOT EXISTS
-  //   FOR (r:Recipe) ON EACH [r.title, r.description]`,
-  // );
 }

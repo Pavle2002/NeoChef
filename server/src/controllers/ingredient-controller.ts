@@ -48,9 +48,15 @@ async function addCanonical(req: Request, res: Response): Promise<void> {
   );
 }
 
+async function importCanonical(req: Request, res: Response): Promise<void> {
+  await ingredientService.importCanonical("./canonical.json");
+  sendSuccess(res, 200, null, "Canonical ingredients imported successfully");
+}
+
 export const ingredientController = {
   getAllCanonical,
   getAllUnmapped,
   getSimilarCanonical,
   addCanonical,
+  importCanonical,
 };

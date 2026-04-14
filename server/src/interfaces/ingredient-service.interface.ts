@@ -16,4 +16,5 @@ export interface IIngredientService {
     canonicalId: string,
     confidence: number,
   ): Promise<void>;
+  importCanonical(filePath: string): Promise<void>;
 }

@@ -16,6 +16,7 @@ import {
 import { getSavedPagesQueryOptions } from "@/query-options/get-saved-pages-query-options";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { useImportCanonicalIngredients } from "@/mutations/use-import-canonical-ingredients";
 
 type EventData = {
   type: string;
@@ -45,8 +46,7 @@ export const Route = createFileRoute("/_protected/dashboard")({
 
 function RouteComponent() {
   const { mutate } = useStartTransformJob();
-  const { data: savedPages } = useSuspenseQuery(getSavedPagesQueryOptions());
-  console.log(savedPages);
+  const { mutate: importCanonicalMutate } = useImportCanonicalIngredients();
 
   async function handleSubmit(event: React.SubmitEvent) {
     event.preventDefault();
@@ -58,6 +58,16 @@ function RouteComponent() {
 
   return (
     <>
+      <h2 className="text-3xl text-primary font-bold">
+        Import Canonical Ingredients
+      </h2>
+      <p className="text-muted-foreground mb-3">
+        This will seed the database with canonical ingredients from the
+        <i> canonical.json</i> file.
+      </p>
+      <Button className="max-w-xs mb-5" onClick={() => importCanonicalMutate()}>
+        Import Canonical Ingredients
+      </Button>
       <h2 className="text-3xl text-primary font-bold">Saved Pages</h2>
       <p className="text-muted-foreground mb-5">
         Select the saved page you want to upsert to databse.

@@ -6,8 +6,13 @@ import { Router } from "express";
 
 const router = Router();
 
-const { getAllCanonical, getAllUnmapped, getSimilarCanonical, addCanonical } =
-  ingredientController;
+const {
+  getAllCanonical,
+  getAllUnmapped,
+  getSimilarCanonical,
+  addCanonical,
+  importCanonical,
+} = ingredientController;
 const { getAllCanonicalSchema, getSimilarCanonicalSchema, addCanonicalSchema } =
   ingredientSchemas;
 
@@ -30,5 +35,6 @@ router.post(
   validate(addCanonicalSchema),
   addCanonical,
 );
+router.post("/import-canonical", isAdmin, importCanonical);
 
 export { router as ingredientRoutes };

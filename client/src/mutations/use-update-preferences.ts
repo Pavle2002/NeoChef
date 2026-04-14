@@ -24,7 +24,10 @@ export function useUpdatePreferences() {
       });
 
       queryClient.invalidateQueries({
-        queryKey: getTopPicksRecipesQueryOptions().queryKey,
+        queryKey: getTopPicksRecipesQueryOptions("advanced").queryKey,
+      });
+      queryClient.invalidateQueries({
+        queryKey: getTopPicksRecipesQueryOptions("basic").queryKey,
       });
     },
   });

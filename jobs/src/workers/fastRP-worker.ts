@@ -11,10 +11,10 @@ export const fastRPWorker = new Worker<FastRPJob>(
     await embeddingService.runRecommendationsFastRP();
     await embeddingService.dropProjection("recommendations");
 
-    await embeddingService.dropProjection("similarRecipes");
-    await embeddingService.createSimilarRecipesProjection();
-    await embeddingService.runSimilarRecipesFastRP();
-    await embeddingService.dropProjection("similarRecipes");
+    // await embeddingService.dropProjection("similarRecipes");
+    // await embeddingService.createSimilarRecipesProjection();
+    // await embeddingService.runSimilarRecipesFastRP();
+    // await embeddingService.dropProjection("similarRecipes");
   },
   { connection },
 );

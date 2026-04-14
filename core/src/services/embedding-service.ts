@@ -131,7 +131,7 @@ export class EmbeddingService implements IEmbeddingService {
         embeddingDimension: 256,
         iterationWeights: [0.0, 1.0, 1.0],
         nodeSelfInfluence: 0.0,
-        normalizationStrength: 0.8,
+        normalizationStrength: 0.5,
         relationshipWeightProperty: 'weight',
         randomSeed: 42,
         writeProperty: 'recommendationEmbedding'
@@ -148,7 +148,7 @@ export class EmbeddingService implements IEmbeddingService {
           r AS source,
           ci AS target,
           'HAS_CANONICAL' AS relType,
-          1.5 AS weight
+          2.0 AS weight
 
         UNION ALL
 
@@ -157,7 +157,7 @@ export class EmbeddingService implements IEmbeddingService {
           ci1 AS source,
           ci2 AS target,
           'IS_A' AS relType,
-          1.0 AS weight
+          1.5 AS weight
 
         UNION ALL
 
@@ -166,7 +166,7 @@ export class EmbeddingService implements IEmbeddingService {
           r AS source,
           c AS target,
           'BELONGS_TO' AS relType,
-          3.0 AS weight
+          1.5 AS weight
 
         UNION ALL
 
@@ -175,7 +175,7 @@ export class EmbeddingService implements IEmbeddingService {
           r AS source,
           d AS target,
           'IS_OF_TYPE' AS relType,
-          1.5 AS weight
+          0.5 AS weight
     }
 
     WITH gds.graph.project(
@@ -207,8 +207,8 @@ export class EmbeddingService implements IEmbeddingService {
       `CALL gds.fastRP.write('similarRecipes', {
         embeddingDimension: 256,
         iterationWeights: [0.0, 1.0, 1.0],
-        nodeSelfInfluence: 0.1,
-        normalizationStrength: 0.5,
+        nodeSelfInfluence: 0.0,
+        normalizationStrength: 0.0,
         relationshipWeightProperty: 'weight',
         randomSeed: 42,
         writeProperty: 'similarityEmbedding'

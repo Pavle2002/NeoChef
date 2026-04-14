@@ -13,9 +13,6 @@ export interface IIngredientRepository {
     ingredientId: string,
     limit?: number,
   ): Promise<MatchResult[]>;
-  // createCanonical(
-  //   ingredient: CanonicalIngredientData,
-  // ): Promise<CanonicalIngredient>;
   create(ingredient: IngredientData): Promise<Ingredient>;
   createManyCanonical(
     ingredients: CanonicalIngredientData[],

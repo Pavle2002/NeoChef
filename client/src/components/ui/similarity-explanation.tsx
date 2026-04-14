@@ -31,6 +31,8 @@ function SimilarityExplanationContent({
     getRecipeSimilarityExplanationQueryOptions(recipe1Id, recipe2Id),
   );
 
+  console.dir(explanation, { depth: null });
+
   return (
     <div className="max-w-xs space-y-2.5">
       {explanation.sharedIngredients.length > 0 && (

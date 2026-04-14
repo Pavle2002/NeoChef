@@ -67,3 +67,9 @@ export type MatchResult = {
   match: CanonicalIngredient;
   confidence: number;
 };
+
+export type CanonicalImport = {
+  name: string;
+  category: string;
+  versions?: string[];
+};
