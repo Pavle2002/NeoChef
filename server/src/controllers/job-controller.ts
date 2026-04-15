@@ -1,3 +1,4 @@
+import { logger } from "@config/logger.js";
 import { getQueueEvents, getQueues, QUEUES } from "@neochef/core";
 import { storageService, queues, queueEvents } from "@services/index.js";
 import { sendSuccess } from "@utils/response-handler.js";
@@ -28,21 +29,36 @@ async function startTransformJob(req: Request, res: Response): Promise<void> {
   sendSuccess(res, 200, correlationId, "Transform job started successfully");
 }
 
+async function startFastRPJob(_req: Request, res: Response): Promise<void> {
+  const correlationId = randomUUID();
+  const projectionNames = ["recommendations", "similarRecipes"] as const;
+
+  await queues[QUEUES.FASTRP].addBulk(
+    projectionNames.map((projectionName) => ({
+      name: "fastrp-job",
+      data: { correlationId, projectionName, type: "FastRP" },
+    })),
+  );
+
+  sendSuccess(res, 200, correlationId, "FastRP job started successfully");
+}
+
 async function streamEvents(req: Request, res: Response): Promise<void> {
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
   res.setHeader("Connection", "keep-alive");
 
   const cleanupListeners = addListeners(queues, queueEvents, res);
+  logger.info("Client connected, started streaming events");
 
   req.on("close", () => {
     cleanupListeners();
-    console.log("Client disconnected, stopped streaming events");
+    logger.info("Client disconnected, stopped streaming events");
     res.end();
   });
 }
 
-async function listSavedPages(req: Request, res: Response): Promise<void> {
+async function listSavedPages(_req: Request, res: Response): Promise<void> {
   const pages = await storageService.listPages();
   sendSuccess(res, 200, pages, "Pages retrieved successfully");
 }
@@ -53,12 +69,12 @@ function addListeners(
   res: Response,
 ) {
   const listeners: Array<{
-    type: "completed" | "failed";
+    type: "completed" | "failed" | "added" | "active";
     queueName: (typeof QUEUES)[keyof typeof QUEUES];
     handler: ({ jobId }: { jobId: string }) => Promise<void>;
   }> = [];
 
-  const eventTypes = ["completed", "failed"] as const;
+  const eventTypes = ["completed", "failed", "added", "active"] as const;
 
   for (const queueName of Object.values(QUEUES)) {
     const queue = queues[queueName];
@@ -89,6 +105,7 @@ function addListeners(
 export const jobController = {
   startFetchJob,
   startTransformJob,
+  startFastRPJob,
   streamEvents,
   listSavedPages,
 };

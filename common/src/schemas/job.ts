@@ -27,6 +27,7 @@ export const projectionNameSchema = z.enum([
 export const FastRPJobSchema = z.object({
   type: z.enum(["FastRP"]),
   projectionName: projectionNameSchema,
+  correlationId: z.string(),
 });
 
 export type FetchJob = z.infer<typeof FetchJobSchema>;

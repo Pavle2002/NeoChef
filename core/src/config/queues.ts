@@ -72,7 +72,7 @@ function getFastRPQueue(connection: QueueConnection) {
   return new Queue<FastRPJob>(QUEUES.FASTRP, {
     connection,
     defaultJobOptions: {
-      removeOnComplete: true,
+      removeOnComplete: { age: 60 },
       removeOnFail: false,
     },
   });

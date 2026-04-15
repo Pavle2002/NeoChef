@@ -4,7 +4,12 @@ import { useStartTransformJob } from "@/mutations/use-start-transform-job";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import type { FetchJob, TransformJob, UpsertJob } from "@neochef/common";
+import type {
+  FastRPJob,
+  FetchJob,
+  TransformJob,
+  UpsertJob,
+} from "@neochef/common";
 import {
   Table,
   TableBody,
@@ -17,12 +22,13 @@ import { getSavedPagesQueryOptions } from "@/query-options/get-saved-pages-query
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { useImportCanonicalIngredients } from "@/mutations/use-import-canonical-ingredients";
+import { useStartFastRPJob } from "@/mutations/use-start-fastrp-job";
 
 type EventData = {
   type: string;
   job: {
     id: string;
-    data: FetchJob | TransformJob | UpsertJob;
+    data: FetchJob | TransformJob | UpsertJob | FastRPJob;
     returnValue: unknown | null;
     failedReason?: string;
     stackTrace: string[];
@@ -45,15 +51,17 @@ export const Route = createFileRoute("/_protected/dashboard")({
 });
 
 function RouteComponent() {
-  const { mutate } = useStartTransformJob();
-  const { mutate: importCanonicalMutate } = useImportCanonicalIngredients();
+  const { mutate: startTransformMJob } = useStartTransformJob();
+  const { mutate: importCanonicalIngredients } =
+    useImportCanonicalIngredients();
+  const { mutate: startFastRPJob } = useStartFastRPJob();
 
   async function handleSubmit(event: React.SubmitEvent) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget as HTMLFormElement);
     const selectedPage = formData.get("selectedPage");
     if (!selectedPage) return;
-    mutate(Number(selectedPage));
+    startTransformMJob(Number(selectedPage));
   }
 
   return (
@@ -65,17 +73,28 @@ function RouteComponent() {
         This will seed the database with canonical ingredients from the
         <i> canonical.json</i> file.
       </p>
-      <Button className="max-w-xs mb-5" onClick={() => importCanonicalMutate()}>
+      <Button
+        className="max-w-xs mb-5"
+        onClick={() => importCanonicalIngredients()}
+      >
         Import Canonical Ingredients
       </Button>
       <h2 className="text-3xl text-primary font-bold">Saved Pages</h2>
       <p className="text-muted-foreground mb-5">
         Select the saved page you want to upsert to databse.
       </p>
-      <form className="flex gap-5" onSubmit={handleSubmit}>
+      <form className="flex gap-5 mb-5" onSubmit={handleSubmit}>
         <PagesRadioGroup />
         <Button type="submit">Upsert page</Button>
       </form>
+      <h2 className="text-3xl text-primary font-bold">Generate Embeddings</h2>
+      <p className="text-muted-foreground mb-3 max-w-2xl">
+        This will generate embeddings necessary for recipe recommendations and
+        recipe similarity features.
+      </p>
+      <Button className="max-w-xs" onClick={() => startFastRPJob()}>
+        Generate Embeddings
+      </Button>
       <h2 className="text-3xl text-primary font-bold my-5">Background Jobs</h2>
       <BackgroundJobsTable />
     </>
@@ -169,7 +188,9 @@ function formatJobDuration(start?: number, end?: number) {
   }
 }
 
-function getMessageForJob(job: FetchJob | TransformJob | UpsertJob) {
+function getMessageForJob(
+  job: FetchJob | TransformJob | UpsertJob | FastRPJob,
+) {
   switch (job.type) {
     case "Fetch":
       return `Fetching page ${job.page}`;
@@ -177,5 +198,7 @@ function getMessageForJob(job: FetchJob | TransformJob | UpsertJob) {
       return `Transforming page ${job.page}`;
     case "Upsert":
       return `Upserting recipe with source Id ${job.extendedRecipeData.recipeData.sourceId}`;
+    case "FastRP":
+      return `Generating embeddings for ${job.projectionName}`;
   }
 }
