@@ -11,7 +11,7 @@ router.use(isAdmin);
 const {
   startFetchJob,
   startTransformJob,
-  startFastRPJob,
+  startEmbeddingJob,
   streamEvents,
   listSavedPages,
 } = jobController;
@@ -19,7 +19,7 @@ const { startFetchJobSchema, startTransformJobSchema } = jobSchemas;
 
 router.post("/fetch", validate(startFetchJobSchema), startFetchJob);
 router.post("/transform", validate(startTransformJobSchema), startTransformJob);
-router.post("/fastrp", startFastRPJob);
+router.post("/embedding", startEmbeddingJob);
 router.get("/events", streamEvents);
 router.get("/pages", listSavedPages);
 

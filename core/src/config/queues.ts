@@ -1,5 +1,5 @@
 import type {
-  FastRPJob,
+  EmbeddingJob,
   FetchJob,
   TransformJob,
   UpsertJob,
@@ -10,7 +10,7 @@ export const QUEUES = {
   FETCH: "fetch-queue",
   TRANSFORM: "transform-queue",
   UPSERT: "upsert-queue",
-  FASTRP: "fastrp-queue",
+  EMBEDDING: "embedding-queue",
 } as const;
 
 export type QueueConnection = {
@@ -23,7 +23,7 @@ export function getQueues(connection: QueueConnection) {
     [QUEUES.FETCH]: getFetchQueue(connection),
     [QUEUES.TRANSFORM]: getTransformQueue(connection),
     [QUEUES.UPSERT]: getUpsertQueue(connection),
-    [QUEUES.FASTRP]: getFastRPQueue(connection),
+    [QUEUES.EMBEDDING]: getEmbeddingGenerationQueue(connection),
   } as const;
 }
 
@@ -32,7 +32,7 @@ export function getQueueEvents(connection: QueueConnection) {
     [QUEUES.FETCH]: new QueueEvents(QUEUES.FETCH, { connection }),
     [QUEUES.TRANSFORM]: new QueueEvents(QUEUES.TRANSFORM, { connection }),
     [QUEUES.UPSERT]: new QueueEvents(QUEUES.UPSERT, { connection }),
-    [QUEUES.FASTRP]: new QueueEvents(QUEUES.FASTRP, { connection }),
+    [QUEUES.EMBEDDING]: new QueueEvents(QUEUES.EMBEDDING, { connection }),
   } as const;
 }
 
@@ -68,8 +68,8 @@ function getUpsertQueue(connection: QueueConnection) {
   });
 }
 
-function getFastRPQueue(connection: QueueConnection) {
-  return new Queue<FastRPJob>(QUEUES.FASTRP, {
+function getEmbeddingGenerationQueue(connection: QueueConnection) {
+  return new Queue<EmbeddingJob>(QUEUES.EMBEDDING, {
     connection,
     defaultJobOptions: {
       removeOnComplete: { age: 60 },

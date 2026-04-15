@@ -15,6 +15,7 @@ import {
   DishTypeRepository,
   DriverQueryExecutor,
   EmbeddingService,
+  GDSService,
   getQueueEvents,
   getQueues,
   IngredientRepository,
@@ -44,9 +45,10 @@ export const userService = new UserService(
   unitOfWorkFactory,
   redisClient,
 );
+const gdsService = new GDSService(queryExecutor);
 export const embeddingService = new EmbeddingService(
   config.embedderUrl,
-  queryExecutor,
+  gdsService,
 );
 export const recipeService = new RecipeService(
   recipeRepository,

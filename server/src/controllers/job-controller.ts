@@ -29,18 +29,23 @@ async function startTransformJob(req: Request, res: Response): Promise<void> {
   sendSuccess(res, 200, correlationId, "Transform job started successfully");
 }
 
-async function startFastRPJob(_req: Request, res: Response): Promise<void> {
+async function startEmbeddingJob(_req: Request, res: Response): Promise<void> {
   const correlationId = randomUUID();
-  const projectionNames = ["recommendations", "similarRecipes"] as const;
+  const embeddingPurposes = ["recommendations", "recipe-similarity"] as const;
 
-  await queues[QUEUES.FASTRP].addBulk(
-    projectionNames.map((projectionName) => ({
-      name: "fastrp-job",
-      data: { correlationId, projectionName, type: "FastRP" },
+  await queues[QUEUES.EMBEDDING].addBulk(
+    embeddingPurposes.map((purpose) => ({
+      name: "embedding-job",
+      data: { correlationId, purpose, type: "Embedding" },
     })),
   );
 
-  sendSuccess(res, 200, correlationId, "FastRP job started successfully");
+  sendSuccess(
+    res,
+    200,
+    correlationId,
+    "Embedding generation job started successfully",
+  );
 }
 
 async function streamEvents(req: Request, res: Response): Promise<void> {
@@ -105,7 +110,7 @@ function addListeners(
 export const jobController = {
   startFetchJob,
   startTransformJob,
-  startFastRPJob,
+  startEmbeddingJob,
   streamEvents,
   listSavedPages,
 };

@@ -3,12 +3,12 @@ import { getFormatedDate } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export function useStartFastRPJob() {
+export function useStartEmbeddingJob() {
   return useMutation({
-    mutationFn: async () => apiClient.post<string>("/jobs/fastrp"),
+    mutationFn: async () => apiClient.post<string>("/jobs/embedding"),
 
     onSuccess: () => {
-      toast.success("FastRP job started! 🎉", {
+      toast.success("Embedding generation job started! 🎉", {
         description: getFormatedDate() + " 📆",
       });
     },

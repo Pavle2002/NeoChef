@@ -19,19 +19,19 @@ export const UpsertJobSchema = z.object({
   extendedRecipeData: ExtendedRecipeDataSchema,
 });
 
-export const projectionNameSchema = z.enum([
+export const embeddingPurposeSchema = z.enum([
   "recommendations",
-  "similarRecipes",
+  "recipe-similarity",
 ]);
 
-export const FastRPJobSchema = z.object({
-  type: z.enum(["FastRP"]),
-  projectionName: projectionNameSchema,
+export const EmbeddingJobSchema = z.object({
+  type: z.enum(["Embedding"]),
+  purpose: embeddingPurposeSchema,
   correlationId: z.string(),
 });
 
 export type FetchJob = z.infer<typeof FetchJobSchema>;
 export type TransformJob = z.infer<typeof TransformJobSchema>;
 export type UpsertJob = z.infer<typeof UpsertJobSchema>;
-export type FastRPJob = z.infer<typeof FastRPJobSchema>;
-export type ProjectionName = z.infer<typeof projectionNameSchema>;
+export type EmbeddingJob = z.infer<typeof EmbeddingJobSchema>;
+export type EmbeddingPurpose = z.infer<typeof embeddingPurposeSchema>;

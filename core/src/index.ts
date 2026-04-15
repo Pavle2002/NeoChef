@@ -38,3 +38,4 @@ export * from "./interfaces/embedding-service.interface.js";
 
 export * from "./services/embedding-service.js";
 export * from "./services/storage.js";
+export * from "./services/gds-service.js";

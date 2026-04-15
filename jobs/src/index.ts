@@ -1,10 +1,8 @@
 import { logger } from "./config/logger.js";
-import { fastRPWorker } from "./workers/fastRP-worker.js";
+import { embeddingWorker } from "./workers/embedding-worker.js";
 import { fetchWorker } from "./workers/fetch-worker.js";
 import { transformWorker } from "./workers/transform-worker.js";
 import { upsertWorker } from "./workers/upsert-worker.js";
-import { connection, queues } from "./services.js";
-import { QUEUES } from "@neochef/core";
 
 logger.info("Starting recipe ingestion workers...");
 
@@ -34,14 +32,10 @@ upsertWorker.on("failed", (job, err) => {
   logger.error(`Upsert job ${job?.id} failed: ${err.message}`);
 });
 
-fastRPWorker.on("completed", (job) => {
-  logger.info(`FastRP job with id: ${job.id} has been completed.`);
+embeddingWorker.on("completed", (job) => {
+  logger.info(`Embedding job with id: ${job.id} has been completed.`);
 });
 
-fastRPWorker.on("failed", (job, err) => {
-  logger.error(`FastRP job ${job?.id} failed: ${err.message}`);
+embeddingWorker.on("failed", (job, err) => {
+  logger.error(`Embedding job ${job?.id} failed: ${err.message}`);
 });
-
-// queues[QUEUES.FASTRP].add("fastrp-job", {
-//   type: "FastRP",
-// });

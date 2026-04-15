@@ -5,6 +5,7 @@ import {
   EmbeddingService,
   S3StorageService,
   getQueues,
+  GDSService,
 } from "@neochef/core";
 import { config } from "./config/config.js";
 import { neo4jClient } from "./config/neo4j.js";
@@ -25,7 +26,8 @@ export const storageService = new S3StorageService(
   r2Client,
   config.r2.bucketName,
 );
+const gdsService = new GDSService(queryExecutor);
 export const embeddingService = new EmbeddingService(
   config.embedderUrl,
-  queryExecutor,
+  gdsService,
 );

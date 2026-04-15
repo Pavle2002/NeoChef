@@ -5,7 +5,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import type {
-  FastRPJob,
+  EmbeddingJob,
   FetchJob,
   TransformJob,
   UpsertJob,
@@ -22,13 +22,13 @@ import { getSavedPagesQueryOptions } from "@/query-options/get-saved-pages-query
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { useImportCanonicalIngredients } from "@/mutations/use-import-canonical-ingredients";
-import { useStartFastRPJob } from "@/mutations/use-start-fastrp-job";
+import { useStartEmbeddingJob } from "@/mutations/use-start-embedding-job";
 
 type EventData = {
   type: string;
   job: {
     id: string;
-    data: FetchJob | TransformJob | UpsertJob | FastRPJob;
+    data: FetchJob | TransformJob | UpsertJob | EmbeddingJob;
     returnValue: unknown | null;
     failedReason?: string;
     stackTrace: string[];
@@ -54,7 +54,7 @@ function RouteComponent() {
   const { mutate: startTransformMJob } = useStartTransformJob();
   const { mutate: importCanonicalIngredients } =
     useImportCanonicalIngredients();
-  const { mutate: startFastRPJob } = useStartFastRPJob();
+  const { mutate: startEmbeddingJob } = useStartEmbeddingJob();
 
   async function handleSubmit(event: React.SubmitEvent) {
     event.preventDefault();
@@ -92,7 +92,7 @@ function RouteComponent() {
         This will generate embeddings necessary for recipe recommendations and
         recipe similarity features.
       </p>
-      <Button className="max-w-xs" onClick={() => startFastRPJob()}>
+      <Button className="max-w-xs" onClick={() => startEmbeddingJob()}>
         Generate Embeddings
       </Button>
       <h2 className="text-3xl text-primary font-bold my-5">Background Jobs</h2>
@@ -189,7 +189,7 @@ function formatJobDuration(start?: number, end?: number) {
 }
 
 function getMessageForJob(
-  job: FetchJob | TransformJob | UpsertJob | FastRPJob,
+  job: FetchJob | TransformJob | UpsertJob | EmbeddingJob,
 ) {
   switch (job.type) {
     case "Fetch":
@@ -198,7 +198,7 @@ function getMessageForJob(
       return `Transforming page ${job.page}`;
     case "Upsert":
       return `Upserting recipe with source Id ${job.extendedRecipeData.recipeData.sourceId}`;
-    case "FastRP":
-      return `Generating embeddings for ${job.projectionName}`;
+    case "Embedding":
+      return `Generating embeddings for ${job.purpose}`;
   }
 }
