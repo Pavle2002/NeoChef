@@ -72,7 +72,7 @@ function TopPicksSection() {
   );
   return (
     <>
-      <RecipeCarousel recipes={basic} />
+      {/* <RecipeCarousel recipes={basic} /> */}
       <RecipeCarousel recipes={advanced} />
     </>
   );
@@ -91,7 +91,7 @@ function SimilarToLastLikedSection() {
       <p className="text-base sm:text-lg text-muted-foreground">
         Explore recipes similar to <i>"{basic.lastLiked.title}"</i>.
       </p>
-      <RecipeCarousel
+      {/* <RecipeCarousel
         recipes={basic.recipes}
         popoverContent={(recipe) => (
           <SimilarityExplanation
@@ -99,7 +99,7 @@ function SimilarToLastLikedSection() {
             recipe2Id={recipe.id}
           />
         )}
-      />
+      /> */}
       <RecipeCarousel
         recipes={advanced.recipes}
         popoverContent={(recipe) => (

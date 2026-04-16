@@ -92,4 +92,28 @@ async function createIndexes(client: Driver): Promise<void> {
       }
     }`,
   );
+
+  await client.executeQuery(
+    `CREATE VECTOR INDEX recipe_recommendation_embedding_index IF NOT EXISTS
+    FOR (r:Recipe)
+    ON (r.recommendationEmbedding)
+    OPTIONS {
+      indexConfig: {
+        \`vector.dimensions\`: 256,
+        \`vector.similarity_function\`: 'cosine'
+      }
+    }`,
+  );
+
+  await client.executeQuery(
+    `CREATE VECTOR INDEX recipe_similarity_embedding_index IF NOT EXISTS
+    FOR (r:Recipe)
+    ON (r.similarityEmbedding)
+    OPTIONS {
+      indexConfig: {
+        \`vector.dimensions\`: 256,
+        \`vector.similarity_function\`: 'cosine'
+      }
+    }`,
+  );
 }

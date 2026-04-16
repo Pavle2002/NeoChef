@@ -195,28 +195,30 @@ export class RecommendationRepository implements IRecommendationRepository {
       MATCH (u:User {id: $userId})
       WHERE u.recommendationEmbedding IS NOT NULL
 
-      MATCH (r:Recipe)
-      WHERE r.recommendationEmbedding IS NOT NULL
-        AND NOT (u)-[:LIKES|SAVED]->(r)
+      CALL db.index.vector.queryNodes(
+        'recipe_recommendations_vector_index',
+        100,
+        u.recommendationEmbedding
+      ) YIELD node AS recommended, score
+      WHERE NOT (u)-[:LIKES|SAVED]->(recommended)
         AND NOT EXISTS {
           MATCH (u)-[:DISLIKES]->(disliked:CanonicalIngredient)
-          MATCH (r)-[:CONTAINS]->(:Ingredient)-[:MAPS_TO]->(ci:CanonicalIngredient)
+          MATCH (recommended)-[:CONTAINS]->(:Ingredient)-[:MAPS_TO]->(ci:CanonicalIngredient)
           WHERE ci = disliked OR (ci)-[:IS_A*]->(disliked)
         }
 
-      WITH u, r, gds.similarity.cosine(u.recommendationEmbedding, r.recommendationEmbedding) AS similarity
-
-      ORDER BY similarity DESC
+      WITH recommended, score
+      ORDER BY score DESC
       LIMIT 10
 
-      OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
-      RETURN r, count(l) as likeCount
+      OPTIONAL MATCH (recommended)<-[l:LIKES]-(:User)
+      RETURN recommended, count(l) as likeCount
       `;
 
     const result = await this.queryExecutor.run(query, { userId });
 
     return result.records.map((record) => {
-      const recipe = record.get("r").properties;
+      const recipe = record.get("recommended").properties;
       recipe.createdAt = recipe.createdAt.toString();
       recipe.likeCount = record.get("likeCount");
       return recipe as Recipe;
@@ -228,22 +230,24 @@ export class RecommendationRepository implements IRecommendationRepository {
   ): Promise<{ lastLiked: Recipe; recipes: Recipe[] } | null> {
     const query = `
       MATCH (u:User {id: $userId})-[l:LIKES]->(last:Recipe)
-      WITH u, last
+      WHERE last.similarityEmbedding IS NOT NULL
+      WITH u, last, l
       ORDER BY l.likedAt DESC
       LIMIT 1
       
-      MATCH (r:Recipe)
-      WHERE r.id <> last.id
-        AND r.similarityEmbedding IS NOT NULL
-        AND NOT (u)-[:LIKES|SAVED]->(r)
-        
-      WITH last, r, gds.similarity.cosine(last.similarityEmbedding, r.similarityEmbedding) as similarity
-            
-      ORDER BY similarity DESC
+      CALL db.index.vector.queryNodes(
+        'recipe_similarity_embedding_index',
+        50,
+        last.similarityEmbedding
+      ) YIELD node AS similar, score
+      WHERE similar.id <> last.id AND NOT (u)-[:LIKES|SAVED]->(similar)
+      
+      WITH similar, score, last
+      ORDER BY score DESC
       LIMIT 10
       
-      OPTIONAL MATCH (r)<-[l:LIKES]-(:User)
-      RETURN last, r, count(l) as likeCount
+      OPTIONAL MATCH (similar)<-[likeRel:LIKES]-(:User)
+      RETURN last, similar, count(likeRel) as likeCount
     `;
 
     const result = await this.queryExecutor.run(query, { userId });
@@ -255,7 +259,7 @@ export class RecommendationRepository implements IRecommendationRepository {
 
     const lastLiked = firstRecord.get("last").properties as Recipe;
     const recipes = result.records.map((record) => {
-      const recipe = record.get("r").properties;
+      const recipe = record.get("similar").properties;
       recipe.createdAt = recipe.createdAt.toString();
       recipe.likeCount = record.get("likeCount");
       return recipe as Recipe;

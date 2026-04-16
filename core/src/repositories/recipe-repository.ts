@@ -382,17 +382,21 @@ export class RecipeRepository implements IRecipeRepository {
     const result = await this.queryExecutor.run(
       `MATCH (r:Recipe {id: $id})
       WHERE r.similarityEmbedding IS NOT NULL
-      MATCH (similar:Recipe)
-      WHERE similar.id <> $id
-        AND similar.similarityEmbedding IS NOT NULL
 
-      WITH similar, gds.similarity.cosine(r.similarityEmbedding, similar.similarityEmbedding) AS similarity
-      ORDER BY similarity DESC
+      CALL db.index.vector.queryNodes(
+        'recipe_similarity_embedding_index',
+        $indexLimit,
+        r.similarityEmbedding
+      ) YIELD node AS similar, score
+      WHERE similar.id <> $id
+      
+      WITH similar, score
+      ORDER BY score DESC
       LIMIT $limit
       
       OPTIONAL MATCH (similar)<-[l:LIKES]-(:User)
       RETURN similar AS r, COUNT(DISTINCT l) AS likeCount`,
-      { id, limit: int(limit) },
+      { id, limit: int(limit), indexLimit: int(limit * 5) },
     );
 
     const records = result.records;
