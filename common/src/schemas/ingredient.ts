@@ -4,7 +4,7 @@ export const CanonicalIngredientSchema = z.object({
   id: z.string().uuid(),
   name: z.string().trim(),
   category: z.string().trim(),
-  embedding: z.array(z.number()),
+  nameEmbedding: z.array(z.number()),
 });
 
 export const IngredientSchema = z.object({
@@ -15,7 +15,7 @@ export const IngredientSchema = z.object({
   normalizedName: z.string().trim(),
   image: z.string().nullish().default(null),
   aisle: z.string().nullish().default(null),
-  embedding: z.array(z.number()),
+  nameEmbedding: z.array(z.number()),
 });
 
 export const IngredientUsageSchema = z.object({
@@ -40,7 +40,7 @@ export const CanonicalIngredientDataSchema = CanonicalIngredientSchema.omit({
     .array(
       z.object({
         name: z.string().trim(),
-        embedding: z.array(z.number()),
+        nameEmbedding: z.array(z.number()),
       }),
     )
     .optional(),

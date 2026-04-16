@@ -36,17 +36,17 @@ export function getValidCanonicalIngredientsData(): CanonicalIngredientData[] {
     {
       name: "Tomato",
       category: "Vegetable",
-      embedding: [0.4, 0.5, 0.6],
+      nameEmbedding: [0.4, 0.5, 0.6],
     },
     {
       name: "Broccoli",
       category: "Vegetable",
-      embedding: [0.1, 0.2, 0.3],
+      nameEmbedding: [0.1, 0.2, 0.3],
     },
     {
       name: "Onion",
       category: "Vegetable",
-      embedding: [0.7, 0.8, 0.9],
+      nameEmbedding: [0.7, 0.8, 0.9],
     },
   ];
 }

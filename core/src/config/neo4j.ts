@@ -71,9 +71,9 @@ async function createConstraints(client: Driver): Promise<void> {
 
 async function createIndexes(client: Driver): Promise<void> {
   await client.executeQuery(
-    `CREATE VECTOR INDEX canonical_embedding_index IF NOT EXISTS
+    `CREATE VECTOR INDEX canonical_name_embedding_index IF NOT EXISTS
     FOR (i:CanonicalIngredient)
-    ON (i.embedding)
+    ON (i.nameEmbedding)
     OPTIONS {
       indexConfig: {
         \`vector.dimensions\`: 384,
@@ -82,9 +82,9 @@ async function createIndexes(client: Driver): Promise<void> {
     }`,
   );
   await client.executeQuery(
-    `CREATE VECTOR INDEX recipe_embedding_index IF NOT EXISTS
+    `CREATE VECTOR INDEX recipe_title_embedding_index IF NOT EXISTS
     FOR (r:Recipe)
-    ON (r.embedding)
+    ON (r.titleEmbedding)
     OPTIONS {
       indexConfig: {
         \`vector.dimensions\`: 384,

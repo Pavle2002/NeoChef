@@ -29,7 +29,7 @@ export const RecipeSchema = z.object({
   title: z.string().trim(),
   imageType: z.string(),
   servings: z.number(),
-  embedding: z.array(z.number()),
+  titleEmbedding: z.array(z.number()),
   instructions: z.array(z.string().trim()).optional().default([]),
   summary: z.string().trim().nullish().default(null),
   readyInMinutes: z.number().nullish().default(null),

@@ -116,7 +116,7 @@ export class GDSService {
     );
   }
 
-  async createSimilarRecipesProjection(): Promise<void> {
+  async createRecipeSimilarityProjection(): Promise<void> {
     await this.queryExecutor.run(
       `CALL {
         MATCH (r:Recipe)-[:CONTAINS]->(:Ingredient)-[:MAPS_TO]->(ci:CanonicalIngredient)
@@ -151,7 +151,7 @@ export class GDSService {
           r AS source,
           d AS target,
           'IS_OF_TYPE' AS relType,
-          0.5 AS weight
+          0.7 AS weight
     }
 
     WITH gds.graph.project(
@@ -178,7 +178,7 @@ export class GDSService {
     );
   }
 
-  async runFastRPOnSimilarRecipesProjection(): Promise<void> {
+  async runFastRPOnRecipeSimilarityProjection(): Promise<void> {
     await this.queryExecutor.run(
       `CALL gds.fastRP.write('recipe-similarity', {
         embeddingDimension: 256,

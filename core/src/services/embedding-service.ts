@@ -37,8 +37,8 @@ export class EmbeddingService implements IEmbeddingService {
 
   async generateRecipeSimilarityEmbeddings(): Promise<void> {
     await this.gdsService.dropProjection("recipe-similarity");
-    await this.gdsService.createSimilarRecipesProjection();
-    await this.gdsService.runFastRPOnSimilarRecipesProjection();
+    await this.gdsService.createRecipeSimilarityProjection();
+    await this.gdsService.runFastRPOnRecipeSimilarityProjection();
     await this.gdsService.dropProjection("recipe-similarity");
   }
 }

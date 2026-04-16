@@ -348,7 +348,7 @@ export class RecipeRepository implements IRecipeRepository {
 
     if (searchEmbadding) {
       matchClauses.push(
-        `CALL db.index.vector.queryNodes('recipe_embedding_index', 200, $searchEmbadding) 
+        `CALL db.index.vector.queryNodes('recipe_title_embedding_index', 200, $searchEmbadding) 
         YIELD node AS r, score
         WHERE score > 0.6`,
       );

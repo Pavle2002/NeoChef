@@ -60,11 +60,11 @@ export class IngredientService implements IIngredientService {
     let enrichedIngredients: CanonicalIngredientData[] = [];
 
     for (const ingredient of canonicalIngredients) {
-      const embedding = await this.embeddingService.getEmbedding(
+      const nameEmbedding = await this.embeddingService.getEmbedding(
         ingredient.name,
       );
 
-      let versionEmbeddings: { name: string; embedding: number[] }[] = [];
+      let versionEmbeddings: { name: string; nameEmbedding: number[] }[] = [];
 
       if (ingredient.versions) {
         for (const version of ingredient.versions) {
@@ -73,7 +73,7 @@ export class IngredientService implements IIngredientService {
 
           versionEmbeddings.push({
             name: version,
-            embedding: versionEmbedding,
+            nameEmbedding: versionEmbedding,
           });
         }
       }
@@ -81,7 +81,7 @@ export class IngredientService implements IIngredientService {
       enrichedIngredients.push({
         name: ingredient.name,
         category: ingredient.category,
-        embedding,
+        nameEmbedding: nameEmbedding,
         versions: versionEmbeddings.length > 0 ? versionEmbeddings : undefined,
       });
     }
