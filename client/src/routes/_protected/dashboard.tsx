@@ -105,7 +105,9 @@ function BackgroundJobsTable() {
   const [events, setEvents] = useState<EventData[]>([]);
 
   useEffect(() => {
-    const eventSource = new EventSource(`${config.apiUrl}/jobs/events`);
+    const eventSource = new EventSource(`${config.apiUrl}/jobs/events`, {
+      withCredentials: true,
+    });
 
     eventSource.onmessage = (event) => {
       const data = JSON.parse(event.data) as EventData;
