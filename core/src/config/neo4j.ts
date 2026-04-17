@@ -1,4 +1,5 @@
 import neo4j, { Driver } from "neo4j-driver";
+import { safeAwait } from "../utils/safe-await.js";
 
 export async function createNeo4jClient(
   url: string,
@@ -8,8 +9,16 @@ export async function createNeo4jClient(
   const client = neo4j.driver(url, neo4j.auth.basic(username, password), {
     disableLosslessIntegers: true,
   });
+  const [error, serverInfo] = await safeAwait(client.getServerInfo());
+
+  if (error) {
+    await client.close();
+    throw new Error("Neo4j connection failed");
+  }
+
   await createConstraints(client);
   await createIndexes(client);
+
   return client;
 }
 
