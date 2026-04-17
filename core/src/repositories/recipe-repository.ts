@@ -197,8 +197,8 @@ export class RecipeRepository implements IRecipeRepository {
           [s IN collect(rel) WHERE type(s) = 'SAVED'] AS saves
       WITH r,
           size(likes) AS totalLikes,
-          size([l IN likes WHERE l.likedAt >= datetime() - duration('P7D')]) AS recentLikes,
-          size([s IN saves WHERE s.savedAt >= datetime() - duration('P7D')]) AS recentSaves
+          size([l IN likes WHERE l.likedAt >= datetime() - duration('P30D')]) AS recentLikes,
+          size([s IN saves WHERE s.savedAt >= datetime() - duration('P30D')]) AS recentSaves
       WITH r, totalLikes, (recentLikes + recentSaves * 2) AS score
       ORDER BY score DESC
       LIMIT 24
@@ -389,14 +389,14 @@ export class RecipeRepository implements IRecipeRepository {
         r.similarityEmbedding
       ) YIELD node AS similar, score
       WHERE similar.id <> $id
-      
+
       WITH similar, score
       ORDER BY score DESC
       LIMIT $limit
       
       OPTIONAL MATCH (similar)<-[l:LIKES]-(:User)
       RETURN similar AS r, COUNT(DISTINCT l) AS likeCount`,
-      { id, limit: int(limit), indexLimit: int(limit * 5) },
+      { id, limit: int(limit), indexLimit: int(limit * 10) },
     );
 
     const records = result.records;

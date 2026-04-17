@@ -13,7 +13,7 @@ import { Suspense } from "react";
 export const Route = createFileRoute("/_protected/home")({
   component: RouteComponent,
   loader: async ({ context: { queryClient } }) => {
-    queryClient.ensureQueryData(getTopPicksRecipesQueryOptions("basic"));
+    // queryClient.ensureQueryData(getTopPicksRecipesQueryOptions("basic"));
     queryClient.ensureQueryData(getTopPicksRecipesQueryOptions("advanced"));
     queryClient.ensureQueryData(getFridgeBasedRecipesQueryOptions());
     queryClient.ensureQueryData(
@@ -64,9 +64,9 @@ function RouteComponent() {
 }
 
 function TopPicksSection() {
-  const { data: basic } = useSuspenseQuery(
-    getTopPicksRecipesQueryOptions("basic"),
-  );
+  // const { data: basic } = useSuspenseQuery(
+  //   getTopPicksRecipesQueryOptions("basic"),
+  // );
   const { data: advanced } = useSuspenseQuery(
     getTopPicksRecipesQueryOptions("advanced"),
   );
@@ -79,17 +79,17 @@ function TopPicksSection() {
 }
 
 function SimilarToLastLikedSection() {
-  const { data: basic } = useSuspenseQuery(
-    getSimilarToLastLikedRecipesQueryOptions("basic"),
-  );
+  // const { data: basic } = useSuspenseQuery(
+  //   getSimilarToLastLikedRecipesQueryOptions("basic"),
+  // );
   const { data: advanced } = useSuspenseQuery(
     getSimilarToLastLikedRecipesQueryOptions("advanced"),
   );
 
-  return basic != null && advanced != null ? (
+  return advanced != null ? (
     <>
       <p className="text-base sm:text-lg text-muted-foreground">
-        Explore recipes similar to <i>"{basic.lastLiked.title}"</i>.
+        Explore recipes similar to <i>"{advanced.lastLiked.title}"</i>.
       </p>
       {/* <RecipeCarousel
         recipes={basic.recipes}

@@ -82,6 +82,7 @@ export class IngredientRepository implements IIngredientRepository {
     ingredientId: string,
     limit = 5,
   ): Promise<MatchResult[]> {
+    const idnexLimit = limit < 5 ? 50 : limit * 10;
     const result = await this.queryExecutor.run(
       `Match (i:Ingredient {id: $ingredientId})
       CALL db.index.vector.queryNodes('canonical_name_embedding_index', $indexLimit, i.nameEmbedding)
@@ -89,7 +90,7 @@ export class IngredientRepository implements IIngredientRepository {
       RETURN c, score
       ORDER BY score DESC
       LIMIT $limit`,
-      { ingredientId, limit: int(limit), indexLimit: int(limit * 5) },
+      { ingredientId, limit: int(limit), indexLimit: int(idnexLimit) },
     );
 
     return result.records.map((record) => ({

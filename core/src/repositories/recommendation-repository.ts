@@ -196,7 +196,7 @@ export class RecommendationRepository implements IRecommendationRepository {
       WHERE u.recommendationEmbedding IS NOT NULL
 
       CALL db.index.vector.queryNodes(
-        'recipe_recommendations_vector_index',
+        'recipe_recommendation_embedding_index',
         100,
         u.recommendationEmbedding
       ) YIELD node AS recommended, score
@@ -237,7 +237,7 @@ export class RecommendationRepository implements IRecommendationRepository {
       
       CALL db.index.vector.queryNodes(
         'recipe_similarity_embedding_index',
-        50,
+        100,
         last.similarityEmbedding
       ) YIELD node AS similar, score
       WHERE similar.id <> last.id AND NOT (u)-[:LIKES|SAVED]->(similar)
