@@ -16,9 +16,9 @@ export const Route = createFileRoute("/_protected/home")({
     // queryClient.ensureQueryData(getTopPicksRecipesQueryOptions("basic"));
     queryClient.ensureQueryData(getTopPicksRecipesQueryOptions("advanced"));
     queryClient.ensureQueryData(getFridgeBasedRecipesQueryOptions());
-    queryClient.ensureQueryData(
-      getSimilarToLastLikedRecipesQueryOptions("basic"),
-    );
+    // queryClient.ensureQueryData(
+    //   getSimilarToLastLikedRecipesQueryOptions("basic"),
+    // );
     queryClient.ensureQueryData(
       getSimilarToLastLikedRecipesQueryOptions("advanced"),
     );
