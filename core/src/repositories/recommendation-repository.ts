@@ -195,11 +195,14 @@ export class RecommendationRepository implements IRecommendationRepository {
       MATCH (u:User {id: $userId})
       WHERE u.recommendationEmbedding IS NOT NULL
 
+      // 1. Candidate generation (ANN)
       CALL db.index.vector.queryNodes(
         'recipe_recommendation_embedding_index',
-        100,
+        200,
         u.recommendationEmbedding
-      ) YIELD node AS recommended, score
+      ) YIELD node AS recommended, score AS embeddingScore
+
+      // 2. Filtering
       WHERE NOT (u)-[:LIKES|SAVED]->(recommended)
         AND NOT EXISTS {
           MATCH (u)-[:DISLIKES]->(disliked:CanonicalIngredient)
@@ -207,12 +210,29 @@ export class RecommendationRepository implements IRecommendationRepository {
           WHERE ci = disliked OR (ci)-[:IS_A*]->(disliked)
         }
 
-      WITH recommended, score
-      ORDER BY score DESC
+      // 3. Preference features
+      OPTIONAL MATCH (u)-[:FOLLOWS]->(d:Diet)<-[:SUITABLE_FOR]-(recommended)
+      WITH u, recommended, embeddingScore, count(DISTINCT d) AS dietMatches
+
+      OPTIONAL MATCH (u)-[:PREFERS]->(c:Cuisine)<-[:BELONGS_TO]-(recommended)
+      WITH recommended, embeddingScore, dietMatches, count(DISTINCT c) AS cuisineMatches
+
+      // 4. Weighted matches
+      WITH recommended, embeddingScore, (0.6 * dietMatches + 0.4 * cuisineMatches) AS preferencesMatches
+
+      // 5. Exponential normalization (τ = 2.5)
+      WITH recommended, embeddingScore,
+          (1 - exp(-preferencesMatches / 2.5)) AS preferencesScore
+
+      // 6. Final score
+      WITH recommended, (0.9 * embeddingScore + 0.1 * preferencesScore) AS finalScore
+
+      ORDER BY finalScore DESC
       LIMIT 10
 
+      // 7. Optional metadata
       OPTIONAL MATCH (recommended)<-[l:LIKES]-(:User)
-      RETURN recommended, count(l) as likeCount
+      RETURN recommended, finalScore, count(l) AS likeCount
       `;
 
     const result = await this.queryExecutor.run(query, { userId });
