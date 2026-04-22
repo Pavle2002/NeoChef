@@ -1,6 +1,6 @@
 # NeoChef 🍲
 
-**Recipe Recommendation Web App powered by a `Neo4j` graph model and `AI` enabling `personalized` and `context-aware` recipe suggestions.** The project is designed as a scalable full-stack app demonstrating best real‑world backend, frontend, and DevOps practices.
+**Recipe Recommendation Web App powered by a `Neo4j` graph model and `AI` enabling `personalized` and `context-aware` recipe suggestions.** The project is designed as a scalable full-stack app demonstrating best real‑world backend, frontend, and devOps practices.
 > 🌐 Live at: **https://neochef.app**
 
 ---
@@ -20,7 +20,7 @@
 ## Features 🚀
 
 ### Backend ⚙️
-- 🧠 **Personalized recommendation engine** built on a `Neo4j` graph data model, leveraging complex weighted `Cypher` queries (user similarity, ingredient and categories overlap, interaction weights) and neo4j built in `vector indexes`.
+- 🧠 **Personalized recommendation engine** built on a `Neo4j` graph data model, leveraging `Graph Data Science` module, `Fast Randon Projection` algorithm, complex weighted `Cypher` queries and `vector indexes`.
 - 📬 **Event-driven** ETL pipeline: Recipes are fetched from the Spoonacular API, transformed, embedded, and upserted into Neo4j through a scalable, `event-driven` workflow powered by `Redis` message queues and `BullMQ` background workers.
 - 🤖 **Local Embedding service** powered by tiny quantized in memory `all-MiniLM-L6-v2` model, used for generating `embbedings`.
 - 📡 **Real-time admin dashboard** powered by `Server-Sent Events` (SSE) for live background job monitoring and status updates
