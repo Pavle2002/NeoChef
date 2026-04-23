@@ -1,8 +1,11 @@
+import { QUEUES } from "@neochef/core";
 import { logger } from "./config/logger.js";
+import { queues } from "./services.js";
 import { embeddingWorker } from "./workers/embedding-worker.js";
 import { fetchWorker } from "./workers/fetch-worker.js";
 import { transformWorker } from "./workers/transform-worker.js";
 import { upsertWorker } from "./workers/upsert-worker.js";
+import { randomUUID } from "crypto";
 
 logger.info("Starting recipe ingestion workers...");
 
@@ -39,3 +42,17 @@ embeddingWorker.on("completed", (job) => {
 embeddingWorker.on("failed", (job, err) => {
   logger.error(`Embedding job ${job?.id} failed: ${err.message}`);
 });
+
+queues[QUEUES.EMBEDDING].upsertJobScheduler(
+  "embedding-generation-scheduler",
+  // { every: 240_000 },
+  { pattern: "0 0 0,6,12,18 * * *" }, // every day at 00:00, 06:00, 12:00 and 18:00
+  {
+    name: "embedding-job-trigger",
+    data: {
+      type: "Embedding",
+      correlationId: randomUUID(),
+      purpose: "recommendations",
+    },
+  },
+);
